@@ -1,0 +1,2 @@
+- [Baselines durées de phases SDS/BUILD](baselines_duree_phases.md) — phase1_pm ~1min fiable ; durée totale SDS trop variable (18min-1h44) ; BUILD échantillon insuffisant
+- [État plateforme juillet 2026](etat_plateforme_2026-07.md) — 0 exécution démarrée depuis 2026-06-13, nombreux projets de test, ne pas confondre silence commercial et panne technique
