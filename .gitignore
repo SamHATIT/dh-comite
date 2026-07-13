@@ -3,3 +3,5 @@
 *.log
 .deosro_pass
 hooks.log
+ronde1.out
+ronde1.err

@@ -39,7 +39,7 @@ psql "$DEOS_RO_DSN" -c "SELECT execution_id, count(*) FILTER (WHERE vide) AS vid
   WHERE created_at > now()-interval '48 hours'
   GROUP BY execution_id HAVING count(*) FILTER (WHERE vide) > 0;"
 # Phases BUILD en cours/échec
-psql "$DEOS_RO_DSN" -c "SELECT execution_id, phase_number, phase_name, status,
+psql "$DEOS_RO_DSN" -c "SELECT execution_id, phase_number, phase_name, status,  -- clé métier = execution_id (le champ id est un id de LIGNE, ne jamais s en servir comme référence)
   agent_id, completed_batches || '/' || total_batches AS batches, elena_verdict
   FROM v_deos_build_phases WHERE status NOT IN ('completed')
   ORDER BY execution_id DESC, phase_number LIMIT 20;"
