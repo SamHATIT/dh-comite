@@ -29,3 +29,10 @@ traité comme une alerte delivery.
 d'exécutions démarrées dans les dernières 24h à ce repère (zéro depuis un
 mois au 2026-07-13) pour distinguer une vraie reprise d'activité d'un bruit de
 test. Voir aussi [[baselines-duree-phases]].
+
+**Confirmé par Sam le 2026-07-13** : les 9 exécutions en WAITING_BR_VALIDATION
+(85, 86, 120, 140, 149, 150, 151, 152, 158) sont TOUTES des projets de test
+internes — il n'y a AUCUN client réel sur la plateforme avant le lancement
+payant de la rentrée (septembre 2026). Ne plus proposer de « relance client »
+sur ces exécutions ; les traiter comme jeu de données de test. Les alertes
+d'attente BR sur ces ids ne sont pas des signaux business.
