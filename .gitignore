@@ -1,3 +1,4 @@
 .env
 .dbpass
 *.log
+.deosro_pass
