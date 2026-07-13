@@ -2,3 +2,4 @@
 .dbpass
 *.log
 .deosro_pass
+hooks.log

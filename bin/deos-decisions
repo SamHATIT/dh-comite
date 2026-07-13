@@ -1,0 +1,36 @@
+#!/bin/bash
+# deos-decisions add --origine X --texte "..." [--options JSON --reco "..."]
+# deos-decisions status <id> <statut> --par <agent> [--preuve JSON --porte-sur "..."]
+# deos-decisions list [statut]
+set -euo pipefail
+esc() { printf "%s" "$1" | sed "s/'/''/g"; }
+CMD="${1:-}"; shift || true
+case "$CMD" in
+  add)
+    ORIGINE=""; TEXTE=""; OPTIONS="null"; RECO=""
+    while [ $# -gt 0 ]; do case "$1" in
+      --origine) ORIGINE="$2"; shift 2;; --texte) TEXTE="$2"; shift 2;;
+      --options) OPTIONS="$2"; shift 2;; --reco) RECO="$2"; shift 2;;
+      *) shift;; esac; done
+    [ -z "$ORIGINE" ] || [ -z "$TEXTE" ] && { echo "REFUS: --origine et --texte requis" >&2; exit 2; }
+    N=$(psql "$COMITE_DB_DSN" -tA -c "SELECT lpad((count(*)+1)::text, 2, '0') FROM decisions WHERE id LIKE 'DEC-' || to_char(now(),'YYYY-MMDD') || '%';")
+    ID="DEC-$(date +%Y-%m%d)-$N"
+    psql "$COMITE_DB_DSN" -q -c "INSERT INTO decisions (id, origine, texte, options, recommandation) VALUES ('$ID', '$(esc "$ORIGINE")', '$(esc "$TEXTE")', $([ "$OPTIONS" = "null" ] && echo NULL || echo "'$(esc "$OPTIONS")'::jsonb"), $([ -z "$RECO" ] && echo NULL || echo "'$(esc "$RECO")'"));"
+    echo "$ID" ;;
+  status)
+    ID="${1:-}"; STATUT="${2:-}"; shift 2 || true
+    PAR=""; PREUVE=""; PORTE=""
+    while [ $# -gt 0 ]; do case "$1" in
+      --par) PAR="$2"; shift 2;; --preuve) PREUVE="$2"; shift 2;;
+      --porte-sur) PORTE="$2"; shift 2;; *) shift;; esac; done
+    case "$PAR" in cos|ceo|sam) ;; *) echo "REFUS: seul cos/ceo/sam change un statut (DH-COS)" >&2; exit 2;; esac
+    if [ "$STATUT" = "clos" ] && [ -z "$PREUVE" ]; then echo "REFUS: clôture sans preuve (DH-COS-002)" >&2; exit 2; fi
+    SETP=""; [ -n "$PREUVE" ] && SETP=", preuve='$(esc "$PREUVE")'::jsonb"
+    [ -n "$PORTE" ] && SETP="$SETP, porte_sur='$(esc "$PORTE")', validation_par='$(esc "$PAR")'"
+    psql "$COMITE_DB_DSN" -q -c "UPDATE decisions SET statut='$(esc "$STATUT")'$SETP WHERE id='$(esc "$ID")';"
+    echo "OK: $ID → $STATUT (par $PAR)" ;;
+  list)
+    F="${1:-}"; W=""; [ -n "$F" ] && W="WHERE statut='$(esc "$F")'"
+    psql "$COMITE_DB_DSN" -c "SELECT id, statut, origine, left(texte,60) AS texte, date::date FROM decisions $W ORDER BY date DESC LIMIT 20;" ;;
+  *) echo "usage: deos-decisions add|status|list ..." >&2; exit 1 ;;
+esac

@@ -1,0 +1,32 @@
+#!/bin/bash
+# deos-state get <cle> | deos-state set <cle> --par <agent> (valeur JSON sur stdin)
+# Scopes d'écriture par agent (GATE 4 §3)
+set -euo pipefail
+declare -A SCOPES=(
+  [commercial]="pipeline_commercial rapport_commercial"
+  [marketing]="calendrier_editorial perf_contenu rapport_marketing"
+  [delivery]="rapport_delivery"
+  [cs]="comptes_clients tickets rapport_cs"
+  [cos]="priorites_semaine cash_suivi rapport_cos"
+  [ceo]="brief"
+  [sam]="*"
+)
+CMD="${1:-}"; CLE="${2:-}"
+case "$CMD" in
+  get)
+    psql "$COMITE_DB_DSN" -tA -c "SELECT valeur FROM deos_state WHERE cle = '$CLE';" ;;
+  list)
+    psql "$COMITE_DB_DSN" -tA -c "SELECT cle || ' | ' || maj_par || ' | ' || updated_at FROM deos_state ORDER BY cle;" ;;
+  set)
+    PAR=""; [ "${3:-}" = "--par" ] && PAR="${4:-}"
+    [ -z "$PAR" ] && { echo "REFUS: --par <agent> requis" >&2; exit 2; }
+    ALLOWED="${SCOPES[$PAR]:-}"
+    if [ "$ALLOWED" != "*" ]; then
+      echo " $ALLOWED " | grep -q " $CLE " || { echo "REFUS: scope — '$PAR' ne peut pas écrire '$CLE' (DH scopes)" >&2; exit 2; }
+    fi
+    VAL=$(cat); echo "$VAL" | jq -e . >/dev/null || { echo "REFUS: valeur non-JSON" >&2; exit 2; }
+    VAL_ESC=$(printf "%s" "$VAL" | sed "s/'/''/g")
+    psql "$COMITE_DB_DSN" -q -c "INSERT INTO deos_state (cle, valeur, maj_par) VALUES ('$CLE', '$VAL_ESC'::jsonb, '$PAR') ON CONFLICT (cle) DO UPDATE SET valeur = EXCLUDED.valeur, maj_par = EXCLUDED.maj_par;"
+    echo "OK: $CLE mis à jour par $PAR" ;;
+  *) echo "usage: deos-state get|list|set <cle> [--par agent]" >&2; exit 1 ;;
+esac
