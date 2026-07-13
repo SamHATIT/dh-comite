@@ -1,0 +1,33 @@
+services:
+  comite:
+    build: .
+    container_name: dh-comite
+    env_file: .env
+    working_dir: /workspace
+    command: sleep infinity
+    volumes:
+      - ./:/workspace
+      - comite_home:/root
+      - /var/log/digital-humans:/prodlogs:ro
+    networks: [comite_net]
+    restart: unless-stopped
+
+  comite-db:
+    image: postgres:16
+    container_name: dh-comite-db
+    environment:
+      POSTGRES_DB: dh_comite
+      POSTGRES_USER: comite
+      POSTGRES_PASSWORD: "6427c5bf993df368895781d6b67bc18b"
+    volumes:
+      - comite_db_data:/var/lib/postgresql/data
+      - ./db/init:/docker-entrypoint-initdb.d:ro
+    networks: [comite_net]
+    restart: unless-stopped
+
+networks:
+  comite_net: {}
+
+volumes:
+  comite_home: {}
+  comite_db_data: {}
