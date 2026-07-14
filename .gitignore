@@ -7,3 +7,6 @@ ronde1.out
 ronde1.err
 ronde3.out
 ronde3.err
+briefs/*.meta.json
+briefs/*.err
+briefs/daily-run.log
