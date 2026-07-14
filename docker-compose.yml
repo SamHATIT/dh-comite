@@ -25,6 +25,19 @@ services:
     networks: [comite_net]
     restart: unless-stopped
 
+  comite-web:
+    image: python:3.12-slim
+    container_name: dh-comite-web
+    working_dir: /workspace/web
+    env_file: .env
+    command: sh -c "pip install --quiet --no-cache-dir fastapi uvicorn psycopg2-binary && uvicorn app:app --host 0.0.0.0 --port 8090"
+    volumes:
+      - ./:/workspace:ro
+    ports:
+      - "127.0.0.1:8090:8090"
+    networks: [comite_net]
+    restart: unless-stopped
+
 networks:
   comite_net: {}
 

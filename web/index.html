@@ -1,0 +1,183 @@
+<!doctype html><html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Digital·Humans — Comité</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;1,500;1,600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/marked/12.0.0/marked.min.js"></script>
+<style>
+:root{--noir:#0c0b09;--carbone:#141310;--trait:#2a2620;--ivoire:#ece7de;--gris:#9a938a;
+--laiton:#c8a464;--vert:#7fb069;--ambre:#d9a441;--rouge:#c25b4e;--serif:'Cormorant Garamond',serif;--mono:'JetBrains Mono',monospace}
+*{box-sizing:border-box;margin:0}
+body{background:var(--noir);color:var(--ivoire);font-family:var(--mono);font-size:13px;min-height:100vh}
+a{color:var(--laiton);text-decoration:none}
+.wrap{max-width:1180px;margin:0 auto;padding:28px 24px 60px}
+header{display:flex;justify-content:space-between;align-items:baseline;border-bottom:1px solid var(--trait);padding-bottom:18px;margin-bottom:30px}
+.marque{font-family:var(--serif);font-size:26px;font-style:italic}.marque b{font-style:normal;font-weight:500}
+.eyebrow{letter-spacing:.28em;text-transform:uppercase;font-size:10px;color:var(--gris)}
+.hero{display:flex;gap:40px;align-items:center;margin-bottom:36px}
+.poincon{position:relative;width:150px;height:150px;flex:none}
+.poincon svg{transform:rotate(-90deg)}
+.poincon .score{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.poincon .score b{font-family:var(--serif);font-size:44px;font-weight:500;font-style:italic}
+.poincon .score span{font-size:9px;letter-spacing:.24em;color:var(--gris);text-transform:uppercase}
+.hero h1{font-family:var(--serif);font-size:34px;font-weight:500;font-style:italic;line-height:1.15;margin-bottom:8px}
+.hero .sub{color:var(--gris);max-width:56ch;line-height:1.6}
+.grille{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:14px;margin-bottom:34px}
+.tuile{background:var(--carbone);border:1px solid var(--trait);padding:18px 20px;cursor:pointer;transition:border-color .18s}
+.tuile:hover{border-color:var(--laiton)}
+.tuile .haut{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:12px}
+.tuile h2{font-family:var(--serif);font-size:20px;font-weight:500;font-style:italic}
+.pastille{display:inline-flex;align-items:center;gap:6px;font-size:10px;letter-spacing:.18em;text-transform:uppercase}
+.pastille i{width:8px;height:8px;border-radius:50%;display:inline-block}
+.v i{background:var(--vert)}.a i{background:var(--ambre)}.r i{background:var(--rouge)}.n i{background:var(--gris)}
+.v{color:var(--vert)}.a{color:var(--ambre)}.r{color:var(--rouge)}.n{color:var(--gris)}
+.kpi{display:flex;justify-content:space-between;gap:12px;padding:5px 0;border-top:1px dashed var(--trait);color:var(--gris)}
+.kpi b{color:var(--ivoire);font-weight:500;text-align:right}
+.tuile .pied{margin-top:10px;font-size:10px;color:var(--gris);letter-spacing:.06em}
+.section h3{font-family:var(--serif);font-style:italic;font-weight:500;font-size:22px;margin:26px 0 12px}
+table{width:100%;border-collapse:collapse}
+td,th{padding:8px 10px;border-bottom:1px solid var(--trait);text-align:left;vertical-align:top}
+th{color:var(--gris);font-weight:400;font-size:10px;letter-spacing:.2em;text-transform:uppercase}
+.badge{border:1px solid var(--trait);padding:2px 8px;font-size:10px;letter-spacing:.1em;text-transform:uppercase;white-space:nowrap}
+.panneau{position:fixed;top:0;right:0;bottom:0;width:min(720px,94vw);background:var(--carbone);border-left:1px solid var(--laiton);
+ transform:translateX(102%);transition:transform .25s ease;overflow-y:auto;padding:30px 34px;z-index:10}
+.panneau.ouvert{transform:none}
+.voile{position:fixed;inset:0;background:rgba(5,4,3,.6);opacity:0;pointer-events:none;transition:opacity .25s;z-index:9}
+.voile.ouvert{opacity:1;pointer-events:auto}
+.fermer{float:right;cursor:pointer;color:var(--gris);font-size:18px;padding:4px 10px;border:1px solid var(--trait)}
+.panneau h2{font-family:var(--serif);font-style:italic;font-weight:500;font-size:26px;margin-bottom:4px}
+.panneau .meta{color:var(--gris);font-size:11px;margin-bottom:18px}
+.bloc{margin-bottom:22px}.bloc h4{letter-spacing:.24em;text-transform:uppercase;font-size:10px;color:var(--laiton);margin-bottom:8px}
+.fait{padding:7px 0;border-top:1px dashed var(--trait);line-height:1.55}
+.src{display:block;color:var(--gris);font-size:10px;margin-top:2px}
+.liens a{display:inline-block;border:1px solid var(--laiton);color:var(--laiton);padding:7px 14px;margin:0 8px 8px 0;
+ font-size:10px;letter-spacing:.18em;text-transform:uppercase}
+.liens a:hover{background:var(--laiton);color:var(--noir)}
+.md{line-height:1.65;color:var(--ivoire)}
+.md h1,.md h2,.md h3{font-family:var(--serif);font-style:italic;font-weight:500;margin:18px 0 8px}
+.md table{margin:10px 0}.md code{color:var(--laiton)}.md li{margin:4px 0 4px 18px}
+.vide{color:var(--gris);font-style:italic;padding:14px 0}
+footer{margin-top:40px;border-top:1px solid var(--trait);padding-top:14px;color:var(--gris);font-size:10px;letter-spacing:.14em}
+@media (prefers-reduced-motion:reduce){.panneau,.voile,.tuile{transition:none}}
+</style></head><body>
+<div class="wrap">
+<header>
+  <div><div class="eyebrow">Comité de direction augmenté</div>
+  <div class="marque"><b>Digital</b>·Humans</div></div>
+  <div class="eyebrow" id="horodatage"></div>
+</header>
+
+<div class="hero">
+  <div class="poincon">
+    <svg width="150" height="150" viewBox="0 0 150 150">
+      <circle cx="75" cy="75" r="66" fill="none" stroke="#2a2620" stroke-width="5"/>
+      <circle id="jauge" cx="75" cy="75" r="66" fill="none" stroke="#c8a464" stroke-width="5"
+        stroke-linecap="round" stroke-dasharray="414.7" stroke-dashoffset="414.7"/>
+      <circle cx="75" cy="75" r="56" fill="none" stroke="#2a2620" stroke-width="1"/>
+    </svg>
+    <div class="score"><b id="score">—</b><span id="tendance">santé</span></div>
+  </div>
+  <div>
+    <h1>La journée, contresignée.</h1>
+    <div class="sub" id="soustitre">Chargement de l'état du comité…</div>
+    <div style="margin-top:12px" class="liens">
+      <a href="#" id="lien-brief">Brief du jour</a>
+      <a href="#" id="lien-suivi">Page de suivi</a>
+    </div>
+  </div>
+</div>
+
+<div class="grille" id="tuiles"></div>
+
+<div class="section">
+  <h3>Décisions — ce qui t'attend, ce qui vient d'être acté</h3>
+  <table id="tbl-decisions"><thead><tr><th>ID</th><th>Décision</th><th>Origine</th><th>Statut</th><th>Âge</th></tr></thead><tbody></tbody></table>
+</div>
+
+<footer>Digital·Humans — comité de direction augmenté · lecture seule · les actions passent par le daily, Telegram ou deos-decisions.</footer>
+</div>
+
+<div class="voile" id="voile" onclick="fermer()"></div>
+<aside class="panneau" id="panneau" aria-modal="true"></aside>
+
+<script>
+const DOMAINES = {
+  delivery:   {titre:"Delivery / Produit", liens:[["Dashboard plateforme","https://app.digital-humans.fr/admin"],["Exécutions","https://app.digital-humans.fr/projects"]]},
+  commercial: {titre:"Commercial",         liens:[["Pipeline Salesforce","https://orgfarm-2b37d18797-dev-ed.develop.lightning.force.com"],["Objectifs (plan H2)","#"]]},
+  marketing:  {titre:"Marketing & Contenu",liens:[["Journal / Ghost","https://digital-humans.fr/journal"],["Séquence LinkedIn","#suivi"]]},
+  cs:         {titre:"Customer Success",   liens:[["Comptes & usage","https://app.digital-humans.fr/admin"],["Cases Salesforce","https://orgfarm-2b37d18797-dev-ed.develop.lightning.force.com"]]},
+  cos:        {titre:"Exécution (CoS)",    liens:[["Page de suivi","#suivi"]]}
+};
+const CLS = s => ({vert:"v",ambre:"a",rouge:"r"}[s]||"n");
+let ETAT=null;
+
+async function charger(){
+  const r = await fetch("api/etat"); ETAT = await r.json();
+  const brief = ETAT.state.brief?.valeur || null;
+  document.getElementById("horodatage").textContent = new Date().toLocaleString("fr-FR",{dateStyle:"full",timeStyle:"short"});
+  if(brief?.sante){
+    const sc = brief.sante.score ?? "—";
+    document.getElementById("score").textContent = sc;
+    document.getElementById("tendance").textContent = brief.sante.tendance || "santé";
+    const off = 414.7*(1-Math.max(0,Math.min(100,sc))/100);
+    requestAnimationFrame(()=>{document.getElementById("jauge").style.transition="stroke-dashoffset .8s ease";
+      document.getElementById("jauge").style.strokeDashoffset=off;});
+    const manq = brief.sante.domaines_manquants||[];
+    document.getElementById("soustitre").textContent =
+      (brief.date?`Brief du ${brief.date}. `:"") + (manq.length?`Domaines sans rapport : ${manq.join(", ")}. `:"Les cinq domaines ont rapporté. ") + "Clique une loge pour le détail.";
+  } else { document.getElementById("soustitre").textContent="Aucun brief encore produit — le premier arrive au prochain daily (07h30 UTC)."; }
+
+  const tuiles = document.getElementById("tuiles"); tuiles.innerHTML="";
+  for(const [dom,cfg] of Object.entries(DOMAINES)){
+    const rap = ETAT.state["rapport_"+dom]?.valeur || null;
+    const maj = ETAT.state["rapport_"+dom]?.maj;
+    const statut = rap?.statut || "absent";
+    const kpis = (rap?.kpis||[]).slice(0,3).map(k=>`<div class="kpi"><span>${k.nom}</span><b>${k.valeur}</b></div>`).join("")
+      || `<div class="vide">Aucun rapport produit pour ce domaine.</div>`;
+    tuiles.insertAdjacentHTML("beforeend", `
+      <div class="tuile" onclick="ouvrirDomaine('${dom}')">
+        <div class="haut"><h2>${cfg.titre}</h2>
+          <span class="pastille ${CLS(statut)}"><i></i>${rap? (rap.domain_score??"—")+" · "+statut : "absent"}</span></div>
+        ${kpis}
+        <div class="pied">${maj? "rapport du "+new Date(maj).toLocaleString("fr-FR",{dateStyle:"short",timeStyle:"short"}) : "en attente de première ronde"}</div>
+      </div>`);
+  }
+
+  const tb = document.querySelector("#tbl-decisions tbody"); tb.innerHTML="";
+  for(const d of ETAT.decisions){
+    tb.insertAdjacentHTML("beforeend", `<tr><td>${d.id}</td><td>${d.texte.slice(0,110)}${d.texte.length>110?"…":""}</td>
+      <td>${d.origine}</td><td><span class="badge">${d.statut}</span></td><td>${d.age_j} j</td></tr>`);
+  }
+  if(!ETAT.decisions.length) tb.innerHTML = `<tr><td colspan="5" class="vide">Aucune décision ouverte.</td></tr>`;
+}
+
+function ouvrir(html){document.getElementById("panneau").innerHTML=`<span class="fermer" onclick="fermer()">✕</span>`+html;
+  document.getElementById("panneau").classList.add("ouvert");document.getElementById("voile").classList.add("ouvert");}
+function fermer(){document.getElementById("panneau").classList.remove("ouvert");document.getElementById("voile").classList.remove("ouvert");}
+document.addEventListener("keydown",e=>{if(e.key==="Escape")fermer()});
+
+function ouvrirDomaine(dom){
+  const cfg=DOMAINES[dom]; const e=ETAT.state["rapport_"+dom]; const r=e?.valeur;
+  const liens = `<div class="bloc liens"><h4>Aller plus loin</h4>${cfg.liens.map(([l,u])=>u==="#suivi"?`<a href="#" onclick="ouvrirSuivi();return false">${l}</a>`:`<a href="${u}" target="_blank" rel="noopener">${l}</a>`).join("")}</div>`;
+  if(!r){ouvrir(`<h2>${cfg.titre}</h2><div class="vide">Aucun rapport pour ce domaine — il apparaîtra après la première ronde.</div>${liens}`);return;}
+  const secs=[];
+  if(r.calcul_score) secs.push(`<div class="bloc"><h4>Score — calcul</h4><div class="fait">${r.calcul_score}</div></div>`);
+  const li=(t,arr,f)=>{if(arr&&arr.length)secs.push(`<div class="bloc"><h4>${t}</h4>${arr.map(f).join("")}</div>`)};
+  li("Faits sourcés", r.faits, x=>`<div class="fait">${x.texte||x}<span class="src">${x.source||""}</span></div>`);
+  if(r.kpis?.length) secs.push(`<div class="bloc"><h4>KPIs</h4><table>${r.kpis.map(k=>`<tr><td>${k.nom}</td><td><b>${k.valeur}</b></td><td><span class="pastille ${CLS(k.statut)}"><i></i>${k.statut||""}</span></td></tr>`).join("")}</table></div>`);
+  li("Alertes", r.alertes, x=>`<div class="fait"><span class="pastille ${CLS({haute:'rouge',moyenne:'ambre',basse:'n'}[x.gravite]||x.gravite)}"><i></i>${x.gravite||""}</span> ${x.texte}<span class="src">${x.source||""}</span></div>`);
+  li("Décisions demandées", r.decisions_demandees, x=>`<div class="fait"><b>${x.id||""}</b> ${x.texte}${x.recommandation?` — reco : ${x.recommandation}`:""}</div>`);
+  li("Opportunités", r.opportunites, x=>`<div class="fait">${x.texte||x}<span class="src">${x.source||""}</span></div>`);
+  li("Données manquantes (déclaré)", r.donnees_manquantes, x=>`<div class="fait">${x}</div>`);
+  ouvrir(`<h2>${cfg.titre}</h2><div class="meta">rapport du ${new Date(e.maj).toLocaleString("fr-FR")} · domain_score ${r.domain_score??"—"} (${r.statut||"?"})</div>${secs.join("")}${liens}`);
+}
+
+document.getElementById("lien-brief").onclick=e=>{e.preventDefault();
+  ouvrir(`<h2>Brief — ${ETAT.brief_fichier||""}</h2><div class="md">${marked.parse(ETAT.brief_md||"*Aucun brief.*")}</div>
+  <div class="bloc liens"><h4>Archives</h4>${ETAT.briefs.map(b=>`<a href="#" onclick="voirBrief('${b}');return false">${b.replace(/^(brief-|comite-)|\.md$/g,"$1"==="comite-"?"comité ":"")}</a>`).join("")}</div>`);}
+async function voirBrief(n){const r=await fetch("api/brief/"+n);const j=await r.json();
+  ouvrir(`<h2>${n}</h2><div class="md">${marked.parse(j.contenu||"")}</div>`);}
+function ouvrirSuivi(){ouvrir(`<h2>Page de suivi</h2><div class="md">${marked.parse(ETAT.page_suivi||"*Pas encore générée.*")}</div>`);}
+document.getElementById("lien-suivi").onclick=e=>{e.preventDefault();ouvrirSuivi();};
+
+charger(); setInterval(charger, 120000);
+</script></body></html>
