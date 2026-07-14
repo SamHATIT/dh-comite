@@ -1,0 +1,44 @@
+version: 1
+sante_ponderations:            # formule P1 du CEO (Gate 1)
+  delivery: 0.30
+  commercial: 0.25
+  cs: 0.20
+  marketing: 0.15
+  execution: 0.10
+
+# crans : observe | conseille | agit_sous_validation | autonomie
+curseurs:
+  ceo:
+    brief_et_routage: autonomie
+    arbitrage_operationnel: autonomie
+    arbitrage_strategique: conseille
+    apprentissage: conseille
+  commercial:
+    analyse_et_preparation: conseille
+    maj_pipeline: agit_sous_validation
+    apprentissage: conseille
+  marketing:
+    analyse_et_brouillons: autonomie
+    programmation_contenu_valide: agit_sous_validation
+    apprentissage: conseille
+  delivery:
+    supervision: autonomie
+    diagnostic: autonomie
+    correctifs: agit_sous_validation
+    evolutions: conseille
+    apprentissage: conseille
+  cs:
+    surveillance_comptes: autonomie
+    brouillons_reponses: agit_sous_validation
+    apprentissage: conseille
+  cos:
+    suivi_et_relances: autonomie
+    cash: conseille
+    apprentissage: conseille
+
+toujours_validation:
+  - envoi_externe_engageant
+  - deploiement_production
+  - engagement_financier
+  - suppression_donnees
+  - donnees_personnelles_rgpd
