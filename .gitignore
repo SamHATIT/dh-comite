@@ -10,3 +10,5 @@ ronde3.err
 briefs/*.meta.json
 briefs/*.err
 briefs/daily-run.log
+cos1.out
+cos1.err
