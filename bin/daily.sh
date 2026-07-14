@@ -3,6 +3,8 @@
 set -euo pipefail
 cd /workspace
 TS=$(date -u +%Y-%m-%d)
+# Répartition validée par Sam le 14/07 : Opus en semaine, Fable le lundi (comité hebdo)
+if [ "$(date -u +%u)" = "1" ]; then CEO_MODEL=claude-fable-5; else CEO_MODEL=claude-opus-4-8; fi
 CTX=$(mktemp)
 
 fresh() { # $1=cle : affiche le rapport avec son état de fraîcheur
@@ -46,7 +48,7 @@ INSTRUCTION DU JOUR : produis le daily brief du $TS.
    echo '<json>' | /workspace/bin/deos-state set brief --par ceo
 2. Puis le Markdown complet (8 sections), écrit dans /workspace/briefs/brief-$TS.md
 3. Restitue aussi le Markdown dans ta réponse." \
-  --model claude-fable-5 \
+  --model "$CEO_MODEL" \
   --allowedTools "Bash,Read,Grep,Glob,Write" \
   --output-format json > "briefs/daily-$TS.meta.json" 2> "briefs/daily-$TS.err"
 RC=$?
