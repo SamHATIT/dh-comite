@@ -41,3 +41,12 @@ INSTRUCTION : préside le comité hebdo du $TS — déroule les quatre temps, é
 RC=$?
 rm -f "$CTX"
 echo "comité terminé RC=$RC — CR: briefs/comite-$TS.md"
+
+# Envoi Telegram du CR de comité
+TOKEN=$(grep '^TELEGRAM_BOT_TOKEN=' /workspace/.env | cut -d= -f2)
+CHAT=$(grep '^TELEGRAM_CHAT_ID=' /workspace/.env | cut -d= -f2)
+if [ -n "${TOKEN:-}" ] && [ -n "${CHAT:-}" ] && [ -f "briefs/comite-$TS.md" ]; then
+  HEAD=$(head -c 3500 "briefs/comite-$TS.md")
+  curl -s --max-time 15 "https://api.telegram.org/bot$TOKEN/sendMessage" \
+    -d chat_id="$CHAT" --data-urlencode text="$HEAD" > /dev/null && echo "CR envoyé sur Telegram"
+fi
