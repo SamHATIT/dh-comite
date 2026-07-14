@@ -36,3 +36,11 @@ internes — il n'y a AUCUN client réel sur la plateforme avant le lancement
 payant de la rentrée (septembre 2026). Ne plus proposer de « relance client »
 sur ces exécutions ; les traiter comme jeu de données de test. Les alertes
 d'attente BR sur ces ids ne sont pas des signaux business.
+
+**Vérifié le 2026-07-14 (ronde 3, contrôle croisé)** : la « fenêtre de logs
+tronquée au dernier redémarrage » observée le 14/07 n'était PAS un défaut de
+l'export — journalctl lui-même ne contient aucune entrée backend entre
+09:53Z et 18:10Z le 13/07 (absence réelle de trafic en phase de test).
+L'export cron reflète fidèlement le journal. Avant de proposer de « fiabiliser
+l'export », comparer d'abord le fichier avec journalctl à la source : un
+fichier court peut simplement refléter un service silencieux.
