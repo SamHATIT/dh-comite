@@ -44,3 +44,8 @@ l'export — journalctl lui-même ne contient aucune entrée backend entre
 L'export cron reflète fidèlement le journal. Avant de proposer de « fiabiliser
 l'export », comparer d'abord le fichier avec journalctl à la source : un
 fichier court peut simplement refléter un service silencieux.
+
+**Confirmé par Sam le 2026-07-14** : le restart backend du 13/07 18:10Z et les
+exécutions 161 (annulée) / 162 (complétée) étaient bien un déploiement suivi
+d'un test de fumée sur le projet interne LogiFleet G3 (v2 corpus).
+Hypothèse close (DEC-2026-0714-04, clos avec preuve).
