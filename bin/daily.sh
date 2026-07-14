@@ -23,7 +23,7 @@ for D in delivery commercial marketing cs cos; do
   echo "### rapport_$D"; fresh "rapport_$D"; echo ""
 done
 echo "## B2. Décisions en cours (statut != clos)"
-psql "$COMITE_DB_DSN" -tA -c "SELECT id||' | '||statut||' | '||origine||' | '||left(texte,80)||' | âge: '||(now()::date - date::date)||'j' FROM decisions WHERE statut <> 'clos' ORDER BY date;" | sed 's/^/- /'
+psql "$COMITE_DB_DSN" -tA -c "SELECT id||' | '||statut||' | '||origine||' | '||left(texte,80)||' | âge: '||(now()::date - date::date)||'j' FROM decisions WHERE statut NOT IN ('clos','refusee') OR updated_at > now()-interval '48 hours' ORDER BY date;" | sed 's/^/- /'
 [ -z "$(psql "$COMITE_DB_DSN" -tA -c "SELECT 1 FROM decisions WHERE statut <> 'clos' LIMIT 1;")" ] && echo "(aucune décision ouverte)"
 echo ""
 echo "## B3. Brief J-1"

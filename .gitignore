@@ -12,3 +12,12 @@ briefs/*.err
 briefs/daily-run.log
 cos1.out
 cos1.err
+briefs/ab-*.meta.json
+briefs/ab-*.err
+briefs/ab-run.log
+cro1.out
+cro1.err
+csm1.out
+csm1.err
+cmo1.out
+cmo1.err
