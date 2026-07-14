@@ -4,7 +4,9 @@ set -euo pipefail
 cd /workspace
 TS=$(date -u +%Y-%m-%d)
 # Répartition validée par Sam le 14/07 : Opus en semaine, Fable le lundi (comité hebdo)
-if [ "$(date -u +%u)" = "1" ]; then CEO_MODEL=claude-fable-5; else CEO_MODEL=claude-opus-4-8; fi
+# Le lundi, le comité hebdo (comite.sh, 08h00) remplace le daily.
+if [ "$(date -u +%u)" = "1" ]; then echo "lundi : daily remplacé par le comité hebdo (08h00)"; exit 0; fi
+CEO_MODEL=claude-opus-4-8
 CTX=$(mktemp)
 
 fresh() { # $1=cle : affiche le rapport avec son état de fraîcheur
