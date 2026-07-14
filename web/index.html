@@ -101,7 +101,7 @@ footer{margin-top:40px;border-top:1px solid var(--trait);padding-top:14px;color:
 
 <script>
 const DOMAINES = {
-  delivery:   {titre:"Delivery / Produit", liens:[["Dashboard plateforme","https://app.digital-humans.fr/admin"],["Exécutions","https://app.digital-humans.fr/projects"]]},
+  delivery:   {titre:"Delivery / Produit", liens:[["Dashboard admin (suivi interne)","https://app.digital-humans.fr/admin"]]},
   commercial: {titre:"Commercial",         liens:[["Pipeline Salesforce","https://orgfarm-2b37d18797-dev-ed.develop.lightning.force.com"],["Objectifs (plan H2)","#"]]},
   marketing:  {titre:"Marketing & Contenu",liens:[["Journal / Ghost","https://digital-humans.fr/journal"],["Séquence LinkedIn","#suivi"]]},
   cs:         {titre:"Customer Success",   liens:[["Comptes & usage","https://app.digital-humans.fr/admin"],["Cases Salesforce","https://orgfarm-2b37d18797-dev-ed.develop.lightning.force.com"]]},
@@ -160,6 +160,19 @@ function ouvrirDomaine(dom){
   const liens = `<div class="bloc liens"><h4>Aller plus loin</h4>${cfg.liens.map(([l,u])=>u==="#suivi"?`<a href="#" onclick="ouvrirSuivi();return false">${l}</a>`:`<a href="${u}" target="_blank" rel="noopener">${l}</a>`).join("")}</div>`;
   if(!r){ouvrir(`<h2>${cfg.titre}</h2><div class="vide">Aucun rapport pour ce domaine — il apparaîtra après la première ronde.</div>${liens}`);return;}
   const secs=[];
+  if(dom==="delivery" && ETAT.ops){
+    const A=ETAT.ops.activite||{}, S=ETAT.ops.serveur||{};
+    const lignes = A.erreur ? `<tr><td colspan=2 class="vide">${A.erreur}</td></tr>` : `
+      <tr><td>Utilisateurs actifs (30 j)</td><td><b>${A.utilisateurs_actifs_30j}</b></td></tr>
+      <tr><td>Exécutions 7 j / 30 j</td><td><b>${A.executions_7j} / ${A.executions_30j}</b></td></tr>
+      <tr><td>En cours maintenant</td><td><b>${A.en_cours}</b></td></tr>
+      <tr><td>Dernière exécution</td><td><b>${A.derniere_execution? new Date(A.derniere_execution).toLocaleString("fr-FR"):"—"}</b></td></tr>`;
+    const srv = S.erreur ? `<tr><td colspan=2 class="vide">${S.erreur}</td></tr>` : `
+      <tr><td>Charge (1/5/15 min)</td><td><b>${S.charge}</b> <span class="pastille ${S.charge_pct<60?"v":S.charge_pct<85?"a":"r"}"><i></i>${S.charge_pct}%</span></td></tr>
+      <tr><td>RAM disponible</td><td><b>${S.ram_dispo_gb} / ${S.ram_totale_gb} Go</b></td></tr>
+      <tr><td>Disque utilisé</td><td><b>${S.disque_utilise_pct}%</b> <span class="pastille ${S.disque_utilise_pct<70?"v":S.disque_utilise_pct<85?"a":"r"}"><i></i></span></td></tr>`;
+    secs.push(`<div class="bloc"><h4>Exploitation — activité & capacité (temps réel)</h4><table>${lignes}${srv}</table></div>`);
+  }
   if(r.calcul_score) secs.push(`<div class="bloc"><h4>Score — calcul</h4><div class="fait">${r.calcul_score}</div></div>`);
   const li=(t,arr,f)=>{if(arr&&arr.length)secs.push(`<div class="bloc"><h4>${t}</h4>${arr.map(f).join("")}</div>`)};
   li("Faits sourcés", r.faits, x=>`<div class="fait">${x.texte||x}<span class="src">${x.source||""}</span></div>`);
