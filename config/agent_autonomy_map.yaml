@@ -31,6 +31,11 @@ curseurs:
     surveillance_comptes: autonomie
     brouillons_reponses: agit_sous_validation
     apprentissage: conseille
+  legal:
+    verification_conformite: autonomie
+    redaction_corrections: conseille
+    contrats_et_dpa: conseille
+    apprentissage: conseille
   cos:
     suivi_et_relances: autonomie
     cash: conseille

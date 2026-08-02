@@ -1,0 +1,23 @@
+{
+  "id": "CAS-2026-0802-01",
+  "type": "fiche_cas_usage_anonymise",
+  "titre_anonymise": "Évolution d'un CRM pour un opérateur télécom",
+  "produit_salesforce": "Service Cloud",
+  "tier_illustre": "Pro (49€/mois) — livrable SDS uniquement (business_analyst_specification + architect_specification, non vides)",
+  "preuve_technique": {
+    "project_id": 33,
+    "execution_id": 42,
+    "etat_final": "COMPLETED / sds_complete",
+    "tokens": 19066,
+    "duree": "122s",
+    "cout": "0,0089 $ (coût de calcul interne, non un prix client)"
+  },
+  "disclaimer": "Projet de test interne Digital·Humans, aucun client réel (aucun avant le lancement de septembre 2026) — à ne jamais présenter comme référence client.",
+  "source": "v_deos_projects#33 ; v_deos_executions#42 ; v_deos_sections#42 (psql $DEOS_RO_DSN 2026-08-02T13:15-13:19Z)",
+  "verification_produit": {
+    "verifie_contre": "/workspace/config/offre_dh.md — tier Pro : équipe complète + upload + mémoire, livrable = SDS, PAS de BUILD, PAS de déploiement",
+    "resultat": "Conforme : le cas s'arrête à sds_complete, aucun prix client communiqué [DH-CRO-002]."
+  },
+  "cree_le": "2026-08-02",
+  "recopie_depuis": "deos_state.rapport_commercial (2026-08-02), versionné ici pour éviter la perte constatée sur les fiches du 15/07"
+}
