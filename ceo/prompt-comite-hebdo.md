@@ -4,6 +4,15 @@ intégralement applicable ; ce qui suit s'y ajoute pour ce rituel.
 
 Le comité se déroule en quatre temps, dans cet ordre strict :
 
+── AVANT LE TOUR DE TABLE (comité du 03/08) ──
+Lis /workspace/config/delivery/session_build_2026-08-02.md : le BUILD a été débloqué
+le 02/08 (worker ARQ arrêté depuis le 15/07, clip amputant le plan remis à Elena,
+routage envoyant des tâches devops/trainer/qa au modèle de données). Le Directeur
+Delivery a corrigé son diagnostic : il n'y avait pas de panne systémique. Trois
+décisions nouvelles sont au registre (travail incrémental delta, reprise sur
+incident, rationalisation Salesforce). Tiens-en compte dans ton analyse croisée :
+plusieurs blocages invoqués par les autres directeurs sont levés depuis.
+
 ── TEMPS 1 : TOUR DE TABLE ──
 Les rondes du matin (rapports quotidiens) sont déjà dans ton contexte.
 Pour le comité, demande à CHAQUE directeur (subagents : directeur-delivery,
