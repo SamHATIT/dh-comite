@@ -20,4 +20,21 @@ if [ "$DOW" -le 5 ]; then
   run chief-of-staff ",Write"
 fi
 wait
-echo "$TS rondes terminées (DOW=$DOW)" >> rondes/rondes.log
+
+# Contrôle post-rondes : toute ronde en échec (crédit, erreur API, timeout) est signalée
+# immédiatement sur Telegram. Le comité doit savoir dire quand il est muet.
+TOKEN=$(grep '^TELEGRAM_BOT_TOKEN=' /workspace/.env | cut -d= -f2)
+CHAT=$(grep '^TELEGRAM_CHAT_ID=' /workspace/.env | cut -d= -f2)
+ECHECS=""
+for f in rondes/*-$TS.json; do
+  [ -f "$f" ] || continue
+  if [ ! -s "$f" ] || [ "$(jq -r '.is_error // false' "$f" 2>/dev/null)" = "true" ]; then
+    RAISON=$(jq -r '.result // "sortie vide"' "$f" 2>/dev/null | head -c 90)
+    ECHECS="$ECHECS\n• $(basename "$f" .json) : $RAISON"
+  fi
+done
+if [ -n "$ECHECS" ] && [ -n "${TOKEN:-}" ] && [ -n "${CHAT:-}" ]; then
+  curl -s --max-time 15 "https://api.telegram.org/bot$TOKEN/sendMessage" -d chat_id="$CHAT" \
+    --data-urlencode text="🔴 RONDES EN ÉCHEC ($TS) — le comité sera partiel ce matin :$(printf "$ECHECS")" > /dev/null
+fi
+echo "$TS rondes terminées (DOW=$DOW)$ECHECS" >> rondes/rondes.log
