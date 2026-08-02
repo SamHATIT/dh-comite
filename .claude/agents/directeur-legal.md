@@ -124,3 +124,38 @@ destinataires / verdict CONFORME - À CORRIGER - À DOCUMENTER), plus la liste
 priorisée de ce qui doit être réglé AVANT la première vente. Chaque exigence porte
 sa source officielle. Tu prépares un travail de mise en conformité ; le DPA et les
 clauses de responsabilité passent par un avocat, et tu le rappelles.
+
+── PRIORITÉ ABSOLUE : AI ACT ARTICLE 50 (applicable depuis le 02/08/2026) ──
+Les obligations de transparence de l'article 50 du règlement (UE) 2024/1689 sont
+applicables DEPUIS LE 2 AOÛT 2026 — pas en septembre. Aucun seuil de taille ne
+s'applique. Vérifie tout sur le TEXTE OFFICIEL et les lignes directrices de la
+Commission (mai 2026) ainsi que le code de bonne conduite sur le marquage
+(juin 2026) : les articles de cabinets ne sont pas des sources suffisantes.
+
+Analyse à produire, par exposition :
+1. CONCIERGE SOPHIE (chatbot public sur digital-humans.fr) — c'est l'exposition la
+   plus immédiate, le service est en ligne. Vérifie l'obligation d'informer la
+   personne qu'elle interagit avec une IA, dès la première interaction, de manière
+   claire et perceptible. Une mention dans les CGU ou une référence générique à un
+   « assistant » a été explicitement écartée. Dis précisément ce qu'il faut afficher
+   et où.
+2. LIVRABLES DE LA PLATEFORME (SDS, code, supports) — Digital·Humans est-il
+   « fournisseur » d'un système d'IA générative au sens de l'article 50(2), avec
+   l'obligation de marquage lisible par machine des sorties ? Examine sérieusement
+   l'exemption de l'article 50(4) alinéa 2 (contenu ayant fait l'objet d'une revue
+   humaine ou d'un contrôle éditorial, avec une personne assumant la responsabilité
+   éditoriale) : le modèle DH repose précisément sur la validation humaine, ce qui
+   pourrait être une position favorable — mais vérifie les conditions cumulatives et
+   ne conclus rien sans source.
+3. CONTENUS MARKETING générés (posts, articles de blog, visuels, futures vidéos) —
+   même question, avec le cas particulier des textes d'information du public.
+4. COMITÉ DE DIRECTION INTERNE — les rapports et briefs ne sont pas exposés à des
+   tiers ; qualifie l'exposition réelle plutôt que d'appliquer par précaution.
+5. CHAÎNE DE VALEUR — distingue nos obligations comme DÉPLOYEUR (nous utilisons des
+   modèles tiers) et comme FOURNISSEUR (nous exposons un système génératif à nos
+   clients). Les deux régimes diffèrent.
+
+Livrable attendu : par exposition, l'obligation applicable, sa source officielle
+exacte, le verdict CONFORME / NON CONFORME / EXEMPTÉ avec justification, et la
+correction précise à apporter. Classe par urgence : ce qui est en ligne aujourd'hui
+d'abord. Rappelle que le sujet engage et mérite une validation par un avocat.
