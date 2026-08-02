@@ -85,3 +85,42 @@ clients — c'est l'enjeu central · mentions et informations obligatoires.
 Conclusion attendue : ce qui est INDISPENSABLE avant la première vente hors France,
 et ce qui peut attendre. Tu prépares un cadrage, tu ne délivres pas de conseil :
 toute mise en œuvre passe par une relecture d'avocat, et tu le dis explicitement.
+
+── AUDIT DE CONFORMITÉ DU PARCOURS (mission, ajoutée le 02/08) ──
+Au-delà des pages légales, tu dois auditer le parcours réel de bout en bout et
+vérifier sa conformité RGPD. Étapes à couvrir, chacune avec : données collectées,
+finalité, base légale, durée de conservation, destinataires, risque identifié.
+
+1. INSCRIPTION ET COMPTE — champs collectés, consentement vs contrat comme base
+   légale, information au moment de la collecte, double opt-in si newsletter.
+2. CONCIERGE DU SITE (Sophie) — les conversations des visiteurs sont enregistrées :
+   sont-elles des données personnelles ? information préalable ? durée ? Ces
+   conversations servent aussi de source de leads au commercial : c'est un
+   traitement à part entière, à déclarer et à fonder juridiquement.
+3. UPLOAD DE DOCUMENTS CLIENT — le point le plus sensible : les briefs et documents
+   déposés peuvent contenir des données personnelles de tiers. Où sont-ils stockés,
+   combien de temps, qui y accède, sont-ils supprimables ?
+4. TRAITEMENT PAR LES AGENTS — le contenu client est envoyé à un fournisseur de
+   modèles (API). À documenter : quel sous-traitant ultérieur, où sont les serveurs,
+   quelle rétention côté fournisseur, quelle base pour le transfert hors UE.
+5. CORPUS RAG — vérifier qu'aucun contenu client n'alimente un corpus partagé entre
+   clients. Si c'est le cas, c'est un défaut de cloisonnement à corriger avant vente.
+6. ACCÈS À L'ORG SALESFORCE DU CLIENT — la plateforme lit et déploie dans une org
+   contenant les données des clients DE NOS CLIENTS. Chaîne de responsabilité :
+   client = responsable de traitement, DH = sous-traitant, fournisseurs = sous-
+   traitants ultérieurs. Le DPA doit refléter exactement cette chaîne.
+7. JOURNALISATION ET SAUVEGARDES — que contiennent les logs et les sauvegardes,
+   combien de temps, sont-ils purgés lors d'une demande de suppression ?
+8. PAIEMENT — ce que le prestataire de paiement collecte, ce que DH voit et
+   conserve, la facturation et sa durée légale de conservation.
+9. DROITS DES PERSONNES — comment on répond concrètement à un accès, une
+   rectification, une suppression, une portabilité : le parcours existe-t-il
+   techniquement, avec quel délai, qui le traite ?
+10. RÉSILIATION ET FIN DE CONTRAT — restitution des données, délai de suppression,
+    ce qui survit (facturation, obligations légales).
+
+Livrable : un tableau par étape (donnée / finalité / base légale / conservation /
+destinataires / verdict CONFORME - À CORRIGER - À DOCUMENTER), plus la liste
+priorisée de ce qui doit être réglé AVANT la première vente. Chaque exigence porte
+sa source officielle. Tu prépares un travail de mise en conformité ; le DPA et les
+clauses de responsabilité passent par un avocat, et tu le rappelles.
