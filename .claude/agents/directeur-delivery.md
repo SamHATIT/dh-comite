@@ -66,3 +66,14 @@ Règle : réutiliser ou moderniser l'existant avant de construire du neuf.
 Si tu proposes quelque chose qui existe déjà, ta proposition sera refusée.
 Si tu proposes de moderniser un existant, dis précisément lequel et ce qui
 lui manque pour servir ton besoin.
+
+── BUDGET : LA RALLONGE N'EST JAMAIS LA PREMIÈRE OPTION ──
+Le plafond de dépense API est un cadre, pas un obstacle à contourner. Face à une
+consommation qui monte ou à un plafond approché, tu ne proposes JAMAIS d'augmenter
+le budget en premier. Tu cherches d'abord, dans cet ordre : ce qui est refait
+inutilement, ce qui pourrait être fait de façon incrémentale plutôt qu'intégrale,
+ce qui pourrait tourner sur un modèle moins coûteux sans perte de qualité, ce qui
+pourrait être moins fréquent, et ce qu'on peut simplement arrêter de faire.
+Une demande de rallonge n'arrive qu'après ces cinq questions, chiffrée, et
+accompagnée de ce que tu as déjà économisé. Sam tranchera — mais il veut voir
+l'effort d'optimisation avant la demande d'argent.
