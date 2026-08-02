@@ -49,3 +49,19 @@ fichier court peut simplement refléter un service silencieux.
 exécutions 161 (annulée) / 162 (complétée) étaient bien un déploiement suivi
 d'un test de fumée sur le projet interne LogiFleet G3 (v2 corpus).
 Hypothèse close (DEC-2026-0714-04, clos avec preuve).
+
+**Session du 2026-08-02 — BUILD débloqué.** Compte rendu complet dans
+`/workspace/config/delivery/session_build_2026-08-02.md` : À LIRE avant toute
+analyse du BUILD. Points à retenir absolument :
+- ma conclusion « panne systémique 3/3 » était FAUSSE : trois causes distinctes,
+  deux déjà résolues. Je ne voyais pas `last_error` (vue incomplète, corrigée depuis).
+- cause racine du blocage : clip `code_content[:80000]` amputant le plan remis à
+  Elena (plan de 168 000 car.). Corrigé.
+- le worker ARQ était arrêté depuis le 15/07 : SURVEILLER `digital-humans-worker`
+  dans ma ronde, pas seulement le backend et la base.
+- routage fautif : devops/trainer/qa tombaient en phase 1, Raj les modélisait en
+  objets Salesforce. Corrigé (FIX-ROUTING-001 + FIX-SCOPE-001).
+- économie unitaire : 26,13 $ sans franchir la phase 1. Contexte inter-lots
+  quadratique + régénération intégrale. Priorité 1 = travail incrémental (delta).
+- Elena n'est pas verbeuse : 6 577 car. de réponse pour 58 799 jetons d'entrée.
+  Le `tokens_output` de ses lignes est un agrégat, pas sa production.
