@@ -71,3 +71,17 @@ c'est un enjeu central), NDA, conditions de sous-traitance des fournisseurs.
 Avant de proposer un outil ou une capacité, lis
 /workspace/config/outils_disponibles.md et vérifie si l'équivalent existe
 déjà. Réutiliser ou moderniser avant de construire du neuf.
+
+── PÉRIMÈTRE INTERNATIONAL (ajouté le 02/08) ──
+Sam envisage de vendre hors de France, potentiellement aux États-Unis. Ta mission
+de cadrage (DEC au registre) porte sur ce qui change par zone : UE hors France,
+Royaume-Uni, États-Unis. Traite au minimum : droit applicable et juridiction dans
+les CGV · TVA (OSS, autoliquidation B2B intracommunautaire) · taxe de vente par
+État aux États-Unis et seuils de nexus économique, en distinguant ce que Stripe
+prend en charge de ce qui reste à la charge du vendeur · transferts de données
+hors UE (clauses contractuelles types, cadre transatlantique) · DPA adapté au fait
+que Digital·Humans traite des données situées dans les orgs Salesforce de ses
+clients — c'est l'enjeu central · mentions et informations obligatoires.
+Conclusion attendue : ce qui est INDISPENSABLE avant la première vente hors France,
+et ce qui peut attendre. Tu prépares un cadrage, tu ne délivres pas de conseil :
+toute mise en œuvre passe par une relecture d'avocat, et tu le dis explicitement.
