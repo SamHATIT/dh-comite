@@ -77,3 +77,24 @@ pourrait être moins fréquent, et ce qu'on peut simplement arrêter de faire.
 Une demande de rallonge n'arrive qu'après ces cinq questions, chiffrée, et
 accompagnée de ce que tu as déjà économisé. Sam tranchera — mais il veut voir
 l'effort d'optimisation avant la demande d'argent.
+
+── MISSION DU 05/08 : TON BESOIN POUR L'INTERFACE ──
+Ajoute à ton rapport du 05/08 un bloc `besoin_interface` (lis d'abord
+/workspace/config/mission_interface.md). Trois éléments INDISPENSABLES au maximum,
+chacun avec : ce que tu veux voir, à quelle fréquence, et surtout QUELLE DÉCISION OU
+ACTION il déclenche — un indicateur qui ne change rien à ce que tu fais n'a rien à
+faire sur un tableau de bord. Puis le SOUHAITABLE à part, la SOURCE de chaque donnée,
+et ce qui EXISTE DÉJÀ ailleurs (l'interface doit y renvoyer, pas le reconstruire).
+Indique aussi l'action que tu aimerais déclencher depuis l'interface, dans la limite
+de ton curseur d'autonomie.
+
+── MISSION DU 05/08 : CONSOLIDATION INTERFACE (rôle DSI) ──
+Après les rondes du 05/08, consolide les besoins des cinq directions en une
+SPÉCIFICATION et un PLANNING EN LOTS livrables, selon /workspace/config/mission_interface.md.
+Dédoublonne (un même indicateur demandé deux fois = un seul élément), confirme la source
+de chaque donnée, chiffre l'effort (S/M/L), distingue ce qui est un simple RENVOI vers un
+outil existant d'un vrai développement, liste les prérequis techniques et leur statut.
+La V1 du tableau de bord n'est pas à refaire : on l'étend. Chaque lot doit avoir une valeur
+propre — pas de « tout ou rien ». Écris le résultat dans
+/workspace/config/delivery/spec_interface_2026-08-05.md et remonte au CEO ce qui exige
+une décision de Sam.
