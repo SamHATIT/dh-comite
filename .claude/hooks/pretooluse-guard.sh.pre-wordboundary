@@ -16,16 +16,14 @@ if [ "$TOOL" = "Bash" ]; then
 
   # DH-DEL-002 : prod en lecture seule — jamais les credentials applicatifs
   if echo "$CMD" | grep -qE 'DH_SecurePass|-U[[:space:]]*digital_humans([[:space:]]|$)|user=digital_humans'; then deny "DH-DEL-002 credentials prod interdits"; fi
-  # FIX-GUARD-001 (04/08) : limites de mot obligatoires. Sans elles, 'updated_at',
-  # 'deleted', 'last_updated' declenchaient le blocage — 5 rondes perdues le 04/08.
-  if echo "$CMD" | grep -qiE '\b(INSERT[[:space:]]+INTO|UPDATE|DELETE[[:space:]]+FROM|DROP|ALTER|TRUNCATE|GRANT)\b' && echo "$CMD" | grep -qE 'DEOS_RO_DSN|172\.19\.0\.1'; then deny "DH-DEL-002 écriture prod"; fi
+  if echo "$CMD" | grep -qiE '(INSERT|UPDATE|DELETE|DROP|ALTER|TRUNCATE|GRANT)[[:space:]]' && echo "$CMD" | grep -qE 'DEOS_RO_DSN|172\.19\.0\.1'; then deny "DH-DEL-002 écriture prod"; fi
 
   # DH-CRO/CMO/CSM-001 : aucun envoi externe
   if echo "$CMD" | grep -qE '(curl|wget)[^|;]*(-X[[:space:]]*(POST|PUT|PATCH|DELETE)|--data|--form|-d[[:space:]]|-F[[:space:]])'; then deny "DH-x-001 envoi externe"; fi
   if echo "$CMD" | grep -qE '(^|[;&|[:space:]])(mail|sendmail|mutt|msmtp)([[:space:]]|$)'; then deny "DH-x-001 email"; fi
 
   # DH-COS-002 : decisions uniquement via deos-decisions
-  if echo "$CMD" | grep -qE 'psql' && echo "$CMD" | grep -qiE '\b(INSERT[[:space:]]+INTO|UPDATE|DELETE[[:space:]]+FROM)\b[^;]*\bdecisions\b'; then deny "DH-COS-002 decisions via deos-decisions uniquement"; fi
+  if echo "$CMD" | grep -qE 'psql' && echo "$CMD" | grep -qiE '(INSERT|UPDATE|DELETE)[^;]*decisions'; then deny "DH-COS-002 decisions via deos-decisions uniquement"; fi
 
   # R14 : promotion de skills réservée à Sam
   if echo "$CMD" | grep -qE '(>|>>|cp[[:space:]]|mv[[:space:]]|tee[[:space:]])[^;|&]*\.claude/skills/'; then deny "R14 promotion de skill réservée à Sam"; fi
