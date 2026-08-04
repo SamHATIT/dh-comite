@@ -1,0 +1,40 @@
+{
+  "type": "page_linkedin_company",
+  "id": "CONT-2026-0804-02",
+  "canal": "linkedin_company_page",
+  "place_dans_sequence": "Hors séquence des 13 rangs — extension du rang 1 (refonte About, CONT-2026-0714-01, déjà validé par Sam le 14/07). Origine : DEC-2026-0803-04 (Sam, 03/08) : « accroche, résumé, bannière, cohérence avec la charte ». Le résumé existe déjà et est réutilisé tel quel ; seuls l'accroche (tagline) et le concept de bannière sont nouveaux ce jour.",
+  "contenu": {
+    "tagline": {
+      "texte": "Pas un outil. Un studio. Autonome par nature.",
+      "brass": "studio",
+      "note": "Réemploi exact de la ligne déjà validée (rangs 1 et 2, 14/07) plutôt qu'un nouvel angle — cohérence de marque, conforme à la discipline « tester avant de généraliser » : cette ligne est déjà la plus éprouvée du dispositif. 46 caractères, largement sous la limite LinkedIn (~120 car. pour le champ tagline)."
+    },
+    "resume_about": {
+      "texte": "Inchangé — reprise intégrale de CONT-2026-0714-01 (validé par Sam le 14/07, retouche pricing appliquée). Aucune réécriture : ce texte a été conçu pour ce même usage (le calendrier le désignait déjà « Refonte About — LinkedIn Company Page »).",
+      "note": "Pas de nouveau travail de copie ici — je ne recrée pas ce qui existe déjà (cohérent avec l'esprit de la règle budgétaire du 03/08)."
+    },
+    "banniere_visuelle": {
+      "texte": null,
+      "note": "DIFFÉRÉ. La bannière est un support image, pas du texte : elle doit être mutualisée avec le système visuel cinématique noir & blanc demandé par DEC-2026-0803-03/0803-05 (voir CONT-2026-0804-03), pour ne pas produire un second système visuel en parallèle. Je ne propose donc aucune bannière avant que le traitement Sophie (mesure rendu + coût) n'ait eu lieu. Un visuel provisoire sobre (charte ink/bone/brass, sans figure ni texte) peut couvrir l'intervalle si Sam le souhaite — à confirmer, coût quasi nul, à évaluer avec Delivery."
+    },
+    "point_de_vigilance_entracte": {
+      "texte": "Le lien du site pointant aujourd'hui vers la page Entracte, je reprends la lecture de Sam plutôt que d'en proposer une nouvelle : le texte de la page LinkedIn (tagline + résumé) est prêt et peut être mis en ligne dès maintenant, indépendamment du fait que le site pointe vers l'Entracte — les deux se lisent bien ensemble (« nous baissons nous-mêmes le rideau » est cohérent avec un moment de marque assumé, pas une panne cachée). Les approches commerciales sortantes, elles, restent au jalon de réouverture, conformément à la recommandation de Sam et au rôle de vérification que joue cette page pour tout destinataire d'une approche."
+    }
+  },
+  "faits_cites": [
+    {
+      "affirmation": "Le texte du résumé (« Pas un outil. Un studio... ») a été validé par Sam le 14/07/2026, retouche pricing incluse.",
+      "source": "config/contenus/CONT-2026-0714-01_about.md ; calendrier_editorial (rang 1, statut valide)"
+    },
+    {
+      "affirmation": "La grille tarifaire mentionnée dans le résumé (Free/Pro 49€/Team 1490€) correspond à l'offre canonique en vigueur.",
+      "source": "config/offre_dh.md#2026-08-03 (dernière relecture confirmée)"
+    }
+  ],
+  "conformite_marque": {
+    "transcreation": "Aucun nouveau texte à transcréer (résumé réutilisé, tagline réutilisée) — seule la structuration pour l'usage LinkedIn est nouvelle.",
+    "lexique_dh": "Cohérent avec le lexique déjà acté (« studio », « autonome par nature »). Aucun mot banni.",
+    "skill_applique": "dh-fr-copywriting — relecture de conformité effectuée, aucune modification nécessaire sur les deux textes réemployés."
+  },
+  "decision_demandee": "1) Sam : valider la tagline (réemploi, aucun risque de contenu neuf) et confirmer que le résumé déjà validé peut être publié tel quel sur la page LinkedIn. 2) Sam : confirmer la lecture proposée sur l'Entracte (page prête maintenant, texte seul ; démarchage sortant au jalon de réouverture) — ou trancher autrement. 3) Bannière : NON demandée aujourd'hui, différée à la décision sur le système visuel (CONT-2026-0804-03). Rien n'est publié ni programmé tant que 1-2 ne sont pas validés [DH-CMO-001]."
+}

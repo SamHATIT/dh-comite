@@ -1,0 +1,81 @@
+{
+  "type": "concept_copie_page_speciale",
+  "id": "ENTR-2026-0803-01",
+  "canal": "site_web (page https://digital-humans.fr/entracte.html — support à préciser par Delivery : animation web ou vidéo courte)",
+  "place_dans_sequence": "Hors séquence de lancement (rangs 1-13) — mission transverse ponctuelle, indépendante du fil rouge. Ne remplace ni ne retarde le rang 3 (portrait Sophie). Origine : DEC-2026-0802-08, brief config/mission_entracte.md.",
+  "contenu": {
+    "note_de_cadrage": "Le fond ne change pas (contrainte du brief) : nous avons baissé le rideau nous-mêmes, avant d'ouvrir, pas après. Aucune date de retour n'est promise. Le concept ci-dessous reprend volontairement la syntaxe déjà validée du post pivot ('Pas un outil. Un studio.') pour bâtir 'Pas une panne. Un entracte.' — cohérence de marque plutôt que nouvel angle. Découpage en 5 cartes/beats pour laisser à Delivery le choix entre scroll animé et vidéo courte (chaque carte = un plan ou un temps de scroll).",
+    "beats": [
+      {
+        "carte": 1,
+        "fonction": "titre",
+        "texte": "L'Entracte"
+      },
+      {
+        "carte": 2,
+        "fonction": "accroche",
+        "texte": "Pas une panne. Un entracte.",
+        "brass": "entracte",
+        "note": "Reprend la syntaxe du post pivot ('Pas un outil. Un studio.') déjà validée par Sam — cohérence de marque, pas un nouvel angle testé isolément."
+      },
+      {
+        "carte": 3,
+        "fonction": "raison",
+        "texte": "Nous baissons nous-mêmes le rideau, avant de vous recevoir — pas après.",
+        "brass": "nous-mêmes",
+        "note": "Reformulation plus directe (vouvoiement introduit : 'avant de vous recevoir') de la ligne actuelle 'Nous avons baissé le rideau de nous-mêmes'. Le brass porte l'idée centrale : geste choisi, pas subi."
+      },
+      {
+        "carte": 4,
+        "fonction": "contexte_factuel",
+        "texte": "Depuis le 2 août 2026, le nouveau cadre européen impose la transparence à toute intelligence artificielle exposée au public. Nous nous mettons en conformité avant de vous recevoir : la même exigence que celle que nous appliquons à notre studio. Rien ne sort sans preuve, rien n'est promis qui ne soit démontré.",
+        "brass": "avant de vous recevoir",
+        "note": "Neutralisation DEC-2026-0803-02 (arbitrage CEO, comité 03/08, étape 1) : l'auto-déclaration de conformité non sourcée ('Nous nous y conformons avant de vous recevoir') est remplacée par une formulation de démarche en cours ('Nous nous mettons en conformité avant de vous recevoir'), qui n'affirme aucun état de conformité atteint ni prouvé. Fond validé conservé : conformité proactive comme démarche, aucune date de retour promise. Le brass reste sur 'avant de vous recevoir' (le geste choisi, pas l'état de conformité). Aucune substance légale nouvelle ajoutée. L'audit AI Act art. 50 (DEC-2026-0802-07) est en_execution : à ce jour, aucune preuve de conformité n'est disponible, donc aucune ne peut être affirmée (DH-CMO-002). Étape suivante obligatoire : relecture Juridique adossée au rapport art. 50, puis validation Sam — brouillon toujours NON transmis, NON programmé (DH-CMO-001)."
+      },
+      {
+        "carte": 5,
+        "fonction": "excuse_et_duree",
+        "texte": "Nos excuses, si vous passiez nous voir aujourd'hui. Ce sera court.",
+        "brass": "court",
+        "note": "Vouvoiement direct (vs 'celles et ceux qui passaient nous voir' actuel, plus distant). Raccourci pour tenir le rythme d'un beat animé."
+      },
+      {
+        "carte": 6,
+        "fonction": "promesse_fidelite",
+        "texte": "Aux premiers compagnons de route : vous ne repartirez pas les mains vides. Nous préparons quelque chose pour celles et ceux qui nous auront fait confiance les premiers.",
+        "brass": "premiers",
+        "note": "Inchangé sur le fond (texte déjà en ligne, déjà vouvoyant) — conservé tel quel, aucune raison de le retravailler."
+      },
+      {
+        "carte": 7,
+        "fonction": "cloture",
+        "texte": "La Scène rouvrira quand nous serons prêts à vous y accueillir. Retour imminent.",
+        "brass": "vous",
+        "note": "Reprend le lexique 'la Scène' déjà employé dans le portrait Sophie (rang 3, en attente de validation) — fil de cohérence entre deux contenus de la marque, à confirmer une fois le rang 3 lui-même validé. ATTENTION : ne pas lire 'quand nous serons prêts' comme une promesse de date — c'est une condition, pas un calendrier ; à faire confirmer par le Juridique pour écarter toute ambiguïté avant production, conformément au brief."
+      },
+      {
+        "carte": 8,
+        "fonction": "contact",
+        "texte": "contact@digital-humans.fr",
+        "brass": null,
+        "note": "Inchangé."
+      }
+    ]
+  },
+  "faits_cites": [
+    {
+      "affirmation": "Depuis le 2 août 2026, le règlement européen (AI Act, article 50) impose de nouvelles obligations de transparence aux systèmes d'IA exposés au public.",
+      "source": "DEC-2026-0802-07 (\"URGENT AI Act article 50 applicable DEPUIS LE 02/08/2026\", registre decisions, créée le 2026-08-02) ; texte déjà publié sur https://digital-humans.fr/entracte.html (lu le 2026-08-03)"
+    },
+    {
+      "affirmation": "La page actuelle (https://digital-humans.fr/entracte.html) est déjà en ligne, sobre, dans la charte, et ne promet aucune date de retour précise.",
+      "source": "Lecture directe de https://digital-humans.fr/entracte.html le 2026-08-03 ; confirmé par config/mission_entracte.md ligne 7-9"
+    }
+  ],
+  "conformite_marque": {
+    "transcreation": "Concept pensé directement en français (aucune copie EN source pour cette page). Reformulations des cartes 3, 4 et 5 pour introduire le vouvoiement direct envers le visiteur, en cohérence avec la voix de marque (vous/votre systématique) — la version en ligne s'adressait à 'celles et ceux' de façon plus distante par endroits.",
+    "lexique_dh": "Réemploi du lexique de marque déjà acté : structure 'Pas un X. Un Y.' (post pivot, rang 2, valide) et 'la Scène' (portrait Sophie, rang 3, en_validation). Aucun mot de la liste bannie (délivrer, adresser, supporter, etc.). Une seule emphase brass par carte.",
+    "skill_applique": "dh-fr-copywriting (lu intégralement le 2026-08-03 — vouvoiement, registre tech×luxe, sobriété assurée, une emphase brass par phrase-clé, zéro calque)"
+  },
+  "decision_demandee": "1) CEO : confirmer au comité du 03/08 que Marketing pilote bien le concept + copie de la mission Entracte (rôle proposé dans DEC-2026-0802-08), avant toute transmission à Delivery. 2) Sam : valider ou amender ce concept (7 cartes) — en particulier la carte 7 ('La Scène rouvrira quand nous serons prêts à vous y accueillir'), à vérifier avec le Juridique pour écarter toute lecture comme promesse de date. 3) Juridique : relire l'ensemble avant toute mise en production, conformément au brief (la page traite de conformité, elle ne doit ni sur-promettre ni sous-entendre une obligation inexistante). Ce brouillon n'est transmis à personne d'autre que ce rapport tant que ces trois points ne sont pas levés — aucune publication, aucune programmation (DH-CMO-001)."
+}

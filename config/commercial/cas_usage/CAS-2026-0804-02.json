@@ -1,0 +1,22 @@
+{
+  "id": "CAS-2026-0804-02",
+  "type": "fiche_cas_usage_anonymise",
+  "titre_anonymise": "Suivi des essais cliniques et surveillance des effets indésirables (secteur santé)",
+  "produit_salesforce": "Service Cloud",
+  "tier_illustre": "Pro (49€/mois) — livrable SDS uniquement (business_analyst_specification + architect_solution_design, non vides)",
+  "preuve_technique": {
+    "project_id": 100,
+    "execution_id": 148,
+    "etat_final": "COMPLETED / sds_complete",
+    "tokens": 593447,
+    "duree_s": "non renseignée (duration_seconds NULL dans v_deos_executions)",
+    "cout": "8,339592 $ (coût de calcul interne, non un prix client) — sous la cible de 10 €/SDS fixée par Sam le 03/08"
+  },
+  "disclaimer": "Projet de test interne Digital·Humans, aucun client réel — à ne jamais présenter comme référence client. Vertical santé : vigilance accrue sur toute donnée sensible avant réutilisation commerciale (à faire confirmer par le Juridique si ce cas est retenu au-delà d'un usage interne).",
+  "source": "v_deos_projects#100 ; v_deos_executions#148 ; v_deos_sections#148 (psql $DEOS_RO_DSN 2026-08-04)",
+  "verification_produit": {
+    "verifie_contre": "/workspace/config/offre_dh.md#2026-08-04 — tier Pro : équipe complète + upload + mémoire, livrable = SDS, PAS de BUILD, PAS de déploiement",
+    "resultat": "Conforme : le cas s'arrête à sds_complete (SDS document 711 654 caractères, gap analysis, WBS et QA specifications non vides), aucun prix client communiqué [DH-CRO-002]."
+  },
+  "cree_le": "2026-08-04"
+}

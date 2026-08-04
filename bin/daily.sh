@@ -57,14 +57,20 @@ RC=$?
 rm -f "$CTX"
 echo "daily terminé RC=$RC — brief: briefs/brief-$TS.md"
 
-# Envoi Telegram du brief (validé 14/07 — sendMessage direct, pas de N8N sur ce trajet)
+# Dossier illustre (format de reference) + notification Telegram courte
+python3 /workspace/bin/dossier.py daily "$TS" > /tmp/dossier-path.txt 2>/tmp/dossier.err
+DOC=$(cat /tmp/dossier-path.txt 2>/dev/null)
+
 TOKEN=$(grep '^TELEGRAM_BOT_TOKEN=' /workspace/.env | cut -d= -f2)
 CHAT=$(grep '^TELEGRAM_CHAT_ID=' /workspace/.env | cut -d= -f2)
-if [ -n "${TOKEN:-}" ] && [ -n "${CHAT:-}" ] && [ -f "briefs/brief-$TS.md" ]; then
-  # Telegram limite à 4096 caractères : santé + tête du brief, lien vers le fichier pour le reste
-  HEAD=$(head -c 3500 "briefs/brief-$TS.md")
+if [ -n "${TOKEN:-}" ] && [ -n "${CHAT:-}" ]; then
+  SANTE=$(/workspace/bin/deos-state get brief 2>/dev/null | jq -r '.sante.score // "?"')
+  NDEC=$(psql "$COMITE_DB_DSN" -tA -c "SELECT count(*) FROM decisions WHERE statut NOT IN ('clos','refusee');" 2>/dev/null)
+  NALERTE=$(/workspace/bin/deos-state get brief 2>/dev/null | jq -r '[.alertes[]? | select((.gravite//"")|test("haute";"i"))] | length')
+  MSG="Brief du $TS — sante $SANTE/100
+Alertes hautes : ${NALERTE:-0}   ·   Decisions en attente : ${NDEC:-0}
+Dossier complet (graphiques, tableaux) :
+https://app.digital-humans.fr/comite/dossier/$(basename "${DOC:-brief-$TS.docx}")"
   curl -s --max-time 15 "https://api.telegram.org/bot$TOKEN/sendMessage" \
-    -d chat_id="$CHAT" --data-urlencode text="$HEAD
-
-[…] Brief complet : briefs/brief-$TS.md" > /dev/null && echo "brief envoyé sur Telegram"
+    -d chat_id="$CHAT" --data-urlencode text="$MSG" > /dev/null && echo "notification Telegram envoyee"
 fi

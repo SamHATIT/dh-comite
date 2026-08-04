@@ -1,0 +1,49 @@
+{
+  "type": "concept_visuel",
+  "id": "CONT-2026-0804-03",
+  "canal": "site_web + linkedin (bannière, série des portraits, présentation des directeurs)",
+  "place_dans_sequence": "Hors séquence des 13 rangs — concept transversal répondant à DEUX décisions groupées par Sam lui-même : DEC-2026-0803-03 (traitement visuel de la série des 11 portraits) et DEC-2026-0803-05 (identité visuelle des directeurs), avec la consigne explicite « un seul système visuel pour les deux usages ».",
+  "contenu": {
+    "references_de_genre_autorisees": [
+      "clair-obscur (contraste fort, pas de dégradé)",
+      "carton de titre façon cinéma classique (fond uni, typographie centrée)",
+      "grain argentique discret",
+      "format large (letterbox)",
+      "rideau de scène — cohérent avec le lexique déjà en place (« la Scène »)"
+    ],
+    "interdits_explicites": [
+      "aucune référence reconnaissable à une œuvre existante",
+      "aucun pastiche identifiable",
+      "aucune musique ni plan recréé",
+      "aucun portrait photoréaliste de personne (agents = agents, jamais présentés comme un effectif humain)"
+    ],
+    "palette": "ink / bone / brass — déjà en charte, aucune palette nouvelle à valider",
+    "usage_1_portraits_serie": {
+      "principe": "Un carton de titre (écran sombre, prénom en typographie brass) + un élément central stylisé évoquant le rôle de l'agent (silhouette ou pictogramme, jamais un visage réaliste) + transition « rideau qui se lève » entre les cartes.",
+      "gabarit": "Un seul gabarit reproductible (mêmes cadrages, même typo, seul l'élément central varie par agent) — pas une création originale par portrait.",
+      "sequencement": "UN traitement produit et mesuré pour Sophie d'abord (rendu réel + coût réel constaté), PUIS gabarit appliqué aux 10 suivants. Aucune des 11 productions n'est engagée en parallèle — conforme à l'instruction explicite de Sam."
+    },
+    "usage_2_identite_directeurs": {
+      "principe": "Silhouette ou pictogramme illustré (registre générique de film), jamais un visage photoréaliste — pour ne pas donner l'impression d'un effectif humain, motif que Sam associe explicitement au risque de l'article 50 de l'AI Act.",
+      "mention_obligatoire": "Toute apparition d'un directeur (site, intervention en ligne) porte la mention explicite « agent Digital·Humans » — jamais un prénom seul.",
+      "validation_prealable": "Le Juridique valide la mention et le caractère non trompeur AVANT toute mise en ligne — je ne propose pas de date de mise en ligne tant que cette relecture n'a pas eu lieu."
+    },
+    "roles": "Marketing (ce concept, direction du message) — Delivery (évalue le véhicule technique : animation web légère vs vidéo courte vs gabarit statique, chiffre la production réelle) — Juridique (valide la mention et le caractère non trompeur de l'identité des directeurs)."
+  },
+  "faits_cites": [
+    {
+      "affirmation": "Le cadre impératif (évocation de genre uniquement, palette ink/bone/brass, séquencement Sophie d'abord) reprend mot pour mot les termes de la décision de Sam.",
+      "source": "DEC-2026-0803-03 (comité, 2026-08-03, statut accordee)"
+    },
+    {
+      "affirmation": "Le risque de confusion avec un effectif humain est explicitement rattaché par Sam à l'article 50 de l'AI Act, pour lequel le site est actuellement en pause.",
+      "source": "DEC-2026-0803-05 (comité, 2026-08-03, statut accordee)"
+    }
+  ],
+  "conformite_marque": {
+    "transcreation": "Non applicable (concept visuel, pas de copie à transcréer à ce stade — les seuls mots produits ici sont la mention obligatoire « agent Digital·Humans »).",
+    "lexique_dh": "Réemploi du motif « la Scène » déjà en place dans le lexique de marque (post pivot, portrait Sophie).",
+    "skill_applique": "dh-fr-copywriting appliqué à la seule chaîne textuelle du concept (la mention obligatoire)."
+  },
+  "decision_demandee": "1) Sam : valider l'orientation du concept (références de genre, interdits, séquencement Sophie d'abord, mutualisation portraits/identité) avant que Delivery ne chiffre le véhicule technique. 2) Delivery : une fois l'orientation validée, chiffrer le coût réel de production du traitement Sophie (animation web vs vidéo courte vs gabarit statique) — aucun chiffre de production n'est avancé ici, faute de donnée [hypothèse déclarée]. 3) Juridique : validation de la mention et du caractère non trompeur de l'identité des directeurs, avant toute mise en ligne. Rien n'est produit ni engagé sur les 10 portraits suivants avant la mesure du traitement Sophie."
+}

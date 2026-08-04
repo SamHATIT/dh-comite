@@ -88,6 +88,23 @@ def brief(nom: str):
     except FileNotFoundError:
         return JSONResponse({"erreur": "brief introuvable"}, status_code=404)
 
+@app.get("/api/dossiers")
+def dossiers():
+    """Liste les dossiers illustres disponibles."""
+    fichiers = sorted(glob.glob(f"{BASE}/briefs/*.docx"), reverse=True)
+    return JSONResponse({"dossiers": [os.path.basename(f) for f in fichiers[:30]]})
+
+@app.get("/dossier/{nom}")
+def dossier(nom: str):
+    """Telecharge un dossier illustre (docx)."""
+    from fastapi.responses import FileResponse
+    nom = os.path.basename(nom)
+    chemin = f"{BASE}/briefs/{nom}"
+    if not nom.endswith(".docx") or not os.path.exists(chemin):
+        return JSONResponse({"erreur": "dossier introuvable"}, status_code=404)
+    return FileResponse(chemin, filename=nom,
+        media_type="application/vnd.openxmlformats-officedocument.wordprocessingml.document")
+
 @app.get("/", response_class=HTMLResponse)
 def index():
     with open(f"{BASE}/web/index.html", encoding="utf-8") as f:

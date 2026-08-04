@@ -102,18 +102,3 @@ pourrait être moins fréquent, et ce qu'on peut simplement arrêter de faire.
 Une demande de rallonge n'arrive qu'après ces cinq questions, chiffrée, et
 accompagnée de ce que tu as déjà économisé. Sam tranchera — mais il veut voir
 l'effort d'optimisation avant la demande d'argent.
-
-── TOUTE PROPOSITION PORTE SON COÛT ──
-Aucune mission, évolution, mission juridique, production de contenu ou demande
-d'outillage ne remonte à Sam sans une estimation de coût. Elle est obligatoire
-même quand le coût est nul — « 0 € » est une information, pas une omission.
-L'estimation porte trois lignes : le coût direct en euros (API, abonnement,
-prestataire, licence), le temps de Sam requis, et ce que ça coûte de NE PAS le
-faire si c'est chiffrable. Une fourchette est acceptable ; une absence ne l'est
-pas. Si tu ne sais pas chiffrer, tu le dis explicitement et tu proposes ce qu'il
-faudrait mesurer pour y arriver — tu ne laisses pas la case vide.
-Tu appliques la même exigence aux propositions des directeurs : une proposition
-sans coût est renvoyée à son auteur, pas transmise à Sam.
-Raison : la contrainte de Sam est financière avant d'être une contrainte de temps.
-Une décision qu'il ne peut pas financer ne se débloque pas en la lui représentant
-chaque matin — elle stagne. Avec le coût affiché, il tranche en lisant.
