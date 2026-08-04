@@ -196,6 +196,25 @@ def main():
         img(doc,g_decisions(dec))
         tbl(doc,["ID","Decision","Origine","Age"],
             [[d["id"],d["texte"][:110],d["origine"],f"{d.get('age_j',0)} j"] for d in dec[:14]])
+    ana=brief.get("analyse_decisions")
+    if ana:
+        head(doc,f"{n}. Les decisions instruites",1); n+=1
+        add(doc,"Chaque decision porte l'argument de celui qui la demande, l'argument contraire quand il existe, et la recommandation du CEO digital.",9.5,italic=True,color=GREY,space=10)
+        for d in (ana if isinstance(ana,list) else [ana])[:12]:
+            if not isinstance(d,dict): add(doc,str(d),10); continue
+            titre=f"{d.get('id','')} - {d.get('intitule') or d.get('texte','')}"
+            head(doc,titre.strip(' -')[:110],3)
+            if d.get("demandeur") or d.get("age_j") is not None:
+                add(doc,f"**Qui demande** : {d.get('demandeur','?')}"+(f" - en attente depuis {d['age_j']} jours" if d.get('age_j') is not None else ""),10,space=4)
+            if d.get("argument"): add(doc,f"**Son argument** : {d['argument']}",10,space=4)
+            if d.get("argument_contraire"): add(doc,f"**Argument contraire** : {d['argument_contraire']}",10,space=4)
+            opts=d.get("options")
+            if opts:
+                if isinstance(opts,list):
+                    for o in opts: add(doc,f"   \u2022 {o if isinstance(o,str) else json.dumps(o,ensure_ascii=False)}",10,space=3)
+                else: add(doc,f"**Options** : {opts}",10,space=4)
+            if d.get("recommandation"): add(doc,f"**Recommandation** : {d['recommandation']}",10,bold=False,space=4)
+            add(doc,"Ta reponse : ..................................................................",9.5,color=GREY,space=12)
     for key,title in [("hier","Hier - les faits"),("kpis","Indicateurs"),
               ("priorites_jour","Priorites"),("alertes","Alertes"),("opportunites","Opportunites")]:
         v=brief.get(key)

@@ -82,7 +82,6 @@ footer{margin-top:40px;border-top:1px solid var(--trait);padding-top:14px;color:
     <div style="margin-top:12px" class="liens">
       <a href="#" id="lien-brief">Brief du jour</a>
       <a href="#" id="lien-suivi">Page de suivi</a>
-      <a href="#" id="lien-archives">Archives des dossiers</a>
     </div>
   </div>
 </div>
@@ -190,23 +189,6 @@ document.getElementById("lien-brief").onclick=e=>{e.preventDefault();
   <div class="bloc liens"><h4>Archives</h4>${ETAT.briefs.map(b=>`<a href="#" onclick="voirBrief('${b}');return false">${b.replace(/^(brief-|comite-)|\.md$/g,"$1"==="comite-"?"comité ":"")}</a>`).join("")}</div>`);}
 async function voirBrief(n){const r=await fetch("api/brief/"+n);const j=await r.json();
   ouvrir(`<h2>${n}</h2><div class="md">${marked.parse(j.contenu||"")}</div>`);}
-async function ouvrirArchives(){
-  let j={dossiers:[]};
-  try{ const r=await fetch("api/dossiers"); j=await r.json(); }catch(e){}
-  const lignes = (j.dossiers||[]).map(n=>{
-    const hebdo = n.startsWith("comite-");
-    const d = n.replace(/^(brief|comite)-/,"").replace(/\.docx$/,"");
-    const jour = new Date(d+"T12:00:00").toLocaleDateString("fr-FR",{weekday:"long",day:"numeric",month:"long",year:"numeric"});
-    return `<tr><td>${hebdo?"Comité hebdomadaire":"Brief quotidien"}</td><td>${jour}</td>
-            <td><a href="dossier/${n}" download>télécharger</a></td></tr>`;
-  }).join("");
-  ouvrir(`<h2>Archives des dossiers</h2>
-    <div class="meta">Chaque rituel produit un dossier illustré — graphiques, tableaux, analyse du CEO digital.</div>
-    ${lignes ? `<table><thead><tr><th>Nature</th><th>Date</th><th></th></tr></thead><tbody>${lignes}</tbody></table>`
-             : `<div class="vide">Aucun dossier archivé pour l'instant. Le premier sera produit au prochain rituel.</div>`}`);
-}
-document.getElementById("lien-archives").onclick=e=>{e.preventDefault();ouvrirArchives();};
-
 function ouvrirSuivi(){ouvrir(`<h2>Page de suivi</h2><div class="md">${marked.parse(ETAT.page_suivi||"*Pas encore générée.*")}</div>`);}
 document.getElementById("lien-suivi").onclick=e=>{e.preventDefault();ouvrirSuivi();};
 
