@@ -1,0 +1,22 @@
+{
+  "id": "CAS-2026-0805-01",
+  "type": "fiche_cas_usage_anonymise",
+  "titre_anonymise": "Gestion locative et suivi de biens pour une agence immobilière",
+  "produit_salesforce": "Sales Cloud / gestion de portefeuille de biens",
+  "tier_illustre": "Pro (49€/mois) — livrable SDS uniquement (research_analyst_sds_document 693 642 caractères + architect_wbs 66 978 caractères, non vides ; PAS de BUILD, PAS de déploiement)",
+  "preuve_technique": {
+    "project_id": 90,
+    "execution_id": 138,
+    "etat_final": "COMPLETED / last_completed_phase = phase6_export (fin de pipeline SDS, aucune phase BUILD atteinte)",
+    "tokens": 456585,
+    "duree_s": "5143 (09/02/2026 09:39:41 -> 11:05:24, calculée à partir de started_at/completed_at)",
+    "cout": "non disponible — total_cost = 0 pour cette exécution du 09/02/2026, antérieure à l'activation du suivi de coût observée sur les exécutions d'août (contrairement aux fiches CAS-2026-0804-01/02, ce chiffre n'est PAS une preuve de gratuité, c'est un trou de données à signaler, pas à combler [source: cette ronde]"
+  },
+  "disclaimer": "Projet de test interne Digital·Humans, aucun client réel — à ne jamais présenter comme référence client.",
+  "source": "v_deos_projects#90 ; v_deos_executions#138 ; v_deos_sections#138 (psql $DEOS_RO_DSN 2026-08-05)",
+  "verification_produit": {
+    "verifie_contre": "/workspace/config/offre_dh.md#2026-08-05 — tier Pro : équipe complète + upload + mémoire, livrable = SDS, PAS de BUILD, PAS de déploiement",
+    "resultat": "Conforme : le cas s'arrête à phase6_export/sds (SDS 693 642 caractères, WBS 66 978 caractères, gap analysis et solution design non vides), aucun prix client communiqué, aucune promesse de BUILD [DH-CRO-002]."
+  },
+  "cree_le": "2026-08-05"
+}

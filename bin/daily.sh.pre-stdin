@@ -41,48 +41,21 @@ fresh priorites_semaine
 } > "$CTX"
 
 mkdir -p briefs
+claude -p "$(cat ceo/prompt-ceo.md)
 
-# FIX-ARGLIST-001 (05/08) : le prompt complet passait en argument de commande et a
-# depasse la limite du shell des que les 5 directions ont rapporte ("Argument list
-# too long", brief perdu le 05/08). Il transite desormais par un fichier lu sur
-# l'entree standard — aucune limite de taille.
-PROMPT=$(mktemp)
-{
-  cat ceo/prompt-ceo.md
-  echo ""
-  cat "$CTX"
-  echo ""
-  echo "INSTRUCTION DU JOUR : produis le daily brief du $TS."
-  echo "1. D'abord le bloc JSON brief_data (schéma Gate 1), stocké via :"
-  echo "   echo '<json>' | /workspace/bin/deos-state set brief --par ceo"
-  echo "2. Puis le Markdown complet (8 sections), écrit dans /workspace/briefs/brief-$TS.md"
-  echo "3. Restitue aussi le Markdown dans ta réponse."
-} > "$PROMPT"
+$(cat "$CTX")
 
-cat "$PROMPT" | claude -p \
+INSTRUCTION DU JOUR : produis le daily brief du $TS.
+1. D'abord le bloc JSON brief_data (schéma Gate 1), stocké via :
+   echo '<json>' | /workspace/bin/deos-state set brief --par ceo
+2. Puis le Markdown complet (8 sections), écrit dans /workspace/briefs/brief-$TS.md
+3. Restitue aussi le Markdown dans ta réponse." \
   --model "$CEO_MODEL" \
   --allowedTools "Bash,Read,Grep,Glob,Write" \
   --output-format json > "briefs/daily-$TS.meta.json" 2> "briefs/daily-$TS.err"
 RC=$?
-rm -f "$CTX" "$PROMPT"
+rm -f "$CTX"
 echo "daily terminé RC=$RC — brief: briefs/brief-$TS.md"
-
-# FIX-ALERTE-BRIEF (05/08) : le brief a echoue silencieusement le 05/08 (Argument
-# list too long) et personne n'a ete prevenu — l'alerte ne couvrait que les rondes.
-# Desormais, un brief absent ou perime declenche une alerte Telegram immediate.
-TOKEN_A=$(grep '^TELEGRAM_BOT_TOKEN=' /workspace/.env | cut -d= -f2)
-CHAT_A=$(grep '^TELEGRAM_CHAT_ID=' /workspace/.env | cut -d= -f2)
-FRAICHEUR=$(psql "$COMITE_DB_DSN" -tA -c "SELECT round(extract(epoch FROM now()-updated_at)/3600) FROM deos_state WHERE cle='brief';" 2>/dev/null)
-if [ ! -f "briefs/brief-$TS.md" ] || [ "${FRAICHEUR:-999}" -gt 3 ]; then
-  RAISON=$(tail -c 200 "briefs/daily-$TS.err" 2>/dev/null | tr '\n' ' ')
-  if [ -n "${TOKEN_A:-}" ] && [ -n "${CHAT_A:-}" ]; then
-    curl -s --max-time 15 "https://api.telegram.org/bot$TOKEN_A/sendMessage" -d chat_id="$CHAT_A" \
-      --data-urlencode text="🔴 BRIEF NON PRODUIT ($TS) — les rondes ont peut-etre reussi, mais le brief a echoue.
-Raison : ${RAISON:-inconnue}
-Les rapports bruts restent consultables sur https://app.digital-humans.fr/comite/" > /dev/null
-  fi
-  echo "$TS ALERTE : brief non produit — $RAISON" >> briefs/incidents.log
-fi
 
 # Dossier illustre (format de reference) + notification Telegram courte
 python3 /workspace/bin/dossier.py daily "$TS" > /tmp/dossier-path.txt 2>/tmp/dossier.err

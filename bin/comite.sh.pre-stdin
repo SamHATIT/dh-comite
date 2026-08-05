@@ -28,23 +28,18 @@ ls -1 briefs/brief-2026-*.md 2>/dev/null | tail -6 | sed 's/^/- /'
 } > "$CTX"
 
 mkdir -p briefs
-PROMPT=$(mktemp)
-{
-  cat ceo/prompt-ceo.md
-  echo ""
-  cat ceo/prompt-comite-hebdo.md
-  echo ""
-  cat "$CTX"
-  echo ""
-  echo "INSTRUCTION : préside le comité hebdo du $TS — déroule les quatre temps, écris le CR dans /workspace/briefs/comite-$TS.md et restitue-le."
-} > "$PROMPT"
+claude -p "$(cat ceo/prompt-ceo.md)
 
-cat "$PROMPT" | claude -p \
+$(cat ceo/prompt-comite-hebdo.md)
+
+$(cat "$CTX")
+
+INSTRUCTION : préside le comité hebdo du $TS — déroule les quatre temps, écris le CR dans /workspace/briefs/comite-$TS.md et restitue-le." \
   --model claude-fable-5 \
   --allowedTools "Task,Bash,Read,Grep,Glob,Write" \
   --output-format json > "briefs/comite-$TS.meta.json" 2> "briefs/comite-$TS.err"
 RC=$?
-rm -f "$CTX" "$PROMPT"
+rm -f "$CTX"
 echo "comité terminé RC=$RC — CR: briefs/comite-$TS.md"
 
 # Dossier illustre (format de reference) + notification Telegram courte
