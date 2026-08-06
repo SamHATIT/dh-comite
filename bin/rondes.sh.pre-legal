@@ -26,15 +26,6 @@ if [ "$DOW" -le 5 ]; then
   run directeur-customer-success ""
   run directeur-marketing ""
   run chief-of-staff ",Write"
-  # FIX-LEGAL-001 (06/08) : le Directeur Juridique n'etait dans AUCUNE ronde.
-  # Cree le 02/08 en "regime a la demande", il n'a jamais ete invoque — d'ou
-  # deux missions accordees sans aucun livrable pendant quatre jours.
-  # Il tourne desormais le LUNDI uniquement : son perimetre est ponctuel, une
-  # ronde quotidienne serait du gaspillage. Il peut aussi etre invoque a la
-  # demande par le CEO quand un sujet juridique surgit.
-  if [ "$(date +%u)" = "1" ]; then
-    run directeur-legal ""
-  fi
 fi
 wait
 
