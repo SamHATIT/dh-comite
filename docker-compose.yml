@@ -9,6 +9,13 @@ services:
       - ./:/workspace
       - comite_home:/root
       - /var/log/digital-humans:/prodlogs:ro
+      # Backlog de la plateforme, en LECTURE SEULE (06/08). Le Directeur
+      # Delivery tient le backlog des evolutions selon sa fiche, mais le
+      # conteneur ne montait pas le depot : il ne pouvait rien lire. C'est la
+      # cause de son immobilisme sur ce point, signalee par lui-meme.
+      # Lecture seule : il propose, il ne modifie pas — conforme a son curseur
+      # "ecrire_base = Conseille" et "modifier_dispositif = Observe".
+      - /root/workspace/digital-humans-production/docs:/backlog:ro
     networks: [comite_net]
     restart: unless-stopped
 
