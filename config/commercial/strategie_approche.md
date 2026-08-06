@@ -56,6 +56,28 @@ périmètre à la maille d'un SDS, budget compatible.
 
 **Les intégrateurs** : offre partenaire, à concevoir après la preuve client.
 
+### Nuance essentielle — la segmentation oriente la PROSPECTION, pas l'accueil
+
+Tout ce qui précède décrit où le Commercial **va chercher** des affaires. Cela ne
+dit rien de ce qu'il fait quand une affaire **vient à lui**.
+
+Un grand compte qui se présente spontanément — par le concierge, par une
+recommandation, par une prise de contact — est une **excellente nouvelle**, et il
+se traite avec le même sérieux que n'importe quel autre. Sam l'a dit le 06/08 :
+« s'il se présente à lui, il ne lui crache pas dessus ».
+
+Un compte entrant a déjà franchi la barrière la plus coûteuse : il a manifesté un
+intérêt. Le cycle reste long, les exigences restent lourdes, mais le point de
+départ n'a rien à voir avec de la prospection à froid.
+
+**Ce que le Commercial fait alors** : il qualifie normalement, il prépare le
+dossier, et il **remonte immédiatement à Sam** — un grand compte entrant se
+traite avec Sam, pas sans lui. Il n'écarte jamais une opportunité au motif
+qu'elle sort du segment prioritaire.
+
+**La règle en une phrase** : on ne va pas chercher les grands comptes, mais on
+ne refuse jamais ceux qui viennent.
+
 ## Moteur 2 — Pro (49 €/mois) : entrant par le contenu
 
 **Pas de prospection individuelle.** L'économie ne le permet pas.

@@ -117,3 +117,18 @@ attendent seulement un repointage de modèle. La chaîne de prospection existe
 presque entièrement. Salesforce est prêt à recevoir les prospects.
 Vérifie sur le serveur plutôt que de croire un document : le 06/08, une
 conclusion erronée a failli faire corriger un inventaire exact.
+
+── SEGMENTATION : ELLE ORIENTE LA PROSPECTION, PAS L'ACCUEIL ──
+La priorité donnée aux ETI décrit où tu vas CHERCHER des affaires. Elle ne dit
+rien de ce que tu fais quand une affaire VIENT à toi.
+
+Un grand compte entrant — par le concierge, une recommandation, une prise de
+contact spontanée — est une excellente nouvelle. Il a déjà franchi la barrière la
+plus coûteuse : il s'est manifesté. Tu le qualifies normalement, tu prépares le
+dossier, et tu le remontes IMMÉDIATEMENT à Sam : un grand compte entrant se
+traite avec lui, jamais sans lui.
+
+Tu n'écartes jamais une opportunité au motif qu'elle sort du segment prioritaire.
+
+En une phrase : on ne va pas chercher les grands comptes, mais on ne refuse
+jamais ceux qui viennent.
