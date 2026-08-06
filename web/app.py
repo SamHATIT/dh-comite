@@ -310,6 +310,44 @@ def api_demo(action: str):
         return {"erreur": str(ex)}
 
 
+@app.get("/api/brief_complet")
+def api_brief_complet():
+    """Acte I — tout ce que le comite a produit aujourd'hui, sans rien ecraser.
+    Les champs longs sont transmis ENTIERS : c'est l'interface qui applique
+    le motif de l'incipit, pas l'API qui tronque."""
+    try:
+        r = q(DSN, "SELECT valeur FROM deos_state WHERE cle='brief'")
+        if not r:
+            return {"erreur": "Aucun brief encore produit."}
+        b = r[0]["valeur"] or {}
+    except Exception as e:
+        return {"erreur": str(e)}
+
+    def txt(x):
+        if isinstance(x, dict):
+            return x.get("texte") or x.get("objet") or x.get("nom") or str(x)
+        return str(x)
+
+    # Les indicateurs portent leur direction d'origine, pour le regroupement.
+    kpis = []
+    for k in (b.get("kpis") or []):
+        if not isinstance(k, dict):
+            continue
+        src = (k.get("source") or "").replace("rapport_", "").split()[0] if k.get("source") else ""
+        kpis.append({"nom": k.get("nom", "—"),
+                     "valeur": k.get("valeur") or k.get("value") or "",
+                     "direction": src or "autres"})
+
+    return {
+        "date": b.get("date"),
+        "sante": b.get("sante") or {},
+        "kpis": kpis,
+        "alertes": [txt(a) for a in (b.get("alertes") or [])],
+        "decisions_attendues": [txt(d) for d in (b.get("decisions_attendues") or [])],
+        "priorites_jour": [txt(p) for p in (b.get("priorites_jour") or [])],
+    }
+
+
 @app.get("/comite.css")
 def feuille_style():
     from fastapi.responses import FileResponse

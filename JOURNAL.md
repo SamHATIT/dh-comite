@@ -1,9 +1,10 @@
 # Journal — dh-comite
 
 > Genere automatiquement depuis les messages de commit.
-> Derniere mise a jour : 06/08/2026 20:39 UTC
+> Derniere mise a jour : 06/08/2026 20:43 UTC
 
 ## 2026-08-06
+- Acte II implemente : poste de pilotage dans le langage du Studio. Sur-titre numerote, corps en mono, chiffres romains pour les decisions en attente, trois etats d'absence distincts (perime, absent, non calculable) en cadre hachure. Chemins relatifs pour fonctionner derriere le prefixe nginx. `1231612`
 - Journal des refus filtrable (retour de Sam) : 42 entrees sont illisibles sans tri. Filtres par direction, par famille de tache et par origine (curseur ou regle figee), avec compteur. Un second clic sur un filtre actif le retire. Verifie : Marketing passe de 40 a 4 refus. `edb16b0`
 - Acte III implemente dans le langage du Studio : sur-titre numerote (No 03), corps en JetBrains Mono, filets en laiton 24 pourcent, volet lateral pour le texte structure (motif du handoff Claude Design). Verifie : 36 cases, 7 canaux contraints, 1 evolution prevue, 40 refus, volet fonctionnel. `f41915b`
 - Correction : le comite hebdomadaire reste sur Fable 5, choix delibere de Sam pour l'analyse croisee en quatre phases. La regle n'est pas 'toujours le plus recent' mais 'le modele adapte au besoin, dans sa derniere version'. `b5d6c20`

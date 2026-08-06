@@ -1,304 +1,219 @@
-<!doctype html><html lang="fr"><head><meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Digital·Humans — Comité</title>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;1,500;1,600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/marked/12.0.0/marked.min.js"></script>
+<!doctype html><html lang="fr"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Acte I — Tableau de bord du comité</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Inter:wght@300;400&family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="comite.css">
 <style>
-:root{--noir:#0c0b09;--carbone:#141310;--trait:#2a2620;--ivoire:#ece7de;--gris:#9a938a;
---laiton:#c8a464;--vert:#7fb069;--ambre:#d9a441;--rouge:#c25b4e;--serif:'Cormorant Garamond',serif;--mono:'JetBrains Mono',monospace}
-*{box-sizing:border-box;margin:0}
-body{background:var(--noir);color:var(--ivoire);font-family:var(--mono);font-size:13px;min-height:100vh}
-a{color:var(--laiton);text-decoration:none}
-.wrap{max-width:1180px;margin:0 auto;padding:28px 24px 60px}
-header{display:flex;justify-content:space-between;align-items:baseline;border-bottom:1px solid var(--trait);padding-bottom:18px;margin-bottom:30px}
-.marque{font-family:var(--serif);font-size:26px;font-style:italic}.marque b{font-style:normal;font-weight:500}
-.eyebrow{letter-spacing:.28em;text-transform:uppercase;font-size:10px;color:var(--gris)}
-.hero{display:flex;gap:40px;align-items:center;margin-bottom:36px}
+/* ── Le poinçon : score + arc, motif du Studio ── */
+.hero{display:flex;gap:38px;align-items:flex-start;flex-wrap:wrap;margin-bottom:12px}
 .poincon{position:relative;width:150px;height:150px;flex:none}
 .poincon svg{transform:rotate(-90deg)}
-.poincon .score{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
-.poincon .score b{font-family:var(--serif);font-size:44px;font-weight:500;font-style:italic}
-.poincon .score span{font-size:9px;letter-spacing:.24em;color:var(--gris);text-transform:uppercase}
-.hero h1{font-family:var(--serif);font-size:34px;font-weight:500;font-style:italic;line-height:1.15;margin-bottom:8px}
-.hero .sub{color:var(--gris);max-width:56ch;line-height:1.6}
-/* Lecture longue : casse normale, pas de chasse fixe, pas d'interlettrage.
-   Les capitales suppriment la silhouette des mots — tenable sur trois mots
-   de sur-titre, epuisant sur un paragraphe. */
-/* Releve chiffre plutot que prose : chaque donnee a sa ligne, sa valeur et,
-   quand c'est une proportion, sa barre. On lit en une seconde au lieu de
-   dechiffrer un paragraphe. */
-.releve{margin-top:6px;max-width:52ch}
-/* Le calcul d'un score : le RESULTAT d'abord, les termes reperables ensuite,
-   le raisonnement replie. Un titre "calcul" suivi d'un pave n'apprend rien. */
-.calc-res{display:flex;align-items:baseline;gap:10px;margin:4px 0 14px}
-.calc-res b{font-family:var(--serif);font-size:38px;font-weight:400;color:var(--creme,#f5f2ec)}
-.calc-res span{font-family:var(--mono,monospace);font-size:9.5px;letter-spacing:.18em;
-  text-transform:uppercase;color:var(--gris)}
-.calc-t{border-top:1px solid var(--trait)}
-.ct{display:grid;grid-template-columns:52px 1fr;gap:12px;padding:8px 0;
-  border-bottom:1px solid var(--trait);align-items:baseline}
-.ct-v{font-family:var(--mono,monospace);font-size:13px;text-align:right}
-.ct-moins{color:var(--rouge,#b85b49)} .ct-plus{color:var(--vert,#6e9c5c)}
-.ct-r{font-size:12.5px;color:var(--gris);line-height:1.5}
-.calc-d{margin-top:14px}
-.calc-d summary{font-family:var(--mono,monospace);font-size:9.5px;letter-spacing:.18em;
-  text-transform:uppercase;color:var(--gris);cursor:pointer;padding:6px 0}
-.calc-d summary:hover{color:var(--or,#c8a464)}
-.calc-p{font-size:13px;line-height:1.65;color:var(--gris);padding:10px 0 0 14px;
-  border-left:1px solid var(--trait);margin-top:6px}
-.rl{display:grid;grid-template-columns:1fr auto;gap:6px 14px;align-items:baseline;
-  padding:9px 0;border-bottom:1px solid var(--trait)}
-.rl-l{font-family:var(--mono,'JetBrains Mono',monospace);font-size:9.5px;letter-spacing:.16em;
-  text-transform:uppercase;color:var(--gris)}
-.rl-v{font-family:var(--serif);font-size:19px;font-weight:400;text-align:right;color:var(--creme,#f5f2ec)}
-.rl-v .rl-s{font-size:12px;color:var(--gris)}
-.rl-manq{font-size:13px;font-style:italic;color:var(--ambre,#c79a3a)}
-.rl-b{grid-column:1/-1;height:2px;background:var(--trait);overflow:hidden;margin-top:2px}
-.rl-b i{display:block;height:100%;background:var(--or,#c8a464);width:0;
-  transition:width .9s cubic-bezier(.2,.7,.3,1)}
-.rl-note{margin-top:12px;font-size:12px;color:var(--gris);font-style:italic}
-.explication{margin-top:16px;max-width:64ch;font-size:13.5px;line-height:1.65;
-  color:var(--gris);border-left:1px solid var(--or,#c8a464);padding-left:16px;
-  font-family:var(--sans,'Inter',system-ui,sans-serif);text-transform:none;letter-spacing:0}
-.grille{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:14px;margin-bottom:34px}
-.tuile{background:var(--carbone);border:1px solid var(--trait);padding:18px 20px;cursor:pointer;transition:border-color .18s}
-.tuile:hover{border-color:var(--laiton)}
-.tuile .haut{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:12px}
-.tuile h2{font-family:var(--serif);font-size:20px;font-weight:500;font-style:italic}
-.pastille{display:inline-flex;align-items:center;gap:6px;font-size:10px;letter-spacing:.18em;text-transform:uppercase}
-.pastille i{width:8px;height:8px;border-radius:50%;display:inline-block}
-.v i{background:var(--vert)}.a i{background:var(--ambre)}.r i{background:var(--rouge)}.n i{background:var(--gris)}
-.v{color:var(--vert)}.a{color:var(--ambre)}.r{color:var(--rouge)}.n{color:var(--gris)}
-.kpi{display:flex;justify-content:space-between;gap:12px;padding:5px 0;border-top:1px dashed var(--trait);color:var(--gris)}
-.kpi b{color:var(--ivoire);font-weight:500;text-align:right}
-.tuile .pied{margin-top:10px;font-size:10px;color:var(--gris);letter-spacing:.06em}
-.section h3{font-family:var(--serif);font-style:italic;font-weight:500;font-size:22px;margin:26px 0 12px}
-table{width:100%;border-collapse:collapse}
-td,th{padding:8px 10px;border-bottom:1px solid var(--trait);text-align:left;vertical-align:top}
-th{color:var(--gris);font-weight:400;font-size:10px;letter-spacing:.2em;text-transform:uppercase}
-.badge{border:1px solid var(--trait);padding:2px 8px;font-size:10px;letter-spacing:.1em;text-transform:uppercase;white-space:nowrap}
-.panneau{position:fixed;top:0;right:0;bottom:0;width:min(720px,94vw);background:var(--carbone);border-left:1px solid var(--laiton);
- transform:translateX(102%);transition:transform .25s ease;overflow-y:auto;padding:30px 34px;z-index:10}
-.panneau.ouvert{transform:none}
-.voile{position:fixed;inset:0;background:rgba(5,4,3,.6);opacity:0;pointer-events:none;transition:opacity .25s;z-index:9}
-.voile.ouvert{opacity:1;pointer-events:auto}
-.fermer{float:right;cursor:pointer;color:var(--gris);font-size:18px;padding:4px 10px;border:1px solid var(--trait)}
-.panneau h2{font-family:var(--serif);font-style:italic;font-weight:500;font-size:26px;margin-bottom:4px}
-.panneau .meta{color:var(--gris);font-size:11px;margin-bottom:18px}
-.bloc{margin-bottom:22px}.bloc h4{letter-spacing:.24em;text-transform:uppercase;font-size:10px;color:var(--laiton);margin-bottom:8px}
-.fait{padding:7px 0;border-top:1px dashed var(--trait);line-height:1.55}
-.src{display:block;color:var(--gris);font-size:10px;margin-top:2px}
-.liens a{display:inline-block;border:1px solid var(--laiton);color:var(--laiton);padding:7px 14px;margin:0 8px 8px 0;
- font-size:10px;letter-spacing:.18em;text-transform:uppercase}
-.liens a:hover{background:var(--laiton);color:var(--noir)}
-.md{line-height:1.65;color:var(--ivoire)}
-.md h1,.md h2,.md h3{font-family:var(--serif);font-style:italic;font-weight:500;margin:18px 0 8px}
-.md table{margin:10px 0}.md code{color:var(--laiton)}.md li{margin:4px 0 4px 18px}
-.vide{color:var(--gris);font-style:italic;padding:14px 0}
-footer{margin-top:40px;border-top:1px solid var(--trait);padding-top:14px;color:var(--gris);font-size:10px;letter-spacing:.14em}
-@media (prefers-reduced-motion:reduce){.panneau,.voile,.tuile{transition:none}}
+.poincon .sc{position:absolute;inset:0;display:flex;flex-direction:column;
+ align-items:center;justify-content:center}
+.poincon .sc b{font-family:var(--serif);font-size:46px;font-weight:400;font-style:italic;color:var(--bone)}
+.poincon .sc span{font-family:var(--mono);font-size:8.5px;letter-spacing:.22em;
+ text-transform:uppercase;color:var(--bone-4);margin-top:4px}
+.hero-t{flex:1;min-width:280px}
+/* ── L'INCIPIT — motif central du handoff Claude Design ── */
+.notes{margin-top:26px;border-top:1px solid var(--hair)}
+.inc{border-bottom:1px solid var(--hair-2);padding:16px 0}
+.inc-h{display:flex;align-items:baseline;gap:14px;margin-bottom:10px}
+.inc-l{font-family:var(--mono);font-size:9.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--bone-4)}
+.inc-a{margin-left:auto;font-family:var(--mono);font-size:9px;letter-spacing:.16em;
+ text-transform:uppercase;color:var(--brass-3);cursor:pointer;white-space:nowrap;
+ background:none;border:none;padding:0;display:inline-flex;align-items:center;gap:8px}
+.inc-a:hover{color:var(--brass)}
+.inc-a i{font-style:normal;display:inline-block;transition:transform .3s var(--ease)}
+.inc-a.on i{transform:rotate(90deg)}
+.inc-p{max-height:6.4em;overflow:hidden;transition:max-height .5s var(--ease);
+ font-size:12px;line-height:2;color:var(--bone-3);max-width:70ch}
+.inc-p.on{max-height:560px;border-left:1px solid var(--hair);padding-left:16px}
+.inc-p.nul{max-height:0}
+/* ── Indicateurs groupés par direction ── */
+.grp{margin-bottom:26px}
+.grp-h{display:flex;align-items:baseline;gap:14px;padding-bottom:10px;border-bottom:1px solid var(--hair)}
+.grp-t{font-family:var(--serif);font-style:italic;font-size:18px;color:var(--bone-2)}
+.grp-m{margin-left:auto;font-family:var(--mono);font-size:9px;letter-spacing:.16em;
+ text-transform:uppercase;color:var(--bone-4)}
+.k{padding:13px 0;border-bottom:1px solid var(--hair-2)}
+.k-h{display:grid;grid-template-columns:1fr auto;gap:14px;align-items:baseline}
+.k-l{font-family:var(--mono);font-size:11px;color:var(--bone-4)}
+.k-v{font-family:var(--serif);font-size:20px;color:var(--bone);text-align:right;white-space:nowrap}
+.k-v.abs{font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--bone-4)}
+.k-d{font-size:11.5px;line-height:1.8;color:var(--bone-4);margin-top:7px;
+ max-height:4.4em;overflow:hidden;transition:max-height .4s var(--ease);max-width:76ch}
+.k-d.on{max-height:280px}
+.k-a{font-family:var(--mono);font-size:8.5px;letter-spacing:.16em;text-transform:uppercase;
+ color:var(--brass-3);cursor:pointer;background:none;border:none;padding:4px 0 0;display:block}
+.k-a:hover{color:var(--brass)}
+/* ── Alertes et décisions ── */
+.li{padding:14px 0;border-bottom:1px solid var(--hair-2);display:grid;
+ grid-template-columns:32px 1fr;gap:14px;align-items:baseline}
+.li-r{font-family:var(--serif);font-style:italic;font-size:15px;color:var(--brass-3)}
+.li-t{font-size:12.5px;line-height:1.8;color:var(--bone-3);max-height:5.4em;overflow:hidden;
+ transition:max-height .4s var(--ease);max-width:80ch}
+.li-t.on{max-height:400px}
+@media (max-width:640px){
+  .hero{gap:24px}
+  .poincon{width:120px;height:120px}
+  .poincon svg{width:120px;height:120px}
+  .poincon .sc b{font-size:38px}
+  .k-h{grid-template-columns:1fr}
+  .k-v{text-align:left;margin-top:4px}
+  .li{grid-template-columns:24px 1fr;gap:10px}
+}
 </style></head><body>
 <div class="wrap">
-<header>
-  <div><div class="eyebrow">Comité de direction augmenté</div>
-  <div class="marque"><b>Digital</b>·Humans</div></div>
-  <div class="eyebrow" id="horodatage"></div>
-</header>
-
-<div class="hero">
-  <div class="poincon">
-    <svg width="150" height="150" viewBox="0 0 150 150">
-      <circle cx="75" cy="75" r="66" fill="none" stroke="#2a2620" stroke-width="5"/>
-      <circle id="jauge" cx="75" cy="75" r="66" fill="none" stroke="#c8a464" stroke-width="5"
-        stroke-linecap="round" stroke-dasharray="414.7" stroke-dashoffset="414.7"/>
-      <circle cx="75" cy="75" r="56" fill="none" stroke="#2a2620" stroke-width="1"/>
-    </svg>
-    <div class="score"><b id="score">—</b><span id="tendance">santé</span></div>
+  <div class="bandeau">
+    <div><div class="marque">Digital·<em>Humans</em></div>
+      <div class="devise">Comité de direction · augmenté</div></div>
+    <nav class="nav">
+      <a href="./" class="on">Acte I · Tableau de bord</a>
+      <a href="pilotage">Acte II · Pilotage</a>
+      <a href="gouvernance">Acte III · Gouvernance</a>
+      <a href="rapports">Rapports</a>
+    </nav>
   </div>
-  <div>
-    <h1>La journée, contresignée.</h1>
-    <div class="sub" id="soustitre">Chargement de l'état du comité…</div>
-    <div class="explication" id="explication" style="display:none"></div>
-    <div style="margin-top:12px" class="liens">
-      <a href="#" id="lien-brief">Brief du jour</a>
-      <a href="#" id="lien-suivi">Page de suivi</a>
-      <a href="#" id="lien-archives">Archives des dossiers</a>
+
+  <div class="acte" id="acte">Nº 01 · Tableau de bord</div>
+  <div class="hero">
+    <div class="poincon">
+      <svg width="150" height="150" viewBox="0 0 150 150">
+        <circle cx="75" cy="75" r="66" fill="none" stroke="#1C1C1F" stroke-width="4"/>
+        <circle id="arc" cx="75" cy="75" r="66" fill="none" stroke="#C8A97E" stroke-width="4"
+          stroke-linecap="round" stroke-dasharray="414.7" stroke-dashoffset="414.7"
+          style="transition:stroke-dashoffset .9s cubic-bezier(.4,0,.2,1)"/>
+        <circle cx="75" cy="75" r="56" fill="none" stroke="#C8A97E1F" stroke-width="1"/>
+      </svg>
+      <div class="sc"><b id="score">—</b><span id="mot">santé</span></div>
+    </div>
+    <div class="hero-t">
+      <h1>La journée, <em>contresignée</em></h1>
+      <div id="releve"></div>
     </div>
   </div>
+
+  <div class="notes" id="notes"></div>
+
+  <div class="section">
+    <h2>Les indicateurs</h2>
+    <p class="chapo" id="kpi-c">Ce que les directions ont remonté ce jour.</p>
+    <div id="kpis"></div>
+  </div>
+
+  <div class="section">
+    <h2>Les alertes</h2>
+    <p class="chapo" id="al-c"></p>
+    <div id="alertes"></div>
+  </div>
+
+  <div class="section">
+    <h2>Ce qui attend votre arbitrage</h2>
+    <p class="chapo" id="dec-c"></p>
+    <div id="decisions"></div>
+  </div>
 </div>
-
-<div class="grille" id="tuiles"></div>
-
-<div class="section">
-  <h3>Décisions — ce qui t'attend, ce qui vient d'être acté</h3>
-  <table id="tbl-decisions"><thead><tr><th>ID</th><th>Décision</th><th>Origine</th><th>Statut</th><th>Âge</th></tr></thead><tbody></tbody></table>
-</div>
-
-<footer>Digital·Humans — comité de direction augmenté · lecture seule · les actions passent par le daily, Telegram ou deos-decisions.</footer>
-</div>
-
-<div class="voile" id="voile" onclick="fermer()"></div>
-<aside class="panneau" id="panneau" aria-modal="true"></aside>
 
 <script>
-const DOMAINES = {
-  delivery:   {titre:"Delivery / Produit", liens:[["Console admin (suivi interne)","https://app.digital-humans.fr/admin/"]]},
-  commercial: {titre:"Commercial",         liens:[["Pipeline Salesforce","https://orgfarm-2b37d18797-dev-ed.develop.lightning.force.com"],["Objectifs (plan H2)","#"]]},
-  marketing:  {titre:"Marketing & Contenu",liens:[["Journal / Ghost","https://digital-humans.fr/journal"],["Séquence LinkedIn","#suivi"]]},
-  cs:         {titre:"Customer Success",   liens:[["Comptes & usage","https://app.digital-humans.fr/admin/"],["Cases Salesforce","https://orgfarm-2b37d18797-dev-ed.develop.lightning.force.com"]]},
-  cos:        {titre:"Exécution (CoS)",    liens:[["Page de suivi","#suivi"]]}
-};
-const CLS = s => ({vert:"v",ambre:"a",rouge:"r"}[s]||"n");
-let ETAT=null;
+const ROM=['I','II','III','IV','V','VI','VII','VIII','IX','X','XI','XII','XIII','XIV','XV','XVI'];
+const DIRS={delivery:'Delivery',commercial:'Commercial',marketing:'Marketing',
+ 'customer-success':'Customer Success','chief-of-staff':'Chief of Staff',legal:'Juridique'};
 
-async function charger(){
-  const r = await fetch("api/etat"); ETAT = await r.json();
-  const brief = ETAT.state.brief?.valeur || null;
-  document.getElementById("horodatage").textContent = new Date().toLocaleString("fr-FR",{dateStyle:"full",timeStyle:"short"});
-  if(brief?.sante){
-    const sc = brief.sante.score ?? "—";
-    document.getElementById("score").textContent = sc;
-    // La pastille sous le score ne prend qu'un mot : "hausse", "stable", "baisse".
-    // Le raisonnement complet descend sous le titre, en casse normale — les
-    // capitales en chasse fixe suppriment la silhouette des mots et rendent
-    // un long paragraphe epuisant a lire.
-    const tRaw = (brief.sante.tendance || "").toString();
-    const mot = (tRaw.match(/^(hausse|baisse|stable|amélioration|dégradation)/i) || ["santé"])[0];
-    document.getElementById("tendance").textContent = mot.toLowerCase();
-    const expl = document.getElementById("explication");
-    if (expl) {
-      if (tRaw.length > 40) {
-        expl.textContent = tRaw;
-        expl.style.display = "block";
-      } else { expl.style.display = "none"; }
-    }
-    const off = 414.7*(1-Math.max(0,Math.min(100,sc))/100);
-    requestAnimationFrame(()=>{document.getElementById("jauge").style.transition="stroke-dashoffset .8s ease";
-      document.getElementById("jauge").style.strokeDashoffset=off;});
-    // Le sous-titre portait un paragraphe entier melant dates, scores et etats.
-    // C'etait de la donnee deguisee en prose : on la structure.
-    const manq = brief.sante.domaines_manquants||[];
-    const rapporte = 6 - manq.length;
-    const pctRapport = Math.round(rapporte*100/6);
-    document.getElementById("soustitre").innerHTML =
-      `<div class="releve">
-         <div class="rl">
-           <span class="rl-l">Brief</span>
-           <span class="rl-v">${brief.date||"—"}</span>
-         </div>
-         <div class="rl">
-           <span class="rl-l">Directions ayant rapporté</span>
-           <span class="rl-v">${rapporte} <span class="rl-s">/ 6</span></span>
-           <span class="rl-b"><i style="width:${pctRapport}%"></i></span>
-         </div>
-         ${manq.length ? `<div class="rl">
-           <span class="rl-l">Sans remontée</span>
-           <span class="rl-v rl-manq">${manq.join(" · ")}</span>
-         </div>` : ""}
-       </div>
-       <div class="rl-note">Cliquez une loge pour le détail.</div>`;
-  } else { document.getElementById("soustitre").textContent="Aucun brief encore produit — le premier arrive au prochain daily (07h30 UTC)."; }
-
-  const tuiles = document.getElementById("tuiles"); tuiles.innerHTML="";
-  for(const [dom,cfg] of Object.entries(DOMAINES)){
-    const rap = ETAT.state["rapport_"+dom]?.valeur || null;
-    const maj = ETAT.state["rapport_"+dom]?.maj;
-    const statut = rap?.statut || "absent";
-    const kpis = (rap?.kpis||[]).slice(0,3).map(k=>`<div class="kpi"><span>${k.nom}</span><b>${k.valeur}</b></div>`).join("")
-      || `<div class="vide">Aucun rapport produit pour ce domaine.</div>`;
-    tuiles.insertAdjacentHTML("beforeend", `
-      <div class="tuile" onclick="ouvrirDomaine('${dom}')">
-        <div class="haut"><h2>${cfg.titre}</h2>
-          <span class="pastille ${CLS(statut)}"><i></i>${rap? (rap.domain_score??"—")+" · "+statut : "absent"}</span></div>
-        ${kpis}
-        <div class="pied">${maj? "rapport du "+new Date(maj).toLocaleString("fr-FR",{dateStyle:"short",timeStyle:"short"}) : "en attente de première ronde"}</div>
-      </div>`);
-  }
-
-  const tb = document.querySelector("#tbl-decisions tbody"); tb.innerHTML="";
-  for(const d of ETAT.decisions){
-    tb.insertAdjacentHTML("beforeend", `<tr><td>${d.id}</td><td>${d.texte.slice(0,110)}${d.texte.length>110?"…":""}</td>
-      <td>${d.origine}</td><td><span class="badge">${d.statut}</span></td><td>${d.age_j} j</td></tr>`);
-  }
-  if(!ETAT.decisions.length) tb.innerHTML = `<tr><td colspan="5" class="vide">Aucune décision ouverte.</td></tr>`;
+// ── L'incipit : deux lignes, volume déclaré, dépli sur place.
+//    Rien n'est tronqué — l'incipit masque, il ne coupe pas.
+function incipit(libelle, texte, id){
+  if(!texte) return `<div class="inc"><div class="inc-h"><span class="inc-l">${libelle}</span>
+    <span class="inc-l" style="margin-left:auto">aucun texte</span></div>
+    <div class="inc-p nul"></div></div>`;
+  const n=texte.length;
+  return `<div class="inc"><div class="inc-h">
+      <span class="inc-l">${libelle}</span>
+      <button class="inc-a" data-i="${id}"><i>▸</i><span>Lire · ${n} car.</span></button>
+    </div>
+    <div class="inc-p" id="p${id}">${texte.replace(/</g,'&lt;')}</div></div>`;
+}
+function brancherIncipits(){
+  document.querySelectorAll('.inc-a[data-i]').forEach(b=>b.addEventListener('click',()=>{
+    const p=document.getElementById('p'+b.dataset.i);
+    const on=p.classList.toggle('on'); b.classList.toggle('on',on);
+    b.querySelector('span').textContent = on
+      ? 'Replier' : 'Lire · '+p.textContent.length+' car.';
+  }));
 }
 
-function ouvrir(html){document.getElementById("panneau").innerHTML=`<span class="fermer" onclick="fermer()">✕</span>`+html;
-  document.getElementById("panneau").classList.add("ouvert");document.getElementById("voile").classList.add("ouvert");}
-function fermer(){document.getElementById("panneau").classList.remove("ouvert");document.getElementById("voile").classList.remove("ouvert");}
-document.addEventListener("keydown",e=>{if(e.key==="Escape")fermer()});
+function tete(d){
+  const s=d.sante||{};
+  const sc=s.score;
+  if(typeof sc==='number'){
+    let v=0; const t=setInterval(()=>{v+=2; if(v>=sc){v=sc;clearInterval(t);}
+      document.getElementById('score').textContent=v;},18);
+    document.getElementById('arc').style.strokeDashoffset=414.7*(1-sc/100);
+  } else document.getElementById('score').textContent='—';
+  // La pastille ne prend qu'un MOT — le raisonnement va dans l'incipit.
+  const t=(s.tendance||'').toString();
+  const m=(t.match(/^(hausse|baisse|stable|amélioration|dégradation)/i)||['santé'])[0];
+  document.getElementById('mot').textContent=m.toLowerCase();
 
-function ouvrirDomaine(dom){
-  const cfg=DOMAINES[dom]; const e=ETAT.state["rapport_"+dom]; const r=e?.valeur;
-  const liens = `<div class="bloc liens"><h4>Aller plus loin</h4>${cfg.liens.map(([l,u])=>u==="#suivi"?`<a href="#" onclick="ouvrirSuivi();return false">${l}</a>`:`<a href="${u}" target="_blank" rel="noopener">${l}</a>`).join("")}</div>`;
-  if(!r){ouvrir(`<h2>${cfg.titre}</h2><div class="vide">Aucun rapport pour ce domaine — il apparaîtra après la première ronde.</div>${liens}`);return;}
-  const secs=[];
-  if(dom==="delivery" && ETAT.ops){
-    const A=ETAT.ops.activite||{}, S=ETAT.ops.serveur||{};
-    const lignes = A.erreur ? `<tr><td colspan=2 class="vide">${A.erreur}</td></tr>` : `
-      <tr><td>Utilisateurs actifs (30 j)</td><td><b>${A.utilisateurs_actifs_30j}</b></td></tr>
-      <tr><td>Exécutions 7 j / 30 j</td><td><b>${A.executions_7j} / ${A.executions_30j}</b></td></tr>
-      <tr><td>En cours maintenant</td><td><b>${A.en_cours}</b></td></tr>
-      <tr><td>Dernière exécution</td><td><b>${A.derniere_execution? new Date(A.derniere_execution).toLocaleString("fr-FR"):"—"}</b></td></tr>`;
-    const srv = S.erreur ? `<tr><td colspan=2 class="vide">${S.erreur}</td></tr>` : `
-      <tr><td>Charge (1/5/15 min)</td><td><b>${S.charge}</b> <span class="pastille ${S.charge_pct<60?"v":S.charge_pct<85?"a":"r"}"><i></i>${S.charge_pct}%</span></td></tr>
-      <tr><td>RAM disponible</td><td><b>${S.ram_dispo_gb} / ${S.ram_totale_gb} Go</b></td></tr>
-      <tr><td>Disque utilisé</td><td><b>${S.disque_utilise_pct}%</b> <span class="pastille ${S.disque_utilise_pct<70?"v":S.disque_utilise_pct<85?"a":"r"}"><i></i></span></td></tr>`;
-    secs.push(`<div class="bloc"><h4>Exploitation — activité & capacité (temps réel)</h4><table>${lignes}${srv}</table></div>`);
-  }
-  // Le calcul du score est un raisonnement, pas une donnee : il est long et son
-  // format varie d'une direction a l'autre (soustraction ici, moyenne la).
-  // On extrait donc ce qui est chiffrable — le resultat, les termes reperables —
-  // et on replie le raisonnement, consultable mais non impose.
-  if(r.calcul_score){
-    const txt = String(r.calcul_score);
-    const res = txt.match(/=\s*(\d{1,3})(?:\s|\.|$)/);
-    const termes = [...txt.matchAll(/([-+])\s*(\d{1,3}(?:,\d)?)\s*\(([^)]{5,90})/g)].slice(0,5);
-    let h = '<div class="bloc"><h4>Score — comment il est obtenu</h4>';
-    if(res) h += `<div class="calc-res"><b>${res[1]}</b><span>sur 100</span></div>`;
-    if(termes.length){
-      h += '<div class="calc-t">' + termes.map(m =>
-        `<div class="ct"><span class="ct-v ${m[1]==='-'?'ct-moins':'ct-plus'}">${m[1]}${m[2]}</span>
-         <span class="ct-r">${m[3].replace(/</g,'&lt;')}…</span></div>`).join('') + '</div>';
-    }
-    h += `<details class="calc-d"><summary>Le raisonnement complet</summary>
-          <div class="calc-p">${txt.replace(/</g,'&lt;')}</div></details></div>`;
-    secs.push(h);
-  }
-  const li=(t,arr,f)=>{if(arr&&arr.length)secs.push(`<div class="bloc"><h4>${t}</h4>${arr.map(f).join("")}</div>`)};
-  li("Faits sourcés", r.faits, x=>`<div class="fait">${x.texte||x}<span class="src">${x.source||""}</span></div>`);
-  if(r.kpis?.length) secs.push(`<div class="bloc"><h4>KPIs</h4><table>${r.kpis.map(k=>`<tr><td>${k.nom}</td><td><b>${k.valeur}</b></td><td><span class="pastille ${CLS(k.statut)}"><i></i>${k.statut||""}</span></td></tr>`).join("")}</table></div>`);
-  li("Alertes", r.alertes, x=>`<div class="fait"><span class="pastille ${CLS({haute:'rouge',moyenne:'ambre',basse:'n'}[x.gravite]||x.gravite)}"><i></i>${x.gravite||""}</span> ${x.texte}<span class="src">${x.source||""}</span></div>`);
-  li("Décisions demandées", r.decisions_demandees, x=>`<div class="fait"><b>${x.id||""}</b> ${x.texte}${x.recommandation?` — reco : ${x.recommandation}`:""}</div>`);
-  li("Opportunités", r.opportunites, x=>`<div class="fait">${x.texte||x}<span class="src">${x.source||""}</span></div>`);
-  li("Données manquantes (déclaré)", r.donnees_manquantes, x=>`<div class="fait">${x}</div>`);
-  ouvrir(`<h2>${cfg.titre}</h2><div class="meta">rapport du ${new Date(e.maj).toLocaleString("fr-FR")} · domain_score ${r.domain_score??"—"} (${r.statut||"?"})</div>${secs.join("")}${liens}`);
+  const manq=s.domaines_manquants||[];
+  const rap=6-manq.length, pct=Math.round(rap*100/6);
+  document.getElementById('releve').innerHTML=`
+    <div class="lv"><span class="lv-l">Brief</span><span class="lv-v">${d.date||'—'}</span></div>
+    <div class="lv"><span class="lv-l">Directions ayant rapporté</span>
+      <span class="lv-v">${rap}<span style="font-size:13px;color:var(--bone-4)"> / 6</span></span></div>
+    <div style="height:2px;background:var(--ink-3);overflow:hidden;margin-top:-6px">
+      <i style="display:block;height:100%;background:var(--brass);width:${pct}%;transition:width .9s var(--ease)"></i></div>`;
+
+  let h=incipit('Calcul du score', s.calcul, 'c');
+  h+=incipit('Tendance', s.tendance, 't');
+  manq.forEach((x,i)=>h+=incipit('Domaine manquant · '+(i+1), x, 'm'+i));
+  document.getElementById('notes').innerHTML=h;
+  brancherIncipits();
 }
 
-document.getElementById("lien-brief").onclick=e=>{e.preventDefault();
-  ouvrir(`<h2>Brief — ${ETAT.brief_fichier||""}</h2><div class="md">${marked.parse(ETAT.brief_md||"*Aucun brief.*")}</div>
-  <div class="bloc liens"><h4>Archives</h4>${ETAT.briefs.map(b=>`<a href="#" onclick="voirBrief('${b}');return false">${b.replace(/^(brief-|comite-)|\.md$/g,"$1"==="comite-"?"comité ":"")}</a>`).join("")}</div>`);}
-async function voirBrief(n){const r=await fetch("api/brief/"+n);const j=await r.json();
-  ouvrir(`<h2>${n}</h2><div class="md">${marked.parse(j.contenu||"")}</div>`);}
-async function ouvrirArchives(){
-  let j={dossiers:[]};
-  try{ const r=await fetch("api/dossiers"); j=await r.json(); }catch(e){}
-  const lignes = (j.dossiers||[]).map(n=>{
-    const hebdo = n.startsWith("comite-");
-    const d = n.replace(/^(brief|comite)-/,"").replace(/\.docx$/,"");
-    const jour = new Date(d+"T12:00:00").toLocaleDateString("fr-FR",{weekday:"long",day:"numeric",month:"long",year:"numeric"});
-    return `<tr><td>${hebdo?"Comité hebdomadaire":"Brief quotidien"}</td><td>${jour}</td>
-            <td><a href="dossier/${n}" download>télécharger</a></td></tr>`;
-  }).join("");
-  ouvrir(`<h2>Archives des dossiers</h2>
-    <div class="meta">Chaque rituel produit un dossier illustré — graphiques, tableaux, analyse du CEO digital.</div>
-    ${lignes ? `<table><thead><tr><th>Nature</th><th>Date</th><th></th></tr></thead><tbody>${lignes}</tbody></table>`
-             : `<div class="vide">Aucun dossier archivé pour l'instant. Le premier sera produit au prochain rituel.</div>`}`);
+function kpis(d){
+  const k=d.kpis||[];
+  document.getElementById('kpi-c').textContent=
+    k.length+' indicateur(s) remonté(s) ce jour. Une valeur, et son constat.';
+  const grp={};
+  k.forEach(x=>{ const g=x.direction||'autres'; (grp[g]=grp[g]||[]).push(x); });
+  document.getElementById('kpis').innerHTML=Object.entries(grp).map(([g,items])=>`
+    <div class="grp"><div class="grp-h">
+      <span class="grp-t">${DIRS[g]||g}</span>
+      <span class="grp-m">${items.length} indicateur${items.length>1?'s':''}</span></div>
+      ${items.map((x,i)=>{
+        const v=x.valeur||'', court=v.length<=34, id='k'+g+i;
+        return `<div class="k"><div class="k-h">
+            <span class="k-l">${x.nom}</span>
+            <span class="k-v ${v?'':'abs'}">${court?v:(v.split(/[;(]/)[0].slice(0,30)||'—')}</span></div>
+          ${!court&&v?`<div class="k-d" id="d${id}">${v.replace(/</g,'&lt;')}</div>
+            <button class="k-a" data-k="${id}">Lire · ${v.length} car.</button>`:''}</div>`;
+      }).join('')}</div>`).join('');
+  document.querySelectorAll('.k-a[data-k]').forEach(b=>b.addEventListener('click',()=>{
+    const e=document.getElementById('d'+b.dataset.k);
+    const on=e.classList.toggle('on');
+    b.textContent = on ? 'Replier' : 'Lire · '+e.textContent.length+' car.';
+  }));
 }
-document.getElementById("lien-archives").onclick=e=>{e.preventDefault();ouvrirArchives();};
 
-function ouvrirSuivi(){ouvrir(`<h2>Page de suivi</h2><div class="md">${marked.parse(ETAT.page_suivi||"*Pas encore générée.*")}</div>`);}
-document.getElementById("lien-suivi").onclick=e=>{e.preventDefault();ouvrirSuivi();};
+function liste(cible, items, chapo, prefixe){
+  document.getElementById(chapo).textContent =
+    items.length ? items.length+' entrée(s). Cliquez pour lire en entier.' : 'Aucune.';
+  document.getElementById(cible).innerHTML=items.map((x,i)=>{
+    const t=typeof x==='string'?x:(x.texte||JSON.stringify(x));
+    return `<div class="li"><span class="li-r">${ROM[i]||i+1}</span>
+      <span class="li-t" id="${prefixe}${i}" style="cursor:pointer">${t.replace(/</g,'&lt;')}</span></div>`;
+  }).join('');
+  items.forEach((_,i)=>{
+    const e=document.getElementById(prefixe+i);
+    if(e) e.addEventListener('click',()=>e.classList.toggle('on'));
+  });
+}
 
-charger(); setInterval(charger, 120000);
+fetch('api/brief_complet').then(r=>r.json()).then(d=>{
+  if(d.erreur){document.getElementById('releve').innerHTML='<p class="err">'+d.erreur+'</p>';return;}
+  tete(d); kpis(d);
+  liste('alertes', d.alertes||[], 'al-c', 'a');
+  liste('decisions', d.decisions_attendues||[], 'dec-c', 'x');
+}).catch(e=>{document.getElementById('releve').innerHTML='<p class="err">Injoignable — '+e+'</p>';});
 </script></body></html>
