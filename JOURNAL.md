@@ -1,9 +1,10 @@
 # Journal — dh-comite
 
 > Genere automatiquement depuis les messages de commit.
-> Derniere mise a jour : 06/08/2026 20:29 UTC
+> Derniere mise a jour : 06/08/2026 20:39 UTC
 
 ## 2026-08-06
+- Journal des refus filtrable (retour de Sam) : 42 entrees sont illisibles sans tri. Filtres par direction, par famille de tache et par origine (curseur ou regle figee), avec compteur. Un second clic sur un filtre actif le retire. Verifie : Marketing passe de 40 a 4 refus. `edb16b0`
 - Acte III implemente dans le langage du Studio : sur-titre numerote (No 03), corps en JetBrains Mono, filets en laiton 24 pourcent, volet lateral pour le texte structure (motif du handoff Claude Design). Verifie : 36 cases, 7 canaux contraints, 1 evolution prevue, 40 refus, volet fonctionnel. `f41915b`
 - Correction : le comite hebdomadaire reste sur Fable 5, choix delibere de Sam pour l'analyse croisee en quatre phases. La regle n'est pas 'toujours le plus recent' mais 'le modele adapte au besoin, dans sa derniere version'. `b5d6c20`
 - Regle des modeles : toujours la derniere version d'une famille, sauf raison explicite. Alias courts dans les scripts (opus/sonnet), derniere version epinglee dans la table de routage. Corrige : CEO et comite passaient par des versions figees (opus-4-8, fable-5), la plateforme etait sur Opus 4.8 alors qu'Opus 5 existe. `6f10ed5`
