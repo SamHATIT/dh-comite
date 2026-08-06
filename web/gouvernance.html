@@ -76,6 +76,22 @@ h2{font-family:var(--serif);font-style:italic;font-weight:400;font-size:1.55rem;
 .detail .k{font-family:var(--mono);font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;
  color:var(--bone-4);display:block;margin-bottom:3px}
 
+
+/* ── Mode démonstration ── */
+.demo-bar{display:flex;align-items:center;gap:14px;flex-wrap:wrap;
+ border:1px solid var(--ink-line);background:var(--ink-2);padding:14px 18px;margin-bottom:26px}
+.demo-bar.on{border-color:var(--brass);background:var(--ink-3)}
+.demo-bar .txt{flex:1;min-width:220px;font-size:13px;color:var(--bone-4)}
+.demo-bar.on .txt{color:var(--bone-3)}
+.btn-demo{background:none;color:var(--bone-3);border:1px solid var(--ink-line);
+ padding:11px 20px;font-family:var(--mono);font-size:10px;letter-spacing:.18em;
+ text-transform:uppercase;cursor:pointer;transition:all .2s var(--ease)}
+.btn-demo:hover{border-color:var(--brass);color:var(--brass)}
+.demo-bar.on .btn-demo{background:var(--brass);color:var(--ink);border-color:var(--brass)}
+.pastille-demo{width:8px;height:8px;border-radius:50%;background:var(--neutre);flex:none}
+.demo-bar.on .pastille-demo{background:var(--brass);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+
 /* ── Journal des refus ── */
 .refus{border-top:1px solid var(--ink-line);margin-top:6px}
 .refus .l{display:grid;grid-template-columns:112px 1fr auto;gap:14px;padding:11px 2px;
@@ -107,6 +123,12 @@ h2{font-family:var(--serif);font-style:italic;font-weight:400;font-size:1.55rem;
      Le réglage affiché ci-dessous est celui qui s'applique&nbsp;: c'est lui que la plateforme lit
      avant chaque action, et c'est lui qui bloque.</p>
   <div class="filet"></div>
+
+  <div class="demo-bar" id="demoBar">
+    <i class="pastille-demo"></i>
+    <span class="txt" id="demoTxt">Mode démonstration inactif.</span>
+    <button class="btn-demo" id="btnDemo">Activer</button>
+  </div>
 
   <div class="ind" id="ind"></div>
 
@@ -222,6 +244,33 @@ function refus(d){
     </div>`;
   }).join('');
 }
+
+
+// ── Mode démonstration ─────────────────────────────────────────────
+// On écrit vraiment pendant la démo : une simulation ne prouverait rien.
+// Tout ce qui est créé porte un marqueur, et la sortie du mode l'efface.
+function majDemo(e){
+  const bar = document.getElementById('demoBar');
+  const txt = document.getElementById('demoTxt');
+  const btn = document.getElementById('btnDemo');
+  if (e && e.actif){
+    bar.classList.add('on');
+    txt.innerHTML = "<b>Mode démonstration actif</b> — les éléments créés sont réels et seront effacés à la sortie."
+                  + (e.active_le ? " Depuis " + e.active_le.replace('T',' ') + "." : "");
+    btn.textContent = 'Terminer et effacer';
+  } else {
+    bar.classList.remove('on');
+    txt.textContent = e && e.message ? e.message : "Mode démonstration inactif.";
+    btn.textContent = 'Activer';
+  }
+}
+document.getElementById('btnDemo').addEventListener('click', () => {
+  const actif = document.getElementById('demoBar').classList.contains('on');
+  fetch('/api/demo/' + (actif ? 'off' : 'on'))
+    .then(r=>r.json()).then(e=>{ majDemo(e); if (actif) setTimeout(()=>location.reload(), 1400); })
+    .catch(()=>{ document.getElementById('demoTxt').textContent = "Mode démonstration indisponible."; });
+});
+fetch('/api/demo/etat').then(r=>r.json()).then(majDemo).catch(()=>{});
 
 fetch('/api/gouvernance').then(r=>r.json()).then(d=>{
   DATA = d; ind(d); grille(d); refus(d);

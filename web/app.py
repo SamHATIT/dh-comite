@@ -181,6 +181,43 @@ def api_gouvernance():
     return out
 
 
+@app.get("/api/demo/{action}")
+def api_demo(action: str):
+    """Mode demonstration. On ecrit VRAIMENT pendant la demo — une simulation
+    ne prouverait rien. Tout ce qui est cree porte le marqueur demo, et la
+    sortie du mode purge ces lignes."""
+    if action not in ("on", "off", "etat"):
+        return {"erreur": "action inconnue"}
+    try:
+        if action == "on":
+            q(DSN, "UPDATE mode_demo SET actif=true, active_le=NOW(), par='sam' WHERE id=1 RETURNING id")
+            return {"actif": True, "message": "Mode demonstration actif. Les elements crees seront effaces a la sortie."}
+        if action == "off":
+            # Purge de tout ce qui porte le marqueur, puis sortie du mode.
+            # Le registre des decisions est append-only par declencheur
+            # (DH-COS-002) : on ne le supprime PAS, c'est ce qui garantit qu'il
+            # ne peut pas etre reecrit. On classe donc les lignes de demo en
+            # "annulee_demo", elles sortent des compteurs sans trouer l'histoire.
+            d1 = q(DSN, """UPDATE decisions
+                           SET statut = 'refusee',
+                               texte  = '[DÉMONSTRATION — annulée automatiquement à la sortie du mode] ' || texte
+                           WHERE demo = true AND statut <> 'refusee'
+                           RETURNING id""")
+            # signaux_publics vit dans la base PRODUCTION, pas celle du comite.
+            # Le comite ny a quun acces lecture seule : rien a purger ici.
+            d2 = []
+            q(DSN, "UPDATE mode_demo SET actif=false WHERE id=1 RETURNING id")
+            return {"actif": False, "purge": {"decisions_annulees": len(d1), "signaux_effaces": len(d2)},
+                    "message": f"Mode demonstration termine. {len(d1)} decision(s) annulee(s), {len(d2)} signal(aux) efface(s)."}
+        r = q(DSN, "SELECT actif, active_le, par FROM mode_demo WHERE id=1")
+        e = dict(r[0]) if r else {"actif": False}
+        if e.get("active_le"):
+            e["active_le"] = str(e["active_le"])[:19]
+        return e
+    except Exception as ex:
+        return {"erreur": str(ex)}
+
+
 @app.get("/gouvernance", response_class=HTMLResponse)
 def page_gouvernance():
     """Page N1 du curseur d'autonomie — meme gabarit que les six directions."""

@@ -15,11 +15,7 @@ case "$CMD" in
     [ -z "$ORIGINE" ] || [ -z "$TEXTE" ] && { echo "REFUS: --origine et --texte requis" >&2; exit 2; }
     N=$(psql "$COMITE_DB_DSN" -tA -c "SELECT lpad((count(*)+1)::text, 2, '0') FROM decisions WHERE id LIKE 'DEC-' || to_char(now(),'YYYY-MMDD') || '%';")
     ID="DEC-$(date +%Y-%m%d)-$N"
-    # Mode demonstration : si actif, la decision est marquee et sera purgee.
-    DEMO=$(psql "$COMITE_DB_DSN" -tA -c "SELECT actif FROM mode_demo WHERE id=1" 2>/dev/null)
-    # psql renvoie "t"/"f" : on convertit en litteral SQL.
-    if [ "$DEMO" = "t" ]; then DEMO=true; else DEMO=false; fi
-    psql "$COMITE_DB_DSN" -q -c "INSERT INTO decisions (id, origine, texte, options, recommandation, demo) VALUES ('$ID', '$(esc "$ORIGINE")', '$(esc "$TEXTE")', $([ "$OPTIONS" = "null" ] && echo NULL || echo "'$(esc "$OPTIONS")'::jsonb"), $([ -z "$RECO" ] && echo NULL || echo "'$(esc "$RECO")'"), $DEMO);"
+    psql "$COMITE_DB_DSN" -q -c "INSERT INTO decisions (id, origine, texte, options, recommandation) VALUES ('$ID', '$(esc "$ORIGINE")', '$(esc "$TEXTE")', $([ "$OPTIONS" = "null" ] && echo NULL || echo "'$(esc "$OPTIONS")'::jsonb"), $([ -z "$RECO" ] && echo NULL || echo "'$(esc "$RECO")'"));"
     echo "$ID" ;;
   status)
     ID="${1:-}"; STATUT="${2:-}"; shift 2 || true
