@@ -26,3 +26,4 @@ rondes/
 docker-compose.yml.pre-*
 *.bak
 *.bak2
+web/wip/*.png

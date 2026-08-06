@@ -1,9 +1,10 @@
 # Journal — dh-comite
 
 > Genere automatiquement depuis les messages de commit.
-> Derniere mise a jour : 06/08/2026 18:13 UTC
+> Derniere mise a jour : 06/08/2026 18:17 UTC
 
 ## 2026-08-06
+- Bloc 'Score — calcul' des directions : meme defaut que le sous-titre, un titre suivi d'un pave. Restructure en resultat (88 sur 100), termes reperables avec leur raison, et raisonnement complet REPLIE — consultable sans etre impose. Le format du calcul variant d'une direction a l'autre, l'extraction est tolerante : si elle echoue, seul le repli s'affiche. `501aa62`
 - Lisibilite du tableau de bord (retour de Sam) : (1) le CEO ecrivait un paragraphe entier dans la pastille sous le score, concue pour un mot — en capitales, chasse fixe et interlettrage, donc illisible et chevauchant l'arc. La pastille ne prend plus qu'un mot, le raisonnement descend sous le titre en casse normale. (2) Le sous-titre melait dates, scores et etats en prose : remplace par un releve chiffre — une ligne par donnee, valeur en serif, barre de proportion quand c'est un ratio. `d105035`
 - Poste de pilotage (N0) : ecran d'ouverture branche sur les vraies donnees. Reconstruit dans la charte du handoff Claude Design — le fichier .dc.html etant un canevas non deployable. Trois principes du brief respectes : actes numerotes en chiffres romains, mode degrade avec cadre hachure et 'n.c.' plutot qu'un zero, et l'ecart entre le regle et le vecu. Verifie : 6 actes, 6 directions, 3 mentions 'non disponible', pied a 4 indicateurs, mobile en colonne. `4deb7c8`
 - Pages legales completes : hebergeur (Hostinger International Ltd, serveurs en France), tarifs (49 EUR Pro, 1490 EUR Team), date de publication. Zero champ restant. Acces residuel au widget verifie le 06/08 — l'endpoint du concierge ne repond plus. `6386c6a`

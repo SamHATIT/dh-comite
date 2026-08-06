@@ -310,6 +310,29 @@ def api_demo(action: str):
         return {"erreur": str(ex)}
 
 
+@app.get("/wip/{nom}")
+def page_wip(nom: str):
+    """Captures d'ecran des trois ecrans, pour le brief Claude Design."""
+    from fastapi.responses import FileResponse
+    import re
+    if not re.match(r'^[a-z0-9.-]+\.png$', nom):
+        return JSONResponse({"erreur": "nom invalide"}, status_code=400)
+    return FileResponse(f"{BASE}/web/wip/{nom}", media_type="image/png")
+
+
+@app.get("/wip", response_class=HTMLResponse)
+def page_wip_index():
+    import os as _os
+    f = sorted(x for x in _os.listdir(f"{BASE}/web/wip") if x.endswith(".png"))
+    liens = "".join(f'<li><a href="/wip/{x}">{x}</a></li>' for x in f)
+    return HTMLResponse(
+        '<html><head><meta charset="utf-8"><title>Captures WIP</title>'
+        '<style>body{background:#0A0A0B;color:#F5F2EC;font-family:system-ui;padding:40px}'
+        'a{color:#C8A97E}li{margin:8px 0}</style></head><body>'
+        '<h1 style="font-weight:300">Captures des trois écrans</h1>'
+        f'<ul>{liens}</ul></body></html>')
+
+
 @app.get("/pilotage", response_class=HTMLResponse)
 def page_pilotage():
     """Poste de pilotage (N0) — l'ecran d'ouverture : qu'est-ce qui m'attend ?"""
