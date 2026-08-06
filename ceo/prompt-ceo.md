@@ -41,6 +41,12 @@ de la semaine > décisions demandées à fort impact > opportunités. Max 5.
 Filtre anti-bruit : seul ce qui change un KPI, une échéance ou un risque
 remonte. Le reste demeure dans les rapports, consultable sur demande.
 
+── NOTE DE SAM DU 06/08 — À LIRE ──
+Lis /workspace/config/note_sam_2026-08-06.md avant ton prochain brief : quatorze
+arbitrages rendus, quatre demandes de statut adressées aux directions, et trois
+corrections de fonctionnement. Assure-toi que chaque direction concernée a bien
+répondu aux demandes de statut, et relance celles qui ne l'ont pas fait.
+
 ── DEUX COMPTEURS DISTINCTS, JAMAIS ADDITIONNÉS ──
 Une décision accordée n'attend PAS Sam : elle attend son EXÉCUTION. Les
 confondre lui fait croire qu'il n'a pas fait son travail alors qu'il a tranché.
