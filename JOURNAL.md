@@ -1,9 +1,10 @@
 # Journal — dh-comite
 
 > Genere automatiquement depuis les messages de commit.
-> Derniere mise a jour : 06/08/2026 20:43 UTC
+> Derniere mise a jour : 06/08/2026 20:49 UTC
 
 ## 2026-08-06
+- Acte I implemente : tableau de bord dans le langage du Studio, avec le motif 'L'incipit' de Claude Design. Les quatre textes longs (calcul 692 car., tendance 548, deux domaines manquants) sont desormais annonces par leur volume et deplies a la demande — plus jamais de pave impose sous un titre qui promet une valeur. 16 indicateurs groupes par direction, 9 alertes et 5 decisions en chiffres romains, tous deplaibles. API brief_complet : les champs longs transitent ENTIERS, c'est l'interface qui masque. `7459e66`
 - Acte II implemente : poste de pilotage dans le langage du Studio. Sur-titre numerote, corps en mono, chiffres romains pour les decisions en attente, trois etats d'absence distincts (perime, absent, non calculable) en cadre hachure. Chemins relatifs pour fonctionner derriere le prefixe nginx. `1231612`
 - Journal des refus filtrable (retour de Sam) : 42 entrees sont illisibles sans tri. Filtres par direction, par famille de tache et par origine (curseur ou regle figee), avec compteur. Un second clic sur un filtre actif le retire. Verifie : Marketing passe de 40 a 4 refus. `edb16b0`
 - Acte III implemente dans le langage du Studio : sur-titre numerote (No 03), corps en JetBrains Mono, filets en laiton 24 pourcent, volet lateral pour le texte structure (motif du handoff Claude Design). Verifie : 36 cases, 7 canaux contraints, 1 evolution prevue, 40 refus, volet fonctionnel. `f41915b`
