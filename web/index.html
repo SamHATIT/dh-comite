@@ -21,6 +21,27 @@ header{display:flex;justify-content:space-between;align-items:baseline;border-bo
 .poincon .score span{font-size:9px;letter-spacing:.24em;color:var(--gris);text-transform:uppercase}
 .hero h1{font-family:var(--serif);font-size:34px;font-weight:500;font-style:italic;line-height:1.15;margin-bottom:8px}
 .hero .sub{color:var(--gris);max-width:56ch;line-height:1.6}
+/* Lecture longue : casse normale, pas de chasse fixe, pas d'interlettrage.
+   Les capitales suppriment la silhouette des mots — tenable sur trois mots
+   de sur-titre, epuisant sur un paragraphe. */
+/* Releve chiffre plutot que prose : chaque donnee a sa ligne, sa valeur et,
+   quand c'est une proportion, sa barre. On lit en une seconde au lieu de
+   dechiffrer un paragraphe. */
+.releve{margin-top:6px;max-width:52ch}
+.rl{display:grid;grid-template-columns:1fr auto;gap:6px 14px;align-items:baseline;
+  padding:9px 0;border-bottom:1px solid var(--trait)}
+.rl-l{font-family:var(--mono,'JetBrains Mono',monospace);font-size:9.5px;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--gris)}
+.rl-v{font-family:var(--serif);font-size:19px;font-weight:400;text-align:right;color:var(--creme,#f5f2ec)}
+.rl-v .rl-s{font-size:12px;color:var(--gris)}
+.rl-manq{font-size:13px;font-style:italic;color:var(--ambre,#c79a3a)}
+.rl-b{grid-column:1/-1;height:2px;background:var(--trait);overflow:hidden;margin-top:2px}
+.rl-b i{display:block;height:100%;background:var(--or,#c8a464);width:0;
+  transition:width .9s cubic-bezier(.2,.7,.3,1)}
+.rl-note{margin-top:12px;font-size:12px;color:var(--gris);font-style:italic}
+.explication{margin-top:16px;max-width:64ch;font-size:13.5px;line-height:1.65;
+  color:var(--gris);border-left:1px solid var(--or,#c8a464);padding-left:16px;
+  font-family:var(--sans,'Inter',system-ui,sans-serif);text-transform:none;letter-spacing:0}
 .grille{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:14px;margin-bottom:34px}
 .tuile{background:var(--carbone);border:1px solid var(--trait);padding:18px 20px;cursor:pointer;transition:border-color .18s}
 .tuile:hover{border-color:var(--laiton)}
@@ -79,6 +100,7 @@ footer{margin-top:40px;border-top:1px solid var(--trait);padding-top:14px;color:
   <div>
     <h1>La journée, contresignée.</h1>
     <div class="sub" id="soustitre">Chargement de l'état du comité…</div>
+    <div class="explication" id="explication" style="display:none"></div>
     <div style="margin-top:12px" class="liens">
       <a href="#" id="lien-brief">Brief du jour</a>
       <a href="#" id="lien-suivi">Page de suivi</a>
@@ -118,13 +140,45 @@ async function charger(){
   if(brief?.sante){
     const sc = brief.sante.score ?? "—";
     document.getElementById("score").textContent = sc;
-    document.getElementById("tendance").textContent = brief.sante.tendance || "santé";
+    // La pastille sous le score ne prend qu'un mot : "hausse", "stable", "baisse".
+    // Le raisonnement complet descend sous le titre, en casse normale — les
+    // capitales en chasse fixe suppriment la silhouette des mots et rendent
+    // un long paragraphe epuisant a lire.
+    const tRaw = (brief.sante.tendance || "").toString();
+    const mot = (tRaw.match(/^(hausse|baisse|stable|amélioration|dégradation)/i) || ["santé"])[0];
+    document.getElementById("tendance").textContent = mot.toLowerCase();
+    const expl = document.getElementById("explication");
+    if (expl) {
+      if (tRaw.length > 40) {
+        expl.textContent = tRaw;
+        expl.style.display = "block";
+      } else { expl.style.display = "none"; }
+    }
     const off = 414.7*(1-Math.max(0,Math.min(100,sc))/100);
     requestAnimationFrame(()=>{document.getElementById("jauge").style.transition="stroke-dashoffset .8s ease";
       document.getElementById("jauge").style.strokeDashoffset=off;});
+    // Le sous-titre portait un paragraphe entier melant dates, scores et etats.
+    // C'etait de la donnee deguisee en prose : on la structure.
     const manq = brief.sante.domaines_manquants||[];
-    document.getElementById("soustitre").textContent =
-      (brief.date?`Brief du ${brief.date}. `:"") + (manq.length?`Domaines sans rapport : ${manq.join(", ")}. `:"Les cinq domaines ont rapporté. ") + "Clique une loge pour le détail.";
+    const rapporte = 6 - manq.length;
+    const pctRapport = Math.round(rapporte*100/6);
+    document.getElementById("soustitre").innerHTML =
+      `<div class="releve">
+         <div class="rl">
+           <span class="rl-l">Brief</span>
+           <span class="rl-v">${brief.date||"—"}</span>
+         </div>
+         <div class="rl">
+           <span class="rl-l">Directions ayant rapporté</span>
+           <span class="rl-v">${rapporte} <span class="rl-s">/ 6</span></span>
+           <span class="rl-b"><i style="width:${pctRapport}%"></i></span>
+         </div>
+         ${manq.length ? `<div class="rl">
+           <span class="rl-l">Sans remontée</span>
+           <span class="rl-v rl-manq">${manq.join(" · ")}</span>
+         </div>` : ""}
+       </div>
+       <div class="rl-note">Cliquez une loge pour le détail.</div>`;
   } else { document.getElementById("soustitre").textContent="Aucun brief encore produit — le premier arrive au prochain daily (07h30 UTC)."; }
 
   const tuiles = document.getElementById("tuiles"); tuiles.innerHTML="";
