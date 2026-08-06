@@ -6,12 +6,7 @@ TS=$(date -u +%Y-%m-%d)
 # Répartition validée par Sam le 14/07 : Opus en semaine, Fable le lundi (comité hebdo)
 # Le lundi, le comité hebdo (comite.sh, 08h00) remplace le daily.
 if [ "$(date -u +%u)" = "1" ]; then echo "lundi : daily remplacé par le comité hebdo (08h00)"; exit 0; fi
-# REGLE (06/08) : toujours l'ALIAS, jamais une version datee. L'alias pointe
-# vers la derniere version du modele — on beneficie des ameliorations sans
-# rien changer, et on evite de payer une generation obsolete.
-# Une version figee ne se justifie que pour reproduire un resultat a
-# l'identique, et doit alors porter la raison en commentaire.
-CEO_MODEL=opus
+CEO_MODEL=claude-opus-4-8
 CTX=$(mktemp)
 
 fresh() { # $1=cle : affiche le rapport avec son état de fraîcheur

@@ -1,9 +1,10 @@
 # Journal — dh-comite
 
 > Genere automatiquement depuis les messages de commit.
-> Derniere mise a jour : 06/08/2026 18:34 UTC
+> Derniere mise a jour : 06/08/2026 20:01 UTC
 
 ## 2026-08-06
+- Backlog monte en lecture seule dans le conteneur du comite (/backlog). La plainte du Delivery etait fondee : sa fiche lui demande de tenir le backlog des evolutions, mais le depot de la plateforme n'etait pas monte — il ne pouvait lire ni TASKS_MASTER.md (52 taches actives) ni BACKLOG.md. Lecture seule, conforme a son curseur. `e4442b2`
 - Captures WIP des trois ecrans pour le brief Claude Design (route /wip, images exclues du depot) `ebcf79c`
 - Bloc 'Score — calcul' des directions : meme defaut que le sous-titre, un titre suivi d'un pave. Restructure en resultat (88 sur 100), termes reperables avec leur raison, et raisonnement complet REPLIE — consultable sans etre impose. Le format du calcul variant d'une direction a l'autre, l'extraction est tolerante : si elle echoue, seul le repli s'affiche. `501aa62`
 - Lisibilite du tableau de bord (retour de Sam) : (1) le CEO ecrivait un paragraphe entier dans la pastille sous le score, concue pour un mot — en capitales, chasse fixe et interlettrage, donc illisible et chevauchant l'arc. La pastille ne prend plus qu'un mot, le raisonnement descend sous le titre en casse normale. (2) Le sous-titre melait dates, scores et etats en prose : remplace par un releve chiffre — une ligne par donnee, valeur en serif, barre de proportion quand c'est un ratio. `d105035`

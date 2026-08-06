@@ -40,7 +40,7 @@ PROMPT=$(mktemp)
 } > "$PROMPT"
 
 cat "$PROMPT" | claude -p \
-  --model opus \
+  --model claude-fable-5 \
   --allowedTools "Task,Bash,Read,Grep,Glob,Write" \
   --output-format json > "briefs/comite-$TS.meta.json" 2> "briefs/comite-$TS.err"
 RC=$?
