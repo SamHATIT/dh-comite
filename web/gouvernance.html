@@ -3,7 +3,7 @@
 <title>Acte III — Curseur d'autonomie</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Inter:wght@300;400&family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/comite.css">
+<link rel="stylesheet" href="comite.css">
 <style>
 /* ── Grille des curseurs ── */
 .grille{width:100%;border-collapse:collapse;margin-top:6px}
@@ -45,6 +45,17 @@
 .fermer{position:absolute;top:24px;right:24px;background:none;border:none;color:var(--bone-4);
  font-family:var(--mono);font-size:10px;letter-spacing:.18em;cursor:pointer}
 .fermer:hover{color:var(--brass)}
+
+/* ── Filtres du journal — 42 entrées sont illisibles sans tri ── */
+.filtres{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:4px 0 20px}
+.f{background:none;border:1px solid var(--hair-2);color:var(--bone-4);
+ padding:7px 14px;font-family:var(--mono);font-size:9px;letter-spacing:.16em;
+ text-transform:uppercase;cursor:pointer;transition:all .2s var(--ease)}
+.f:hover{border-color:var(--hair);color:var(--bone-3)}
+.f.on{background:var(--brass);color:var(--ink);border-color:var(--brass)}
+.f-sep{width:1px;height:20px;background:var(--hair-2);margin:0 4px}
+.f-n{margin-left:auto;font-family:var(--mono);font-size:9.5px;letter-spacing:.16em;
+ text-transform:uppercase;color:var(--bone-4)}
 /* ── Journal des refus ── */
 .refus .r{display:grid;grid-template-columns:104px 1fr auto;gap:14px;padding:12px 2px;
  border-bottom:1px solid var(--hair-2);align-items:baseline}
@@ -69,10 +80,10 @@
     <div><div class="marque">Digital·<em>Humans</em></div>
       <div class="devise">Comité de direction · augmenté</div></div>
     <nav class="nav">
-      <a href="/">Acte I · Tableau de bord</a>
-      <a href="/pilotage">Acte II · Pilotage</a>
-      <a href="/gouvernance" class="on">Acte III · Gouvernance</a>
-      <a href="/rapports">Rapports</a>
+      <a href="./">Acte I · Tableau de bord</a>
+      <a href="pilotage">Acte II · Pilotage</a>
+      <a href="gouvernance" class="on">Acte III · Gouvernance</a>
+      <a href="rapports">Rapports</a>
     </nav>
   </div>
 
@@ -102,6 +113,7 @@
     <h2>Ce qui s'est passé</h2>
     <p class="chapo">Les refus réellement opposés par la plateforme. Un écart avec la grille
        signalerait un réglage qui ne tient pas.</p>
+    <div class="filtres" id="filtres"></div>
     <div class="refus" id="refus"></div>
   </div>
 </div>
@@ -185,10 +197,45 @@ document.getElementById('fermer').addEventListener('click',fermer);
 document.getElementById('voile').addEventListener('click',fermer);
 document.addEventListener('keydown',e=>{if(e.key==='Escape')fermer();});
 
-function refus(d){
+let REFUS=[], FILTRE={dir:null, tache:null, origine:null};
+
+function filtres(d){
+  const dirs=[...new Set(REFUS.filter(r=>r.direction).map(r=>r.direction))];
+  const taches=[...new Set(REFUS.filter(r=>r.type_tache).map(r=>r.type_tache))];
+  const b=(lib,cle,val)=>{
+    const on=FILTRE[cle]===val;
+    return `<button class="f ${on?'on':''}" data-c="${cle}" data-v="${val===null?'':val}">${lib}</button>`;
+  };
+  let h=b('Tous','dir',null);
+  dirs.forEach(x=>h+=b((DIRS.find(y=>y[0]===x)||[,x])[1],'dir',x));
+  if(taches.length>1){
+    h+='<span class="f-sep"></span>';
+    taches.forEach(x=>h+=b((TACHES.find(y=>y[0]===x)||[,x])[1],'tache',x));
+  }
+  h+='<span class="f-sep"></span>'+b('Curseur','origine','curseur')+b('Règle figée','origine','regle_figee');
+  h+=`<span class="f-n" id="compte"></span>`;
+  const el=document.getElementById('filtres');
+  el.innerHTML=h;
+  el.querySelectorAll('.f').forEach(btn=>btn.addEventListener('click',()=>{
+    const c=btn.dataset.c, v=btn.dataset.v||null;
+    // Un second clic sur un filtre actif le retire.
+    FILTRE[c] = (FILTRE[c]===v) ? null : v;
+    if(c==='dir' && v===null) FILTRE={dir:null,tache:null,origine:null};
+    filtres(); dessinerRefus();
+  }));
+}
+
+function dessinerRefus(){
   const el=document.getElementById('refus');
-  if(!d.refus||!d.refus.length){el.innerHTML='<p class="nd" style="padding:18px 0">Aucun refus journalisé.</p>';return;}
-  el.innerHTML=d.refus.map(r=>{
+  const liste=REFUS.filter(r=>
+    (!FILTRE.dir     || r.direction===FILTRE.dir) &&
+    (!FILTRE.tache   || r.type_tache===FILTRE.tache) &&
+    (!FILTRE.origine || r.origine===FILTRE.origine));
+  const c=document.getElementById('compte');
+  if(c) c.textContent = liste.length===REFUS.length
+    ? REFUS.length+' refus' : liste.length+' sur '+REFUS.length;
+  if(!liste.length){el.innerHTML='<p class="nd" style="padding:18px 0">Aucun refus ne correspond à ce filtre.</p>';return;}
+  el.innerHTML=liste.map(r=>{
     const dl=r.direction?(DIRS.find(x=>x[0]===r.direction)||[,r.direction])[1]:null;
     const tl=r.type_tache?(TACHES.find(x=>x[0]===r.type_tache)||[,r.type_tache])[1]:null;
     const q=r.origine==='curseur'
@@ -200,7 +247,13 @@ function refus(d){
   }).join('');
 }
 
-fetch('/api/gouvernance').then(r=>r.json()).then(d=>{
+function refus(d){
+  const el=document.getElementById('refus');
+  if(!d.refus||!d.refus.length){el.innerHTML='<p class="nd" style="padding:18px 0">Aucun refus journalisé.</p>';return;}
+  REFUS=d.refus; filtres(d); dessinerRefus();
+}
+
+fetch("api/gouvernance").then(r=>r.json()).then(d=>{
   if(d.erreur){document.getElementById('grille').innerHTML='<p class="err">Données indisponibles — '+d.erreur+'</p>';return;}
   ind(d);grille(d);refus(d);
 }).catch(e=>{document.getElementById('grille').innerHTML='<p class="err">Injoignable — '+e+'</p>';});
