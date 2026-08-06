@@ -28,6 +28,24 @@ header{display:flex;justify-content:space-between;align-items:baseline;border-bo
    quand c'est une proportion, sa barre. On lit en une seconde au lieu de
    dechiffrer un paragraphe. */
 .releve{margin-top:6px;max-width:52ch}
+/* Le calcul d'un score : le RESULTAT d'abord, les termes reperables ensuite,
+   le raisonnement replie. Un titre "calcul" suivi d'un pave n'apprend rien. */
+.calc-res{display:flex;align-items:baseline;gap:10px;margin:4px 0 14px}
+.calc-res b{font-family:var(--serif);font-size:38px;font-weight:400;color:var(--creme,#f5f2ec)}
+.calc-res span{font-family:var(--mono,monospace);font-size:9.5px;letter-spacing:.18em;
+  text-transform:uppercase;color:var(--gris)}
+.calc-t{border-top:1px solid var(--trait)}
+.ct{display:grid;grid-template-columns:52px 1fr;gap:12px;padding:8px 0;
+  border-bottom:1px solid var(--trait);align-items:baseline}
+.ct-v{font-family:var(--mono,monospace);font-size:13px;text-align:right}
+.ct-moins{color:var(--rouge,#b85b49)} .ct-plus{color:var(--vert,#6e9c5c)}
+.ct-r{font-size:12.5px;color:var(--gris);line-height:1.5}
+.calc-d{margin-top:14px}
+.calc-d summary{font-family:var(--mono,monospace);font-size:9.5px;letter-spacing:.18em;
+  text-transform:uppercase;color:var(--gris);cursor:pointer;padding:6px 0}
+.calc-d summary:hover{color:var(--or,#c8a464)}
+.calc-p{font-size:13px;line-height:1.65;color:var(--gris);padding:10px 0 0 14px;
+  border-left:1px solid var(--trait);margin-top:6px}
 .rl{display:grid;grid-template-columns:1fr auto;gap:6px 14px;align-items:baseline;
   padding:9px 0;border-bottom:1px solid var(--trait)}
 .rl-l{font-family:var(--mono,'JetBrains Mono',monospace);font-size:9.5px;letter-spacing:.16em;
@@ -228,7 +246,25 @@ function ouvrirDomaine(dom){
       <tr><td>Disque utilisé</td><td><b>${S.disque_utilise_pct}%</b> <span class="pastille ${S.disque_utilise_pct<70?"v":S.disque_utilise_pct<85?"a":"r"}"><i></i></span></td></tr>`;
     secs.push(`<div class="bloc"><h4>Exploitation — activité & capacité (temps réel)</h4><table>${lignes}${srv}</table></div>`);
   }
-  if(r.calcul_score) secs.push(`<div class="bloc"><h4>Score — calcul</h4><div class="fait">${r.calcul_score}</div></div>`);
+  // Le calcul du score est un raisonnement, pas une donnee : il est long et son
+  // format varie d'une direction a l'autre (soustraction ici, moyenne la).
+  // On extrait donc ce qui est chiffrable — le resultat, les termes reperables —
+  // et on replie le raisonnement, consultable mais non impose.
+  if(r.calcul_score){
+    const txt = String(r.calcul_score);
+    const res = txt.match(/=\s*(\d{1,3})(?:\s|\.|$)/);
+    const termes = [...txt.matchAll(/([-+])\s*(\d{1,3}(?:,\d)?)\s*\(([^)]{5,90})/g)].slice(0,5);
+    let h = '<div class="bloc"><h4>Score — comment il est obtenu</h4>';
+    if(res) h += `<div class="calc-res"><b>${res[1]}</b><span>sur 100</span></div>`;
+    if(termes.length){
+      h += '<div class="calc-t">' + termes.map(m =>
+        `<div class="ct"><span class="ct-v ${m[1]==='-'?'ct-moins':'ct-plus'}">${m[1]}${m[2]}</span>
+         <span class="ct-r">${m[3].replace(/</g,'&lt;')}…</span></div>`).join('') + '</div>';
+    }
+    h += `<details class="calc-d"><summary>Le raisonnement complet</summary>
+          <div class="calc-p">${txt.replace(/</g,'&lt;')}</div></details></div>`;
+    secs.push(h);
+  }
   const li=(t,arr,f)=>{if(arr&&arr.length)secs.push(`<div class="bloc"><h4>${t}</h4>${arr.map(f).join("")}</div>`)};
   li("Faits sourcés", r.faits, x=>`<div class="fait">${x.texte||x}<span class="src">${x.source||""}</span></div>`);
   if(r.kpis?.length) secs.push(`<div class="bloc"><h4>KPIs</h4><table>${r.kpis.map(k=>`<tr><td>${k.nom}</td><td><b>${k.valeur}</b></td><td><span class="pastille ${CLS(k.statut)}"><i></i>${k.statut||""}</span></td></tr>`).join("")}</table></div>`);
