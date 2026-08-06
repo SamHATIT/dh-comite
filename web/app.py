@@ -310,6 +310,77 @@ def api_demo(action: str):
         return {"erreur": str(ex)}
 
 
+@app.get("/comite.css")
+def feuille_style():
+    from fastapi.responses import FileResponse
+    return FileResponse(f"{BASE}/web/comite.css", media_type="text/css")
+
+
+@app.get("/rapports", response_class=HTMLResponse)
+def page_rapports():
+    """Index des rapports produits par les directions, lisibles depuis un lien."""
+    import os as _o, glob as _g
+    fichiers = []
+    for d in ("delivery", "legal", "commercial", "marketing"):
+        for f in sorted(_g.glob(f"{BASE}/config/{d}/*.md"), reverse=True):
+            n = _o.path.basename(f)
+            fichiers.append((d, n, _o.path.getsize(f)))
+    li = "".join(
+        f'<li><span class="d">{d}</span> <a href="/rapport/{d}/{n}">{n}</a>'
+        f' <span class="t">{k//1024} Ko</span></li>' for d, n, k in fichiers)
+    return HTMLResponse(
+        '<html><head><meta charset="utf-8"><title>Rapports du comité</title>'
+        '<style>body{background:#0A0A0B;color:#B5B0A4;font-family:"JetBrains Mono",monospace;'
+        'padding:48px 32px;font-size:13px;line-height:2}h1{font-family:Georgia,serif;'
+        'font-weight:300;font-size:30px;color:#F5F2EC;font-style:italic;margin-bottom:28px}'
+        'a{color:#C8A97E;text-decoration:none}a:hover{text-decoration:underline}'
+        'li{list-style:none;border-bottom:1px solid #C8A97E1F;padding:9px 0}'
+        '.d{display:inline-block;width:110px;font-size:9.5px;letter-spacing:.18em;'
+        'text-transform:uppercase;color:#6F6B62}.t{color:#6F6B62;font-size:11px;float:right}'
+        'ul{padding:0;max-width:900px}</style></head><body>'
+        f'<h1>Rapports des directions</h1><ul>{li}</ul></body></html>')
+
+
+@app.get("/rapport/{direction}/{nom}", response_class=HTMLResponse)
+def page_rapport(direction: str, nom: str):
+    """Rend un rapport markdown en HTML lisible, dans la charte."""
+    import re as _r, html as _h, os as _o
+    if not _r.match(r'^[a-z-]+$', direction) or not _r.match(r'^[\w.-]+\.md$', nom):
+        return HTMLResponse("<p>nom invalide</p>", status_code=400)
+    chemin = f"{BASE}/config/{direction}/{nom}"
+    if not _o.path.exists(chemin):
+        return HTMLResponse("<p>introuvable</p>", status_code=404)
+    md = open(chemin, encoding="utf-8").read()
+    # Rendu markdown minimal : titres, gras, code, tableaux, listes.
+    h = _h.escape(md)
+    h = _r.sub(r'^### (.+)$', r'<h3>\1</h3>', h, flags=_r.M)
+    h = _r.sub(r'^## (.+)$', r'<h2>\1</h2>', h, flags=_r.M)
+    h = _r.sub(r'^# (.+)$', r'<h1>\1</h1>', h, flags=_r.M)
+    h = _r.sub(r'\*\*([^*]+)\*\*', r'<b>\1</b>', h)
+    h = _r.sub(r'`([^`]+)`', r'<code>\1</code>', h)
+    h = _r.sub(r'^- (.+)$', r'<li>\1</li>', h, flags=_r.M)
+    h = _r.sub(r'^\|(.+)\|$', lambda m: '<tr>' + ''.join(
+        f'<td>{c.strip()}</td>' for c in m.group(1).split('|')) + '</tr>', h, flags=_r.M)
+    h = _r.sub(r'(<tr>.*?</tr>\n?)+', lambda m: f'<table>{m.group(0)}</table>', h, flags=_r.S)
+    h = _r.sub(r'<td>[-: ]+</td>', '', h)
+    h = h.replace('\n\n', '</p><p>')
+    return HTMLResponse(
+        '<html><head><meta charset="utf-8"><title>' + _h.escape(nom) + '</title>'
+        '<style>body{background:#0A0A0B;color:#B5B0A4;font-family:"JetBrains Mono",monospace;'
+        'font-size:13px;line-height:1.9;padding:44px 28px 90px;max-width:1000px;margin:0 auto}'
+        'h1,h2,h3{font-family:Georgia,serif;font-weight:300;color:#F5F2EC;font-style:italic;'
+        'line-height:1.2;margin:34px 0 12px}h1{font-size:30px}h2{font-size:22px;color:#E5E1D8;'
+        'border-bottom:1px solid #C8A97E3D;padding-bottom:8px}h3{font-size:17px}'
+        'b{color:#F5F2EC;font-weight:400}code{color:#C8A97E;font-size:12px}'
+        'table{width:100%;border-collapse:collapse;margin:14px 0}'
+        'td{border-bottom:1px solid #C8A97E1F;padding:8px 10px;vertical-align:top;font-size:12px}'
+        'li{margin-left:18px;margin-bottom:4px}p{margin:10px 0}'
+        'a{color:#C8A97E}.retour{font-size:10px;letter-spacing:.2em;text-transform:uppercase;'
+        'color:#6F6B62;text-decoration:none;display:inline-block;margin-bottom:20px}'
+        '</style></head><body><a class="retour" href="/rapports">← Tous les rapports</a><p>'
+        + h + '</p></body></html>')
+
+
 @app.get("/wip/{nom}")
 def page_wip(nom: str):
     """Captures d'ecran des trois ecrans, pour le brief Claude Design."""

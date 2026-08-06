@@ -1,281 +1,207 @@
 <!doctype html><html lang="fr"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Gouvernance — curseur d'autonomie</title>
+<title>Acte III — Curseur d'autonomie</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Inter:wght@300;400;500&family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Inter:wght@300;400&family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/comite.css">
 <style>
-:root{
-  --ink:#0A0A0B;--ink-2:#141416;--ink-3:#1C1C1F;--ink-line:#2A2A2E;
-  --bone:#F5F2EC;--bone-3:#B8B2A6;--bone-4:#9A938A;
-  --brass:#C8A97E;--brass-deep:#8C6E4A;
-  --ok:#6E9C5C;--warn:#C79A3A;--alert:#B85B49;--neutre:#8D8880;
-  --serif:'Cormorant Garamond',Georgia,serif;--sans:'Inter',system-ui,sans-serif;
-  --mono:'JetBrains Mono',ui-monospace,monospace;
-  --ease:cubic-bezier(.2,.7,.3,1);
-}
-*{box-sizing:border-box;margin:0}
-body{background:var(--ink);color:var(--bone);font-family:var(--sans);font-weight:300;
- font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased}
-.wrap{max-width:1100px;margin:0 auto;padding:38px 22px 90px}
-
-/* ── En-tête, gabarit N1 : retour, nom, rôle, état ── */
-.retour{font-family:var(--mono);font-size:10px;letter-spacing:.28em;text-transform:uppercase;
- color:var(--bone-4);text-decoration:none;display:inline-block;margin-bottom:26px}
-.retour:hover{color:var(--brass)}
-.eyebrow{font-family:var(--mono);font-size:10px;letter-spacing:.32em;text-transform:uppercase;
- color:var(--brass);margin-bottom:12px}
-h1{font-family:var(--serif);font-weight:300;font-size:clamp(2rem,4vw,2.9rem);line-height:1.08;
- letter-spacing:-.012em;margin-bottom:10px}
-h1 em{font-style:italic;color:var(--brass)}
-.role{font-family:var(--serif);font-style:italic;font-size:19px;color:var(--bone-3);max-width:62ch}
-.filet{height:1px;background:linear-gradient(90deg,var(--brass),transparent 72%);margin:30px 0 26px}
-
-/* ── 4 indicateurs maximum, grille 2×2 ── */
-.ind{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:1px;
- background:var(--ink-line);border:1px solid var(--ink-line);margin-bottom:34px}
-.ind>div{background:var(--ink-2);padding:20px 18px}
-.ind .lbl{font-family:var(--mono);font-size:10px;letter-spacing:.2em;text-transform:uppercase;
- color:var(--bone-4);margin-bottom:10px}
-.ind .val{font-family:var(--serif);font-size:40px;font-weight:300;line-height:1;color:var(--bone)}
-.ind .val .sur{font-size:20px;color:var(--bone-4)}
-.ind .sous{font-size:12px;color:var(--bone-4);margin-top:8px;line-height:1.45}
-.ind .barre{height:3px;background:var(--ink-3);margin-top:12px;overflow:hidden}
-.ind .barre i{display:block;height:100%;background:var(--brass);transition:width .6s var(--ease)}
-
-h2{font-family:var(--serif);font-style:italic;font-weight:400;font-size:1.55rem;
- margin:38px 0 6px;color:var(--bone)}
-.chapo{color:var(--bone-4);font-size:13.5px;margin-bottom:18px;max-width:74ch}
-
-/* ── Grille des réglages ── */
-.grille{width:100%;border-collapse:collapse;font-size:13px}
-.grille th{font-family:var(--mono);font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;
- color:var(--bone-4);font-weight:400;text-align:center;padding:11px 6px;border-bottom:1px solid var(--ink-line)}
-.grille th:first-child{text-align:left;padding-left:2px}
-.grille td{padding:0;border-bottom:1px solid var(--ink-3);text-align:center}
-.grille td:first-child{text-align:left;padding:13px 10px 13px 2px;color:var(--bone-3);font-size:13px}
-.grille tr:hover td{background:var(--ink-2)}
-.cell{display:block;padding:13px 4px;cursor:pointer;position:relative;transition:background .2s var(--ease)}
-.cell:hover{background:var(--ink-3)}
-.n{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase}
-.n1{color:var(--neutre)} .n2{color:var(--warn)} .n3{color:var(--brass)} .n4{color:var(--ok)}
-.canal{position:absolute;top:6px;right:7px;width:4px;height:4px;border-radius:50%;background:var(--brass)}
-.evol{position:absolute;bottom:6px;right:7px;font-family:var(--mono);font-size:8px;color:var(--brass-deep)}
-
-.legende{display:flex;gap:20px;flex-wrap:wrap;margin:16px 0 0;
- font-family:var(--mono);font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--bone-4)}
-.legende span{display:inline-flex;align-items:center;gap:6px}
-.legende i{width:7px;height:7px;display:inline-block;border-radius:50%}
-
-/* ── Détail au clic ── */
-.detail{border:1px solid var(--brass-deep);background:var(--ink-2);padding:20px 22px;margin-top:18px;display:none}
-.detail.on{display:block}
-.detail .t{font-family:var(--serif);font-style:italic;font-size:19px;margin-bottom:4px}
-.detail .st{font-family:var(--mono);font-size:10px;letter-spacing:.18em;text-transform:uppercase;
- color:var(--brass);margin-bottom:14px}
-.detail p{color:var(--bone-3);font-size:13.5px;margin-bottom:10px;max-width:76ch}
-.detail .k{font-family:var(--mono);font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;
- color:var(--bone-4);display:block;margin-bottom:3px}
-
-
-/* ── Mode démonstration ── */
-.demo-bar{display:flex;align-items:center;gap:14px;flex-wrap:wrap;
- border:1px solid var(--ink-line);background:var(--ink-2);padding:14px 18px;margin-bottom:26px}
-.demo-bar.on{border-color:var(--brass);background:var(--ink-3)}
-.demo-bar .txt{flex:1;min-width:220px;font-size:13px;color:var(--bone-4)}
-.demo-bar.on .txt{color:var(--bone-3)}
-.btn-demo{background:none;color:var(--bone-3);border:1px solid var(--ink-line);
- padding:11px 20px;font-family:var(--mono);font-size:10px;letter-spacing:.18em;
- text-transform:uppercase;cursor:pointer;transition:all .2s var(--ease)}
-.btn-demo:hover{border-color:var(--brass);color:var(--brass)}
-.demo-bar.on .btn-demo{background:var(--brass);color:var(--ink);border-color:var(--brass)}
-.pastille-demo{width:8px;height:8px;border-radius:50%;background:var(--neutre);flex:none}
-.demo-bar.on .pastille-demo{background:var(--brass);animation:pulse 2s infinite}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
-
+/* ── Grille des curseurs ── */
+.grille{width:100%;border-collapse:collapse;margin-top:6px}
+.grille th{font-family:var(--mono);font-size:9px;letter-spacing:.14em;text-transform:uppercase;
+ color:var(--bone-4);font-weight:400;text-align:center;padding:12px 5px;
+ border-bottom:1px solid var(--hair)}
+.grille th:first-child{text-align:left;padding-left:2px;width:26%}
+.grille td{padding:0;border-bottom:1px solid var(--hair-2);text-align:center}
+.grille td:first-child{text-align:left;padding:14px 12px 14px 2px;
+ font-family:var(--mono);font-size:11px;color:var(--bone-3)}
+.c{display:block;padding:14px 4px;cursor:pointer;position:relative;
+ transition:background .2s var(--ease);font-family:var(--mono);font-size:9.5px;
+ letter-spacing:.1em;text-transform:uppercase}
+.c:hover{background:var(--ink-3)}
+.c1{color:#6F6B62}.c2{color:#B5B0A4}.c3{color:#B89968}.c4{color:#C8A97E}
+.mk{position:absolute;top:7px;right:8px;width:4px;height:4px;border-radius:50%;background:var(--brass)}
+.ev{position:absolute;bottom:6px;right:8px;font-family:var(--mono);font-size:8px;color:var(--brass-3)}
+.leg{display:flex;gap:22px;flex-wrap:wrap;margin-top:18px;font-family:var(--mono);
+ font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--bone-4)}
+.leg span{display:inline-flex;align-items:center;gap:7px}
+.leg i{width:6px;height:6px;border-radius:50%;display:inline-block}
+/* ── Volet latéral, motif du handoff pour le texte structuré ── */
+.voile{position:fixed;inset:0;background:#00000099;opacity:0;pointer-events:none;
+ transition:opacity .3s var(--ease);z-index:40}
+.voile.on{opacity:1;pointer-events:auto}
+.volet{position:fixed;top:0;right:0;bottom:0;width:440px;max-width:100%;
+ background:var(--ink-2);border-left:1px solid var(--hair);z-index:41;
+ transform:translateX(100%);transition:transform .4s var(--ease);
+ overflow-y:auto;padding:30px 28px}
+.volet.on{transform:none}
+.volet .k{font-family:var(--mono);font-size:9px;letter-spacing:.22em;text-transform:uppercase;
+ color:var(--brass-3);margin-bottom:10px}
+.volet h3{font-family:var(--serif);font-style:italic;font-weight:400;font-size:22px;
+ color:var(--bone);margin-bottom:20px;line-height:1.2}
+.volet .bloc{border-top:1px solid var(--hair-2);padding:15px 0}
+.volet .bt{font-family:var(--mono);font-size:9px;letter-spacing:.18em;text-transform:uppercase;
+ color:var(--bone-4);margin-bottom:7px}
+.volet .bc{font-size:12px;line-height:1.9;color:var(--bone-3)}
+.fermer{position:absolute;top:24px;right:24px;background:none;border:none;color:var(--bone-4);
+ font-family:var(--mono);font-size:10px;letter-spacing:.18em;cursor:pointer}
+.fermer:hover{color:var(--brass)}
 /* ── Journal des refus ── */
-.refus{border-top:1px solid var(--ink-line);margin-top:6px}
-.refus .l{display:grid;grid-template-columns:112px 1fr auto;gap:14px;padding:11px 2px;
- border-bottom:1px solid var(--ink-3);align-items:baseline}
-.refus .h{font-family:var(--mono);font-size:10.5px;color:var(--bone-4)}
-.refus .q{font-size:13px;color:var(--bone-3)}
-.refus .q b{color:var(--bone);font-weight:400}
-.refus .cmd{font-family:var(--mono);font-size:10.5px;color:var(--neutre);
- white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%;display:block;margin-top:3px}
-.refus .tag{font-family:var(--mono);font-size:9px;letter-spacing:.14em;text-transform:uppercase;
- color:var(--alert);white-space:nowrap}
-.refus .tag.fig{color:var(--bone-4)}
-
-.nd{color:var(--bone-4);font-style:italic;font-size:13px;padding:16px 0}
-@media (max-width:760px){
-  .wrap{padding:26px 15px 70px}
-  .grille th{font-size:8.5px;padding:9px 2px}
-  .grille td:first-child{font-size:11.5px;padding-left:0}
-  .n{font-size:8.5px}
-  .refus .l{grid-template-columns:1fr;gap:3px}
+.refus .r{display:grid;grid-template-columns:104px 1fr auto;gap:14px;padding:12px 2px;
+ border-bottom:1px solid var(--hair-2);align-items:baseline}
+.refus .h{font-family:var(--mono);font-size:10px;color:var(--bone-4)}
+.refus .q{font-size:12px;color:var(--bone-3);line-height:1.6}
+.refus .q b{color:var(--bone-2);font-weight:400}
+.refus .cmd{font-family:var(--mono);font-size:10px;color:var(--bone-4);display:block;
+ margin-top:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.refus .tg{font-family:var(--mono);font-size:8.5px;letter-spacing:.14em;text-transform:uppercase;
+ color:var(--brass-3);white-space:nowrap}
+.refus .tg.fig{color:var(--bone-4)}
+@media (max-width:720px){
+  .grille th{font-size:8px;padding:9px 2px}
+  .grille td:first-child{font-size:10px;padding-left:0}
+  .c{font-size:8px;letter-spacing:.05em}
+  .refus .r{grid-template-columns:1fr;gap:3px}
+  .volet{width:100%}
 }
-@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 </style></head><body>
 <div class="wrap">
-  <a class="retour" href="/">← Poste de pilotage</a>
-  <div class="eyebrow">Gouvernance</div>
+  <div class="bandeau">
+    <div><div class="marque">Digital·<em>Humans</em></div>
+      <div class="devise">Comité de direction · augmenté</div></div>
+    <nav class="nav">
+      <a href="/">Acte I · Tableau de bord</a>
+      <a href="/pilotage">Acte II · Pilotage</a>
+      <a href="/gouvernance" class="on">Acte III · Gouvernance</a>
+      <a href="/rapports">Rapports</a>
+    </nav>
+  </div>
+
+  <div class="acte">Nº 03 · Gouvernance</div>
   <h1>Le curseur <em>d'autonomie</em></h1>
-  <p class="role">Chaque direction reçoit son autonomie <em>tâche par tâche</em>, jamais globalement.
-     Le réglage affiché ci-dessous est celui qui s'applique&nbsp;: c'est lui que la plateforme lit
-     avant chaque action, et c'est lui qui bloque.</p>
-  <div class="filet"></div>
+  <p class="chapo">Chaque direction reçoit son autonomie tâche par tâche, jamais globalement.
+     Le réglage affiché est celui qui s'applique : la plateforme le lit avant chaque action,
+     et c'est lui qui bloque.</p>
 
-  <div class="demo-bar" id="demoBar">
-    <i class="pastille-demo"></i>
-    <span class="txt" id="demoTxt">Mode démonstration inactif.</span>
-    <button class="btn-demo" id="btnDemo">Activer</button>
+  <div class="g3" id="ind"></div>
+
+  <div class="section">
+    <h2>Ce qui est réglé</h2>
+    <p class="chapo">Six directions, six familles de tâches. Une case pour le détail.</p>
+    <div id="grille"></div>
+    <div class="leg">
+      <span><i style="background:#6F6B62"></i>Observe</span>
+      <span><i style="background:#B5B0A4"></i>Conseille</span>
+      <span><i style="background:#B89968"></i>Agit sous validation</span>
+      <span><i style="background:#C8A97E"></i>Agit en autonomie</span>
+      <span><i style="background:var(--brass)"></i>canal contraint</span>
+      <span style="color:var(--brass-3)">▸ évolution prévue</span>
+    </div>
   </div>
 
-  <div class="ind" id="ind"></div>
-
-  <h2>Ce qui est réglé</h2>
-  <p class="chapo">Six directions, six familles de tâches. Cliquez une case pour voir la justification,
-     la contrainte de canal et la règle technique associée.</p>
-  <div id="grille"></div>
-  <div class="legende">
-    <span><i style="background:var(--neutre)"></i>Observe</span>
-    <span><i style="background:var(--warn)"></i>Conseille</span>
-    <span><i style="background:var(--brass)"></i>Agit sous validation</span>
-    <span><i style="background:var(--ok)"></i>Agit en autonomie</span>
-    <span><i style="background:var(--brass);border-radius:50%"></i>canal contraint</span>
+  <div class="section">
+    <h2>Ce qui s'est passé</h2>
+    <p class="chapo">Les refus réellement opposés par la plateforme. Un écart avec la grille
+       signalerait un réglage qui ne tient pas.</p>
+    <div class="refus" id="refus"></div>
   </div>
-  <div class="detail" id="detail"></div>
-
-  <h2>Ce qui s'est passé</h2>
-  <p class="chapo">Les refus réellement opposés par la plateforme. Un écart entre cette liste et la
-     grille ci-dessus signalerait un réglage qui ne tient pas.</p>
-  <div class="refus" id="refus"></div>
 </div>
 
+<div class="voile" id="voile"></div>
+<aside class="volet" id="volet">
+  <button class="fermer" id="fermer">Fermer ✕</button>
+  <div class="k" id="v-k"></div>
+  <h3 id="v-t"></h3>
+  <div id="v-b"></div>
+</aside>
+
 <script>
-const DIRS = [
-  ["delivery","Delivery"],["commercial","Commercial"],["marketing","Marketing"],
-  ["customer-success","Cust. Success"],["chief-of-staff","Chief of Staff"],["legal","Juridique"]
-];
-const TACHES = [
-  ["observer","Observer et rapporter"],["ecrire_base","Écrire en base"],
-  ["agir_production","Agir sur la production"],["envoyer_externe","Envoyer vers l'extérieur"],
-  ["engager_depense","Engager une dépense"],["modifier_dispositif","Modifier le dispositif"]
-];
-const NIV = {1:["Observe","n1"],2:["Conseille","n2"],3:["Validation","n3"],4:["Autonomie","n4"]};
-let DATA = null;
+const DIRS=[['delivery','Delivery'],['commercial','Commercial'],['marketing','Marketing'],
+ ['customer-success','Cust. Success'],['chief-of-staff','Chief of Staff'],['legal','Juridique']];
+const TACHES=[['observer','Observer et rapporter'],['ecrire_base','Écrire en base'],
+ ['agir_production','Agir sur la production'],['envoyer_externe','Envoyer vers l\u2019extérieur'],
+ ['engager_depense','Engager une dépense'],['modifier_dispositif','Modifier le dispositif']];
+const NIV={1:['Observe','c1'],2:['Conseille','c2'],3:['Validation','c3'],4:['Autonomie','c4']};
 
 function ind(d){
-  const i = d.indicateurs || {};
-  const pctContraint = i.reglages_total ? Math.round(i.contraints*100/i.reglages_total) : 0;
-  const el = document.getElementById('ind');
-  el.innerHTML = `
-    <div><div class="lbl">Réglages actifs</div>
-      <div class="val">${i.reglages_total||0}</div>
-      <div class="sous">6 directions × 6 familles de tâches</div></div>
-    <div><div class="lbl">Sous contrainte</div>
-      <div class="val">${i.contraints||0}<span class="sur"> / ${i.reglages_total||0}</span></div>
-      <div class="barre"><i style="width:${pctContraint}%"></i></div>
-      <div class="sous">Observe ou Conseille — aucune exécution sans vous</div></div>
-    <div><div class="lbl">Refus opposés</div>
-      <div class="val">${i.refus_total||0}</div>
-      <div class="sous">dont ${i.refus_par_curseur||0} par le curseur, ${(i.refus_total||0)-(i.refus_par_curseur||0)} par règle absolue</div></div>
-    <div><div class="lbl">Famille la plus bloquée</div>
-      <div class="val" style="font-size:22px;line-height:1.3;padding-top:8px">${
-        i.tache_la_plus_bloquee ? (TACHES.find(t=>t[0]===i.tache_la_plus_bloquee)||[,i.tache_la_plus_bloquee])[1] : '—'}</div>
-      <div class="sous">${i.directions_avec_refus||0} direction(s) concernée(s)</div></div>`;
+  const i=d.indicateurs||{};
+  const pct=i.reglages_total?Math.round(i.contraints*100/i.reglages_total):0;
+  document.getElementById('ind').innerHTML=`
+   <div><div class="lv-l">Réglages actifs</div>
+     <div class="lv-v" style="text-align:left;margin-top:8px">${i.reglages_total||0}</div>
+     <div style="font-size:11px;color:var(--bone-4);margin-top:6px">6 directions × 6 familles</div></div>
+   <div><div class="lv-l">Sous contrainte</div>
+     <div class="lv-v" style="text-align:left;margin-top:8px">${i.contraints||0}<span style="font-size:13px;color:var(--bone-4)"> / ${i.reglages_total||0}</span></div>
+     <div style="height:2px;background:var(--ink-3);margin-top:10px;overflow:hidden"><i style="display:block;height:100%;background:var(--brass);width:${pct}%;transition:width .9s var(--ease)"></i></div>
+     <div style="font-size:11px;color:var(--bone-4);margin-top:6px">aucune exécution sans vous</div></div>
+   <div><div class="lv-l">Refus opposés</div>
+     <div class="lv-v" style="text-align:left;margin-top:8px">${i.refus_total||0}</div>
+     <div style="font-size:11px;color:var(--bone-4);margin-top:6px">dont ${i.refus_par_curseur||0} par le curseur</div></div>
+   <div><div class="lv-l">Famille la plus bloquée</div>
+     <div style="font-family:var(--serif);font-style:italic;font-size:18px;color:var(--bone);margin-top:10px;line-height:1.3">${
+       i.tache_la_plus_bloquee?(TACHES.find(t=>t[0]===i.tache_la_plus_bloquee)||[,i.tache_la_plus_bloquee])[1]:'—'}</div>
+     <div style="font-size:11px;color:var(--bone-4);margin-top:6px">${i.directions_avec_refus||0} direction(s)</div></div>`;
 }
 
 function grille(d){
-  const idx = {};
-  (d.curseurs||[]).forEach(c => idx[c.direction+'|'+c.type_tache] = c);
-  let h = '<table class="grille"><thead><tr><th></th>';
-  DIRS.forEach(([,lib]) => h += `<th>${lib}</th>`);
-  h += '</tr></thead><tbody>';
-  TACHES.forEach(([tk,tlib]) => {
-    h += `<tr><td>${tlib}</td>`;
-    DIRS.forEach(([dk]) => {
-      const c = idx[dk+'|'+tk];
-      if (!c) { h += '<td><span class="cell nd">n.c.</span></td>'; return; }
-      const [lib,cls] = NIV[c.niveau];
-      h += `<td><span class="cell" data-k="${dk}|${tk}">
-        <span class="n ${cls}">${lib}</span>
-        ${c.canal_impose ? '<i class="canal" title="canal contraint"></i>' : ''}
-        ${c.evolution_prevue ? '<i class="evol">▸</i>' : ''}
-      </span></td>`;
+  const idx={}; (d.curseurs||[]).forEach(c=>idx[c.direction+'|'+c.type_tache]=c);
+  let h='<table class="grille"><thead><tr><th></th>';
+  DIRS.forEach(([,l])=>h+=`<th>${l}</th>`); h+='</tr></thead><tbody>';
+  TACHES.forEach(([tk,tl])=>{
+    h+=`<tr><td>${tl}</td>`;
+    DIRS.forEach(([dk])=>{
+      const c=idx[dk+'|'+tk];
+      if(!c){h+='<td><span class="c nd">n.c.</span></td>';return;}
+      const [lib,cls]=NIV[c.niveau];
+      h+=`<td><span class="c ${cls}" data-k="${dk}|${tk}">${lib}${
+        c.canal_impose?'<i class="mk"></i>':''}${c.evolution_prevue?'<i class="ev">▸</i>':''}</span></td>`;
     });
-    h += '</tr>';
+    h+='</tr>';
   });
-  document.getElementById('grille').innerHTML = h + '</tbody></table>';
-  document.querySelectorAll('.cell[data-k]').forEach(el =>
-    el.addEventListener('click', () => detail(idx[el.dataset.k])));
+  document.getElementById('grille').innerHTML=h+'</tbody></table>';
+  document.querySelectorAll('.c[data-k]').forEach(e=>
+    e.addEventListener('click',()=>volet(idx[e.dataset.k])));
 }
 
-function detail(c){
-  if (!c) return;
-  const [lib] = NIV[c.niveau];
-  const dlib = (DIRS.find(x=>x[0]===c.direction)||[,c.direction])[1];
-  const tlib = (TACHES.find(x=>x[0]===c.type_tache)||[,c.type_tache])[1];
-  const el = document.getElementById('detail');
-  el.innerHTML = `<div class="t">${dlib} — ${tlib}</div>
-    <div class="st">Niveau ${c.niveau} · ${lib}${c.regle_code ? ' · règle '+c.regle_code : ''}</div>
-    ${c.justification ? `<span class="k">Justification</span><p>${c.justification}</p>` : ''}
-    ${c.canal_impose ? `<span class="k">Contrainte de canal</span><p>${c.canal_impose}</p>` : ''}
-    ${c.evolution_prevue ? `<span class="k">Évolution prévue</span><p>${c.evolution_prevue}</p>` : ''}
-    <span class="k">Dernière modification</span><p>${c.maj_le||'—'} par ${c.maj_par||'—'}</p>`;
-  el.classList.add('on');
-  el.scrollIntoView({behavior:'smooth',block:'nearest'});
+// Texte structuré → volet latéral, jamais un pavé (motif du handoff).
+function volet(c){
+  if(!c)return;
+  const dl=(DIRS.find(x=>x[0]===c.direction)||[,c.direction])[1];
+  const tl=(TACHES.find(x=>x[0]===c.type_tache)||[,c.type_tache])[1];
+  document.getElementById('v-k').textContent=`Niveau ${c.niveau} · ${NIV[c.niveau][0]}${c.regle_code?' · '+c.regle_code:''}`;
+  document.getElementById('v-t').textContent=`${dl} — ${tl}`;
+  const b=[];
+  if(c.justification) b.push(['Justification',c.justification]);
+  if(c.canal_impose)  b.push(['Contrainte de canal',c.canal_impose]);
+  if(c.evolution_prevue) b.push(['Évolution prévue',c.evolution_prevue]);
+  b.push(['Dernière modification',`${c.maj_le||'—'} par ${c.maj_par||'—'}`]);
+  document.getElementById('v-b').innerHTML=b.map(([t,x])=>
+    `<div class="bloc"><div class="bt">${t}</div><div class="bc">${String(x).replace(/</g,'&lt;')}</div></div>`).join('');
+  document.getElementById('volet').classList.add('on');
+  document.getElementById('voile').classList.add('on');
 }
+function fermer(){document.getElementById('volet').classList.remove('on');
+  document.getElementById('voile').classList.remove('on');}
+document.getElementById('fermer').addEventListener('click',fermer);
+document.getElementById('voile').addEventListener('click',fermer);
+document.addEventListener('keydown',e=>{if(e.key==='Escape')fermer();});
 
 function refus(d){
-  const el = document.getElementById('refus');
-  if (!d.refus || !d.refus.length) {
-    el.innerHTML = '<p class="nd">Aucun refus enregistré — le journal est vide.</p>'; return;
-  }
-  el.innerHTML = d.refus.map(r => {
-    const dlib = r.direction ? (DIRS.find(x=>x[0]===r.direction)||[,r.direction])[1] : null;
-    const tlib = r.type_tache ? (TACHES.find(x=>x[0]===r.type_tache)||[,r.type_tache])[1] : null;
-    const quoi = r.origine === 'curseur'
-      ? `<b>${dlib}</b> a tenté « ${tlib} » — réglé sur ${NIV[r.regle][0]}, exigeait ${NIV[r.requis][0]}`
-      : `Règle absolue <b>${(r.regle_code||'').split(' ')[0]}</b>`;
-    return `<div class="l">
-      <span class="h">${(r.horodatage||'').replace('T',' ').slice(0,16)}</span>
-      <span class="q">${quoi}<span class="cmd">${(r.commande||'').replace(/</g,'&lt;')}</span></span>
-      <span class="tag ${r.origine==='curseur'?'':'fig'}">${r.origine==='curseur'?'curseur':'règle figée'}</span>
-    </div>`;
+  const el=document.getElementById('refus');
+  if(!d.refus||!d.refus.length){el.innerHTML='<p class="nd" style="padding:18px 0">Aucun refus journalisé.</p>';return;}
+  el.innerHTML=d.refus.map(r=>{
+    const dl=r.direction?(DIRS.find(x=>x[0]===r.direction)||[,r.direction])[1]:null;
+    const tl=r.type_tache?(TACHES.find(x=>x[0]===r.type_tache)||[,r.type_tache])[1]:null;
+    const q=r.origine==='curseur'
+      ?`<b>${dl}</b> a tenté « ${tl} » — réglé sur ${NIV[r.regle][0]}, exigeait ${NIV[r.requis][0]}`
+      :`Règle absolue <b>${(r.regle_code||'').split(' ')[0]}</b>`;
+    return `<div class="r"><span class="h">${(r.horodatage||'').replace('T',' ').slice(0,16)}</span>
+      <span class="q">${q}<span class="cmd">${(r.commande||'').replace(/</g,'&lt;')}</span></span>
+      <span class="tg ${r.origine==='curseur'?'':'fig'}">${r.origine==='curseur'?'curseur':'règle figée'}</span></div>`;
   }).join('');
 }
 
-
-// ── Mode démonstration ─────────────────────────────────────────────
-// On écrit vraiment pendant la démo : une simulation ne prouverait rien.
-// Tout ce qui est créé porte un marqueur, et la sortie du mode l'efface.
-function majDemo(e){
-  const bar = document.getElementById('demoBar');
-  const txt = document.getElementById('demoTxt');
-  const btn = document.getElementById('btnDemo');
-  if (e && e.actif){
-    bar.classList.add('on');
-    txt.innerHTML = "<b>Mode démonstration actif</b> — les éléments créés sont réels et seront effacés à la sortie."
-                  + (e.active_le ? " Depuis " + e.active_le.replace('T',' ') + "." : "");
-    btn.textContent = 'Terminer et effacer';
-  } else {
-    bar.classList.remove('on');
-    txt.textContent = e && e.message ? e.message : "Mode démonstration inactif.";
-    btn.textContent = 'Activer';
-  }
-}
-document.getElementById('btnDemo').addEventListener('click', () => {
-  const actif = document.getElementById('demoBar').classList.contains('on');
-  fetch('/api/demo/' + (actif ? 'off' : 'on'))
-    .then(r=>r.json()).then(e=>{ majDemo(e); if (actif) setTimeout(()=>location.reload(), 1400); })
-    .catch(()=>{ document.getElementById('demoTxt').textContent = "Mode démonstration indisponible."; });
-});
-fetch('/api/demo/etat').then(r=>r.json()).then(majDemo).catch(()=>{});
-
 fetch('/api/gouvernance').then(r=>r.json()).then(d=>{
-  DATA = d; ind(d); grille(d); refus(d);
-}).catch(e=>{
-  document.getElementById('grille').innerHTML =
-    '<p class="nd">Données de gouvernance indisponibles — ' + e + '</p>';
-});
+  if(d.erreur){document.getElementById('grille').innerHTML='<p class="err">Données indisponibles — '+d.erreur+'</p>';return;}
+  ind(d);grille(d);refus(d);
+}).catch(e=>{document.getElementById('grille').innerHTML='<p class="err">Injoignable — '+e+'</p>';});
 </script></body></html>
