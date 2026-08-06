@@ -1,9 +1,10 @@
 # Journal — dh-comite
 
 > Genere automatiquement depuis les messages de commit.
-> Derniere mise a jour : 06/08/2026 15:26 UTC
+> Derniere mise a jour : 06/08/2026 15:41 UTC
 
 ## 2026-08-06
+- Identite legale reelle (Guichet Unique INPI) + brouillons des pages legales transmis au Juridique. Point d'attention : micro-entreprise en franchise de TVA, seuils a instruire avant la premiere vente. `4e9a4cd`
 - Nuance de Sam : la segmentation oriente la prospection, pas l'accueil. Un grand compte entrant se qualifie normalement et remonte immediatement a Sam. `897a786`
 - Segmentation par moteur : un compte est cible pour un moteur donne. Grands comptes = contenu LinkedIn vers tier Pro (adoption par le bas) + Sam en direct pour SH Conseil, PAS de demarchage commercial. ETI = tier Team. Integrateurs = offre partenaire. `677a783`
 - Mentions IA : libelles definitifs FR/EN pour les fenetres de conversation, l'en-tete du concierge, le pied de solution et les livrables (arbitrage Sam du 06/08 : au-dela du minimum legal, choix de marque) `3cb46ab`
