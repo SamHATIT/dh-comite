@@ -1,9 +1,10 @@
 # Journal — dh-comite
 
 > Genere automatiquement depuis les messages de commit.
-> Derniere mise a jour : 06/08/2026 16:22 UTC
+> Derniere mise a jour : 06/08/2026 16:29 UTC
 
 ## 2026-08-06
+- Ecran de gouvernance (page N1) : 4 indicateurs de tete, grille 6x6 des curseurs avec detail au clic, journal des 42 refus reels. Gabarit et jetons du handoff Claude Design — Cormorant, encre, laiton, rayons 2-4px. Verifie : 36 cases, 7 canaux contraints, detail fonctionnel, mobile en colonne. `f7f3fd1`
 - API de gouvernance : 36 curseurs + 42 refus reels + 4 indicateurs de tete (gabarit N1 du handoff Claude Design) `821f04c`
 - CURSEUR-001 : le curseur d'autonomie devient une donnee gouvernee. 36 reglages (6 directions x 6 types de tache) en base, lus par le garde-fou a chaque appel d'outil. Nouvelle famille 'engager_depense' (DH-BUDGET-001) : les directions chiffrent et font approuver, elles n'engagent jamais. Colonne canal_impose : une direction peut etre autonome tout en n'ayant qu'un seul moyen d'action — sans quoi le tableau de bord mentirait. 7 cas de test sur 8 conformes, le 8e etait une contrainte de canal legitime, desormais affichee. `053cfe9`
 - Identite legale reelle (Guichet Unique INPI) + brouillons des pages legales transmis au Juridique. Point d'attention : micro-entreprise en franchise de TVA, seuils a instruire avant la premiere vente. `4e9a4cd`

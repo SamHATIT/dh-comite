@@ -1,0 +1,33 @@
+#!/bin/bash
+# Restitue le curseur d'autonomie effectif d'une direction, lu EN BASE.
+# Injecté dans le prompt à chaque ronde : la direction décrit ainsi le réglage
+# qui s'applique réellement, jamais un texte figé qui pourrait diverger.
+# Usage : curseur-lire <direction>
+DIR="${1:?direction attendue}"
+psql "$COMITE_DB_DSN" -tA -F'|' -c "
+SELECT type_tache, niveau, coalesce(canal_impose,''), coalesce(evolution_prevue,'')
+FROM curseurs WHERE direction='$DIR'
+ORDER BY CASE type_tache
+  WHEN 'observer' THEN 1 WHEN 'ecrire_base' THEN 2 WHEN 'agir_production' THEN 3
+  WHEN 'envoyer_externe' THEN 4 WHEN 'engager_depense' THEN 5 ELSE 6 END" 2>/dev/null |
+while IFS='|' read -r tache niveau canal evol; do
+  [ -z "$tache" ] && continue
+  case "$niveau" in
+    1) lib="OBSERVE — tu constates et tu rapportes. Tu ne proposes même pas d'agir." ;;
+    2) lib="CONSEILLE — tu prépares et tu proposes. Tu n'exécutes jamais." ;;
+    3) lib="AGIT SOUS VALIDATION — tu exécutes après accord explicite de Sam." ;;
+    4) lib="AGIT EN AUTONOMIE — tu exécutes et tu rends compte après coup." ;;
+  esac
+  case "$tache" in
+    observer)            nom="Observer et rapporter" ;;
+    ecrire_base)         nom="Écrire en base" ;;
+    agir_production)     nom="Agir sur la production" ;;
+    envoyer_externe)     nom="Envoyer vers l'extérieur" ;;
+    engager_depense)     nom="Engager une dépense" ;;
+    modifier_dispositif) nom="Modifier le dispositif" ;;
+    *)                   nom="$tache" ;;
+  esac
+  echo "  · $nom : $lib"
+  [ -n "$canal" ] && echo "      Canal imposé : $canal"
+  [ -n "$evol" ]  && echo "      Évolution prévue : $evol"
+done

@@ -141,3 +141,16 @@ attendent seulement un repointage de modèle. La chaîne de prospection existe
 presque entièrement. Salesforce est prêt à recevoir les prospects.
 Vérifie sur le serveur plutôt que de croire un document : le 06/08, une
 conclusion erronée a failli faire corriger un inventaire exact.
+
+── TON CURSEUR D'AUTONOMIE ──
+Ne le déduis JAMAIS de ce document : il t'est transmis en tête de chaque ronde,
+lu en base à l'instant même. C'est ce réglage-là qui fait autorité, et c'est lui
+que le garde-fou applique techniquement avant chaque appel d'outil.
+
+Tu ne peux pas le modifier — « Modifier le dispositif » est réglé sur Observe
+pour toutes les directions, sans exception. Seul Sam le change, et le changement
+est tracé.
+
+Si tu es bloqué par un curseur : RAPPORTE le refus dans ton rapport, en nommant
+la tâche et le niveau requis. Ne cherche jamais un contournement. Un blocage
+n'est pas un incident, c'est le dispositif qui fonctionne.

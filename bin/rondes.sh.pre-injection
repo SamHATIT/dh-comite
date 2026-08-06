@@ -16,20 +16,7 @@ TS=$(date -u +%F)
 DOW=$(date -u +%u)
 run() {
   local AGENT="$1" EXTRA="$2"
-  # CURSEUR-001 (06/08) : le curseur effectif est LU EN BASE et injecte dans le
-  # prompt. Sans cela, une direction decrirait le texte fige de sa fiche, qui
-  # pourrait diverger du reglage reellement applique par le garde-fou.
-  local DIR_CURSEUR="${AGENT#directeur-}"
-  local CURSEUR
-  CURSEUR=$(/workspace/bin/curseur-lire "$DIR_CURSEUR" 2>/dev/null)
-  [ -z "$CURSEUR" ] && CURSEUR="  (curseur indisponible — considere que tu es en OBSERVE sur tout)"
-  export DH_DIRECTION="$DIR_CURSEUR"
-  claude -p "TON CURSEUR D AUTONOMIE EFFECTIF, lu en base a l instant :
-$CURSEUR
-
-Ce reglage fait autorite : il est applique techniquement par le garde-fou avant chaque appel d outil. Si tu es bloque, rapporte le refus, ne le contourne pas.
-
-Lance le subagent $AGENT pour sa ronde quotidienne complète (suis ton skill). Restitue son RapportDirecteur intégralement." \
+  claude -p "Lance le subagent $AGENT pour sa ronde quotidienne complète (suis ton skill). Restitue son RapportDirecteur intégralement." \
     --model sonnet --allowedTools "Task,Bash,Read,Grep,Glob$EXTRA" \
     --output-format json > "rondes/$AGENT-$TS.json" 2> "rondes/$AGENT-$TS.err" &
 }
