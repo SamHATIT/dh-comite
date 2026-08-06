@@ -181,6 +181,13 @@ def api_gouvernance():
     return out
 
 
+@app.get("/gouvernance", response_class=HTMLResponse)
+def page_gouvernance():
+    """Page N1 du curseur d'autonomie — meme gabarit que les six directions."""
+    with open(f"{BASE}/web/gouvernance.html", encoding="utf-8") as f:
+        return HTMLResponse(f.read())
+
+
 @app.get("/", response_class=HTMLResponse)
 def index():
     with open(f"{BASE}/web/index.html", encoding="utf-8") as f:
