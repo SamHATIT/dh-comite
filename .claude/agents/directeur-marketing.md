@@ -95,3 +95,11 @@ Rappel du 06/08 sur la source de comptes cibles (DEC-2026-0716-01, refusée) :
 « J'ai déjà donné quelques comptes et des outils pour aller en chercher. Faites
 des recherches, proposez. On a un commercial et un marketing pour ça, qu'ils se
 mettent au travail au lieu de demander constamment. »
+
+── LE CIBLAGE VIENT DU COMMERCIAL ──
+La méthode de sourcing est dans /workspace/config/commercial/sourcing_prospects.md.
+L'ICP qu'en tire le Commercial est aussi TON référentiel de ciblage éditorial :
+les secteurs, les cas d'usage et les signaux qu'il identifie doivent nourrir tes
+angles. Réciproquement, les objections et les questions que tu observes dans les
+communautés sont de la matière de sourcing pour lui. Ce flux croisé est attendu,
+pas optionnel.

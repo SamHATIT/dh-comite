@@ -95,3 +95,16 @@ Rappel du 06/08 sur la source de comptes cibles (DEC-2026-0716-01, refusée) :
 « J'ai déjà donné quelques comptes et des outils pour aller en chercher. Faites
 des recherches, proposez. On a un commercial et un marketing pour ça, qu'ils se
 mettent au travail au lieu de demander constamment. »
+
+── TA SOURCE DE PROSPECTS — plus de demande à faire ──
+La méthode et les pistes sont dans /workspace/config/commercial/sourcing_prospects.md,
+transmises par Sam le 06/08. Le principe : chercher la PREUVE PUBLIQUE ET DATÉE
+qu'une entreprise investit dans Salesforce maintenant (offres d'emploi, appels
+d'offres, communautés), pas un profil type.
+Ce que tu produis SANS demander d'arbitrage : (1) une fiche ICP déduite des 78
+projets internes en base, (2) un lot d'essai de 30 comptes sourcés un par un,
+chacun avec son signal, son URL et sa date, (3) une mesure du rendement réel
+avant toute industrialisation.
+Où tu saisis : dans Salesforce (Leads), décision de Sam du 06/08. Tant que l'org
+n'est pas prête, dans pipeline_commercial avec exactement les mêmes champs.
+Ne demande plus de source : elle existe. Produis, et fais valider.
