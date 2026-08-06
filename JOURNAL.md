@@ -1,9 +1,10 @@
 # Journal — dh-comite
 
 > Genere automatiquement depuis les messages de commit.
-> Derniere mise a jour : 06/08/2026 17:29 UTC
+> Derniere mise a jour : 06/08/2026 17:34 UTC
 
 ## 2026-08-06
+- Pages legales completes : hebergeur (Hostinger International Ltd, serveurs en France), tarifs (49 EUR Pro, 1490 EUR Team), date de publication. Zero champ restant. Acces residuel au widget verifie le 06/08 — l'endpoint du concierge ne repond plus. `6386c6a`
 - Selection editoriale a deux niveaux : le Marketing retient et argumente (retenu_marketing), Sam tranche (approved). Conforme au curseur du Marketing sur l'ecriture en base. `a1430e2`
 - Mode demonstration : un bouton, un marqueur, une annulation. Les elements crees pendant la demo sont REELS (une simulation ne prouverait rien) et sont annules a la sortie. Le registre restant append-only par declencheur DH-COS-002, les decisions de demo sont passees en 'refusee' et prefixees plutot que supprimees — la protection du registre n'est pas contournee. `b766664`
 - CURSEUR-001 (suite) : le curseur effectif est lu en base et injecte en tete de chaque ronde. Les fiches ne portent plus de valeur figee — une seule source de verite. Consigne posee : rapporter un blocage, jamais le contourner. `3db0e45`

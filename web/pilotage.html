@@ -1,0 +1,190 @@
+<!doctype html><html lang="fr"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Poste de pilotage — Digital·Humans</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Inter:wght@300;400;500&family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#0A0A0B;--ink-2:#141416;--ink-3:#1C1C1F;--ink-line:#2A2A2E;
+  --bone:#F5F2EC;--bone-3:#B8B2A6;--bone-4:#9A938A;
+  --brass:#C8A97E;--brass-deep:#8C6E4A;
+  --ok:#6E9C5C;--warn:#C79A3A;--alert:#B85B49;--neutre:#8D8880;
+  --serif:'Cormorant Garamond',Georgia,serif;--sans:'Inter',system-ui,sans-serif;
+  --mono:'JetBrains Mono',ui-monospace,monospace;--ease:cubic-bezier(.2,.7,.3,1);
+}
+*{box-sizing:border-box;margin:0}
+body{background:var(--ink);color:var(--bone);font-family:var(--sans);font-weight:300;
+ font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased}
+.wrap{max-width:960px;margin:0 auto;padding:34px 20px 90px}
+
+.eyebrow{font-family:var(--mono);font-size:10px;letter-spacing:.32em;text-transform:uppercase;
+ color:var(--brass);margin-bottom:12px}
+h1{font-family:var(--serif);font-weight:300;font-size:clamp(2rem,5vw,2.8rem);line-height:1.06;
+ letter-spacing:-.012em;margin-bottom:8px}
+h1 em{font-style:italic;color:var(--brass)}
+.date{font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--bone-4)}
+.filet{height:1px;background:linear-gradient(90deg,var(--brass),transparent 72%);margin:26px 0 24px}
+
+/* ── L'ouverture : ce qui attend Sam ── */
+.ouverture{border:1px solid var(--ink-line);background:var(--ink-2);padding:22px 20px;margin-bottom:32px}
+.ouverture.urgent{border-color:var(--brass)}
+.ouv-h{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;margin-bottom:4px}
+.ouv-n{font-family:var(--serif);font-size:52px;font-weight:300;line-height:1;color:var(--brass)}
+.ouv-l{font-family:var(--serif);font-style:italic;font-size:20px;color:var(--bone)}
+.ouv-s{font-size:13px;color:var(--bone-4);margin-top:6px}
+.actes{margin-top:18px;border-top:1px solid var(--ink-3)}
+.acte{display:grid;grid-template-columns:auto 1fr auto;gap:13px;padding:13px 0;
+ border-bottom:1px solid var(--ink-3);align-items:baseline}
+.acte-n{font-family:var(--mono);font-size:10px;color:var(--brass);letter-spacing:.1em}
+.acte-t{font-size:13.5px;color:var(--bone-3);line-height:1.5}
+.acte-a{font-family:var(--mono);font-size:10px;letter-spacing:.1em;white-space:nowrap}
+.a0{color:var(--bone-4)}.a1{color:var(--warn)}.a2{color:var(--alert)}
+
+/* ── Les actes : une ligne par direction ── */
+h2{font-family:var(--serif);font-style:italic;font-weight:400;font-size:1.5rem;margin:34px 0 4px}
+.chapo{color:var(--bone-4);font-size:13px;margin-bottom:16px}
+.dir{border-top:1px solid var(--ink-line)}
+.d{display:grid;grid-template-columns:26px 1fr auto;gap:15px;padding:17px 4px;
+ border-bottom:1px solid var(--ink-3);align-items:start;cursor:pointer;
+ transition:background .2s var(--ease)}
+.d:hover{background:var(--ink-2)}
+.d-r{font-family:var(--serif);font-size:17px;color:var(--brass-deep);line-height:1.2;padding-top:2px}
+.d-n{font-family:var(--serif);font-size:19px;color:var(--bone);margin-bottom:3px}
+.d-m{font-size:12.5px;color:var(--bone-4);line-height:1.5}
+.d-m b{color:var(--bone-3);font-weight:400}
+.d-s{text-align:right;white-space:nowrap}
+.d-sc{font-family:var(--serif);font-size:30px;font-weight:300;line-height:1}
+.d-sl{font-family:var(--mono);font-size:9px;letter-spacing:.14em;text-transform:uppercase;
+ color:var(--bone-4);margin-top:3px}
+.nd{font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--neutre)}
+.hach{background:repeating-linear-gradient(45deg,transparent,transparent 4px,var(--ink-3) 4px,var(--ink-3) 5px);
+ border:1px dashed var(--ink-line);padding:3px 9px;display:inline-block}
+.alertes{margin-top:8px}
+.al{font-size:12px;color:var(--bone-4);padding:3px 0 3px 13px;position:relative;line-height:1.45}
+.al::before{content:"";position:absolute;left:0;top:11px;width:6px;height:1px;background:var(--alert)}
+
+.pied{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:1px;
+ background:var(--ink-line);border:1px solid var(--ink-line);margin-top:34px}
+.pied>div{background:var(--ink-2);padding:16px 15px}
+.pied .l{font-family:var(--mono);font-size:9.5px;letter-spacing:.18em;text-transform:uppercase;
+ color:var(--bone-4);margin-bottom:8px}
+.pied .v{font-family:var(--serif);font-size:26px;font-weight:300;line-height:1}
+.pied .s{font-size:11.5px;color:var(--bone-4);margin-top:5px}
+.liens{margin-top:30px;display:flex;gap:18px;flex-wrap:wrap}
+.liens a{font-family:var(--mono);font-size:10px;letter-spacing:.2em;text-transform:uppercase;
+ color:var(--bone-4);text-decoration:none;border-bottom:1px solid transparent;padding-bottom:3px}
+.liens a:hover{color:var(--brass);border-color:var(--brass)}
+@media (max-width:640px){
+  .wrap{padding:24px 14px 70px}
+  .d{grid-template-columns:20px 1fr;gap:11px}
+  .d-s{grid-column:2;text-align:left;margin-top:8px}
+  .acte{grid-template-columns:1fr;gap:4px}
+  .ouv-n{font-size:44px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style></head><body>
+<div class="wrap">
+  <div class="eyebrow">Digital·Humans — comité de direction</div>
+  <h1>Poste de <em>pilotage</em></h1>
+  <div class="date" id="date"></div>
+  <div class="filet"></div>
+
+  <div id="ouverture"></div>
+
+  <h2>Les actes</h2>
+  <p class="chapo">Une ligne par direction. Ce qu'elle a produit, ce qui lui manque, ce qu'elle demande.</p>
+  <div class="dir" id="dirs"></div>
+
+  <div class="pied" id="pied"></div>
+
+  <div class="liens">
+    <a href="/gouvernance">Curseur d'autonomie</a>
+    <a href="/">Tableau de bord complet</a>
+  </div>
+</div>
+
+<script>
+const ROM = ['I','II','III','IV','V','VI'];
+function coul(s){ if(s===null||s===undefined||isNaN(s)) return 'var(--neutre)';
+  return s>=75?'var(--ok)':s>=50?'var(--warn)':'var(--alert)'; }
+
+function ouverture(d){
+  const dec = d.decisions||{};
+  const n = dec.attente_sam||0;
+  const liste = dec.liste||[];
+  const el = document.getElementById('ouverture');
+  if(!n){
+    el.className='ouverture';
+    el.innerHTML = `<div class="ouv-h"><span class="ouv-n">—</span>
+      <span class="ouv-l">Rien ne vous attend</span></div>
+      <div class="ouv-s">Aucune décision en attente d'arbitrage. Prochaine remontée demain matin, 7h.</div>`;
+    return;
+  }
+  el.className = 'ouverture urgent';
+  el.innerHTML = `<div class="ouv-h">
+      <span class="ouv-n">${n}</span>
+      <span class="ouv-l">${n>1?'décisions attendent':'décision attend'} votre arbitrage</span>
+    </div>
+    <div class="ouv-s">${dec.accordees_non_executees||0} autre(s) sont accordées et attendent leur exécution — elles n'appellent pas d'action de votre part.</div>
+    <div class="actes">${liste.map((x,i)=>`
+      <div class="acte">
+        <span class="acte-n">${ROM[i]||i+1}</span>
+        <span class="acte-t">${(x.texte||'').replace(/</g,'&lt;')}</span>
+        <span class="acte-a ${x.age>=7?'a2':x.age>=3?'a1':'a0'}">${x.age} j</span>
+      </div>`).join('')}</div>`;
+}
+
+function directions(d){
+  const el = document.getElementById('dirs');
+  el.innerHTML = (d.directions||[]).map((x,i)=>{
+    let sc, sl;
+    if(x.etat==='absent'){ sc=`<span class="nd hach">n.c.</span>`; sl='aucune remontée'; }
+    else if(x.etat==='perime'){ sc=`<span class="nd hach">périmé</span>`; sl=x.fraicheur||''; }
+    else if(typeof x.score==='number'){ sc=`<span class="d-sc" style="color:${coul(x.score)}">${x.score}</span>`; sl='sur 100'; }
+    else { sc=`<span class="nd hach">n.c.</span>`; sl='non calculable'; }
+    const menu = [];
+    if(x.manques) menu.push(`<b>${x.manques}</b> donnée(s) manquante(s)`);
+    if(x.demandes) menu.push(`<b>${x.demandes}</b> demande(s)`);
+    if(x.fraicheur && x.etat==='ok') menu.push(x.fraicheur);
+    return `<div class="d">
+      <span class="d-r">${ROM[i]}</span>
+      <span>
+        <div class="d-n">${x.libelle}</div>
+        <div class="d-m">${menu.join(' · ')||'—'}</div>
+        ${x.alertes.length?`<div class="alertes">${x.alertes.map(a=>`<div class="al">${a.replace(/</g,'&lt;')}</div>`).join('')}</div>`:''}
+      </span>
+      <span class="d-s">${sc}<div class="d-sl">${sl}</div></span>
+    </div>`;
+  }).join('');
+}
+
+function pied(d){
+  const c = d.cash||{}, dec = d.decisions||{};
+  const sous = (c.solde!==null && c.seuil!==null && c.solde<c.seuil);
+  document.getElementById('pied').innerHTML = `
+    <div><div class="l">Trésorerie déclarée</div>
+      <div class="v" style="color:${sous?'var(--alert)':'var(--bone)'}">${c.solde??'—'} €</div>
+      <div class="s">seuil d'alerte ${c.seuil??'—'} € · déclaré le ${c.declare_le||'—'}</div></div>
+    <div><div class="l">Revenu récurrent</div>
+      <div class="v">${c.mrr??'—'} €</div>
+      <div class="s">lancement payant en septembre</div></div>
+    <div><div class="l">Décisions closes</div>
+      <div class="v">${dec.closes??'—'}</div>
+      <div class="s">avec preuve vérifiée</div></div>
+    <div><div class="l">En attente d'exécution</div>
+      <div class="v">${dec.accordees_non_executees??'—'}</div>
+      <div class="s">accordées, portées par les directions</div></div>`;
+}
+
+document.getElementById('date').textContent =
+  new Date().toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+
+fetch('/api/pilotage').then(r=>r.json()).then(d=>{
+  if(d.erreur){ document.getElementById('ouverture').innerHTML =
+    '<div class="ouverture"><div class="ouv-s">Données indisponibles — '+d.erreur+'</div></div>'; return; }
+  ouverture(d); directions(d); pied(d);
+}).catch(e=>{
+  document.getElementById('ouverture').innerHTML =
+    '<div class="ouverture"><div class="ouv-s">Poste de pilotage injoignable — '+e+'</div></div>';
+});
+</script></body></html>

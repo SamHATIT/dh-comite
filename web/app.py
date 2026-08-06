@@ -181,6 +181,98 @@ def api_gouvernance():
     return out
 
 
+@app.get("/api/pilotage")
+def api_pilotage():
+    """Poste de pilotage (N0). Agrege ce qui attend Sam maintenant, direction
+    par direction. Principe du handoff : on concoit la cible et on AFFICHE LE
+    MANQUE — jamais un zero a la place d'une donnee absente."""
+    import datetime
+    out = {"directions": [], "decisions": {}, "cash": {}, "maj": None}
+    DIRS = [
+        ("delivery",         "Delivery",        "rapport_delivery"),
+        ("commercial",       "Commercial",      "rapport_commercial"),
+        ("marketing",        "Marketing",       "rapport_marketing"),
+        ("customer-success", "Customer Success","rapport_cs"),
+        ("chief-of-staff",   "Chief of Staff",  "rapport_cos"),
+        ("legal",            "Juridique",       "rapport_legal"),
+    ]
+    try:
+        etat = {r["cle"]: r for r in q(DSN, "SELECT cle, valeur, updated_at AS maj FROM deos_state")}
+    except Exception as e:
+        return {"erreur": str(e)}
+
+    aujourdhui = datetime.date.today()
+    for cle, libelle, source in DIRS:
+        e = etat.get(source)
+        d = {"cle": cle, "libelle": libelle, "etat": "absent",
+             "score": None, "statut": None, "alertes": [], "kpis": [],
+             "fraicheur": None, "calcul": None, "manques": 0, "demandes": 0}
+        if e and e.get("valeur"):
+            v = e["valeur"] if isinstance(e["valeur"], dict) else {}
+            maj = e.get("maj")
+            age_h = None
+            if maj:
+                try:
+                    age_h = (datetime.datetime.now(maj.tzinfo) - maj).total_seconds() / 3600
+                except Exception:
+                    pass
+            # Un rapport de plus de 30 h est traite comme manquant : mieux vaut
+            # afficher "pas de remontee" qu'un chiffre perime pris pour actuel.
+            if age_h is not None and age_h > 30:
+                d["etat"] = "perime"
+                d["fraicheur"] = f"dernier rapport il y a {int(age_h)} h"
+            else:
+                d["etat"] = "ok"
+                d["fraicheur"] = f"il y a {int(age_h)} h" if age_h is not None else None
+                # domain_score porte la note ; calcul_score en est la
+                # demonstration ecrite, qu'on garde pour l'infobulle.
+                d["score"] = v.get("domain_score")
+                if isinstance(d["score"], str) and d["score"].isdigit():
+                    d["score"] = int(d["score"])
+                cs = v.get("calcul_score")
+                d["calcul"] = cs[:400] if isinstance(cs, str) else None
+                d["manques"] = len(v.get("donnees_manquantes") or [])
+                d["demandes"] = len(v.get("decisions_demandees") or [])
+                d["statut"] = v.get("statut")
+                al = v.get("alertes") or []
+                d["alertes"] = [
+                    (a.get("texte") if isinstance(a, dict) else str(a))[:180]
+                    for a in al[:3]
+                ]
+                kp = v.get("kpis") or {}
+                if isinstance(kp, dict):
+                    d["kpis"] = [{"nom": k, "valeur": str(x)[:60]} for k, x in list(kp.items())[:4]]
+        out["directions"].append(d)
+
+    try:
+        r = q(DSN, """SELECT statut, count(*) AS n,
+                             min(date)::date AS plus_ancienne
+                      FROM decisions GROUP BY statut""")
+        par = {x["statut"]: x for x in r}
+        out["decisions"] = {
+            "attente_sam": par.get("attente_sam", {}).get("n", 0),
+            "accordees_non_executees": (par.get("accordee", {}).get("n", 0)
+                                        + par.get("en_execution", {}).get("n", 0)),
+            "closes": par.get("clos", {}).get("n", 0),
+            "plus_ancienne_en_attente": str(par.get("attente_sam", {}).get("plus_ancienne") or ""),
+        }
+        liste = q(DSN, """SELECT id, texte, date::date AS d,
+                                 (CURRENT_DATE - date::date) AS age
+                          FROM decisions WHERE statut='attente_sam'
+                          ORDER BY date LIMIT 6""")
+        out["decisions"]["liste"] = [
+            {"id": x["id"], "texte": (x["texte"] or "")[:200], "age": x["age"]} for x in liste]
+    except Exception as e:
+        out["decisions"] = {"erreur": str(e)}
+
+    c = etat.get("cash_suivi")
+    if c and isinstance(c.get("valeur"), dict):
+        v = c["valeur"]
+        out["cash"] = {"solde": v.get("solde_declare"), "seuil": v.get("seuil_alerte_solde"),
+                       "mrr": v.get("mrr_reel"), "declare_le": v.get("date_declaration")}
+    return out
+
+
 @app.get("/api/demo/{action}")
 def api_demo(action: str):
     """Mode demonstration. On ecrit VRAIMENT pendant la demo — une simulation
@@ -216,6 +308,13 @@ def api_demo(action: str):
         return e
     except Exception as ex:
         return {"erreur": str(ex)}
+
+
+@app.get("/pilotage", response_class=HTMLResponse)
+def page_pilotage():
+    """Poste de pilotage (N0) — l'ecran d'ouverture : qu'est-ce qui m'attend ?"""
+    with open(f"{BASE}/web/pilotage.html", encoding="utf-8") as f:
+        return HTMLResponse(f.read())
 
 
 @app.get("/gouvernance", response_class=HTMLResponse)
