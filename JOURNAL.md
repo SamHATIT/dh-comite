@@ -1,9 +1,10 @@
 # Journal — dh-comite
 
 > Genere automatiquement depuis les messages de commit.
-> Derniere mise a jour : 06/08/2026 16:38 UTC
+> Derniere mise a jour : 06/08/2026 17:29 UTC
 
 ## 2026-08-06
+- Selection editoriale a deux niveaux : le Marketing retient et argumente (retenu_marketing), Sam tranche (approved). Conforme au curseur du Marketing sur l'ecriture en base. `a1430e2`
 - Mode demonstration : un bouton, un marqueur, une annulation. Les elements crees pendant la demo sont REELS (une simulation ne prouverait rien) et sont annules a la sortie. Le registre restant append-only par declencheur DH-COS-002, les decisions de demo sont passees en 'refusee' et prefixees plutot que supprimees — la protection du registre n'est pas contournee. `b766664`
 - CURSEUR-001 (suite) : le curseur effectif est lu en base et injecte en tete de chaque ronde. Les fiches ne portent plus de valeur figee — une seule source de verite. Consigne posee : rapporter un blocage, jamais le contourner. `3db0e45`
 - Ecran de gouvernance (page N1) : 4 indicateurs de tete, grille 6x6 des curseurs avec detail au clic, journal des 42 refus reels. Gabarit et jetons du handoff Claude Design — Cormorant, encre, laiton, rayons 2-4px. Verifie : 36 cases, 7 canaux contraints, detail fonctionnel, mobile en colonne. `f7f3fd1`

@@ -47,9 +47,10 @@ Contact : contact@digital-humans.fr
 
 Hébergeur du site
 
-[À COMPLÉTER : nom ou raison sociale]
-[À COMPLÉTER : adresse]
-[À COMPLÉTER : numéro de téléphone]
+Hostinger International Ltd
+61 Lordou Vironos Street, 6023 Larnaca, Chypre
+Serveur physiquement localisé en France (données hébergées dans l'Union européenne)
+https://www.hostinger.fr
 
 
 Intelligence artificielle
@@ -65,7 +66,7 @@ intelligence artificielle.
 | Brouillon | Correction | Raison |
 |-----------|------------|--------|
 | « SAS / SASU / EURL » | **Entrepreneur individuel** | Sam est en EI micro-entreprise, pas en société (source : synthèse Guichet Unique du 19/05/2026) |
-| « Capital social : [Montant] € » | **Supprimé** | Une entreprise individuelle n'a pas de capital social |
+| « Capital social : 49 €/mois (Pro) — 1 490 €/mois (Team) € » | **Supprimé** | Une entreprise individuelle n'a pas de capital social |
 | « RCS de [Ville] » | **RNE** | Depuis 2023, les entrepreneurs individuels sont immatriculés au Registre National des Entreprises, pas au RCS (source : [service-public.fr](https://entreprendre.service-public.gouv.fr/vosdroits/F31228)) |
 | « Numéro de TVA intracommunautaire » | **« TVA non applicable, article 293 B du CGI »** | Franchise en base de TVA — pas de numéro intracommunautaire tant que la franchise s'applique |
 | Hébergeur manquant | **À compléter** | Obligatoire selon la LCEN art. 6 : nom/raison sociale, adresse, téléphone |
@@ -86,7 +87,7 @@ intelligence artificielle.
 ```
 CONDITIONS GÉNÉRALES DE VENTE ET D'UTILISATION
 
-Dernière mise à jour : [DATE]
+Dernière mise à jour : 6 août 2026
 
 
 ARTICLE 1 — IDENTIFICATION DU PRESTATAIRE
@@ -122,13 +123,13 @@ Chat avec deux agents (Chef de projet et Business Analyst). Sessions
 3.2 Offre Pro
 Accès complet au chat avec l'ensemble des agents, génération de spécifications
 techniques et fonctionnelles détaillées, mémoire conversationnelle.
-Tarif : [À COMPLÉTER — voir offre_dh.md] € HT/mois.
+Tarif : 49 € HT/mois.
 
 3.3 Offre Team
 Ensemble des agents, incluant le développement des fonctionnalités spécifiées
 dans une Sandbox indépendante hébergée dans l'environnement Salesforce du
 Client.
-Tarif : [À COMPLÉTER — voir offre_dh.md] € HT/mois.
+Tarif : 1 490 € HT/mois.
 
 Les tarifs sont indiqués hors taxes. TVA non applicable conformément à
 l'article 293 B du Code général des impôts. En cas de dépassement des seuils
@@ -321,7 +322,7 @@ La médiation de la consommation est **non obligatoire en B2B**. Le dispositif d
 ```
 POLITIQUE DE CONFIDENTIALITÉ
 
-Dernière mise à jour : [DATE]
+Dernière mise à jour : 6 août 2026
 
 
 1. RESPONSABLE DU TRAITEMENT
@@ -372,7 +373,7 @@ obligatoires. Leur non-fourniture empêche l'accès au service concerné.
 |---------------|------|--------------|-----------|
 | Anthropic, PBC | Fournisseur de modèle IA (Claude) | États-Unis | Data Processing Addendum, clauses contractuelles types (CCT) |
 | Stripe, Inc. | Paiement | États-Unis | Certification SOC 2, CCT |
-| [Hébergeur — À COMPLÉTER] | Hébergement | [À COMPLÉTER] | [À COMPLÉTER] |
+| Hostinger International Ltd | Hébergement du site et des données | **France** (Union européenne) | Serveurs situés dans l'UE — aucun transfert hors UE pour l'hébergement |
 
 4.2 Engagement des sous-traitants
 Les sous-traitants s'engagent à :
@@ -615,8 +616,8 @@ Source : [aife.economie.gouv.fr](https://aife.economie.gouv.fr/nos-applications/
 | Action | Porteur | État | Effort |
 |--------|---------|------|--------|
 | **Mention IA dans le widget Sophie** | Delivery | Arbitré (voir mentions_ia.md) | ~1h dev |
-| **Hébergeur dans les mentions légales** | Sam | **À COMPLÉTER** | 5 min |
-| **Vérifier l'absence d'accès résiduel au widget** | Delivery | À faire | 30 min |
+| ~~Hébergeur dans les mentions légales~~ | Sam | **Complété le 06/08** (Hostinger International Ltd) | — |
+| ~~Vérifier l'absence d'accès résiduel au widget~~ | Delivery | **Vérifié le 06/08** — l'endpoint du concierge ne répond plus | — |
 | **Publier les trois pages légales** | Sam | Version prête ci-dessus | 30 min |
 
 ### À compléter dans ce document
