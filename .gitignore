@@ -23,3 +23,6 @@ cmo1.out
 cmo1.err
 rondes/
 .webpass
+docker-compose.yml.pre-*
+*.bak
+*.bak2

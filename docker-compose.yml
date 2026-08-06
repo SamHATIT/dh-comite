@@ -18,7 +18,7 @@ services:
     environment:
       POSTGRES_DB: dh_comite
       POSTGRES_USER: comite
-      POSTGRES_PASSWORD: "6427c5bf993df368895781d6b67bc18b"
+      POSTGRES_PASSWORD: ${COMITE_DB_PASSWORD}
     volumes:
       - comite_db_data:/var/lib/postgresql/data
       - ./db/init:/docker-entrypoint-initdb.d:ro
