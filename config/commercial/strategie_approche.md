@@ -35,6 +35,27 @@ Pour chaque compte du milieu de gamme, avant toute approche :
 discours : on teste, on mesure ce qui obtient une réponse, on ajuste. Chaque
 approche est consignée avec son résultat.
 
+## Précision du 06/08 — un compte, un moteur
+
+Un compte n'est pas « servable ou non » : il est **cible pour un moteur donné**.
+Les grands comptes ne sont pas des cibles du Commercial, mais ils restent des
+cibles — par d'autres voies.
+
+**Les grands comptes** (LVMH et ses maisons, L'Oréal, Chanel, Shiseido,
+TotalEnergies, Sanofi, Michelin, AXA…) : le Commercial **ne les démarche pas**.
+Ils n'accepteront pas d'échanger avec un commercial inconnu, et le cycle est hors
+de portée d'un fondateur seul. Deux voies pour eux :
+- **Contenu LinkedIn → tier Pro.** Une personne de la DSI découvre, essaie à
+  49 €, l'outil se répand par le bas. C'est l'adoption par l'usage, pas par
+  l'achat. C'est aussi le seul moteur qui passe les barrières d'un grand compte.
+- **Sam en direct, prestation sur site.** Relève de SH Conseil, pas de
+  Digital·Humans. Cycle long, géré personnellement, sur la relation existante.
+
+**Les ETI et PME** : cible du Commercial pour le tier Team. Décideur accessible,
+périmètre à la maille d'un SDS, budget compatible.
+
+**Les intégrateurs** : offre partenaire, à concevoir après la preuve client.
+
 ## Moteur 2 — Pro (49 €/mois) : entrant par le contenu
 
 **Pas de prospection individuelle.** L'économie ne le permet pas.

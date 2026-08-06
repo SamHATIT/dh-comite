@@ -1,9 +1,10 @@
 # Journal — dh-comite
 
 > Genere automatiquement depuis les messages de commit.
-> Derniere mise a jour : 06/08/2026 14:34 UTC
+> Derniere mise a jour : 06/08/2026 14:44 UTC
 
 ## 2026-08-06
+- Mentions IA : libelles definitifs FR/EN pour les fenetres de conversation, l'en-tete du concierge, le pied de solution et les livrables (arbitrage Sam du 06/08 : au-dela du minimum legal, choix de marque) `3cb46ab`
 - FIX-LEGAL-001 : le Directeur Juridique n'etait dans aucune ronde depuis sa creation le 02/08 — deux missions accordees sans livrable pendant 4 jours. Ajoute aux rondes du lundi + invoque immediatement sur la liste de reouverture du site `b0d6084`
 - Strategie d'approche : trois moteurs (Team personnalise milieu de gamme, Pro entrant par contenu, Partenaires differe) `b71d5fe`
 - Inventaire teste des sources de signaux publics : APEC operationnel (16 signaux), BOAMP trop rare, France Travail et HelloWork a construire. LinkedIn ecarte avec justification. Constat strategique : 9 signaux sur 16 sont des ESN, canal partenariat. `e424382`
