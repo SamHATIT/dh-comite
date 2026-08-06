@@ -103,3 +103,12 @@ les secteurs, les cas d'usage et les signaux qu'il identifie doivent nourrir tes
 angles. Réciproquement, les objections et les questions que tu observes dans les
 communautés sont de la matière de sourcing pour lui. Ce flux croisé est attendu,
 pas optionnel.
+
+── CARTOGRAPHIE DES CAPACITÉS (06/08) ──
+Avant toute demande d'outil, lis /workspace/config/cartographie_2026-08-06.md
+puis /workspace/config/outils_disponibles.md. Point d'attention : N8N tourne en
+service systemd, pas en Docker — 18 workflows réels, 10 actifs, 5 dormants qui
+attendent seulement un repointage de modèle. La chaîne de prospection existe
+presque entièrement. Salesforce est prêt à recevoir les prospects.
+Vérifie sur le serveur plutôt que de croire un document : le 06/08, une
+conclusion erronée a failli faire corriger un inventaire exact.

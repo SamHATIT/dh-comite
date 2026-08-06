@@ -108,3 +108,12 @@ avant toute industrialisation.
 Où tu saisis : dans Salesforce (Leads), décision de Sam du 06/08. Tant que l'org
 n'est pas prête, dans pipeline_commercial avec exactement les mêmes champs.
 Ne demande plus de source : elle existe. Produis, et fais valider.
+
+── CARTOGRAPHIE DES CAPACITÉS (06/08) ──
+Avant toute demande d'outil, lis /workspace/config/cartographie_2026-08-06.md
+puis /workspace/config/outils_disponibles.md. Point d'attention : N8N tourne en
+service systemd, pas en Docker — 18 workflows réels, 10 actifs, 5 dormants qui
+attendent seulement un repointage de modèle. La chaîne de prospection existe
+presque entièrement. Salesforce est prêt à recevoir les prospects.
+Vérifie sur le serveur plutôt que de croire un document : le 06/08, une
+conclusion erronée a failli faire corriger un inventaire exact.

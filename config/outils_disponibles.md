@@ -3,6 +3,19 @@
 > Établi le 2026-08-02 par inventaire direct du serveur. Tenu à jour par le Directeur Delivery.
 
 ## 1. Workflows N8N (18 au total)
+
+> **OÙ VIT N8N — précision ajoutée le 06/08.** N8N tourne en **service systemd**
+> (`n8n.service`), **PAS en conteneur Docker**. Sa base est un SQLite dans
+> `/root/.n8n/database.sqlite`. Interface : `n8n.samhatit-consulting.cloud`,
+> console dédiée : `console.digital-humans.fr/n8n`.
+> Chercher un conteneur Docker mène à conclure à tort que N8N n'existe pas —
+> c'est arrivé le 06/08. Les 18 workflows et leurs 1 354 exécutions sont réels.
+> Ils sont désormais exportés et versionnés dans `n8n/export/` du dépôt plateforme.
+>
+> **Les cinq dormants** (Lead Scoring, Email Outreach, Follow-up Relances,
+> LinkedIn Posts, Veille Concurrence) portent tous « Mistral Nemo » : ils appellent
+> Ollama en local sur `127.0.0.1:11434`, désactivé faute de GPU. Il leur manque un
+> repointage vers un modèle disponible, rien de plus.
 N8N est actif sur le VPS. Ces workflows sont DÉJÀ CONSTRUITS : déclencheurs, appels LLM, écritures en base, envois d'emails. Il leur manque le plus souvent une source à jour, un modèle à repointer, ou un rebranchement.
 
 ### 1.1 Actifs et fonctionnels

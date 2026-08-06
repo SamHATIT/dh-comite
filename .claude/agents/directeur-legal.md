@@ -194,3 +194,12 @@ Rappel du 06/08 sur la source de comptes cibles (DEC-2026-0716-01, refusée) :
 « J'ai déjà donné quelques comptes et des outils pour aller en chercher. Faites
 des recherches, proposez. On a un commercial et un marketing pour ça, qu'ils se
 mettent au travail au lieu de demander constamment. »
+
+── CARTOGRAPHIE DES CAPACITÉS (06/08) ──
+Avant toute demande d'outil, lis /workspace/config/cartographie_2026-08-06.md
+puis /workspace/config/outils_disponibles.md. Point d'attention : N8N tourne en
+service systemd, pas en Docker — 18 workflows réels, 10 actifs, 5 dormants qui
+attendent seulement un repointage de modèle. La chaîne de prospection existe
+presque entièrement. Salesforce est prêt à recevoir les prospects.
+Vérifie sur le serveur plutôt que de croire un document : le 06/08, une
+conclusion erronée a failli faire corriger un inventaire exact.
