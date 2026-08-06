@@ -1,9 +1,10 @@
 # Journal — dh-comite
 
 > Genere automatiquement depuis les messages de commit.
-> Derniere mise a jour : 06/08/2026 12:26 UTC
+> Derniere mise a jour : 06/08/2026 13:14 UTC
 
 ## 2026-08-06
+- Inventaire teste des sources de signaux publics : APEC operationnel (16 signaux), BOAMP trop rare, France Travail et HelloWork a construire. LinkedIn ecarte avec justification. Constat strategique : 9 signaux sur 16 sont des ESN, canal partenariat. `e424382`
 - Cartographie des capacites du 06/08 transmise aux six directions + correction de l'inventaire (N8N tourne en systemd, pas en Docker) `76861a2`
 - Journal automatique du depot (hook post-commit) — genere depuis les messages de commit, sans modele de langage `c0e637e`
 - Journal automatique du depot active (hook post-commit) `ab68f3a`
