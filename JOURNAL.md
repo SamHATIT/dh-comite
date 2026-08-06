@@ -1,9 +1,11 @@
 # Journal — dh-comite
 
 > Genere automatiquement depuis les messages de commit.
-> Derniere mise a jour : 06/08/2026 11:54 UTC
+> Derniere mise a jour : 06/08/2026 12:26 UTC
 
 ## 2026-08-06
+- Cartographie des capacites du 06/08 transmise aux six directions + correction de l'inventaire (N8N tourne en systemd, pas en Docker) `76861a2`
+- Journal automatique du depot (hook post-commit) — genere depuis les messages de commit, sans modele de langage `c0e637e`
 - Journal automatique du depot active (hook post-commit) `ab68f3a`
 - securite : mot de passe Postgres sorti du docker-compose vers .env (ignore) avant la mise sur GitHub `83e6117`
 - Note de Sam au comite du 06/08 : 14 arbitrages, 4 demandes de statut, 3 corrections de fonctionnement `4c2e61e`
