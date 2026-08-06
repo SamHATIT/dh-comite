@@ -105,6 +105,82 @@ def dossier(nom: str):
     return FileResponse(chemin, filename=nom,
         media_type="application/vnd.openxmlformats-officedocument.wordprocessingml.document")
 
+# ── GOUVERNANCE — le curseur d'autonomie (CURSEUR-001, 06/08/2026)
+# Page N1 au meme gabarit que les six directions : en-tete, 4 indicateurs
+# maximum, puis le detail. Elle montre l'ECART entre ce qui est regle et ce
+# qui s'est passe — c'est la difference entre un panneau de configuration et
+# un instrument de pilotage.
+@app.get("/api/gouvernance")
+def api_gouvernance():
+    import re, collections
+    out = {"curseurs": [], "refus": [], "indicateurs": {}}
+
+    # 1. Les reglages declares — via la fonction q() du fichier, pas subprocess.
+    try:
+        out["curseurs"] = [dict(r) for r in q(DSN, """
+            SELECT direction, type_tache, niveau,
+                   coalesce(justification,'')     AS justification,
+                   coalesce(canal_impose,'')      AS canal_impose,
+                   coalesce(evolution_prevue,'')  AS evolution_prevue,
+                   coalesce(regle_code,'')        AS regle_code,
+                   maj_par, maj_le
+            FROM curseurs ORDER BY direction, type_tache""")]
+        for c in out["curseurs"]:
+            if c.get("maj_le"):
+                c["maj_le"] = str(c["maj_le"])[:19]
+    except Exception as e:
+        out["erreur_curseurs"] = str(e)
+
+    # 2. Le vecu — les refus reellement survenus. Sans cela, la page ne
+    # montrerait qu'une intention.
+    chemin = "/workspace/hooks.log"
+    par_dir = collections.Counter()
+    par_tache = collections.Counter()
+    recents = []
+    try:
+        with open(chemin, encoding="utf-8", errors="ignore") as f:
+            for l in f:
+                if "CURSEUR-DENY" not in l and "DENY" not in l:
+                    continue
+                m = re.match(r"(\S+)\s+(CURSEUR-)?DENY\s+\[(\w+)\]\s+(.*)", l.strip())
+                if not m:
+                    continue
+                horo, _, outil, reste = m.groups()
+                mm = re.match(r"([\w-]+)/([\w_]+)\s+regle=(\d)\s+requis=(\d)\s+::\s+(.*)", reste)
+                if mm:
+                    d, t, regle, requis, cmd = mm.groups()
+                    par_dir[d] += 1
+                    par_tache[t] += 1
+                    recents.append({"horodatage": horo, "direction": d, "type_tache": t,
+                                    "regle": int(regle), "requis": int(requis),
+                                    "commande": cmd[:110], "origine": "curseur"})
+                else:
+                    rr = reste.split(" :: ")
+                    recents.append({"horodatage": horo, "direction": None,
+                                    "type_tache": None, "regle_code": rr[0][:40],
+                                    "commande": (rr[1][:110] if len(rr) > 1 else ""),
+                                    "origine": "regle_figee"})
+    except Exception as e:
+        out["erreur_refus"] = str(e)
+
+    out["refus"] = list(reversed(recents))[:40]
+
+    # 3. Les quatre indicateurs de tete — pas un de plus, gabarit N1.
+    total = len(out["curseurs"])
+    autonomes = sum(1 for c in out["curseurs"] if c["niveau"] == 4)
+    contraints = sum(1 for c in out["curseurs"] if c["niveau"] <= 2)
+    out["indicateurs"] = {
+        "reglages_total": total,
+        "autonomes": autonomes,
+        "contraints": contraints,
+        "refus_total": len(recents),
+        "refus_par_curseur": sum(1 for x in recents if x.get("origine") == "curseur"),
+        "directions_avec_refus": len(par_dir),
+        "tache_la_plus_bloquee": (par_tache.most_common(1)[0][0] if par_tache else None),
+    }
+    return out
+
+
 @app.get("/", response_class=HTMLResponse)
 def index():
     with open(f"{BASE}/web/index.html", encoding="utf-8") as f:

@@ -1,9 +1,10 @@
 # Journal — dh-comite
 
 > Genere automatiquement depuis les messages de commit.
-> Derniere mise a jour : 06/08/2026 15:41 UTC
+> Derniere mise a jour : 06/08/2026 16:17 UTC
 
 ## 2026-08-06
+- CURSEUR-001 : le curseur d'autonomie devient une donnee gouvernee. 36 reglages (6 directions x 6 types de tache) en base, lus par le garde-fou a chaque appel d'outil. Nouvelle famille 'engager_depense' (DH-BUDGET-001) : les directions chiffrent et font approuver, elles n'engagent jamais. Colonne canal_impose : une direction peut etre autonome tout en n'ayant qu'un seul moyen d'action — sans quoi le tableau de bord mentirait. 7 cas de test sur 8 conformes, le 8e etait une contrainte de canal legitime, desormais affichee. `053cfe9`
 - Identite legale reelle (Guichet Unique INPI) + brouillons des pages legales transmis au Juridique. Point d'attention : micro-entreprise en franchise de TVA, seuils a instruire avant la premiere vente. `4e9a4cd`
 - Nuance de Sam : la segmentation oriente la prospection, pas l'accueil. Un grand compte entrant se qualifie normalement et remonte immediatement a Sam. `897a786`
 - Segmentation par moteur : un compte est cible pour un moteur donne. Grands comptes = contenu LinkedIn vers tier Pro (adoption par le bas) + Sam en direct pour SH Conseil, PAS de demarchage commercial. ETI = tier Team. Integrateurs = offre partenaire. `677a783`
