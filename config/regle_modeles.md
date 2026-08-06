@@ -28,15 +28,26 @@ version disponible**. La vérifier par `GET /v1/models` avant toute décision, n
 jamais la supposer.
 
 **Exception** : une version figée n'est admise que pour reproduire un résultat à
-l'identique. Elle doit alors porter, en commentaire à côté, la raison et la date
-de réexamen.
+l'identique, **ou pour un usage qui justifie un tier particulier**. Elle doit
+alors porter, en commentaire à côté, la raison.
+
+**L'exception en vigueur** : le **comité hebdomadaire** tourne sur
+`claude-fable-5`, et c'est délibéré. Son analyse croisée en quatre phases —
+incohérences factuelles, collisions de plans, synergies manquées, décisions
+orphelines — justifie le tier supérieur. Les rondes quotidiennes restent sur
+`sonnet`, le brief du jour sur `opus`.
+
+**Le principe réel n'est donc pas « toujours le plus récent » mais « le modèle
+adapté au besoin, dans sa dernière version »** : Haiku pour l'extraction
+mécanique, Sonnet pour les rondes, Opus pour le brief, Fable pour l'analyse
+croisée hebdomadaire.
 
 ## État au 06/08/2026
 
 | Usage | Modèle | Forme |
 | --- | --- | --- |
 | CEO digital, brief quotidien | `opus` | alias |
-| Comité hebdomadaire | `opus` | alias |
+| **Comité hebdomadaire** | **`claude-fable-5`** | **épinglé — exception documentée** |
 | Rondes des six directions | `sonnet` | alias |
 | Plateforme — tier orchestrateur | `claude-opus-5` | épinglé, dernière version |
 | Plateforme — tier ouvrier | `claude-sonnet-5` | épinglé, dernière version |

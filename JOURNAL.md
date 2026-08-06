@@ -1,9 +1,10 @@
 # Journal — dh-comite
 
 > Genere automatiquement depuis les messages de commit.
-> Derniere mise a jour : 06/08/2026 20:01 UTC
+> Derniere mise a jour : 06/08/2026 20:14 UTC
 
 ## 2026-08-06
+- Regle des modeles : toujours la derniere version d'une famille, sauf raison explicite. Alias courts dans les scripts (opus/sonnet), derniere version epinglee dans la table de routage. Corrige : CEO et comite passaient par des versions figees (opus-4-8, fable-5), la plateforme etait sur Opus 4.8 alors qu'Opus 5 existe. `6f10ed5`
 - Backlog monte en lecture seule dans le conteneur du comite (/backlog). La plainte du Delivery etait fondee : sa fiche lui demande de tenir le backlog des evolutions, mais le depot de la plateforme n'etait pas monte — il ne pouvait lire ni TASKS_MASTER.md (52 taches actives) ni BACKLOG.md. Lecture seule, conforme a son curseur. `e4442b2`
 - Captures WIP des trois ecrans pour le brief Claude Design (route /wip, images exclues du depot) `ebcf79c`
 - Bloc 'Score — calcul' des directions : meme defaut que le sous-titre, un titre suivi d'un pave. Restructure en resultat (88 sur 100), termes reperables avec leur raison, et raisonnement complet REPLIE — consultable sans etre impose. Le format du calcul variant d'une direction a l'autre, l'extraction est tolerante : si elle echoue, seul le repli s'affiche. `501aa62`

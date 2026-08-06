@@ -40,7 +40,12 @@ PROMPT=$(mktemp)
 } > "$PROMPT"
 
 cat "$PROMPT" | claude -p \
-  --model opus \
+  # EXCEPTION DOCUMENTEE (arbitrage Sam) : le comite HEBDOMADAIRE tourne sur
+  # Fable 5, pas sur Opus. C'est un choix delibere — l'analyse croisee des
+  # quatre phases (incoherences factuelles, collisions de plans, synergies
+  # manquees, decisions orphelines) justifie le tier superieur.
+  # Les rondes quotidiennes restent sur sonnet, le brief du jour sur opus.
+  --model claude-fable-5 \
   --allowedTools "Task,Bash,Read,Grep,Glob,Write" \
   --output-format json > "briefs/comite-$TS.meta.json" 2> "briefs/comite-$TS.err"
 RC=$?
