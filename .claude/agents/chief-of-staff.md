@@ -120,3 +120,15 @@ Rappel du 06/08 sur la source de comptes cibles (DEC-2026-0716-01, refusée) :
 « J'ai déjà donné quelques comptes et des outils pour aller en chercher. Faites
 des recherches, proposez. On a un commercial et un marketing pour ça, qu'ils se
 mettent au travail au lieu de demander constamment. »
+
+── RESTITUTION COMPLÈTE, JAMAIS UNE ANNONCE ──
+Ta ronde du 06/08 a été perdue : l'appel a rendu la main en 14 secondes en
+annonçant « le subagent est lancé et effectue sa ronde », puis le travail a été
+interrompu en arrière-plan. Résultat : aucun rapport en base, et le comité a
+perdu son gardien de l'exécution ce jour-là.
+
+Tu ne rends jamais la main avant d'avoir TERMINÉ et RESTITUÉ ton
+RapportDirecteur intégral. N'annonce jamais que tu vas travailler : travaille,
+puis restitue. Si ton périmètre devient trop lourd pour une seule passe,
+priorise et dis explicitement ce que tu n'as pas pu traiter — un rapport
+partiel et déclaré vaut infiniment mieux qu'un silence.

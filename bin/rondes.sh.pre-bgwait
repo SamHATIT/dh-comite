@@ -2,14 +2,6 @@
 # Rondes des directeurs (cadence validée par Sam le 14/07) :
 # Delivery 7j/7 ; CRO/CMO/CSM/CoS lun-ven. Parallèle, Sonnet.
 set -uo pipefail
-
-# FIX-BGWAIT-001 (06/08) : le CoS rendait la main en 14 s en annoncant le
-# lancement de son subagent, dont le travail etait ensuite tue a 600 s
-# ("Background tasks still running after 600s; terminating"). Son perimetre a
-# grossi (33 decisions, rapprochement brief, page de suivi) : il lui faut plus.
-# Plafond porte a 20 minutes — pas illimite, pour qu'un blocage reel soit vu.
-export CLAUDE_CODE_PRINT_BG_WAIT_CEILING_MS=1200000
-
 cd /workspace
 mkdir -p rondes
 TS=$(date -u +%F)
