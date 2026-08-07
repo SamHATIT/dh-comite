@@ -1,9 +1,13 @@
 # Journal — dh-comite
 
 > Genere automatiquement depuis les messages de commit.
-> Derniere mise a jour : 06/08/2026 20:49 UTC
+> Derniere mise a jour : 07/08/2026 18:11 UTC
+
+## 2026-08-07
+- FIX-BRIEF-001 : Sam n'a pas recu son brief du 07/08. Cause : le generateur de dossier a plante (matplotlib et python-docx absents), et daily.sh tournant avec set -e, la notification Telegram a ete emportee avec lui. Cause racine : le Dockerfile installe bien ces modules, mais l'image n'avait jamais ete reconstruite depuis leur ajout — ils n'existaient que dans le conteneur en marche, perdu lors de la recreation du 06/08 (ajout du montage backlog). Image reconstruite. Robustesse : l'echec du dossier n'empeche plus la notification, et un echec d'envoi est desormais journalise. `f177310`
 
 ## 2026-08-06
+- Journal regenere automatiquement (session du 06/08) `eca5530`
 - Acte I implemente : tableau de bord dans le langage du Studio, avec le motif 'L'incipit' de Claude Design. Les quatre textes longs (calcul 692 car., tendance 548, deux domaines manquants) sont desormais annonces par leur volume et deplies a la demande — plus jamais de pave impose sous un titre qui promet une valeur. 16 indicateurs groupes par direction, 9 alertes et 5 decisions en chiffres romains, tous deplaibles. API brief_complet : les champs longs transitent ENTIERS, c'est l'interface qui masque. `7459e66`
 - Acte II implemente : poste de pilotage dans le langage du Studio. Sur-titre numerote, corps en mono, chiffres romains pour les decisions en attente, trois etats d'absence distincts (perime, absent, non calculable) en cadre hachure. Chemins relatifs pour fonctionner derriere le prefixe nginx. `1231612`
 - Journal des refus filtrable (retour de Sam) : 42 entrees sont illisibles sans tri. Filtres par direction, par famille de tache et par origine (curseur ou regle figee), avec compteur. Un second clic sur un filtre actif le retire. Verifie : Marketing passe de 40 a 4 refus. `edb16b0`

@@ -110,6 +110,8 @@ if [ -n "${TOKEN:-}" ] && [ -n "${CHAT:-}" ]; then
   NALERTE=$(/workspace/bin/deos-state get brief 2>/dev/null | jq -r '[.alertes[]? | select((.gravite//"")|test("haute";"i"))] | length')
   MSG="Brief du $TS — sante $SANTE/100
 Alertes hautes : ${NALERTE:-0}   ·   Decisions en attente : ${NDEC:-0}
+Brief lisible (HTML, presentable) :
+https://app.digital-humans.fr/comite/brief/$TS
 $(if [ "$DOSSIER_OK" = "1" ]; then
     echo "Dossier complet (graphiques, tableaux) :"
     echo "https://app.digital-humans.fr/comite/dossier/$(basename "${DOC:-brief-$TS.docx}")"

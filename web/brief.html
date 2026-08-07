@@ -1,0 +1,140 @@
+<!doctype html><html lang="fr"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Brief du __JOUR__ — Digital·Humans</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Inter:wght@300;400&family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../comite.css">
+<style>
+.wrap{max-width:900px}
+/* ── Sommaire flottant, pour ne pas se perdre dans un brief de 20 Ko ── */
+.somm{position:sticky;top:0;background:linear-gradient(180deg,var(--ink) 72%,transparent);
+ padding:14px 0 18px;z-index:10;margin-bottom:8px}
+.somm-l{display:flex;gap:8px;flex-wrap:wrap}
+.somm a{font-family:var(--mono);font-size:9px;letter-spacing:.14em;text-transform:uppercase;
+ color:var(--bone-4);text-decoration:none;border:1px solid var(--hair-2);padding:6px 12px;
+ transition:all .2s var(--ease)}
+.somm a:hover{border-color:var(--brass);color:var(--brass)}
+/* ── Sections ── */
+.s{margin:36px 0;scroll-margin-top:70px}
+.s-h{display:flex;align-items:baseline;gap:14px;padding-bottom:10px;
+ border-bottom:1px solid var(--hair);margin-bottom:4px}
+.s-r{font-family:var(--serif);font-style:italic;font-size:15px;color:var(--brass-3);min-width:28px}
+.s-t{font-family:var(--serif);font-style:italic;font-weight:400;font-size:1.45rem;color:var(--bone)}
+.s-n{margin-left:auto;font-family:var(--mono);font-size:9px;letter-spacing:.16em;
+ text-transform:uppercase;color:var(--bone-4)}
+/* ── Contenu : chaque bloc long est replié ── */
+.b{padding:14px 0;border-bottom:1px solid var(--hair-2)}
+.b:last-child{border-bottom:none}
+.b-t{font-size:12.5px;line-height:1.9;color:var(--bone-3);max-height:6.6em;overflow:hidden;
+ transition:max-height .45s var(--ease);max-width:82ch}
+.b-t.on{max-height:900px}
+.b-t b{color:var(--bone);font-weight:400}
+.b-t code{color:var(--brass-2);font-size:11.5px}
+.b-a{font-family:var(--mono);font-size:8.5px;letter-spacing:.16em;text-transform:uppercase;
+ color:var(--brass-3);cursor:pointer;background:none;border:none;padding:6px 0 0;display:block}
+.b-a:hover{color:var(--brass)}
+.b-t h3,.b-t h4{font-family:var(--serif);font-style:italic;font-size:16px;color:var(--bone-2);
+ margin:14px 0 6px;font-weight:400}
+.b-t ul{margin:8px 0 8px 4px;padding-left:16px}
+.b-t li{margin-bottom:5px;line-height:1.8}
+.b-t table{width:100%;border-collapse:collapse;margin:12px 0;font-size:11.5px}
+.b-t td{border-bottom:1px solid var(--hair-2);padding:7px 9px;vertical-align:top}
+.b-t td:first-child{color:var(--bone-4)}
+/* ── Marqueurs de gravité ── */
+.g{display:inline-block;font-family:var(--mono);font-size:8px;letter-spacing:.16em;
+ text-transform:uppercase;padding:2px 8px;border:1px solid;margin-right:9px;vertical-align:2px}
+.g-h{color:var(--brass);border-color:var(--brass)}
+.g-m{color:var(--brass-2);border-color:var(--hair)}
+.imprimer{font-family:var(--mono);font-size:9px;letter-spacing:.18em;text-transform:uppercase;
+ color:var(--bone-4);background:none;border:1px solid var(--hair-2);padding:8px 16px;cursor:pointer}
+.imprimer:hover{border-color:var(--brass);color:var(--brass)}
+@media print{
+  body{background:#fff;color:#000}
+  .somm,.b-a,.imprimer,.bandeau nav{display:none}
+  .b-t{max-height:none!important}
+  .s-t,h1{color:#000}
+}
+</style></head><body>
+<div class="wrap">
+  <div class="bandeau">
+    <div><div class="marque">Digital·<em>Humans</em></div>
+      <div class="devise">Comité de direction · augmenté</div></div>
+    <nav class="nav">
+      <a href="../">Acte I</a><a href="../pilotage">Acte II</a>
+      <a href="../gouvernance">Acte III</a><a href="../rapports">Rapports</a>
+    </nav>
+  </div>
+
+  <div class="acte">Brief quotidien</div>
+  <h1 id="titre">Le <em>__JOUR__</em></h1>
+  <p class="chapo" id="chapo"></p>
+
+  <div class="somm"><div class="somm-l" id="somm"></div></div>
+  <div id="corps"></div>
+
+  <div style="margin-top:44px;padding-top:20px;border-top:1px solid var(--hair)">
+    <button class="imprimer" onclick="window.print()">Imprimer / PDF</button>
+  </div>
+</div>
+
+<script>
+const MD = __MD__;
+
+// Rendu markdown minimal, suffisant pour un brief : titres, gras, code,
+// listes, tableaux. Pas de bibliothèque externe — même contrainte que le reste.
+function rendre(t){
+  let h = t.replace(/&/g,'&amp;').replace(/</g,'&lt;');
+  h = h.replace(/^#### (.+)$/gm,'<h4>$1</h4>')
+       .replace(/^### (.+)$/gm,'<h3>$1</h3>')
+       .replace(/\*\*([^*]+)\*\*/g,'<b>$1</b>')
+       .replace(/`([^`]+)`/g,'<code>$1</code>')
+       .replace(/^\s*[-*] (.+)$/gm,'<li>$1</li>');
+  h = h.replace(/(<li>[\s\S]*?<\/li>\n?)+/g, m=>'<ul>'+m+'</ul>');
+  h = h.replace(/^\|(.+)\|$/gm, m=>{
+    const c=m.slice(1,-1).split('|');
+    if(c.every(x=>/^[-: ]+$/.test(x))) return '';
+    return '<tr>'+c.map(x=>`<td>${x.trim()}</td>`).join('')+'</tr>';
+  });
+  h = h.replace(/(<tr>[\s\S]*?<\/tr>\n?)+/g, m=>'<table>'+m+'</table>');
+  h = h.replace(/^(?!<)(.{3,})$/gm,'<p style="margin:8px 0">$1</p>');
+  // Marqueurs de gravité, repérés dans le texte
+  h = h.replace(/\b(ALERTE HAUTE|HAUTE)\b/g,'<span class="g g-h">haute</span>');
+  h = h.replace(/\b(MOYENNE)\b/g,'<span class="g g-m">moyenne</span>');
+  return h;
+}
+
+// Découpage en sections sur les titres de niveau 2
+const lignes = MD.split('\n');
+const secs=[]; let cur=null;
+for(const l of lignes){
+  const m = l.match(/^##\s+(.+)$/);
+  if(m){ cur={titre:m[1].replace(/[#*]/g,'').trim(), corps:[]}; secs.push(cur); }
+  else if(cur) cur.corps.push(l);
+  else if(l.trim() && !l.startsWith('#')) { /* préambule */ }
+}
+const ROM=['I','II','III','IV','V','VI','VII','VIII','IX','X','XI','XII'];
+
+document.getElementById('chapo').textContent =
+  secs.length+' sections · '+MD.length.toLocaleString('fr-FR')+' caractères · produit par le CEO digital';
+
+document.getElementById('somm').innerHTML = secs.map((s,i)=>
+  `<a href="#s${i}">${ROM[i]||i+1} · ${s.titre.slice(0,26)}</a>`).join('');
+
+document.getElementById('corps').innerHTML = secs.map((s,i)=>{
+  const txt = s.corps.join('\n').trim();
+  const n = txt.length;
+  return `<div class="s" id="s${i}">
+    <div class="s-h"><span class="s-r">${ROM[i]||i+1}</span>
+      <span class="s-t">${s.titre}</span>
+      <span class="s-n">${n.toLocaleString('fr-FR')} car.</span></div>
+    <div class="b"><div class="b-t" id="t${i}">${rendre(txt)}</div>
+      ${n>420?`<button class="b-a" data-i="${i}">Lire la suite · ${n.toLocaleString('fr-FR')} car.</button>`:''}
+    </div></div>`;
+}).join('');
+
+document.querySelectorAll('.b-a[data-i]').forEach(b=>b.addEventListener('click',()=>{
+  const e=document.getElementById('t'+b.dataset.i);
+  const on=e.classList.toggle('on');
+  b.textContent = on ? 'Replier' : 'Lire la suite · '+e.textContent.length.toLocaleString('fr-FR')+' car.';
+}));
+</script></body></html>

@@ -348,6 +348,23 @@ def api_brief_complet():
     }
 
 
+@app.get("/brief/{jour}", response_class=HTMLResponse)
+def page_brief(jour: str):
+    """Le brief du jour en HTML lisible et presentable — remplace le docx.
+    Meme charte que les trois actes ; se montre a un client sans rougir."""
+    import re as _r, os as _o
+    if not _r.match(r'^\d{4}-\d{2}-\d{2}$', jour):
+        return HTMLResponse("<p>date invalide</p>", status_code=400)
+    f = f"{BASE}/briefs/brief-{jour}.md"
+    if not _o.path.exists(f):
+        return HTMLResponse(f"<p>Aucun brief pour le {jour}.</p>", status_code=404)
+    md = open(f, encoding="utf-8", errors="replace").read()
+    with open(f"{BASE}/web/brief.html", encoding="utf-8") as t:
+        gabarit = t.read()
+    import json as _j
+    return HTMLResponse(gabarit.replace("__JOUR__", jour).replace("__MD__", _j.dumps(md)))
+
+
 @app.get("/comite.css")
 def feuille_style():
     from fastapi.responses import FileResponse
