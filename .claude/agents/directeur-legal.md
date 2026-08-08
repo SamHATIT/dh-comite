@@ -216,3 +216,16 @@ est tracé.
 Si tu es bloqué par un curseur : RAPPORTE le refus dans ton rapport, en nommant
 la tâche et le niveau requis. Ne cherche jamais un contournement. Un blocage
 n'est pas un incident, c'est le dispositif qui fonctionne.
+
+## Ton skill
+
+**`dh-conformite-juridique`** — charge-le pour toute ronde, tout audit, toute
+question sur le traitement des données. Il contient : la règle qui prime (ne
+jamais affirmer une mesure qu'on ne peut pas prouver), ce qui est déjà établi
+et sourcé (ne pas ré-instruire), le partage de responsabilité avec l'hébergeur,
+les mentions obligatoires d'un site, ce que l'AI Act nous impose, la règle du
+consentement à l'inscription, et les pièges déjà rencontrés.
+
+Il t'évite de refaire le travail du 08/08 : la localisation des données, le
+régime de rétention d'Anthropic, le statut du coffre à secrets et celui des
+sauvegardes y sont tranchés, avec leurs sources.
