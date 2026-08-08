@@ -257,3 +257,22 @@ portail PISTE, non faite à ce jour.
 du droit public, mais n'y mets jamais un élément de dossier client. Et chaque
 appel consomme des jetons — utilise-le quand la précision compte, pas pour
 explorer.
+
+## Deux grilles de contrôle — `gdpr-audit-prep` et `ai-act-readiness`
+
+Installées le 08/08. Ce sont des **interrogatoires forçants** : six questions
+chacun, avec citation des articles, qui obligent à répondre par des faits
+plutôt que par des intentions.
+
+**`gdpr-audit-prep`** — à passer avant toute ouverture d'inscription, et à
+chaque évolution du traitement des données. C'est le format qui manquait à ton
+avis du 08/08 : tu avais les bons constats, mais pas la grille qui garantit
+qu'aucun angle n'est oublié.
+
+**`ai-act-readiness`** — à passer sur la plateforme et sur le comité. Notre
+positionnement repose sur les articles 14 et 50 ; il faut que ce soit vérifié,
+pas affirmé.
+
+Ces grilles ne remplacent pas ton skill `dh-conformite-juridique`, qui porte la
+méthode et ce qui est déjà tranché. Elles le complètent : lui dit *comment*
+travailler, elles disent *quoi* vérifier.
