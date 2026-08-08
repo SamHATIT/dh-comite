@@ -1,9 +1,10 @@
 # Journal — dh-comite
 
 > Genere automatiquement depuis les messages de commit.
-> Derniere mise a jour : 08/08/2026 16:26 UTC
+> Derniere mise a jour : 08/08/2026 17:11 UTC
 
 ## 2026-08-08
+- Skill dh-conformite-juridique cree : le Directeur Juridique n'en avait AUCUN depuis sa creation le 02/08, alors qu'il porte 4 des 6 points bloquants. Contient la regle qui prime (ne jamais affirmer une mesure non prouvable), les 7 sujets deja tranches et sources au 08/08 pour eviter de les re-instruire, le partage de responsabilite avec l'hebergeur, les mentions LCEN, l'AI Act art. 50 et 14, la regle du consentement, et 4 pieges rencontres. `48e087e`
 - Studio de production video installe sur le VPS (toolkit Digital Samba v0.17.0). Prerequis verifies : Node, Python, ffmpeg, dependances. 12 skills, 14 commandes, 5 templates. Trouvaille importante : sadtalker anime un portrait FIXE a partir d'une voix — supprime le risque de derive de visage identifie dans le cadre de campagne. Reste a brancher les points d'acces GPU sur Packet AI. `043d595`
 - Trois machines documentees : VPS Hostinger (plateforme + montage), PC Sam (ComfyUI, exploration), Packet AI RTX 6000 (calcul lourd). Le serveur GPU n'etait documente nulle part alors qu'il est pris depuis debut aout. `d552bc1`
 - Dossier de preuves hebergement : certificat ISO/IEC 27001:2022 de Hostinger analyse et reference (TUV Thuringen, perimetre incluant explicitement VPS hosting, valide jusqu'au 26/06/2027). Analyse de la fiche Disk Encryption du centre de confiance : ne pas s'en prevaloir, elle vise leurs propres actifs et n'est pas contractuelle. Tableau des affirmations avec leur preuve. `7b344cc`

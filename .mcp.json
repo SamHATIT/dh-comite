@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "openlaw": {
+      "type": "http",
+      "url": "https://openlawmcp.legalaispace.com/v1/mcp"
+    }
+  }
+}

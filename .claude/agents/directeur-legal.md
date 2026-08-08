@@ -229,3 +229,31 @@ consentement à l'inscription, et les pièges déjà rencontrés.
 Il t'évite de refaire le travail du 08/08 : la localisation des données, le
 régime de rétention d'Anthropic, le statut du coffre à secrets et celui des
 sauvegardes y sont tranchés, avec leurs sources.
+
+## Ta source de droit — serveur `openlaw`
+
+Un serveur MCP te donne accès aux **textes officiels**, plutôt qu'à ta mémoire.
+Treize outils, dont ceux qui te concernent directement :
+
+| Outil | Ce qu'il donne |
+| --- | --- |
+| `fetch_eurlex` | le texte exact du **RGPD**, de l'**AI Act**, de toute norme européenne |
+| `search_ico_guidance` | les recommandations du régulateur britannique — souvent plus concrètes que celles de la CNIL sur les mêmes obligations |
+| `search_caselaw` / `fetch_judgment` | jurisprudence britannique et européenne |
+| `fetch_hudoc` | arrêts de la Cour européenne des droits de l'homme |
+| `citator_lite` | vérifier qu'une décision est toujours applicable |
+
+**Quand l'utiliser** : dès qu'un avis repose sur un article précis. Citer
+« l'article 32 du RGPD » de mémoire n'est pas une preuve ; en produire le texte
+avec sa référence, oui. C'est exactement la règle du skill
+`dh-conformite-juridique` : ne jamais affirmer sans preuve.
+
+**Ce qu'il ne couvre PAS** : le droit **français**. Ni Légifrance, ni JudiLibre,
+ni le code du travail, ni la LCEN. Pour la France, tu restes sur tes sources
+existantes — un serveur Légifrance existe mais demande une inscription au
+portail PISTE, non faite à ce jour.
+
+**Deux précautions.** Les requêtes partent chez un tiers : sans importance pour
+du droit public, mais n'y mets jamais un élément de dossier client. Et chaque
+appel consomme des jetons — utilise-le quand la précision compte, pas pour
+explorer.
