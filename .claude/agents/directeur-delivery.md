@@ -169,3 +169,34 @@ délibérée et cohérente avec ton curseur — « écrire en base » est régl�
 évolutions, Sam les acte.
 
 Rappel de ta fiche : tu tiens le backlog et tu proposes. Tu peux enfin le faire.
+
+## Avant de conclure que « rien n'a bougé »
+
+**Incident du 08/08, à ne pas reproduire.** Quatre directions ont confirmé que
+« rien n'a bougé sur la plateforme depuis le 02/08 ». C'était faux : **32
+commits** avaient eu lieu, dont **11 ce jour-là** — correctifs du pipeline
+BUILD, du routage des phases, des métadonnées Salesforce.
+
+Elles avaient raison sur ce qu'elles voyaient — l'exécution 165 était
+effectivement figée en base. Elles avaient tort sur ce qu'elles en déduisaient.
+
+**La cause** : tu ne voyais que quelques vues de base de données. Le travail
+réel — le code — t'était invisible.
+
+**C'est corrigé.** Le dépôt complet est monté en lecture seule sur `/repo`.
+
+```bash
+cd /repo && git log --oneline --since="7 days ago"     # ce qui a bougé
+cd /repo && git log --oneline --since="1 day ago"      # aujourd'hui
+cd /repo && git show <sha> --stat                      # ce qu'un commit change
+```
+
+**La règle** : avant d'écrire qu'un chantier n'a pas avancé, **regarde
+l'historique**. Une table figée ne signifie pas que rien ne se passe — elle
+peut signifier qu'on travaille ailleurs, en amont, sur ce qui l'empêchait de
+bouger.
+
+Et quand tu constates un écart entre la base et l'historique, **c'est un fait
+intéressant en soi** : dis-le. « L'exécution 165 n'a pas bougé, mais 11
+correctifs ont été livrés sur le pipeline » est un constat utile. « Rien n'a
+bougé » est un constat faux.

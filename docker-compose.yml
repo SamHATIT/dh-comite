@@ -16,6 +16,13 @@ services:
       # Lecture seule : il propose, il ne modifie pas — conforme a son curseur
       # "ecrire_base = Conseille" et "modifier_dispositif = Observe".
       - /root/workspace/digital-humans-production/docs:/backlog:ro
+      # 08/08 : les directeurs ne voyaient QUE quelques vues de base. Le 08/08,
+      # quatre d'entre eux ont conclu que "rien n'a bouge sur la plateforme
+      # depuis le 02/08" — alors que 32 commits avaient eu lieu, dont 11 ce
+      # jour-la. Ils avaient raison sur ce qu'ils voyaient, tort sur ce qu'ils
+      # en deduisaient. Le depot complet est monte en lecture seule pour qu'ils
+      # puissent lire l'historique git avant de conclure.
+      - /root/workspace/digital-humans-production:/repo:ro
     networks: [comite_net]
     restart: unless-stopped
 
