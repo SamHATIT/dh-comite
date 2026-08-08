@@ -129,3 +129,40 @@ ne vaut plus. Les modèles lourds ont désormais une machine.
 Le calcul part chez Packet AI, le résultat revient sur le VPS pour l'assemblage.
 
 **Usage : communication uniquement.** Jamais de donnée client sur ces machines.
+
+## Studio de production vidéo — installé le 08/08/2026
+
+**`/root/workspace/video-toolkit`** — toolkit Digital Samba v0.17.0, licence MIT.
+Repéré par Sam le 15/07, resté sans suite jusqu'ici : c'est ce qui manquait au
+Marketing pour produire du visuel.
+
+**Prérequis vérifiés** : Node 22.21, Python 3.12, ffmpeg 6.1, dépendances
+Python installées. Tout passe.
+
+**Douze skills** : `ltx2` (vidéo), `ideogram4` et `qwen-edit` (image),
+`acestep` (musique), `elevenlabs` et `qwen3-tts` (voix), `remotion` (montage
+programmatique en React), `playwright-recording` (capture de démo),
+`moviepy`, `ffmpeg`, `frontend-design`, `runpod`.
+
+**Quatorze commandes**, dont `/video`, `/brand`, `/voice-clone`,
+`/record-demo`, `/generate-voiceover`, `/scene-review`.
+
+**Cinq templates**, dont `concept-explainer-short` (9:16 vertical pour les
+réseaux) et `product-demo`.
+
+### L'outil décisif pour la campagne des onze agents
+
+**`tools/sadtalker.py`** anime un portrait FIXE à partir d'une voix. On part du
+portrait verrouillé de l'agent, on ajoute la voix, il l'anime.
+
+**Aucune dérive de visage possible** — c'était le risque principal identifié
+dans le cadre de campagne. Il disparaît.
+
+### Ce qui reste à brancher
+
+Les points d'accès GPU. Le toolkit propose Modal par défaut ; **nous utiliserons
+Packet AI (RTX 6000)**, déjà payé. À renseigner dans `.env` une fois les modèles
+déployés : Qwen3-TTS, FLUX.2, SadTalker, LTX-2.
+
+**Aucune clé n'est obligatoire** : le toolkit fonctionne sans, avec des
+solutions de repli.

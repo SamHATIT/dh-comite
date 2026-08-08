@@ -1,9 +1,10 @@
 # Journal — dh-comite
 
 > Genere automatiquement depuis les messages de commit.
-> Derniere mise a jour : 08/08/2026 15:42 UTC
+> Derniere mise a jour : 08/08/2026 16:22 UTC
 
 ## 2026-08-08
+- Trois machines documentees : VPS Hostinger (plateforme + montage), PC Sam (ComfyUI, exploration), Packet AI RTX 6000 (calcul lourd). Le serveur GPU n'etait documente nulle part alors qu'il est pris depuis debut aout. `d552bc1`
 - Dossier de preuves hebergement : certificat ISO/IEC 27001:2022 de Hostinger analyse et reference (TUV Thuringen, perimetre incluant explicitement VPS hosting, valide jusqu'au 26/06/2027). Analyse de la fiche Disk Encryption du centre de confiance : ne pas s'en prevaloir, elle vise leurs propres actifs et n'est pas contractuelle. Tableau des affirmations avec leur preuve. `7b344cc`
 - Sauvegarde chiffree quotidienne mise en place (AES-256, GnuPG, retention 30j, alerte Telegram en cas d'echec). Obligation contractuelle : l'accord d'hebergement Hostinger stipule que le client est seul responsable de maintenir des copies de sauvegarde independantes, leur sauvegarde hebdomadaire etant une courtoisie revocable, et que la securite des donnees sur le serveur lui incombe. Restauration testee : 5 tables retrouvees, fichier illisible sans la cle. RESERVE : la cle vit sur le serveur qu'elle protege — a copier ailleurs. `14cb17f`
 - Souverainete des donnees formalisee : serveur a Paris, sauvegardes aux Pays-Bas, deux pays de l'UE avec separation geographique. Choix delibere de Sam a la commande, pas une attribution. Regime des sauvegardes documente (hebdomadaire, 2 versions, quotidien prevu des les premiers clients). Chiffrement au repos non confirme par Hostinger : on ne l'affirme nulle part. `0a21a39`
