@@ -27,3 +27,4 @@ docker-compose.yml.pre-*
 *.bak
 *.bak2
 web/wip/*.png
+config/legal/preuves/*.pdf
