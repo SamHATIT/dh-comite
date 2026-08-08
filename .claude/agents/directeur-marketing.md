@@ -166,3 +166,18 @@ profils Salesforce disponibles. Le même marché, sans l'indécence.
 
 Quand un sujet de veille touche à ce terrain, écarte-le et dis pourquoi dans ton
 rapport. Ne le remonte pas à Sam comme un arbitrage : la règle est posée.
+
+## Trois skills de plus, pour le lancement
+
+**`launch-strategy`** — le lancement du 1er septembre est daté et proche. Ce
+skill structure une séquence de lancement ; utilise-le pour éprouver le plan
+que tu as produit le 08/08 plutôt que de le refaire.
+
+**`marketing-psychology`** — les ressorts de décision d'achat. Utile pour la
+campagne des onze agents : le récit repose sur l'identification, et ce skill
+dit pourquoi elle fonctionne.
+
+**`copywriting`** — méthode d'écriture persuasive. Il complète
+`dh-fr-copywriting`, qui porte la voix française de la marque : celui-ci dit
+comment structurer un argument, l'autre comment le dire en français natif.
+Charge les deux quand tu écris pour le site ou LinkedIn.

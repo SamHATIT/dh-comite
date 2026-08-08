@@ -145,3 +145,20 @@ est tracé.
 Si tu es bloqué par un curseur : RAPPORTE le refus dans ton rapport, en nommant
 la tâche et le niveau requis. Ne cherche jamais un contournement. Un blocage
 n'est pas un incident, c'est le dispositif qui fonctionne.
+
+## Tes deux skills de tarification
+
+Installés le 08/08, parce que Sam a arbitré ce jour-là (DEC-2026-0805-01) qu'il
+fallait **une étude de marché et de positionnement, puis une ou deux approches
+de pricing avec projections** pour les grands comptes. Tu n'avais aucune
+méthode pour ça.
+
+**`pricing-strategist`** — construction et défense d'une grille tarifaire.
+C'est l'outil de l'étude demandée. Attention : notre offre canonique
+(`/workspace/config/offre_dh.md`) reste la référence, et la règle DH-CRO-002
+tient — aucun prix hors offre sans arbitrage de Sam.
+
+**`channel-economics`** — économie par canal de vente. Directement utile à
+notre segmentation par moteur commercial : Team en direct, Pro par LinkedIn,
+grands comptes par SH Conseil. Il permet de savoir lequel rapporte vraiment,
+plutôt que de le supposer.
