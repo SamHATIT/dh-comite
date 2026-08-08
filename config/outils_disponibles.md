@@ -108,3 +108,24 @@ CONSÉQUENCE N8N : les cinq workflows désactivés pointaient sur Ollama local (
 6. Postmark / SMTP-PROD-001 : condition d'envoi réel.
 
 Tout le reste — CRM, dashboards, base de connaissances, tickets, veille, génération d'articles, capture de leads, enrichissement, scoring — EXISTE DÉJÀ sous une forme ou une autre.
+
+## Serveur GPU — Packet AI (RTX 6000)
+
+**Pris début août 2026. Testé avec Sam.** Environ 50 $ de crédit, ce qui
+dépasse le besoin de la campagne vidéo.
+
+**Ce qu'il change** : la remarque « Ollama désactivé faute de GPU » ci-dessus
+ne vaut plus. Les modèles lourds ont désormais une machine.
+
+**Répartition des trois machines — à ne pas confondre :**
+
+| Machine | Rôle | Ce qui y tourne |
+| --- | --- | --- |
+| **VPS Hostinger** (Paris) | plateforme + studio de production | backend, comité, toolkit vidéo Samba (Remotion, Playwright, ffmpeg, montage) |
+| **PC de Sam** (Windows) | exploration visuelle | ComfyUI — itérations à la main sur les images |
+| **Packet AI** (RTX 6000) | calcul lourd | LTX-2 (vidéo), FLUX.2 (image), Qwen3-TTS (voix) |
+
+**Le VPS n'a toujours pas de GPU** : il orchestre et monte, il ne génère pas.
+Le calcul part chez Packet AI, le résultat revient sur le VPS pour l'assemblage.
+
+**Usage : communication uniquement.** Jamais de donnée client sur ces machines.
