@@ -1,9 +1,10 @@
 # Journal — dh-comite
 
 > Genere automatiquement depuis les messages de commit.
-> Derniere mise a jour : 08/08/2026 07:36 UTC
+> Derniere mise a jour : 08/08/2026 15:34 UTC
 
 ## 2026-08-08
+- Souverainete des donnees formalisee : serveur a Paris, sauvegardes aux Pays-Bas, deux pays de l'UE avec separation geographique. Choix delibere de Sam a la commande, pas une attribution. Regime des sauvegardes documente (hebdomadaire, 2 versions, quotidien prevu des les premiers clients). Chiffrement au repos non confirme par Hostinger : on ne l'affirme nulle part. `0a21a39`
 - Ligne editoriale (Sam 08/08) : on ne communique jamais sur des pertes ou reductions demploi. Deux raisons — Salesforce est notre socle et nous visons son programme partenaire ; et on ne se vend pas sur le malheur des gens. Sujet 35 (licenciements Salesforce) ecarte avec sa justification. Angle de remplacement documente. `eb13e64`
 - FIX-LEGAL-002 : le Directeur Juridique n'avait aucun perimetre d'ecriture dans deos-state — cree le 02/08, il n'a jamais ete ajoute a la table des scopes. Ses rapports etaient refuses en silence : cause racine du '0 rapport legal' constate pendant cinq jours. Perimetre ajoute (rapport_legal, conformite_ia, registre_traitements) et teste. Ronde passee en quotidien le temps de la mise en conformite (arbitrage Sam 08/08). `476ddf1`
 
