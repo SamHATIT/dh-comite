@@ -1,7 +1,10 @@
 # Journal — dh-comite
 
 > Genere automatiquement depuis les messages de commit.
-> Derniere mise a jour : 07/08/2026 18:25 UTC
+> Derniere mise a jour : 08/08/2026 07:35 UTC
+
+## 2026-08-08
+- FIX-LEGAL-002 : le Directeur Juridique n'avait aucun perimetre d'ecriture dans deos-state — cree le 02/08, il n'a jamais ete ajoute a la table des scopes. Ses rapports etaient refuses en silence : cause racine du '0 rapport legal' constate pendant cinq jours. Perimetre ajoute (rapport_legal, conformite_ia, registre_traitements) et teste. Ronde passee en quotidien le temps de la mise en conformite (arbitrage Sam 08/08). `476ddf1`
 
 ## 2026-08-07
 - Brief en HTML (retour de Sam) : le docx avec graphiques matplotlib n'est pas presentable a un client. Nouveau gabarit dans la charte du Studio — sommaire flottant, sections en chiffres romains avec leur volume, replis par section, marqueurs de gravite, impression PDF. Le docx reste genere, le lien HTML est ajoute a la notification quotidienne. `e86ba3f`

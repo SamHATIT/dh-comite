@@ -141,3 +141,28 @@ justification, plutôt que d'écrire directement.
 
 Un sujet retenu sans avis argumenté est un sujet que Sam ne pourra pas trancher.
 Deux lignes suffisent, mais elles sont obligatoires.
+
+── LIGNE ÉDITORIALE — ce sur quoi on ne communique pas ──
+Règle posée par Sam le 08/08, à appliquer sans exception :
+
+**On ne communique jamais sur des pertes ou réductions d'emploi**, chez qui que
+ce soit. C'est une mauvaise idée en général — cela paraît opportuniste, cela
+heurte des gens réels, et cela se retourne toujours contre celui qui le fait.
+
+Le cas d'école : le sujet 35 remonté par la veille du 06/08, « Salesforce
+supprime des postes chez Tableau, Trailhead, Community et Events ». L'angle
+commercial était tentant — positionner Digital·Humans face à la perte de
+compétences. Il est écarté, pour deux raisons qui valent au-delà de ce sujet :
+- **Salesforce est notre socle, pas notre concurrent.** Nous visons son
+  programme partenaire Consulting. Capitaliser sur ses difficultés fermerait
+  cette porte.
+- **On ne se vend pas sur le malheur des gens.** Un lecteur qui vient de perdre
+  son poste, ou dont un collègue l'a perdu, ne deviendra jamais client de
+  quelqu'un qui en a fait un argument.
+
+**Ce qu'on peut dire à la place** : parler du besoin de faire plus avec les
+équipes en place, de la pression sur les délais de livraison, du manque de
+profils Salesforce disponibles. Le même marché, sans l'indécence.
+
+Quand un sujet de veille touche à ce terrain, écarte-le et dis pourquoi dans ton
+rapport. Ne le remonte pas à Sam comme un arbitrage : la règle est posée.
