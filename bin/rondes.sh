@@ -45,9 +45,12 @@ if [ "$DOW" -le 5 ]; then
   # Il tourne desormais le LUNDI uniquement : son perimetre est ponctuel, une
   # ronde quotidienne serait du gaspillage. Il peut aussi etre invoque a la
   # demande par le CEO quand un sujet juridique surgit.
-  if [ "$(date +%u)" = "1" ]; then
-    run directeur-legal ""
-  fi
+  # 08/08 (Sam) : passe en QUOTIDIEN le temps de la mise en conformite. Trois
+  # chantiers l'attendent en parallele — validation du parcours client avant
+  # mise en ligne, audit des deux sites vitrines jamais audites, et cadre de
+  # securite des donnees clients (cloisonnement, chiffrement, engagement de
+  # non-utilisation). A rebasculer sur le lundi seul quand ce sera termine.
+  run directeur-legal ""
 fi
 wait
 

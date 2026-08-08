@@ -1,9 +1,10 @@
 # Journal — dh-comite
 
 > Genere automatiquement depuis les messages de commit.
-> Derniere mise a jour : 07/08/2026 18:11 UTC
+> Derniere mise a jour : 07/08/2026 18:25 UTC
 
 ## 2026-08-07
+- Brief en HTML (retour de Sam) : le docx avec graphiques matplotlib n'est pas presentable a un client. Nouveau gabarit dans la charte du Studio — sommaire flottant, sections en chiffres romains avec leur volume, replis par section, marqueurs de gravite, impression PDF. Le docx reste genere, le lien HTML est ajoute a la notification quotidienne. `e86ba3f`
 - FIX-BRIEF-001 : Sam n'a pas recu son brief du 07/08. Cause : le generateur de dossier a plante (matplotlib et python-docx absents), et daily.sh tournant avec set -e, la notification Telegram a ete emportee avec lui. Cause racine : le Dockerfile installe bien ces modules, mais l'image n'avait jamais ete reconstruite depuis leur ajout — ils n'existaient que dans le conteneur en marche, perdu lors de la recreation du 06/08 (ajout du montage backlog). Image reconstruite. Robustesse : l'echec du dossier n'empeche plus la notification, et un echec d'envoi est desormais journalise. `f177310`
 
 ## 2026-08-06

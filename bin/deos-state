@@ -8,6 +8,10 @@ declare -A SCOPES=(
   [delivery]="rapport_delivery"
   [cs]="comptes_clients tickets rapport_cs"
   [cos]="priorites_semaine cash_suivi rapport_cos"
+  # 08/08 : le Juridique, cree le 02/08, n'avait aucun perimetre d'ecriture —
+  # ses rapports etaient refuses en silence, d'ou le "0 rapport legal" constate
+  # pendant cinq jours. La direction travaillait, rien n'arrivait.
+  [legal]="rapport_legal conformite_ia registre_traitements"
   [ceo]="brief"
   [sam]="*"
 )
