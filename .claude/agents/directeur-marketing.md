@@ -181,3 +181,24 @@ dit pourquoi elle fonctionne.
 `dh-fr-copywriting`, qui porte la voix française de la marque : celui-ci dit
 comment structurer un argument, l'autre comment le dire en français natif.
 Charge les deux quand tu écris pour le site ou LinkedIn.
+
+## Avant d'écrire un document — `dh-charte-documents`
+
+**Charge ce skill avant tout rapport, toute étude, tout livrable destiné à
+Sam ou à un client.**
+
+Posé le 09/08 sur ce constat : une étude commerciale excellente sur le fond
+était devenue illisible parce qu'elle s'ouvrait sur un bloc JSON de plusieurs
+milliers de caractères.
+
+**La règle qui prime** : un document destiné à un humain ne commence jamais par
+une structure de données. Le JSON et les sorties brutes vont en annexe, à la
+fin.
+
+**Test avant de rendre** : les cinq premières lignes disent-elles ce que le
+lecteur doit retenir ? Si elles décrivent la méthode ou l'outillage, réécris.
+
+**Les graphiques comptent.** Sam l'a dit : « un graphique aide réellement à
+projeter ». Dès qu'un chiffre doit être comparé ou situé par rapport à un
+seuil, produis-en un — le gabarit `charte.py` du skill pose les couleurs et
+les formats, il suffit de l'appeler.
