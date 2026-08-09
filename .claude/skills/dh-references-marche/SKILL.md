@@ -145,9 +145,53 @@ Si la troisième question n'a pas de réponse, c'est qu'on n'a pas réfléchi.
 
 ---
 
+## Le concurrent français : Naaia
+
+**Correction du 09/08** : j'avais écrit qu'aucune référence n'existait sur la
+gouvernance d'IA en Europe. C'était faux, et Sam l'a relevé.
+
+**Naaia**, Paris, fondée en 2022 par **trois avocates spécialisées** et un
+expert en transformation numérique. **Série A de 6 M€ menée par Ventech en
+juillet 2026**, 9 M€ levés au total.
+
+Leur offre : première plateforme européenne de **système de management de l'IA
+(AIMS)**, bâtie sur **ISO/IEC 42001**. Elle vise les organisations qui doivent
+recenser leurs usages d'IA, qualifier les risques, attribuer les
+responsabilités et **produire des preuves de conformité** — AI Act, ISO 42001,
+Cyber Resilience Act.
+
+**Leur argument est presque le nôtre** : les acteurs américains (Credo AI,
+IBM OpenScale, Microsoft Purview) arrivent en Europe avec des produits conçus
+pour le contexte réglementaire américain, alors que l'AI Act est une
+spécificité européenne.
+
+### La différence, et elle compte
+
+**Naaia DOCUMENTE la conformité. DEOS GOUVERNE l'action.**
+
+Eux produisent un registre, un référentiel, des preuves — travail d'avocates,
+cohérent avec leur fondation. Notre curseur, lui, **refuse une action en temps
+réel et journalise le refus**. C'est un contrôle opérationnel, pas une
+documentation.
+
+**Angle à explorer** : nous ne sommes peut-être pas leur concurrent, mais ce
+qui rend leur registre vivant. Un grand compte peut avoir besoin des deux.
+
+### Deux réserves à ne pas masquer
+
+- Ils ont **9 M€ et une équipe commerciale**. Sam est seul.
+- Ils ont **deux ans d'avance sur ISO 42001**, référentiel que nous
+  n'adressons pas.
+
+### Contexte du marché
+
+France : **1 114 startups d'IA**, 16 Md€ levés, 45 000 emplois. Plusieurs
+fonds européens ont annoncé en 2025-2026 une thèse explicite sur la
+gouvernance et l'observabilité de l'IA. **Le marché n'est pas à créer — il est
+en train de se structurer, et nous n'y sommes pas encore visibles.**
+
 ## Ce qui manque encore
 
-Aucune référence solide sur : la vente de gouvernance d'IA aux grands comptes
-européens, le passage du libre-service à la vente directe chez un fondateur
-seul, et les cycles d'achat en banque-finance française. **Ces sujets sont
-ceux où nous jouons.** Quand une source sérieuse apparaît, elle vient ici.
+Aucune référence solide sur le passage du libre-service à la vente directe
+chez un fondateur seul, ni sur les cycles d'achat en banque-finance française.
+Quand une source sérieuse apparaît, elle vient ici.
