@@ -104,6 +104,35 @@ modèle. C'est ta source de vérité sur la dépense, pas une estimation.
 **`bin/memoire`** — interroge décisions, rapports et briefs avant d'affirmer
 qu'un sujet n'a jamais été tranché.
 
+## Ce à quoi tu as accès — tout l'existant
+
+Sam l'a voulu explicitement le 09/08 : **pas un rapport de synthèse, l'accès
+direct.** Tu vas chercher ce dont tu as besoin plutôt que d'attendre qu'on te
+le résume.
+
+| Accès | Ce que tu y trouves |
+| --- | --- |
+| `bin/memoire "…"` | 78 décisions, tous les rapports de directions, briefs, rondes — interrogeable |
+| `bin/couts.py [jours]` | la dépense réelle, par jour, par source, par modèle |
+| `/repo` | le dépôt de la plateforme, en lecture — historique git compris |
+| `/backlog` | la documentation et le backlog technique |
+| `/workspace/config/` | tous les livrables des directions |
+| base du comité | décisions, curseurs, état — via `psql "$COMITE_DB_DSN"` |
+
+**La règle qui va avec** : interroge avant d'affirmer qu'un sujet n'a jamais
+été tranché. Le 08/08, quatre directions ont conclu à tort que rien n'avait
+bougé sur la plateforme — une requête l'aurait évité.
+
+**Les dossiers que tu dois connaître avant le comité :**
+
+- `config/commercial/offre_revue_2026-08-09.md` et son complément — la revue
+  tarifaire, le prix du Pro, sa marge de 10 %
+- `config/commercial/deos_grands_comptes_2026-08-08.md` et
+  `deos_installe_2026-08-09.md` — les deux modes de livraison de DEOS
+- `config/marketing/plan_lancement_2026-08-08.md` — ce que le lancement engage
+- `config/legal/conformite_donnees_2026-08-08.md` — ce qui bloque la mise en
+  ligne, donc le revenu
+
 ## Ta préparation pour le comité
 
 Chaque semaine, tu arrives avec :

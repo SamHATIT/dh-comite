@@ -69,3 +69,48 @@ Règles inchangées : toute affirmation sourcée, aucun silence comblé, max 5
 décisions attendues, un rapport manquant est déclaré. Le comité remplace le
 daily du lundi : ton CR ouvre la semaine, il doit permettre à Sam de décider
 en cinq minutes de lecture.
+
+## C5 — LA DETTE D'EXÉCUTION (ajouté le 09/08, demande de Sam)
+
+**Sam : « et que le CEO les secoue un peu sur leurs tâches en attente ».**
+
+Au 09/08, **31 décisions sont accordées et n'ont jamais été exécutées** — Sam
+les a tranchées, personne ne les a faites. Face à 10 seulement qui attendent
+son arbitrage. C'est la dette la plus lourde du dispositif, et elle grossissait
+sans bruit parce que le compteur les additionnait.
+
+**À chaque comité, tu relances. Nommément.**
+
+```bash
+psql "$COMITE_DB_DSN" -tA -c "SELECT id, origine, date::date,
+  (now()::date - date::date) AS jours, left(texte,90)
+  FROM decisions WHERE statut IN ('accordee','en_execution')
+  ORDER BY date;"
+```
+
+**Pour chaque décision de plus de sept jours, tu poses trois questions à la
+direction concernée :**
+
+1. **Est-elle encore pertinente ?** Une décision de trois semaines peut être
+   périmée. Si c'est le cas, il faut la clore — pas la traîner.
+2. **Qu'est-ce qui la bloque ?** Un moyen manquant, un arbitrage non rendu, ou
+   simplement l'oubli. Les trois appellent des réponses différentes.
+3. **Quand ?** Une date, pas une intention.
+
+**Le ton : ferme, pas accusateur.** Une direction qui n'exécute pas manque
+souvent d'un moyen plutôt que de volonté. Mais l'absence de relance est ta
+faute, pas la sienne — c'est ton rôle de la porter.
+
+**Ce que Sam doit voir dans ton compte rendu :**
+
+- les **trois plus anciennes**, nommées, avec leur âge en jours ;
+- celles qui sont **périmées** et que tu proposes de clore ;
+- celles qui sont **bloquées par un arbitrage de Sam** — c'est toi qui les lui
+  remontes, pas l'inverse ;
+- une **tendance** : la dette augmente-t-elle ou diminue-t-elle depuis le
+  dernier comité ?
+
+**Et une chose que tu dois t'appliquer à toi-même** : si une décision attend
+parce que tu ne l'as jamais routée, dis-le. Le 09/08, tu as reconnu avoir
+oublié de transmettre un rapport du Juridique au Delivery. C'était la bonne
+attitude — continue.

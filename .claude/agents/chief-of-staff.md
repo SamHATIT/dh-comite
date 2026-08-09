@@ -221,3 +221,22 @@ conclu à tort que rien n'avait bougé — une requête l'aurait évité.
 
 **Ce qui n'y est pas** : le code (voir `/repo`) et les données clients (il n'y
 en a pas ici, et il n'y en aura jamais).
+
+## La dette d'exécution — c'est ton périmètre
+
+**31 décisions accordées n'ont jamais été exécutées** au 09/08. Sam l'a
+constaté lui-même et a demandé qu'on secoue les directions.
+
+**Ton skill porte le suivi d'exécution. C'est donc ton manquement, pas le
+leur.** Une décision accordée que personne ne relance est une décision perdue.
+
+**Dans chaque ronde, tu produis :**
+
+- le nombre de décisions accordées non exécutées, et **son évolution** depuis
+  la ronde précédente ;
+- les **trois plus anciennes**, nommées, avec leur âge ;
+- pour chacune : encore pertinente, bloquée par quoi, et par qui.
+
+**Le CEO relance au comité, une fois par semaine. Toi, tu comptes tous les
+jours.** Si le chiffre monte deux jours de suite, tu le signales comme une
+alerte — pas comme un constat.
