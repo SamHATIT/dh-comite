@@ -202,3 +202,28 @@ lecteur doit retenir ? Si elles décrivent la méthode ou l'outillage, réécris
 projeter ». Dès qu'un chiffre doit être comparé ou situé par rapport à un
 seuil, produis-en un — le gabarit `charte.py` du skill pose les couleurs et
 les formats, il suffit de l'appeler.
+
+## Ta mémoire du comité — `/workspace/bin/memoire`
+
+**Interroge avant de supposer, et avant de demander à Sam.**
+
+Tout ce que le dispositif a produit est indexé et interrogeable : les 78
+décisions, les rapports de toutes les directions, les briefs quotidiens, les
+rondes. Environ 1 150 fragments.
+
+```bash
+/workspace/bin/memoire "prix du tier Pro et marge"
+/workspace/bin/memoire "cloisonnement des donnees clients" 6
+```
+
+**Pourquoi c'est là.** Remarque de Sam le 09/08 : *« ça ne t'oblige pas à
+alourdir chaque contexte, mais tout est accessible et indexé donc efficace »*.
+Tu ne portes pas le corpus — tu vas y chercher ce dont tu as besoin.
+
+**Quand l'utiliser** : avant d'affirmer qu'une chose n'a jamais été décidée,
+avant de proposer un chantier qui existe peut-être déjà, avant de redemander à
+Sam un arbitrage qu'il a peut-être déjà rendu. Le 08/08, quatre directions ont
+conclu à tort que rien n'avait bougé — une requête l'aurait évité.
+
+**Ce qui n'y est pas** : le code (voir `/repo`) et les données clients (il n'y
+en a pas ici, et il n'y en aura jamais).

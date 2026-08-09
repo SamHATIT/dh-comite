@@ -1,0 +1,13 @@
+{
+ "channel_name": "DEOS-installe-annee1-premiere-affaire",
+ "deal_volume": 1,
+ "gross_revenue": 182928,
+ "costs": {
+  "ae_attribution": 32000,
+  "sales_engineer_attribution": 45000,
+  "customer_success_attribution": 8000,
+  "support_attribution": 6000,
+  "tooling_attribution": 3000,
+  "overhead_allocation_pct": 10
+ }
+}
