@@ -106,10 +106,24 @@ TOKEN=$(grep '^TELEGRAM_BOT_TOKEN=' /workspace/.env | cut -d= -f2)
 CHAT=$(grep '^TELEGRAM_CHAT_ID=' /workspace/.env | cut -d= -f2)
 if [ -n "${TOKEN:-}" ] && [ -n "${CHAT:-}" ]; then
   SANTE=$(/workspace/bin/deos-state get brief 2>/dev/null | jq -r '.sante.score // "?"')
-  NDEC=$(psql "$COMITE_DB_DSN" -tA -c "SELECT count(*) FROM decisions WHERE statut NOT IN ('clos','refusee');" 2>/dev/null)
+  # 09/08 : le compteur unique melangeait DEUX choses tres differentes — les
+  # decisions qui attendent l'arbitrage de Sam, et celles deja tranchees qui
+  # attendent d'etre executees. Resultat affiche : 39, alors que Sam n'en a que
+  # 10 a traiter. Ses decisions etaient noyees dans la masse.
+  # Le CEO l'avait pourtant signale le 07/08 : « deux compteurs, jamais
+  # additionnes ». On les separe donc a la source.
+  NDEC=$(psql "$COMITE_DB_DSN" -tA -c "SELECT count(*) FROM decisions WHERE statut='attente_sam';" 2>/dev/null)
+  NEXEC=$(psql "$COMITE_DB_DSN" -tA -c "SELECT count(*) FROM decisions WHERE statut IN ('accordee','en_execution');" 2>/dev/null)
+  # Les trois plus anciennes en attente de Sam : pour qu'il voie QUOI, pas seulement COMBIEN.
+  TOP3=$(psql "$COMITE_DB_DSN" -tA -c "SELECT '  · '||id||' — '||left(regexp_replace(texte, E'[\n\r]+', ' ', 'g'), 62) FROM decisions WHERE statut='attente_sam' ORDER BY date LIMIT 3;" 2>/dev/null)
   NALERTE=$(/workspace/bin/deos-state get brief 2>/dev/null | jq -r '[.alertes[]? | select((.gravite//"")|test("haute";"i"))] | length')
   MSG="Brief du $TS — sante $SANTE/100
-Alertes hautes : ${NALERTE:-0}   ·   Decisions en attente : ${NDEC:-0}
+Alertes hautes : ${NALERTE:-0}
+
+A TON ARBITRAGE : ${NDEC:-0}
+${TOP3:-  (aucune)}
+
+Accordees, en attente d'execution : ${NEXEC:-0}
 Brief lisible (HTML, presentable) :
 https://app.digital-humans.fr/comite/brief/$TS
 $(if [ "$DOSSIER_OK" = "1" ]; then
