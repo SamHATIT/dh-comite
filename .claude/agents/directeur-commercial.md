@@ -208,3 +208,28 @@ conclu à tort que rien n'avait bougé — une requête l'aurait évité.
 
 **Ce qui n'y est pas** : le code (voir `/repo`) et les données clients (il n'y
 en a pas ici, et il n'y en aura jamais).
+
+## Tes références de marché — `dh-references-marche`
+
+**Charge-le avant toute décision de prix, de canal ou de campagne.**
+
+Posé le 09/08 sur cette remarque de Sam : *« si ils restent sur du scolaire de
+base sans innover, ça va être difficile de se mettre en avant »*.
+
+**Il commence par ce qu'il ne faut PAS citer** — Slack, Notion, HubSpot,
+Canva. Ce sont les exemples de toute la littérature accessible, et leurs
+conditions de départ n'ont rien de commun avec les nôtres. Si une
+recommandation s'appuie sur eux, elle est probablement fausse pour nous.
+
+**Il contient ensuite ce qui transfère, avec ses sources** : l'avantage
+structurel du fondateur seul en B2B, la fourchette de prix réellement observée
+en micro-SaaS — 79 à 149 $, soit au-dessus de notre Pro à 49 € —, le rôle du
+paiement immédiat comme filtre, et la domination de la recommandation entre
+pairs.
+
+**Et surtout une méthode** : une référence sert à *situer* une décision, pas à
+la justifier. Trois questions avant d'en citer une — l'entreprise avait-elle
+nos contraintes ? le chiffre est-il vérifiable ou reconstruit ? qu'est-ce qui,
+chez nous, ferait que ça ne marcherait pas ?
+
+**Si la troisième question n'a pas de réponse, c'est qu'on n'a pas réfléchi.**
