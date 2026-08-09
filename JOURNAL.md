@@ -1,9 +1,10 @@
 # Journal — dh-comite
 
 > Genere automatiquement depuis les messages de commit.
-> Derniere mise a jour : 09/08/2026 08:14 UTC
+> Derniere mise a jour : 09/08/2026 08:19 UTC
 
 ## 2026-08-09
+- Missions ponctuelles de directeurs sur Sonnet par defaut (arbitrage Sam 09/08). Le 08/08, quatre missions lancees sur Opus avec des contextes de 140-171K jetons ont coute 24 EUR sur la journee, contre 8 EUR de Sonnet — c'est ce qui a fait sauter le plafond mensuel. Le comite hebdomadaire sur Fable coute 6-7 EUR : les rituels ne sont pas le poste de depense, les missions ponctuelles le sont. Opus reserve a l'analyse croisee ou a une production visible par un client, avec annonce du cout estime AVANT lancement. `8b5aa31`
 - Liens des rapports corriges (signale par Sam le 09/08) : les liens etaient absolus (href=/rapport/...) alors que nginx sert le comite sous /comite/ via proxy_pass vers 127.0.0.1:8090/. Le navigateur sortait donc du comite et retombait sur le tableau de bord de la plateforme. Trois liens rendus relatifs : rapports, retour, wip. Verifie au clic reel : la page s'ouvre, le contenu s'affiche, le retour fonctionne. `99ca924`
 
 ## 2026-08-08
