@@ -1,0 +1,45 @@
+{
+ "profile": "saas",
+ "channels": [
+  {
+   "name": "direct-Pro-selfserve",
+   "deal_count_ttm": 60,
+   "arr_ttm": 35280,
+   "avg_deal_size": 588,
+   "gross_margin_pct": 10.07,
+   "cac": 528.8,
+   "sales_cycle_days": 7,
+   "retention_rate": 0.7,
+   "expansion_rate": 1.02,
+   "partner_discount_pct": 0
+  },
+  {
+   "name": "direct-Team-ETI",
+   "deal_count_ttm": 6,
+   "arr_ttm": 107280,
+   "avg_deal_size": 17880,
+   "gross_margin_pct": 54.21,
+   "cac": 8188,
+   "sales_cycle_days": 60,
+   "retention_rate": 0.85,
+   "expansion_rate": 1.1,
+   "partner_discount_pct": 0
+  },
+  {
+   "name": "direct-DEOS-grands-comptes",
+   "deal_count_ttm": 2,
+   "arr_ttm": 160000,
+   "avg_deal_size": 80000,
+   "gross_margin_pct": 54.0,
+   "cac": 36600,
+   "sales_cycle_days": 180,
+   "retention_rate": 0.9,
+   "expansion_rate": 1.15,
+   "partner_discount_pct": 0
+  }
+ ],
+ "constraints": {
+  "min_direct_pct": 100,
+  "max_partner_concentration_pct": 0
+ }
+}

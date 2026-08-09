@@ -1,0 +1,12 @@
+{
+ "channel_name": "Team-direct-ETI",
+ "deal_volume": 6,
+ "gross_revenue": 107280,
+ "costs": {
+  "ae_attribution": 28800,
+  "customer_success_attribution": 6400,
+  "support_attribution": 2000,
+  "tooling_attribution": 1200,
+  "overhead_allocation_pct": 10
+ }
+}

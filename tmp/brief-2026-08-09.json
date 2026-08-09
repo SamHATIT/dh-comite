@@ -1,0 +1,513 @@
+{
+  "date": "2026-08-09",
+  "agent": "ceo",
+  "sante": {
+    "score": 88,
+    "statut": "ambre",
+    "calcul": "Une seule ronde fraiche ce jour : delivery 88 (poids 0,30). Commercial (0,25), Marketing (0,15), CS (0,20) et Execution/CoS (0,10) n ont pas produit de rapport du jour — regime week-end normal (DOW=7), pas un silence. Recalcul sur poids restants [DH-CEO-003] : somme des poids disponibles = 0,30 ; (88 x 0,30) / 0,30 = 88. PLAFONNE AMBRE : quatre domaines sans score exploitable. AVERTISSEMENT identique a hier : un score calcule sur 30 % du poids n est pas une mesure de sante du comite, c est la note d une seule direction. Je le publie parce que la regle l impose, pas parce qu il informe.",
+    "tendance": "88 -> 88, strictement plat, et pour la meme raison qu hier : c est le score du SEUL domaine qui rapporte le week-end. Le Delivery n a ni gagne ni perdu de point — 1 incident haute ouvert (-12) inchange, tous les autres postes a zero. Ne pas lire ce plat comme une stagnation du comite : la journee du 08/08 a ete la plus productive observee, et rien de cette production n entre dans ce chiffre.",
+    "domain_scores": {
+      "delivery": 88,
+      "commercial": "absent ce jour (regime week-end) — derniere valeur connue 100 le 07/08, score de PROCESSUS regime A, pas de pipeline",
+      "marketing": "absent ce jour (regime week-end). Le rapport du 08/08 declare son domain_score NON CALCULABLE : aucun contenu publie, perf_contenu vide",
+      "cs": "absent ce jour (regime week-end) — non calculable de toute facon (0 compte client reel)",
+      "execution": "absent ce jour (regime week-end) — derniere valeur connue 28 le 07/08. Le menage du registre a ete fait par moi ce matin a defaut de CoS"
+    },
+    "domaines_manquants": [
+      "commercial, marketing, cs, execution/cos — absents par CONSTRUCTION : /workspace/bin/rondes.sh ne lance ces rondes que si DOW <= 5. Aujourd hui DOW=7 (dimanche). Verifie sur rondes.log : 01/08 et 02/08 (week-end precedent) = delivery seul ; 03 au 07/08 = rondes completes ; 08 et 09/08 = delivery seul. CE N EST PAS UNE PANNE.",
+      "legal — passe en QUOTIDIEN le 08/08 par arbitrage de Sam (FIX-LEGAL-002) le temps de la mise en conformite, mais a l interieur du bloc lun-ven : absent le week-end comme les autres. Hors calcul de sante. A rendu un rapport complet le 08/08."
+    ]
+  },
+  "hier": {
+    "sam": [
+      {
+        "texte": "Tu as travaille toute la journee de samedi : 11 decisions ecrites entre 07:23Z et 18:58Z. Tu as traite toi-meme trois des six points bloquants du rapport juridique (B1 affirmations de securite inexactes retirees, B4 engagement Anthropic source et prouve, dossier de conformite fournisseur demande a Hostinger), mis en place et TESTE une sauvegarde chiffree quotidienne avec restauration verifiee, et fait implementer la regle aucun deploiement en production (GARDE-PROD-001, verifie sur 6 cas dont une production fictive refusee).",
+        "source": "comite:decisions#DEC-2026-0808-04 a 0808-14 (horodatages 2026-08-08T07:23:33Z a 18:58:26Z) ; repo:/workspace commits 14cb17f, 0a21a39, 7b344cc, eb13e64, 476ddf1"
+      },
+      {
+        "texte": "Le brief d hier n a rien vu de tout cela : il a ete ecrit a 07:41Z, avant. Ce n est pas un reproche, c est une limite de cadence que je te signale — un brief du matin rend compte de la veille jusqu a 07h00, et une journee de travail comme celle du 08/08 n apparait que 24 heures plus tard. C est ce qui explique l essentiel du present brief.",
+        "source": "deos_state:brief#maj 2026-08-08T07:41:38Z ; comite:decisions (horodatages du 08/08)"
+      },
+      {
+        "texte": "TES DEUX ROUTAGES DE SAMEDI MATIN ONT ETE EXECUTES LE JOUR MEME. Le Juridique a rendu son avis 12 MINUTES apres l instruction (emise 07:34:11Z, rapport 07:46:19Z, livrable de 41 Ko). Le Commercial a livre l etude grands comptes le soir meme a 19:08Z, pour une echeance que j avais proposee au 13/08 — 45 Ko. C est le meilleur delai d execution jamais observe depuis la creation du comite.",
+        "source": "comite:decisions#DEC-2026-0808-02,0808-03 ; deos_state:rapport_legal#2026-08-08T07:46:19Z ; fichier:/workspace/config/commercial/deos_grands_comptes_2026-08-08.md#2026-08-08T19:08Z"
+      },
+      {
+        "texte": "CORRECTION QUE JE TE DOIS. J ai conteste pendant deux briefs consecutifs (07/08 et 08/08) l affirmation de DEC-2026-0807-02 selon laquelle un BUILD avait ete lance, au motif que la base n en montrait aucune trace. Elle etait VRAIE. Le BUILD a bien tourne le 08/08 : 8 tentatives entre 07:40:42Z et 09:03:34Z, puis un succes de la phase 1 a 09:05:10Z. Mon raisonnement — pas de trace, donc pas d activite — etait faux dans ce cas precis, parce que c est l ecriture de la trace elle-meme qui etait cassee.",
+        "source": "logs:/prodlogs/worker-24h.log#166 ; postgres:v_deos_executions#166 (482417 jetons, 3,19 $, verifie par moi le 2026-08-09T07:3xZ) ; comite:decisions#DEC-2026-0807-02"
+      }
+    ],
+    "delivery": [
+      {
+        "texte": "LA CHAINE 165/166 EST ELUCIDEE. La phase 1 du BUILD (modele de donnees, agent raj) a REELLEMENT REUSSI le 08/08 a 09:05:10Z — 9 taches sur 9 generees — apres 8 tentatives echouees entre 07:40:42Z et 09:03:34Z. La phase 2 (logique metier, agent diego) a demarre immediatement apres. C est la premiere fois qu une phase de BUILD aboutit sur ce projet.",
+        "source": "rapport_delivery 2026-08-09 (frais) — logs:/prodlogs/worker-24h.log#166, lignes horodatees 2026-08-08T07:40:42Z a 09:06:40Z"
+      },
+      {
+        "texte": "Preuve independante en base, que j ai verifiee moi-meme : l execution 166 est passee de 0 a 482 417 jetons et de 0 a 3,19 $ entre la ronde d hier et celle d aujourd hui. Un travail generatif a bien eu lieu — c est incompatible avec l hypothese de la simple copie que j avais retenue hier.",
+        "source": "postgres:v_deos_executions#166, requete CEO du 2026-08-09T07:3xZ, comparee au rapport_delivery du 2026-08-08T07:06:51Z"
+      },
+      {
+        "texte": "POURQUOI LE TABLEAU DE SUPERVISION ETAIT VIDE : a 09:05:10Z, une requete a tente d ecrire l identifiant textuel TASK-001 dans une colonne entiere. L erreur a AVORTE la transaction SQL en cours, ce qui a fait echouer en cascade l ecriture du statut de phase juste apres. Le travail est authentique ; sa trace n a jamais ete ecrite. v_deos_build_phases contient toujours 0 ligne pour l execution 166.",
+        "source": "rapport_delivery 2026-08-09 — logs:/prodlogs/worker-24h.log#pid 926002, 2026-08-08T09:05:09Z-09:05:10Z ; postgres:v_deos_build_phases#166 (0 ligne)"
+      },
+      {
+        "texte": "14 commits le 08/08 entre 07:50:35Z et 17:10:03Z corrigent la quasi-totalite de la chaine : suffixe Salesforce, ordre des phases, tuple/dict, listes de valeurs, case a cocher, objet Task, version d API, XML nul, garde production x2, validation en dry-run, journalisation des echecs silencieux — dont FIX-TASKID-001 (a9060de) qui corrige EXACTEMENT le bug ci-dessus. Un seul chantier reste non traite : FIX-GIT-001.",
+        "source": "rapport_delivery 2026-08-09 — repo:/repo git log, 14 commits du 2026-08-08"
+      },
+      {
+        "texte": "MAIS AUCUNE NOUVELLE TENTATIVE N A ETE LANCEE DEPUIS : 0 execution creee ou modifiee dans les dernieres 24 h, 0 ligne de log datee du 09/08. Les 14 correctifs ne sont valides par AUCUNE execution de bout en bout, a J-6 du checkpoint du 15/08. Point de vigilance : le champ status de l execution 166 affiche desormais COMPLETED, ce qui peut se lire a tort comme un succes alors que le resultat reel est indetermine.",
+        "source": "rapport_delivery 2026-08-09 — postgres:v_deos_executions (0 ligne sur fenetre 24h) ; logs (0 ligne datee 2026-08-09)"
+      },
+      {
+        "texte": "Couverture des logs au PIRE NIVEAU JAMAIS OBSERVE, mesure par l export lui-meme : backend 9,8 % d amplitude reelle (2h20 sur 24h, 57 445 lignes en 2 rafales), worker 6,0 % (1h25, 4 rafales). Toutes les lignes des deux fichiers datent du 08/08 entre 07:01:44Z et 09:22:25Z : AUCUNE ligne datee du 09/08. Hier : 46,8 % backend, 0 ligne worker.",
+        "source": "rapport_delivery 2026-08-09 — fichier:/prodlogs/export.log ; comite:decisions#DEC-2026-0804-01 (accordee, non close, 5 jours)"
+      }
+    ],
+    "legal": [
+      {
+        "texte": "AVIS RENDU SUR TA CONDITION DU 08/08, ET IL EST PARTIELLEMENT NEGATIF. Reouverture de la vitrine digital-humans.fr : FAVORABLE SOUS RESERVE (publier les 3 pages du 06/08 corrigees et integrer la mention IA du widget). Mise en ligne AVEC PARCOURS CLIENT : DEFAVORABLE. Ton GO conditionnel ne peut donc pas etre leve en l etat pour le site complet.",
+        "source": "deos_state:rapport_legal#2026-08-08 — champ avis ; fichier:/workspace/config/legal/conformite_donnees_2026-08-08.md"
+      },
+      {
+        "texte": "Six points bloquants nommes avec leur porteur. Tu en as traite trois toi-meme dans la journee. Les DEUX classes critique et bloquant sur la technique — B2 et B3, porteur Delivery — n ont ete routes par personne pendant 24 heures. C est un defaut de routage de ma part, pas un silence du Delivery : je les ai routes ce matin (DEC-2026-0809-05).",
+        "source": "deos_state:rapport_legal#2026-08-08 — champ bloquants ; comite:decisions#DEC-2026-0809-05 (emise le 2026-08-09)"
+      },
+      {
+        "texte": "B2 (critique) : les identifiants Salesforce des clients sont stockes EN CLAIR dans des colonnes nommees encrypted_value, encrypted_client_secret, encrypted_private_key. Le nom des colonnes ment sur leur contenu. B3 (bloquant) : le cloisonnement des contextes clients n est pas prouvable — RLS desactivee sur les 46 tables, aucune policy, ChromaDB en acces direct sans authentification. Quatre tests T1-T4 sont ecrits et attendent d etre executes.",
+        "source": "fichier:/workspace/config/legal/conformite_donnees_2026-08-08.md#1.4 ; deos_state:rapport_legal#2026-08-08"
+      },
+      {
+        "texte": "Deux corrections de commande que je te transmets telles quelles. (1) La mission visait Anthropic et Google : GOOGLE N EST PAS dans la chaine de traitement — les fournisseurs reels sont Anthropic (modeles) et OpenAI (plongements du RAG). (2) La version du 06/08 de la politique de confidentialite OMET OpenAI de la liste des sous-traitants : c est une REGRESSION par rapport a la version actuellement en ligne, au regard de l article 13.1.e du RGPD.",
+        "source": "deos_state:rapport_legal#2026-08-08 — champ corrections_commande"
+      },
+      {
+        "texte": "Un point te revient personnellement : le pied de page de deos.cloud attribue le produit a SH Conseil, quatrieme denomination employee, qui ne correspond a aucune entite documentee (officiel : Aissam Hatit EI, nom commercial Digital-Humans, SIREN 343172490). Si cette entite existe, elle change le responsable de traitement et le cocontractant des CGV — et c est precisement l entite par laquelle l etude commerciale propose de facturer le cadrage Credit Logement.",
+        "source": "deos_state:rapport_legal#2026-08-08 — champ point_a_trancher_sam ; fichier:/workspace/config/commercial/deos_grands_comptes_2026-08-08.md#5.4"
+      }
+    ],
+    "commercial": [
+      {
+        "texte": "PAS DE RONDE AUJOURD HUI (regime week-end, cadence lun-ven). Reprise lundi 10/08. Mais le livrable majeur du 08/08 n a jamais ete consolide : l etude de marche, de positionnement et de tarification grands comptes, 45 Ko, livree le soir meme de la commande.",
+        "source": "rondes/ — aucun fichier directeur-commercial-2026-08-09.json ; fichier:/workspace/config/commercial/deos_grands_comptes_2026-08-08.md"
+      },
+      {
+        "texte": "Positionnement retenu et argumente : DEOS est compare a une PLATEFORME DE GOUVERNANCE IA (Credo AI, Holistic AI, IBM watsonx.governance ; marche 50 000 a 500 000 $/an), PAS a une prestation de conseil. Le motif est economique et non cosmetique : contre du conseil, DEOS vaut des jours-homme ; contre une plateforme, il vaut un abonnement annuel.",
+        "source": "fichier:/workspace/config/commercial/deos_grands_comptes_2026-08-08.md#2.2, 2.4"
+      },
+      {
+        "texte": "Deux approches chiffrees. A — abonnement au perimetre gouverne : 1 200 EUR par direction et par mois, minimum 3 directions, soit 43 200 a 86 400 EUR/an (grille affichee recommandee). B — socle 30 000 EUR/an + revue trimestrielle 24 000 EUR/an + installation 25 000 EUR (montage recommande pour la premiere affaire, parce qu il encaisse plus tot).",
+        "source": "fichier:/workspace/config/commercial/deos_grands_comptes_2026-08-08.md#3.2, 3.3"
+      },
+      {
+        "texte": "Trois seuils calcules qui valent pour tes arbitrages a venir : plancher de destruction de valeur 31 800 EUR par compte et par an — en dessous, tu gagnes plus en facturant tes jours chez SH Conseil ; parite avec le canal Team a 79 400 EUR ; seuil de rentabilite du Pro a environ 150 abonnes payants, l offre echouant en dessous de 120.",
+        "source": "fichier:/workspace/config/commercial/deos_grands_comptes_2026-08-08.md#3.5, 4.2, 4.3"
+      },
+      {
+        "texte": "Sur Credit Logement, la conclusion est nette : on ne vend pas une licence le jour J. On vend une demonstration du dispositif et un CADRAGE PAYE de 8 000 EUR (5 a 10 jours), facture par SH Conseil — parce qu une prestation de jours se facture par SH Conseil, et parce qu un cadrage se cale a ton retour de conges alors qu une negociation de licence ouverte la veille d un depart meurt pendant l absence. Le fait qui rend la demonstration possible : le curseur d autonomie existe desormais EN BASE (36 lignes = 6 directions x 6 types de tache) et le garde-fou refuse et journalise (427 lignes dans hooks.log). C est, ecrit noir sur blanc, le seul actif reellement demontrable fin aout.",
+        "source": "fichier:/workspace/config/commercial/deos_grands_comptes_2026-08-08.md#5.1, 5.2, 5.3, 5.4 ; comite:curseurs (36 lignes) ; fichier:/workspace/hooks.log (496 lignes au 09/08)"
+      },
+      {
+        "texte": "Pipeline commercial : 0/0 sur les 7 stades, vide depuis 26 jours au 09/08, a J-23 du lancement payant. DONNEE DU 07/08 CONSERVEE AVEC SA DATE, non rafraichie depuis — le Commercial ne tourne pas le week-end.",
+        "source": "rapport_commercial 2026-08-07 (perime) — deos-state:pipeline_commercial#maj 2026-07-14"
+      }
+    ],
+    "marketing": [
+      {
+        "texte": "PAS DE RONDE AUJOURD HUI (regime week-end). Mais le rapport du 08/08, produit par une ronde hors cadence lancee a 07:24Z, n a JAMAIS ete consolide dans un brief : il est arrive apres la redaction de celui d hier. Il contient la decouverte la plus structurante de la semaine.",
+        "source": "rondes/ — aucun fichier directeur-marketing-2026-08-09.json ; deos_state:rapport_marketing#2026-08-08T07:36:27Z"
+      },
+      {
+        "texte": "PLAFOND STATUTAIRE DECOUVERT : Digital-Humans est une entreprise individuelle au regime micro. Le plafond de chiffre d affaires est de 77 700 EUR/an et la franchise de TVA tombe a 37 500 EUR/an. Traduit en abonnements Pro tenus 12 mois : 64 Pro franchissent le seuil de TVA, 133 Pro franchissent le plafond micro. Avec les 3 Team de ton objectif O1 (53 640 EUR/an), il ne reste que 41 Pro sous le plafond — et la franchise de TVA est perdue AVANT le premier Pro.",
+        "source": "rapport_marketing 2026-08-08 — config/legal/identite_legale.md ; config/legal/pages_legales_2026-08-06.md sect.5 ; deos_state:okr_h2#2026-07-14 ; calcul du 08/08"
+      },
+      {
+        "texte": "Deux livrables produits : le plan de lancement Pro mondial (54 Ko, 08/08 07:35Z) et les scripts de la campagne des onze agents (42 Ko, 08/08 16:24Z). Campagne cadencee phase 0 du 08 au 31/08 (production, rien ne sort) puis 8 semaines du 01/09 au 27/10, 24 publications LinkedIn, 8 articles. Cout direct de campagne estime a environ 0 EUR hors Gemini non chiffre ; ton temps 2 h/semaine sur 11 semaines.",
+        "source": "rapport_marketing 2026-08-08 — fichiers config/marketing/plan_lancement_2026-08-08.md, campagne_onze_agents_scripts.md"
+      },
+      {
+        "texte": "Le Marketing propose de REVISER l objectif O1 sur sa composante Pro : de 8 a 50 abonnements au 31/12 (scenario nominal, MRR 6 920 EUR). A rapprocher du seuil de rentabilite calcule independamment par le Commercial le meme jour : environ 150 abonnes payants, echec en dessous de 120. Les deux chiffres ne disent pas la meme chose et personne ne les a encore confrontes — je le signale comme un ecart a instruire, pas comme une contradiction tranchee.",
+        "source": "rapport_marketing 2026-08-08 — decisions_demandees rang 6 ; fichier:/workspace/config/commercial/deos_grands_comptes_2026-08-08.md#4.3"
+      },
+      {
+        "texte": "La mission juridique DEC-2026-0802-05 (vente hors France : TVA intracommunautaire, nexus US, transferts hors UE) est accordee depuis le 02/08 et reste NON LIVREE, 7 jours apres. Consequence directe et chiffrable en perimetre : la campagne mondiale plafonne a l audience et n encaisse qu en France et dans l UE. Les CGV definitives sont de droit francais et n existent qu en francais.",
+        "source": "rapport_marketing 2026-08-08 ; comite:decisions#DEC-2026-0802-05 (accordee, 7 jours)"
+      }
+    ],
+    "cs": [
+      {
+        "texte": "PAS DE RONDE AUJOURD HUI (regime week-end). Dernieres donnees : 07/08. Reprise lundi 10/08. Etat structurel inchange et attendu : 0 compte client reel, aucun canal de tickets actif, mode degrade confirme par toi le 13/07 — ce n est pas un incident et le domain_score reste non calculable de toute facon.",
+        "source": "rondes/ — aucun fichier directeur-customer-success-2026-08-09.json ; rapport_cs 2026-08-07 (perime, 48h)"
+      },
+      {
+        "texte": "Un point de son rapport du 07/08 devient actif ce jour : le CS attendait la confirmation de la reprise du BUILD pour lever la composante incident de sa formule de sante. Elle est desormais partiellement acquise — la phase 1 a reussi — mais sans persistance en base, donc sans la trace sur laquelle il avait dit qu il s appuierait. Il le constatera lundi ; je le note pour qu il ne recommence pas le travail de verification.",
+        "source": "rapport_cs 2026-08-07 (perime) — opportunites ; rapport_delivery 2026-08-09 (frais)"
+      }
+    ],
+    "execution": [
+      {
+        "texte": "MENAGE DU REGISTRE FAIT PAR MOI CE MATIN, a defaut de CoS le dimanche : 12 decisions closes avec preuve et 7 requalifiees de attente_sam vers accordee avec un porteur nomme. Motif : le compteur attente_sam etait monte a 22 alors que la moitie de ces entrees etaient des COMPTES RENDUS que tu avais toi-meme ecrits le 08/08, et non des questions qui t etaient posees. Le laisser tel quel aurait reproduit exactement la faute du 06/08.",
+        "source": "comite:decisions — 19 changements de statut traces par ceo le 2026-08-09T07:4xZ, chacun avec sa preuve"
+      },
+      {
+        "texte": "Resultat sur les deux compteurs : ce qui attend ton arbitrage passe de 22 a 9 ; ce qui attend les directions passe de 24 a 30. La hausse du second est presque entierement mecanique — 7 requalifications et 1 routage nouveau — et non une accumulation de retard. Le CoS pourra tout revoir lundi : chaque changement porte sa preuve et rien n est irreversible.",
+        "source": "comite:decisions, comptage direct le 2026-08-09T07:4xZ (9 attente_sam / 28 accordee + 2 en_execution)"
+      },
+      {
+        "texte": "Deux routages du 08/08 clos avec preuve parce qu ils ont ete EXECUTES : DEC-2026-0808-02 (Juridique, 12 minutes) et DEC-2026-0808-03 (Commercial, meme jour au lieu du 13/08). C est la premiere fois que je peux ecrire fait sur preuve remontee plutot que transmis, et pour deux routages a la fois.",
+        "source": "comite:decisions#DEC-2026-0808-02,0808-03 (statut clos, champ preuve)"
+      },
+      {
+        "texte": "Les priorites de la semaine restent perimees depuis le 03/08 (6 jours) : leur rang 1 decrit encore un etat du chantier BUILD que les evenements du 06 au 09/08 ont entierement depasse. Le comite pilote sa semaine sur une file morte. A reprendre par le CoS des sa ronde de lundi — je le lui demande, aucune action de ta part.",
+        "source": "deos-state:priorites_semaine (cos, 2026-08-03)"
+      },
+      {
+        "texte": "Le Delivery a signale spontanement un double ecart sur le garde-fou technique lui-meme : sur-blocage d une lecture inoffensive (filtre purement textuel), et a l inverse angle mort sur une ecriture reelle passee par un script intermediaire, qu il a executee une fois puis corrigee et rapportee. La lecture seule sur la PRODUCTION reste garantie au niveau de la base par le role deos_ro, independamment de ce filtre : le trou ne concerne que la base d etat du comite.",
+        "source": "rapport_delivery 2026-08-09 (frais) — alertes, gravite basse ; declaration spontanee de la direction concernee"
+      }
+    ]
+  },
+  "kpis": [
+    {"nom": "service_backend_up", "valeur": "1/1 — health 200, v2.0.0 healthy, redis v7.0.15 connecte, 0 job en file", "statut": "vert", "domaine": "delivery", "source": "rapport_delivery 2026-08-09 (frais) — http:172.19.0.1:8002/health#07:00:55Z"},
+    {"nom": "build_phase1_reussie_exec_166", "valeur": "9/9 taches generees le 08/08 a 09:05:10Z — PREMIERE phase de BUILD aboutie sur ce projet", "statut": "vert", "domaine": "delivery", "source": "rapport_delivery 2026-08-09 — logs:/prodlogs/worker-24h.log#166"},
+    {"nom": "persistance_build_phases_exec_166", "valeur": "0 ligne malgre 482 417 jetons et 3,19 $ reellement consommes — la vue de supervision ne reflete pas ce qui s est passe", "statut": "rouge", "domaine": "delivery", "source": "rapport_delivery 2026-08-09 ; postgres:v_deos_build_phases#166, verifie par le CEO"},
+    {"nom": "correctifs_livres_non_valides_par_une_execution", "valeur": "13/14 livres en code le 08/08 ; 0 execution lancee depuis pour les valider — J-6 du checkpoint 15/08", "statut": "rouge", "domaine": "delivery", "source": "rapport_delivery 2026-08-09 — repo:/repo (14 commits) ; postgres:v_deos_executions (0 ligne sur 24h)"},
+    {"nom": "couverture_logs_24h", "valeur": "backend 9,8 % (2h20/24h) / worker 6,0 % (1h25/24h) / 0 ligne datee du 09/08 — PIRE JOUR OBSERVE (hier 46,8 % / 0)", "statut": "rouge", "domaine": "delivery", "source": "rapport_delivery 2026-08-09 — fichier:/prodlogs/export.log"},
+    {"nom": "fix_git_001", "valeur": "non corrige — aucun des 14 commits du 08/08 ne touche le clonage ni le jeton GitHub", "statut": "ambre", "domaine": "delivery", "source": "rapport_delivery 2026-08-09 — repo:/repo ; comite:decisions#DEC-2026-0808-05"},
+    {"nom": "avis_juridique_reouverture", "valeur": "vitrine FAVORABLE SOUS RESERVE / avec parcours client DEFAVORABLE — 6 points bloquants, 3 traites par Sam le 08/08", "statut": "ambre", "domaine": "marketing", "source": "deos_state:rapport_legal#2026-08-08"},
+    {"nom": "points_bloquants_juridiques_sans_porteur", "valeur": "2/6 (B2 critique, B3 bloquant) sont restes non routes 24 h — routes ce matin par DEC-2026-0809-05", "statut": "rouge", "domaine": "delivery", "source": "deos_state:rapport_legal#2026-08-08 ; comite:decisions#DEC-2026-0809-05"},
+    {"nom": "etude_grands_comptes", "valeur": "LIVREE le jour meme de la commande (45 Ko) — echeance proposee 13/08, tenue le 08/08 a 19:08Z", "statut": "vert", "domaine": "commercial", "source": "fichier:/workspace/config/commercial/deos_grands_comptes_2026-08-08.md"},
+    {"nom": "pipeline_commercial", "valeur": "0/0 sur 7 stades, vide depuis 26 jours — J-23 du lancement payant. DONNEE DU 07/08, non rafraichie", "statut": "rouge", "domaine": "commercial", "source": "rapport_commercial 2026-08-07 (perime) — deos-state:pipeline_commercial"},
+    {"nom": "plafond_micro_entreprise", "valeur": "77 700 EUR/an de CA, franchise TVA a 37 500 EUR — avec 3 Team (53 640 EUR/an) il reste 41 Pro sous le plafond", "statut": "ambre", "domaine": "marketing", "source": "rapport_marketing 2026-08-08 (J-1, jamais consolide)"},
+    {"nom": "en_attente_de_ton_arbitrage", "valeur": "9 (contre 22 avant menage du registre ce matin, 11 hier) — 5 appellent vraiment une action de toi", "statut": "ambre", "domaine": "execution", "source": "comite:decisions, comptage CEO le 2026-08-09T07:4xZ"},
+    {"nom": "accordees_en_attente_execution", "valeur": "30 (28 accordee + 2 en_execution) contre 24 hier — hausse mecanique : 7 requalifications + 1 routage, et 2 clotures pour execution prouvee", "statut": "ambre", "domaine": "execution", "source": "comite:decisions, comptage CEO le 2026-08-09T07:4xZ"},
+    {"nom": "cash_solde_declare", "valeur": "0 EUR declare le 14/07, inchange depuis 26 jours — seuil d alerte fixe a 50 EUR mais inoperant sans solde a jour", "statut": "rouge", "domaine": "execution", "source": "deos-state:cash_suivi, verifie le 2026-08-09"},
+    {"nom": "priorites_semaine", "valeur": "PERIMEES depuis le 03/08 (6 jours) — le rang 1 decrit un etat BUILD depasse", "statut": "rouge", "domaine": "execution", "source": "deos-state:priorites_semaine (cos, 2026-08-03)"},
+    {"nom": "rondes_du_jour", "valeur": "1/1 attendue (delivery). Les 5 autres directions ne tournent pas le dimanche — cadence lun-ven validee le 14/07, conforme", "statut": "vert", "domaine": "execution", "source": "bin/rondes.sh (DOW<=5) ; rondes/rondes.log 2026-08-09 (DOW=7)"}
+  ],
+  "alertes": [
+    {
+      "texte": "SECURITE DES DONNEES CLIENTS — les deux seuls points classes critique et bloquant du rapport juridique du 08/08 sont restes 24 heures sans porteur. B2 : les identifiants Salesforce des clients sont stockes EN CLAIR dans des colonnes nommees encrypted_value, encrypted_client_secret, encrypted_private_key — le nom des colonnes ment sur leur contenu. B3 : le cloisonnement des contextes clients n est pas prouvable — RLS desactivee sur les 46 tables, aucune policy, ChromaDB sans authentification. Ce sont les deux motifs de l avis DEFAVORABLE sur la mise en ligne avec parcours client, et ils toucheront des donnees de clients reels des le premier compte de septembre. Le defaut de routage est le mien : le rapport est arrive le 08/08 a 07:46Z, je ne l ai pas route. Corrige ce matin (DEC-2026-0809-05, verdict T1-T4 et chiffrage attendus a la ronde du 11/08).",
+      "source": "deos_state:rapport_legal#2026-08-08 ; fichier:/workspace/config/legal/conformite_donnees_2026-08-08.md#1.4 ; comite:decisions#DEC-2026-0809-05",
+      "domaine": "delivery",
+      "gravite": "haute"
+    },
+    {
+      "texte": "TON GO CONDITIONNEL DE REOUVERTURE NE PEUT PAS ETRE LEVE EN L ETAT. Tu as conditionne la mise en ligne a la validation juridique des parcours clients ; la reponse est arrivee le jour meme et elle est DEFAVORABLE pour ce perimetre, FAVORABLE SOUS RESERVE pour la seule vitrine. Le chemin critique de toute la campagne est donc suspendu a un choix qui n a pas encore ete pose : rouvrir en vitrine sans parcours d inscription, ou attendre la levee de B2 et B3 (non chiffree a ce jour). Repere de cadence donne par le Marketing : mise en ligne au 10/08 = rang 13 le 14/10 (OKR O3 tenu) ; au 01/09 = 03/11 (OKR O3 depasse).",
+      "source": "deos_state:rapport_legal#2026-08-08 ; comite:decisions#DEC-2026-0806-12, DEC-2026-0809-01 ; rapport_marketing 2026-08-08",
+      "domaine": "marketing",
+      "gravite": "haute"
+    },
+    {
+      "texte": "Pipeline commercial vide depuis 26 jours a J-23 du lancement payant du 01/09. ALERTE DU 07/08 CONSERVEE AVEC SA DATE — le Commercial ne tourne pas le week-end, cette donnee n a pas ete rafraichie. Element nouveau qui ne la lève pas mais la deplace : l etude du 08/08 chiffre le seuil de rentabilite du Pro a environ 150 abonnes payants, avec echec de l offre en dessous de 120. Un pipeline vide a J-23 et un seuil a 150 ne se rejoignent pas par le canal direct seul.",
+      "source": "rapport_commercial 2026-08-07 (perime, conserve avec sa date) ; fichier:/workspace/config/commercial/deos_grands_comptes_2026-08-08.md#4.3",
+      "domaine": "commercial",
+      "gravite": "haute"
+    },
+    {
+      "texte": "14 correctifs livres, ZERO valide par une execution. La phase 1 a reussi le 08/08, mais aucune tentative n a ete relancee depuis les correctifs : 0 execution creee ou modifiee en 24 h. A J-6 du checkpoint du 15/08, l issue la plus probable n est pas un echec mais une ABSENCE DE PREUVE — ce qui est plus difficile a expliquer a un prospect qu un echec identifie. Le Delivery ne peut pas lancer seul : son curseur agir_production est a Observe, et la depense doit etre autorisee.",
+      "source": "rapport_delivery 2026-08-09 (frais) ; comite:decisions#DEC-2026-0809-03 (creee ce jour) ; curseur-lire:delivery",
+      "domaine": "delivery",
+      "gravite": "haute"
+    },
+    {
+      "texte": "Couverture des logs au pire niveau jamais observe : 9,8 % pour le backend, 6,0 % pour le worker, et blackout TOTAL de la fenetre correspondant a aujourd hui. DEC-2026-0804-01 (fiabilisation) reste accordee sans arbitrage depuis 5 jours, et la degradation s aggrave de jour en jour (46,8 % le 08/08, 9,8 % le 09/08). Consequence assumee : confiance plafonnee a moyenne pour toute affirmation portant sur l activite de la plateforme entre le 08/08 09:22Z et ce matin. Nuance importante par rapport a hier : cette fois, les logs disponibles ont suffi a etablir la verite de l incident — c est la fenetre suivante qui est aveugle.",
+      "source": "rapport_delivery 2026-08-09 (frais) — fichier:/prodlogs/export.log ; comite:decisions#DEC-2026-0804-01",
+      "domaine": "delivery",
+      "gravite": "moyenne"
+    },
+    {
+      "texte": "FIX-GIT-001 : l integration git de la plateforme n a JAMAIS fonctionne, pour deux causes independantes et verifiees — aucun jeton GitHub n existe (ni en base ni en configuration), et le service de deploiement n appelle jamais la fonction de clonage, travaillant dans un repertoire qui n est pas un depot git. Personne ne s en etait apercu parce qu aucune execution n avait jamais atteint l etape de deploiement. Non corrige au code a ce jour ; DEC-2026-0808-05 attend ton arbitrage depuis 23 heures. Sans ce correctif, meme un BUILD reussi de bout en bout ne produira aucun depot livrable.",
+      "source": "rapport_delivery 2026-08-09 (frais) — repo:/repo ; comite:decisions#DEC-2026-0808-05",
+      "domaine": "delivery",
+      "gravite": "moyenne"
+    },
+    {
+      "texte": "GARDE-FOU TECHNIQUE — double ecart rapporte spontanement par le Delivery. Le filtre du hook PreToolUse est purement textuel sur la ligne de commande : il a refuse une lecture inoffensive parce que le mot surveille figurait dans le motif recherche, et a l inverse il n a PAS bloque une ecriture reelle en base d etat passee par un script intermediaire, le mot-cle ne figurant pas dans la commande externe. Le Delivery a execute cette ecriture une fois a titre de verification, l a signalee lui-meme et a corrige. A dire clairement pour ne pas surestimer le risque : la lecture seule sur la PRODUCTION est garantie au niveau de la base par le role deos_ro, pas par ce filtre — le trou ne concerne que la base d etat du comite. Tension a trancher au passage : le dispositif EXIGE que chaque direction ecrive son rapport dans deos_state alors que son curseur ecrire_base est a Conseille.",
+      "source": "rapport_delivery 2026-08-09 (frais) — declaration spontanee ; comite:decisions#DEC-2026-0809-04",
+      "domaine": "execution",
+      "gravite": "moyenne"
+    },
+    {
+      "texte": "Mission juridique DEC-2026-0802-05 (vente hors France) : accordee depuis 7 jours, TOUJOURS non livree, alors que le Juridique a rendu deux autres livrables majeurs entre-temps. Consequence de perimetre signalee par le Marketing : la campagne mondiale du 01/09 plafonne a l audience et n encaisse qu en France et dans l UE, les CGV etant de droit francais et n existant qu en francais.",
+      "source": "rapport_marketing 2026-08-08 ; comite:decisions#DEC-2026-0802-05 (accordee, 7 jours) ; ls /workspace/config/legal/ (aucun fichier correspondant)",
+      "domaine": "marketing",
+      "gravite": "moyenne"
+    },
+    {
+      "texte": "Surveillance cash toujours inoperante : le seuil est fixe a 50 EUR mais le solde declare date du 14/07 et vaut 0 EUR, inchange depuis 26 jours. Une alerte qui se compare a un solde vieux de 26 jours ne se declenchera jamais utilement. Toi seul detiens le chiffre [DH-COS-003]. Element nouveau du jour : je te demande d autoriser une depense API pour le BUILD de validation — je le fais sans connaitre le solde reel, et je prefere le dire.",
+      "source": "deos-state:cash_suivi, verifie le 2026-08-09 ; comite:decisions#DEC-2026-0809-03",
+      "domaine": "execution",
+      "gravite": "moyenne"
+    },
+    {
+      "texte": "ECART CHIFFRE NON INSTRUIT, signale comme tel : le Marketing propose le 08/08 de porter l objectif Pro de 8 a 50 abonnements au 31/12 ; le Commercial calcule le meme jour, independamment, que le Pro echoue en dessous de 120 abonnes et n atteint son seuil de rentabilite qu a environ 150. Les deux chiffres ne sont pas contradictoires au sens strict (l un est un objectif de vente, l autre un seuil economique) mais ils ne peuvent pas cohabiter sans arbitrage. Je les presente cote a cote avec leurs sources plutot que d en retenir un.",
+      "source": "rapport_marketing 2026-08-08 (rang 6) ; fichier:/workspace/config/commercial/deos_grands_comptes_2026-08-08.md#4.3",
+      "domaine": "commercial",
+      "gravite": "moyenne"
+    },
+    {
+      "texte": "Ma propre regle de surveillance du comite entre en collision avec la cadence validee, exactement comme je l avais annonce hier : appliquee a la lettre, elle produirait AUJOURD HUI une alerte haute et une escalade le comite ne remplit plus sa fonction, alors que quatre directions ne tournent pas le dimanche par construction. Je compte donc la peremption en JOURS OUVRES et je le dis explicitement. La fiche n a toujours pas ete amendee : la correction est inscrite dans DEC-2026-0809-04, cout 0 EUR.",
+      "source": "fiche CEO — section surveillance du comite ; bin/rondes.sh (DOW<=5) ; rondes/rondes.log ; brief 2026-08-08 (alerte deja signalee)",
+      "domaine": "execution",
+      "gravite": "basse"
+    },
+    {
+      "texte": "Le registre /backlog/TASKS_MASTER.md, presente comme source unique des taches actives, n a pas bouge depuis le 14/07 : il ignore la chaine d incident 165/166 et les 14 correctifs du 08/08. Plus de trois semaines de retard sur le suivi reel porte par la table decisions et par l historique git. Deux registres qui divergent, c est un registre de trop.",
+      "source": "rapport_delivery 2026-08-09 (frais) — fichier:/backlog/TASKS_MASTER.md#mtime 2026-07-14T17:21:20Z",
+      "domaine": "execution",
+      "gravite": "basse"
+    },
+    {
+      "texte": "Incoherences de statut persistantes et inchangees : le projet 107 reste BUILD_READY alors que son execution 165 est FAILED (depuis le 16/07) ; le projet 108 a REGRESSE de BUILD_IN_PROGRESS a SDS_APPROVED le 08/08 a 09:03:34Z, soit exactement l horodatage du dernier echec avant le succes de 09:05:10Z — et cette regression n a pas ete repercutee ensuite malgre le succes. Enfin, statut_o2 n a pas ete reverifie depuis le 05/08 (4 jours).",
+      "source": "rapport_delivery 2026-08-09 (frais) — postgres:v_deos_projects#107,#108 ; deos-state:statut_o2",
+      "domaine": "delivery",
+      "gravite": "basse"
+    }
+  ],
+  "opportunites": [
+    {
+      "texte": "Le comite lui-meme est devenu le produit demontrable. Le Commercial l ecrit noir sur blanc apres verification : le curseur d autonomie n est plus du texte dans des prompts mais 36 lignes en base lues par le garde-fou, avec 496 lignes de refus journalises. Ajoute au registre de decisions horodate et au brief quotidien, cela constitue les quatre seules choses reellement demontrables devant un DSI fin aout — et cela ne depend d aucun correctif BUILD. La demonstration Credit Logement peut donc se faire sur le dispositif, pas sur la plateforme.",
+      "source": "fichier:/workspace/config/commercial/deos_grands_comptes_2026-08-08.md#5.1, verification_produit ; comite:curseurs ; fichier:/workspace/hooks.log",
+      "cout": "Direct 0 EUR — tout existe et fonctionne. Ton temps : celui de la presentation. Cout de ne pas le faire : se presenter avec une demonstration de plateforme dont la preuve de bout en bout n existe pas encore."
+    },
+    {
+      "texte": "Le delai d execution des routages s est effondre : 12 minutes pour le Juridique, une journee pour une etude de 45 Ko dont j avais propose l echeance a 5 jours. La cause est identifiable et reutilisable — les deux directions avaient recu une instruction ECRITE, bornee, avec sa contrainte de reutilisation de l existant, et le materiau etait deja sur disque. C est un modele a repliquer pour les missions qui trainent depuis trois semaines (livre blanc 0716-05, interface 0714-01).",
+      "source": "comite:decisions#DEC-2026-0808-02,0808-03 (emises 07:34Z, livrees le jour meme) ; comite:decisions#DEC-2026-0716-05,0714-01 (24 et 26 jours)",
+      "cout": "Direct 0 EUR. Ton temps : 0 — c est mon travail de routage. Cout de ne pas le faire : deux missions de plus de trois semaines qui restent au stade du cadrage."
+    },
+    {
+      "texte": "13 des 14 chantiers correctifs sont livres et la phase 1 a reellement abouti. Une seule tentative de BUILD, plafonnee a 30 USD, donnerait la premiere preuve de bout en bout jamais obtenue sur ce type de projet — et le referentiel de duree qui manque depuis le debut pour pouvoir enfin qualifier une lenteur au sens de DH-DEL-003.",
+      "source": "rapport_delivery 2026-08-09 (frais) — opportunites ; repo:/repo (14 commits du 08/08)",
+      "cout": "Direct 3 a 30 USD (reperes reels : phase 1 de la 166 = 3,19 USD, execution 165 complete = 26 USD ; plafond de recharge 100 USD). Ton temps : 1 minute. Cout de ne pas le faire : aucune preuve au 15/08, donc pas de dossier demo Team credible."
+    }
+  ],
+  "routages_emis": [
+    {
+      "id": "DEC-2026-0809-05",
+      "destinataire": "delivery (porteur) + legal (appui relecture)",
+      "texte": "B2 et B3 du rapport juridique du 08/08 : verifier et chiffrer le chiffrement applicatif des identifiants Salesforce clients (aujourd hui en clair dans des colonnes nommees encrypted_*), et executer les tests T1 a T4 du paragraphe 1.4 du livrable juridique pour rendre un verdict sourceable sur le cloisonnement des contextes clients. Echeance : ronde du 11/08 au plus tard.",
+      "cran": "Diagnostic et supervision = Autonomie : les tests et le chiffrage se font sans validation supplementaire. Correctifs = Agit sous validation : le chiffrement lui-meme attendra le go de Sam une fois chiffre. Dans le cran, aucune elevation necessaire.",
+      "suivi": "Instruction tracee ce matin. Le Delivery tourne 7j/7 : il la prendra a sa ronde de demain. Je confirmerai l EXECUTION sur verdict rendu, pas sur transmission."
+    }
+  ],
+  "priorites_jour": [
+    {
+      "rang": 1,
+      "texte": "ESCALADE — Reouverture du site : ta condition a recu sa reponse et elle est partiellement negative. Le Juridique dit FAVORABLE SOUS RESERVE pour la vitrine, DEFAVORABLE avec parcours client. Tu dois donc choisir entre rouvrir en vitrine des lundi (5 minutes, 0 EUR, OKR O3 tenu) ou attendre la levee de B2/B3 dont le chiffrage n existe pas encore. Ne rien decider revient a choisir la seconde option sans le dire.",
+      "source": "deos_state:rapport_legal#2026-08-08 ; comite:decisions#DEC-2026-0806-12, DEC-2026-0809-01 ; rapport_marketing 2026-08-08 (cadence)",
+      "origine": "conflit entre une condition posee par Sam et l avis rendu — alerte haute, chemin critique de la campagne"
+    },
+    {
+      "rang": 2,
+      "texte": "Preuve BUILD au 15/08, J-6 : deux gestes de moins de deux minutes chacun. Donner le go d un BUILD de validation avec un plafond de depense (DEC-2026-0809-03), et trancher FIX-GIT-001 (DEC-2026-0808-05) — la partie qui te revient est la creation d un jeton GitHub, le reste est du code. Sans le premier, pas de preuve ; sans le second, meme une preuve reussie ne produit aucun depot livrable.",
+      "source": "rapport_delivery 2026-08-09 (frais) ; comite:decisions#DEC-2026-0808-05, DEC-2026-0809-03",
+      "origine": "alerte haute delivery + echeance datee (checkpoint 15/08)"
+    },
+    {
+      "rang": 3,
+      "texte": "Credit Logement : l etude est livree, il ne reste que des questions courtes. Le montage (SH Conseil ou Digital-Humans, DEC-2026-0806-14, ouvert depuis 3 jours), la grille de l approche A et la phrase de cadrage, et le plafond de jours que tu peux y consacrer. Vingt minutes au total pour la meilleure opportunite du portefeuille, dont la presentation tombe la derniere semaine d aout, juste avant tes conges. Un point connexe est apparu : l entite SH Conseil, par laquelle l etude propose de facturer, n est documentee nulle part au dossier juridique.",
+      "source": "fichier:/workspace/config/commercial/deos_grands_comptes_2026-08-08.md#5, 7 ; comite:decisions#DEC-2026-0806-14, DEC-2026-0809-02 ; deos_state:rapport_legal#2026-08-08 (point_a_trancher_sam)",
+      "origine": "alerte haute commerciale (client, delai court) + decisions demandees a fort impact"
+    },
+    {
+      "rang": 4,
+      "texte": "Trois arbitrages de calendrier, un mot chacun : la cle de sauvegarde a mettre a l abri (DEC-2026-0808-10 — aujourd hui elle vit sur le serveur qu elle protege, ce qui protege la confidentialite mais pas la continuite), l audit de securite des acces (DEC-2026-0806-08, 3 jours) et l offre integrateur (DEC-2026-0806-09, 3 jours). Reponse attendue pour chacun : maintenant, apres le 01/09, ou jamais.",
+      "source": "comite:decisions#DEC-2026-0808-10, DEC-2026-0806-08, DEC-2026-0806-09",
+      "origine": "decisions arbitrables en un mot, ouvertes sans porteur ni echeance"
+    },
+    {
+      "rang": 5,
+      "texte": "Ce qui ne te demande rien aujourd hui, pour que tu saches que c est suivi : B2 et B3 sont routes au Delivery avec une echeance au 11/08 ; le CoS reprend lundi et rafraichira des priorites de la semaine perimees depuis 6 jours ; le Juridique reste relance sur la vente hors France, non livree depuis 7 jours ; et la demande de statut sur la demo phare Agentforce est requalifiee — elle attend le Delivery et le Marketing, pas toi. Si leur ronde du 10/08 est encore muette, je te l escalade nommement le 11/08, comme annonce hier.",
+      "source": "comite:decisions#DEC-2026-0809-05, DEC-2026-0806-01, DEC-2026-0802-05 ; deos-state:priorites_semaine",
+      "origine": "suivi CEO — aucune action de Sam"
+    }
+  ],
+  "decisions_attendues": [
+    {
+      "id": "ESCALADE — DEC-2026-0809-01 (avec DEC-2026-0806-12)",
+      "texte": "Reouverture du site : rouvrir en VITRINE des lundi 10/08 sans parcours d inscription, ou attendre la levee de B2 et B3 ? Le Juridique s est prononce FAVORABLE SOUS RESERVE pour la vitrine et DEFAVORABLE pour la mise en ligne avec parcours client. Ta condition du 08/08 ne peut pas etre levee en l etat pour le site complet.",
+      "destinataire": "sam",
+      "cout": "Direct 0 EUR dans les deux cas (les 3 pages corrigees existent, la mention IA du widget est testee). Ton temps : 5 minutes. Cout de l inaction, chiffre par le Marketing : mise en ligne au 10/08 = fin de sequence le 14/10, OKR O3 tenu ; au 01/09 = 03/11, OKR O3 depasse. Chaque jour d attente decale le J0 d autant."
+    },
+    {
+      "id": "DEC-2026-0808-05 et DEC-2026-0809-03",
+      "texte": "Les deux gestes qui decident du checkpoint du 15/08. (1) FIX-GIT-001 : creer un jeton GitHub — c est la seule partie qui te revient, l ajout du clonage etant du code cote Delivery. (2) BUILD de validation : donner le go et fixer un plafond de depense, le Delivery ne pouvant pas lancer seul (curseur agir_production = Observe).",
+      "destinataire": "sam",
+      "cout": "Direct : 0 EUR pour le jeton ; 3 a 30 USD pour le BUILD (reperes reels : phase 1 de la 166 = 3,19 USD, execution 165 complete = 26 USD ; plafond de recharge automatique 100 USD). Ton temps : 2 minutes au total. Cout de l inaction : absence de preuve au 15/08 — pas un echec, une absence, ce qui est plus difficile a expliquer a un prospect."
+    },
+    {
+      "id": "DEC-2026-0806-14 et DEC-2026-0809-02",
+      "texte": "Credit Logement, trois questions courtes. (a) Le montage : SH Conseil ou Digital-Humans ? L etude confirme economiquement la recommandation que je faisais hier — SH Conseil pour la presentation et le cadrage, Digital-Humans quand on vend l abonnement. (b) Valider ou corriger la grille de l approche A (1 200 EUR par direction et par mois, minimum 3 directions, 43 a 86 kEUR/an) et la phrase de cadrage a dire en reunion. (c) Confirmer, meme approximativement, le plafond de jours que tu peux consacrer au canal DEOS (hypothese de l etude : 40 j/an).",
+      "destinataire": "sam",
+      "cout": "Direct 0 EUR. Ton temps : 2 min pour le montage, 15 min pour la grille, 5 min pour le plafond de jours. Cout de l inaction : la meilleure opportunite du portefeuille (9/10) se presente sans reponse a la seule question qui tombera a coup sur, et le Commercial prepare soit le mauvais document, soit aucun."
+    },
+    {
+      "id": "DEC-2026-0808-10, DEC-2026-0806-08, DEC-2026-0806-09",
+      "texte": "Trois arbitrages de calendrier, un mot chacun. (a) Cle de sauvegarde : la copier hors du serveur (note de telephone ou papier, sans intitule explicite) — aujourd hui elle vit sur la machine qu elle protege. (b) Audit de securite des acces : maintenant, apres le 01/09, ou jamais ? (c) Offre integrateur : idem, et je maintiens ma recommandation de la fusionner dans le cadre de l etude deja produite plutot que d en faire un chantier separe.",
+      "destinataire": "sam",
+      "cout": "(a) 0 EUR, 2 minutes ; cout de l inaction : si le VPS est perdu, les 22 Mo de sauvegardes chiffrees deviennent indechiffrables — le dispositif protege la confidentialite mais pas la continuite. (b) 0 EUR en interne, 1 minute ; cout de l inaction NON CHIFFRABLE en l etat, il faudrait d abord mesurer le nombre de secrets en clair. (c) 0 EUR, 10 minutes ; cout de l inaction : 30 signaux partenaires restent au statut offre_en_attente et le canal integrateur reste ferme."
+    },
+    {
+      "id": "DEC-2026-0804-01 / PROP-2026-0805-01",
+      "texte": "Fiabilisation de l export des logs : choisir une option parmi les trois deja chiffrees par le Delivery (sa recommandation : Option A), et lever au passage l acces en lecture au script d export sans lequel elle ne peut pas etre mise en oeuvre. Accordee depuis 5 jours sans arbitrage, pendant que la couverture tombe de 46,8 % a 9,8 %.",
+      "destinataire": "sam",
+      "cout": "Chiffrage deja porte par PROP-2026-0805-01 (produit le 05/08). Ton temps : le choix d une lettre. Cout de l inaction : deja partiellement paye — la fenetre du 08/08 09:22Z a ce matin est aveugle, et c est celle ou une eventuelle poursuite de la phase 2 aurait du apparaitre."
+    }
+  ],
+  "analyse_decisions": [
+    {
+      "id": "ESCALADE — DEC-2026-0809-01 (reouverture du site)",
+      "intitule": "Rouvrir en vitrine des lundi, ou attendre la levee de B2 et B3",
+      "demandeur_anciennete": "Question ouverte par moi ce matin, sur la base de l avis rendu par le Juridique le 08/08 a 07:46Z. La decision mere (DEC-2026-0806-12) est accordee depuis 3 jours avec ton GO conditionnel du 08/08.",
+      "argument": "Le Juridique est explicite : la vitrine est FAVORABLE SOUS RESERVE — il suffit de publier les trois pages du 06/08 corrigees et d integrer la mention IA du widget, qui est deja testee (DEC-2026-0806-20, close). Rien de technique ne s y oppose. Et le Marketing chiffre la cadence : chaque jour de retard sur la mise en ligne decale d autant la fin de la sequence editoriale, avec un basculement hors cible de l OKR O3 si l on glisse au 01/09.",
+      "argument_contraire": "L avis est DEFAVORABLE des qu il y a un parcours client, a cause de B2 et B3 qui sont reels et non chiffres. Rouvrir en vitrine cree donc une situation batarde a assumer : un site visible qui ne peut pas encore encaisser, a trois semaines d un lancement payant annonce au 01/09. Deuxieme argument contraire, plus serieux : le Juridique releve que la version du 06/08 de la politique de confidentialite OMET OpenAI de la liste des sous-traitants, ce qui est une REGRESSION par rapport a la version en ligne. Publier cette version en l etat serait moins conforme qu aujourd hui sur ce point precis — a corriger avant publication, pas apres.",
+      "options": "(a) Vitrine lundi — (b) Attendre B2/B3 — (c) Tout rouvrir et assumer. Reponse en un mot, avec une precision : dans le cas (a), corriger d abord l omission d OpenAI.",
+      "recommandation": "(a), avec la correction d OpenAI faite avant publication. C est le seul perimetre sur lequel un avis favorable existe, il ne depend d aucun correctif technique, et il separe enfin deux questions confondues depuis une semaine : l aptitude legale du site comme vitrine, qui est reglee, et l aptitude de la plateforme a recevoir de vrais clients, qui ne l est pas et qui vient seulement d etre routee. L option (c) est la seule que je deconseille formellement : elle passe outre un avis defavorable ecrit et date, sur des donnees de clients reels.",
+      "cout": "Direct 0 EUR. Ton temps : 5 minutes. Cout de l inaction : OKR O3 hors cible si la mise en ligne glisse au 01/09 (fin de sequence au 03/11 au lieu du 14/10)."
+    },
+    {
+      "id": "DEC-2026-0808-05 (FIX-GIT-001)",
+      "intitule": "Integration git de la plateforme — jamais fonctionnelle depuis l origine",
+      "demandeur_anciennete": "Delivery, decouvert et documente le 08/08 a 08:04Z. 23 heures a l heure de ce brief. Signale a nouveau ce matin comme non corrige.",
+      "argument": "Deux causes independantes et verifiees : aucun jeton GitHub n existe (project_credentials vide pour les projets 107 et 108, rien en configuration), et le service de deploiement n appelle jamais la fonction de clonage — il travaille dans un repertoire temporaire vide qui n est pas un depot git. Meme avec un jeton valide, cela echouerait. Personne ne l avait vu parce qu aucune execution n avait jamais atteint l etape de deploiement : celle du 08/08 est la premiere.",
+      "argument_contraire": "Ce n est pas sur le chemin critique du checkpoint du 15/08 si celui-ci se limite a la preuve BUILD vers SANDBOX : le git intervient apres. On peut donc obtenir la preuve attendue sans corriger ce point. L argument tient — a condition d assumer que la promesse commerciale livraison d un depot de code reste non demontrable, y compris devant un prospect.",
+      "options": "(a) Tu crees le jeton GitHub maintenant et le Delivery ajoute le clonage — (b) Tu le fais apres le BUILD de validation — (c) On assume que la livraison git n est pas demontrable avant septembre.",
+      "recommandation": "(a). La partie qui te revient est la creation d un jeton, soit quelques minutes, et elle est independante du reste. Retarder ne fait pas gagner de temps : le correctif de code prend le meme temps aujourd hui ou dans une semaine, et sans lui le premier BUILD reussi s arretera au bord de la livraison.",
+      "cout": "Direct 0 EUR (jeton gratuit). Ton temps : 5 minutes. Effort de code cote Delivery : a chiffrer par lui, non chiffre a ce jour — je ne l invente pas. Cout de l inaction : un BUILD reussi qui n aboutit a aucun depot livrable, donc une demonstration incomplete devant un prospect."
+    },
+    {
+      "id": "DEC-2026-0809-03 (BUILD de validation)",
+      "intitule": "Autoriser une tentative de BUILD pour valider les 14 correctifs, avec un plafond de depense",
+      "demandeur_anciennete": "Ouverte par moi ce matin, a partir du constat du Delivery : 0 execution creee ou modifiee en 24 h. J-6 du checkpoint du 15/08.",
+      "argument": "13 des 14 correctifs sont livres en code et la phase 1 a REELLEMENT abouti le 08/08. Aucune de ces corrections n a ete rejouee depuis. Une seule tentative fournirait la premiere preuve de bout en bout jamais obtenue, et accessoirement le referentiel de duree qui manque depuis le debut pour pouvoir qualifier une lenteur au sens de DH-DEL-003.",
+      "argument_contraire": "Tu as toi-meme pose un garde-fou budgetaire le 06/08 en arbitrant qu on reprenne l execution plutot que d en relancer une neuve, precisement pour ne pas repayer un BUILD complet. Cet argument reste valable et c est pourquoi je propose un plafond explicite plutot qu un go ouvert. Second point de prudence : la phase 2 n a jamais ete observee jusqu au bout, donc le cout reel au-dela de la phase 1 est une extrapolation, pas une mesure — la fourchette 3 a 30 USD porte cette incertitude.",
+      "options": "(a) Go avec plafond 30 USD et arret des qu une phase echoue deux fois — (b) Go sans plafond — (c) Attendre le 11/08 et le verdict sur B2/B3 — (d) Renoncer et documenter le checkpoint du 15/08 en mode degrade.",
+      "recommandation": "(a). Le plafond respecte ton garde-fou du 06/08 tout en levant l incertitude, et la regle d arret evite le scenario ou l on paie plusieurs dizaines de dollars pour reproduire le meme echec. Je ne recommande pas (c) : B2 et B3 concernent la securite des donnees clients, pas le fonctionnement du BUILD, et les deux chantiers peuvent avancer en parallele.",
+      "cout": "Direct 3 a 30 USD (reperes : 3,19 USD pour la phase 1 de la 166, 26 USD pour l execution 165 complete ; plafond de recharge 100 USD, consommation declaree a 20 % au 02/08 — chiffre lui-meme vieux de 7 jours). Ton temps : 1 minute. Cout de l inaction : aucune preuve au 15/08."
+    },
+    {
+      "id": "DEC-2026-0809-02 et DEC-2026-0806-14 (Credit Logement)",
+      "intitule": "Le montage, la grille de prix et le plafond de jours",
+      "demandeur_anciennete": "Le montage vient de toi (06/08, 3 jours). Les deux validations de prix et de capacite viennent du Commercial, livrees le 08/08 au soir avec l etude.",
+      "argument": "L etude ne demande que deux choses et produit tout le reste. Elle etablit le positionnement (plateforme de gouvernance, 50 a 500 k$/an sur le marche), deux grilles chiffrees, les seuils economiques, et un scenario de reunion complet : on ne vend pas de licence le jour J, on vend une demonstration et un cadrage paye de 8 000 EUR. Elle confirme aussi economiquement le montage SH Conseil que je te recommandais hier : une prestation de jours se facture par SH Conseil, et le seul actif reel du dossier — le DSI te connait personnellement — appartient a SH Conseil.",
+      "argument_contraire": "Un point est apparu depuis, et il n est pas anodin : le Juridique releve que SH Conseil est une QUATRIEME denomination employee, qui ne correspond a aucune entite documentee (officiel : Aissam Hatit EI, nom commercial Digital-Humans, SIREN 343172490). Si l on facture un cadrage par SH Conseil, il faut savoir ce qu est juridiquement SH Conseil — c est le responsable de traitement et le cocontractant. Par ailleurs, sur la grille elle-meme : aucun point de mesure du consentement a payer n existe, l etude le dit franchement ; les niveaux proposes sont ancres sur le marche concurrent, pas sur un client interroge.",
+      "options": "Montage : SH Conseil ou Digital-Humans. Grille A : validee telle quelle, corrigee (donne le niveau), ou refusee. Plafond de jours : un nombre, meme approximatif.",
+      "recommandation": "SH Conseil pour la presentation et le cadrage, Digital-Humans au moment ou l on vend l abonnement — l economie confirme ce que je recommandais hier, et le cadrage paye a le merite de se caler a ton retour de conges. Valider la grille A comme GRILLE AFFICHEE en assumant qu elle est ancree sur le marche et non sur un client interroge : c est exactement ce que le cadrage paye servira a mesurer. Et repondre au plafond de jours meme en fourchette : un silence laisse toutes les projections a l etat d hypothese. Un point a ne pas oublier : faire preciser au Juridique ce qu est SH Conseil avant d emettre une facture a cet en-tete.",
+      "cout": "Direct 0 EUR. Ton temps : 22 minutes au total. Cout de l inaction : la meilleure opportunite du portefeuille se presente sans reponse a la question du prix, et le Commercial ne sait pas quel document preparer."
+    },
+    {
+      "id": "DEC-2026-0806-01 (pour information — ne t est PAS adressee)",
+      "intitule": "Demande de statut sur la demo phare Agentforce — toujours sans reponse, 3 jours",
+      "demandeur_anciennete": "Ta demande du 06/08. Non repondue par le Delivery ni par le Marketing les 07, 08 et 09/08. Je l ai requalifiee ce matin de attente_sam vers accordee, porteur delivery et marketing : elle n attend pas ton arbitrage, elle attend un compte rendu.",
+      "argument": "Tu l as ecrit toi-meme : j ai deja valide ca, c est meme dans le titre. Ou en est-on ? DEC-2026-0802-01 est accordee depuis 7 jours sans aucun livrable.",
+      "argument_contraire": "Un element attenuant apparu depuis : le champ de validation de DEC-2026-0802-01 porte execution apres le 15/08, ce qui rend le silence moins anormal qu il n y parait. Mais un porteur qui sait que sa mission est differee doit le DIRE plutot que de laisser une demande de statut sans reponse pendant trois jours.",
+      "options": "Aucune option ne t est soumise. Transparence, pas arbitrage.",
+      "recommandation": "Ne fais rien. C est ma troisieme relance vers le Delivery et le Marketing. Si leur ronde du 10/08 est encore muette, je te l escalade nommement le 11/08 — et ce sera alors une question de tenue des directions, pas de statut de la demo.",
+      "cout": "0 EUR. Ton temps : 0. Cout de l inaction de ma part : une decision que tu as validee dort depuis 7 jours sans que personne n en rende compte."
+    }
+  ],
+  "recommandation": {
+    "texte": "Aujourd hui, tranche la reouverture du site — et tranche-la dans le sens de la vitrine, des lundi. Voici pourquoi c est la seule chose que je te recommande alors meme que la journee d hier a produit plus de matiere que n importe quelle autre. Ta condition du 08/08 etait bien posee : tu as dit oui a la mise en ligne sous reserve que le Juridique valide les parcours clients. Il a repondu douze minutes apres l instruction, et sa reponse coupe le dossier en deux. La vitrine est favorable sous reserve : les trois pages existent, la mention IA du widget est testee, rien de technique ne s y oppose. Le parcours client est defavorable, pour deux raisons qui n ont rien a voir avec le site — les identifiants Salesforce de tes futurs clients sont stockes en clair dans des colonnes qui portent le mot chiffre dans leur nom, et le cloisonnement entre contextes clients n est pas prouvable en l etat. Ces deux points sont reels, ils sont maintenant routes au Delivery avec une echeance au 11/08, et ils ne se resoudront pas en un jour. Tant que tu ne separes pas les deux perimetres, ils se bloquent mutuellement : le site attend une conformite qui concerne la plateforme, et la campagne attend le site. La vitrine debloque le J0 de la sequence editoriale, qui est la seule chose datee et mecanique de tout ce brief — au 10/08 la sequence se termine le 14/10 et l OKR O3 tient, au 01/09 elle se termine le 03/11 et il ne tient plus. Une precision qui compte avant de publier : le Juridique a releve que la version du 06/08 de la politique omet OpenAI de la liste des sous-traitants, ce qui serait une regression par rapport a ce qui est en ligne aujourd hui. A corriger avant, pas apres. Le reste de ta matinee ne me demande presque rien : deux minutes pour le BUILD de validation et le jeton GitHub, vingt minutes pour Credit Logement dont l etude est deja ecrite, et trois arbitrages de calendrier en un mot chacun.",
+    "argument": "Deux choses ont change depuis hier et elles vont dans le meme sens. La premiere : l escalade que je te presentais depuis deux jours est close, et je m etais trompe. Le BUILD avait bien tourne ; c est l ecriture de sa trace qui etait cassee, pas le travail. Je te recommandais hier d ouvrir une vue v_deos_tasks pour rendre la question decidable — elle n a pas ete ouverte, et la reponse est venue par un chemin moins cher que je n avais pas vu : les journaux bruts et l acces en lecture au depot de code. Je maintiens que la vue serait utile ; je retire qu elle etait le seul geste possible. La seconde : ce comite n a pas de probleme d execution. Deux routages emis samedi a 07:34 ont ete livres dans la journee, l un en douze minutes, l autre cinq jours avant l echeance que j avais proposee. Ce qui bloque n est plus la production, c est le sequencement — trois dossiers attendent chacun une phrase de toi, et chacune de ces phrases tient en moins de cinq minutes. J en ai donc mis une seule en avant, celle dont le cout de retard est mecanique et date.",
+    "source": "deos_state:rapport_legal#2026-08-08 (avis, bloquants B2/B3, corrections_commande) ; rapport_delivery 2026-08-09 (logs worker#166, repo 14 commits, couverture des logs) ; postgres:v_deos_executions#166 verifie par le CEO ; fichier:/workspace/config/commercial/deos_grands_comptes_2026-08-08.md ; rapport_marketing 2026-08-08 (cadence editoriale) ; comite:decisions#DEC-2026-0806-12, 0808-05, 0809-01 a 0809-05",
+    "cout": "Direct 0 EUR pour la reouverture en vitrine. Ton temps : 5 minutes pour cette decision, environ 30 minutes pour la totalite du brief si tu veux tout solder. Cout de l inaction sur ce seul point : OKR O3 hors cible (fin de sequence au 03/11 au lieu du 14/10) et une campagne dont la phase 0 produit sans savoir quand elle pourra sortir."
+  },
+  "compteurs_decisions": {
+    "en_attente_de_ton_arbitrage": {
+      "libelle": "En attente de ton arbitrage",
+      "total_statut_attente_sam": 9,
+      "note": "Il etait monte a 22 avant que je fasse le menage ce matin. La cause n etait pas une accumulation de questions : c est que tu as toi-meme ecrit onze comptes rendus le 08/08 (correction de diagnostic, regle sur le deploiement, sauvegardes, positionnement DEOS...) qui sont entres au statut par defaut attente_sam. Te les represcrire comme des decisions en attente aurait reproduit exactement la faute du 06/08. J ai donc clos 12 decisions avec preuve et requalifie 7 vers un porteur nomme. Chaque changement porte sa preuve en base ; le CoS peut tout revoir lundi et rien n est irreversible.",
+      "appellent_vraiment_ton_arbitrage": [
+        "ESCALADE — DEC-2026-0809-01 : reouverture du site, vitrine ou attente (avis juridique rendu, ta condition non levable en l etat)",
+        "DEC-2026-0808-05 (1j) — FIX-GIT-001 : creer un jeton GitHub, le reste est du code",
+        "DEC-2026-0809-03 — BUILD de validation : go et plafond de depense, J-6 du checkpoint",
+        "DEC-2026-0806-14 (3j) + DEC-2026-0809-02 — Credit Logement : montage, grille de prix, plafond de jours",
+        "DEC-2026-0808-10 (1j) — cle de sauvegarde a copier hors du serveur, 2 minutes"
+      ],
+      "arbitrages_de_calendrier_en_un_mot": [
+        "DEC-2026-0806-08 (3j) — audit de securite des acces : maintenant, apres le 01/09, ou jamais",
+        "DEC-2026-0806-09 (3j) — offre integrateur : idem, et je recommande de la rattacher a l etude deja produite"
+      ],
+      "dispositif_pas_urgent": [
+        "DEC-2026-0809-04 — hygiene du dispositif : angle mort du garde-fou sur les ecritures indirectes, et correction de ma propre regle de peremption pour qu elle compte en jours ouvres. 0 EUR, quelques minutes, sans urgence."
+      ]
+    },
+    "accordees_en_attente_execution": {
+      "libelle": "Accordees, en attente d execution",
+      "total": 30,
+      "note": "30 (28 accordee + 2 en_execution) contre 24 hier. La hausse est presque entierement MECANIQUE et ne demande rien de toi : 7 requalifications depuis l autre compteur et 1 routage nouveau, moins 2 clotures pour execution prouvee. Ce chiffre appelle une action des DIRECTIONS et c est a moi de leur demander des comptes. Quatre directions reprennent lundi ; le Delivery est le seul a tourner le week-end.",
+      "executees_et_closes_ce_jour": [
+        "DEC-2026-0808-02 — routage vers le Juridique : emis 07:34:11Z, rendu 07:46:19Z. Douze minutes.",
+        "DEC-2026-0808-03 — routage vers le Commercial : emis 07:34:26Z avec echeance proposee au 13/08, livre le soir meme a 19:08Z. Cinq jours d avance."
+      ],
+      "en_retard_a_relancer_par_le_ceo": [
+        {"id": "DEC-2026-0714-01", "quoi": "Interface web globale", "age_j": 26, "porteur": "delivery/collectif", "action": "l arbitrage collectif etait prevu lundi 10/08 mais la consolidation DSI attendue le 05/08 manque toujours — je la reclame en tete de la ronde de lundi"},
+        {"id": "DEC-2026-0716-01", "quoi": "Source de comptes cibles", "age_j": 24, "porteur": "commercial", "action": "exploitee depuis le 07/08 (10 comptes qualifies) — en cours, pas en souffrance"},
+        {"id": "DEC-2026-0716-05", "quoi": "Livre blanc v1 — premier jet", "age_j": 24, "porteur": "marketing", "action": "toujours au stade cadrage. Relance ferme lundi, avec le modele qui a marche : instruction ecrite, bornee, avec contrainte de reutilisation de l existant"},
+        {"id": "DEC-2026-0802-01", "quoi": "Demo phare Agentforce", "age_j": 7, "porteur": "delivery+marketing", "action": "0 livrable, 3 demandes de statut sans reponse. Le champ de validation porte execution apres le 15/08, ce qui attenue — mais il faut le DIRE. Escalade nommee le 11/08 si la ronde du 10/08 est muette"},
+        {"id": "DEC-2026-0802-05", "quoi": "Mission juridique — vente hors France", "age_j": 7, "porteur": "legal", "action": "toujours 0 % produit alors que deux autres livrables majeurs ont ete rendus entre-temps. Bloque le perimetre d encaissement de la campagne mondiale"},
+        {"id": "DEC-2026-0802-06", "quoi": "Mission juridique — audit du parcours", "age_j": 7, "porteur": "legal", "action": "LARGEMENT LIVRE le 08/08 (41 Ko, 6 points bloquants). Reste le cloisonnement du corpus RAG, desormais route au Delivery en B3 (DEC-2026-0809-05)"},
+        {"id": "DEC-2026-0803-01", "quoi": "GO correctif BUILD", "age_j": 6, "porteur": "delivery", "action": "13 des 14 correctifs livres le 08/08 — a clore des qu une execution les aura valides"},
+        {"id": "DEC-2026-0803-03, 0803-04, 0803-05", "quoi": "Portraits visuels, page LinkedIn, identite des directeurs", "age_j": 6, "porteur": "marketing", "action": "les scripts de la campagne des onze agents ont ete livres le 08/08 (42 Ko) — a rapprocher de ces trois decisions lundi, une partie est peut-etre deja executee"},
+        {"id": "DEC-2026-0804-01", "quoi": "Fiabilisation des logs", "age_j": 5, "porteur": "delivery/sam", "action": "te revient pour le choix d une option — la couverture est tombee a 9,8 %"},
+        {"id": "DEC-2026-0804-05", "quoi": "Mission collective Interface", "age_j": 5, "porteur": "collectif/dsi", "action": "consolidation attendue le 05/08 toujours absente, a la veille de l arbitrage du 10/08"},
+        {"id": "DEC-2026-0805-01", "quoi": "MAJ de l offre canonique grands comptes", "age_j": 4, "porteur": "commercial/sam", "action": "l etude est livree ; l offre canonique elle-meme n est pas encore mise a jour — elle attend ta validation de la grille (DEC-2026-0809-02)"},
+        {"id": "DEC-2026-0808-09, 0808-11, 0808-12, 0808-13", "quoi": "Suites du 08/08 : publication de la politique corrigee, pieces Hostinger, retention zero Anthropic, identifiants SMTP N8N", "age_j": 1, "porteur": "marketing, legal, sam, delivery", "action": "requalifiees ce matin avec un porteur nomme — aucune n attend ton arbitrage"}
+      ]
+    }
+  },
+  "couverture_comite": {
+    "escalade_comite": false,
+    "note": "PAS D ESCALADE DE GOUVERNANCE, et je le dis explicitement pour la deuxieme fois consecutive. Cinq directions n ont pas rapporte aujourd hui parce que le dimanche elles ne tournent pas : /workspace/bin/rondes.sh ne lance le Commercial, le Marketing, le CS, le CoS et le Juridique que si DOW <= 5 ; aujourd hui DOW=7. Cadence Delivery 7j/7 validee par toi le 14/07. Verification independante sur rondes.log : 01 et 02/08 (week-end precedent) = delivery seul, 03 au 07/08 = rondes completes, 08 et 09/08 = delivery seul. Ma propre regle de surveillance, appliquee a la lettre, declencherait aujourd hui une escalade le comite ne remplit plus sa fonction : elle serait FAUSSE, je compte la peremption en jours ouvres et j ai inscrit la correction de ma fiche dans DEC-2026-0809-04.",
+    "rondes_fraiches": ["delivery — 2026-08-09T07:09:36Z, rapport complet, domain_score 88"],
+    "rondes_manquantes_anormales": [],
+    "rondes_non_attendues_ce_jour": ["commercial", "marketing", "cs", "cos", "legal — les cinq reprennent lundi 10/08 (cadence lun-ven)"],
+    "legal": "Passe en QUOTIDIEN le 08/08 par ton arbitrage (FIX-LEGAL-002) le temps de la mise en conformite, mais a l interieur du bloc lun-ven : absent le week-end comme les autres, ce qui est coherent. A rendu le 08/08 un rapport complet et un livrable de 41 Ko. Cause racine de ses cinq jours de silence enfin etablie et corrigee : il n avait aucun perimetre d ecriture dans deos-state, ses rapports etaient refuses en silence.",
+    "observation": "Aucune ronde hors cadence lancee ce jour, contrairement au 08/08 ou une ronde Marketing manuelle a 07:24Z avait produit un rapport qui n a jamais ete consolide — je le consolide dans le present brief, avec 24 heures de retard."
+  },
+  "fraicheur_rapports": {
+    "delivery": "2026-08-09T07:09:36Z — FRAIS (domain_score 88)",
+    "legal": "2026-08-08T07:46:19Z — J-1, hors calcul de sante. Consolide pour la premiere fois ici",
+    "marketing": "2026-08-08T07:36:27Z — J-1, ronde hors cadence, JAMAIS consolide jusqu a ce brief. Non attendu ce jour",
+    "commercial": "2026-08-07 (rapport) + livrable du 2026-08-08T19:08Z jamais consolide. Non attendu ce jour",
+    "cs": "2026-08-07 — non attendu ce jour (cadence lun-ven), reprise le 10/08",
+    "execution_cos": "2026-08-07 — non attendu ce jour ; menage du registre fait par le CEO ce matin a defaut",
+    "decisions": "2026-08-09T07:4xZ — verifiees et modifiees directement en base par le CEO",
+    "brief_j_1": "2026-08-08T07:41:38Z (baseline de comparaison)",
+    "cash_suivi": "solde declare du 14/07 (26 jours) ; enveloppe API mise a jour le 02/08 (7 jours)",
+    "priorites_semaine": "2026-08-03 — PERIMEES depuis 6 jours, a rafraichir par le CoS lundi",
+    "statut_o2": "2026-08-05 — 4 jours, non reverifie par le Delivery ce jour"
+  },
+  "actions_dispositif_et_legal": [
+    {
+      "id": "GARDE-FOU-ECRITURE-INDIRECTE",
+      "texte": "Combler l angle mort du hook PreToolUse sur les ecritures passees par un script intermediaire, et trancher la tension entre le curseur ecrire_base a Conseille et l obligation faite a chaque direction d ecrire son rapport dans deos_state. Un garde-fou qui bloque des lectures benignes et laisse passer des ecritures indirectes donne une fausse assurance, ce qui est pire qu une absence de garde-fou puisqu on cesse de verifier.",
+      "destinataire": "cos/sam",
+      "cout": "0 EUR, quelques minutes de redaction. Cout de l inaction : on continue de croire protege ce qui ne l est pas — etant entendu que la lecture seule sur la PRODUCTION reste garantie par le role deos_ro, independamment de ce filtre."
+    },
+    {
+      "id": "FIX-PEREMPTION-WEEKEND",
+      "texte": "Amender ma fiche pour compter la peremption des rondes en JOURS OUVRES. Signale hier, non fait ; en l etat, la regle produirait chaque dimanche une escalade fausse — exactement le bruit que ma regle anti-bruit doit empecher.",
+      "destinataire": "cos/sam",
+      "cout": "0 EUR, quelques minutes. Cout de l inaction : une fausse alerte haute chaque dimanche."
+    },
+    {
+      "id": "ENTITE-SH-CONSEIL",
+      "texte": "Faire preciser par le Juridique ce qu est juridiquement SH Conseil — quatrieme denomination employee, presente au pied de deos.cloud, et par laquelle l etude commerciale propose de facturer le cadrage Credit Logement. C est le responsable de traitement et le cocontractant des CGV : la question n est pas cosmetique, et elle devient operationnelle si un devis part fin aout.",
+      "destinataire": "legal/sam",
+      "cout": "0 EUR pour la question, a chiffrer si une regularisation s impose. Cout de l inaction : une facture emise sous un en-tete dont le statut juridique n est pas etabli."
+    },
+    {
+      "id": "OMISSION-OPENAI-POLITIQUE",
+      "texte": "Corriger l omission d OpenAI dans la liste des sous-traitants de la version du 06/08 de la politique de confidentialite AVANT toute publication : le Juridique la qualifie de regression par rapport a la version actuellement en ligne, au regard de l article 13.1.e du RGPD. A traiter dans le meme geste que la reouverture, pas apres.",
+      "destinataire": "legal/marketing",
+      "cout": "0 EUR, une ligne a ajouter. Cout de l inaction : publier une version moins conforme que celle qui est en ligne aujourd hui."
+    },
+    {
+      "id": "BACKLOG-OU-DECISIONS",
+      "texte": "Trancher lequel de /backlog/TASKS_MASTER.md (fige au 14/07) ou de la table decisions est la source unique des taches actives, et retirer ce titre a l autre. Reconduit du 08/08, sans mouvement.",
+      "destinataire": "cos/sam",
+      "cout": "0 EUR. Ton temps : 5 minutes. Cout de l inaction : une direction lit le mauvais registre et travaille sur une file morte."
+    }
+  ]
+}

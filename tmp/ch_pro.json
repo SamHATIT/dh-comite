@@ -1,0 +1,15 @@
+{
+ "channel_name": "Pro-selfserve-LinkedIn",
+ "deal_volume": 60,
+ "gross_revenue": 35280,
+ "costs": {
+  "marketing_attribution": 24000,
+  "support_attribution": 3000,
+  "tooling_attribution": 1200,
+  "channel_manager_attribution": 0,
+  "partner_enablement_time": 0,
+  "certification_investment": 0,
+  "channel_conflict_overhead": 0,
+  "overhead_allocation_pct": 10
+ }
+}

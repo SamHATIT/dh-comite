@@ -1,9 +1,10 @@
 # Journal — dh-comite
 
 > Genere automatiquement depuis les messages de commit.
-> Derniere mise a jour : 08/08/2026 18:54 UTC
+> Derniere mise a jour : 08/08/2026 18:58 UTC
 
 ## 2026-08-08
+- Positionnement DEOS formule par Sam : outil de gouvernance qui fait evoluer l'organisation AVEC le systeme, pas seulement un controle. Le curseur d'autonomie est la demonstration du mecanisme. Trois consequences commerciales tracees : on est compare a une transformation et non a un outil d'observabilite ; le decideur est la direction generale ; DEOS est la seule offre non gatee par Salesforce. `a8933f3`
 - Six skills de plus depuis la place de marche, choisis contre des decisions reelles et non par accumulation. Commercial : pricing-strategist et channel-economics (repondent a DEC-2026-0805-01, etude de pricing grands comptes arbitree le 08/08, et a la segmentation par moteur commercial). Marketing : launch-strategy (1er septembre), marketing-psychology (campagne des 11 agents), copywriting (complete dh-fr-copywriting). Customer Success : customer-success-manager, avec la precaution que nous avons zero client et qu'il ne faut pas simuler une activite inexistante. Controle de securite passe sur les six. `6f5bd70`
 - Quatre skills installes depuis la place de marche alirezarezvani/claude-skills (MIT, verifies : aucun appel reseau, aucun jeton, que des scripts de calcul). Juridique : gdpr-audit-prep et ai-act-readiness — grilles de six questions forcantes avec citation des articles. Chief of Staff : saas-metrics-coach et financial-analyst, avec scripts de calcul d'ecarts, de previsions et d'economie unitaire. Comble les deux manques les plus criants de l'audit : le Juridique n'avait aucune grille de verification, et la regle du cout par proposition etait inapplicable faute de methode. `f225a72`
 - Les directeurs voient enfin le code : depot complet monte en lecture seule sur /repo. Le 08/08, quatre directions ont conclu que rien n'avait bouge sur la plateforme depuis le 02/08 — alors que 32 commits avaient eu lieu, dont 11 ce jour-la. Elles avaient raison sur ce qu'elles voyaient (une table figee), tort sur ce qu'elles en deduisaient. Consigne posee chez Delivery : regarder l'historique avant de conclure, et signaler l'ecart entre base et code comme un fait en soi. `8b9ded8`

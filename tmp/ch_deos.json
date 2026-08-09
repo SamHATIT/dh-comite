@@ -1,0 +1,13 @@
+{
+ "channel_name": "DEOS-grands-comptes-reseau-Sam",
+ "deal_volume": 2,
+ "gross_revenue": 120000,
+ "costs": {
+  "ae_attribution": 32000,
+  "sales_engineer_attribution": 12000,
+  "customer_success_attribution": 8000,
+  "support_attribution": 4000,
+  "tooling_attribution": 1200,
+  "overhead_allocation_pct": 10
+ }
+}

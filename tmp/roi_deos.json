@@ -1,0 +1,85 @@
+{
+ "profile": "enterprise-software",
+ "channels": [
+  {
+   "channel": "DEOS-GC-30k-par-compte",
+   "investment_ttm": {
+    "programs": 0,
+    "headcount_cost": 52000,
+    "partner_program_cost": 0,
+    "mdf": 0,
+    "tooling": 7200.0,
+    "training": 4000
+   },
+   "returns_ttm": {
+    "new_arr": 60000,
+    "expansion_arr": 0,
+    "retained_arr_attributable": 0
+   }
+  },
+  {
+   "channel": "DEOS-GC-50k-par-compte",
+   "investment_ttm": {
+    "programs": 0,
+    "headcount_cost": 52000,
+    "partner_program_cost": 0,
+    "mdf": 0,
+    "tooling": 11200.0,
+    "training": 4000
+   },
+   "returns_ttm": {
+    "new_arr": 100000,
+    "expansion_arr": 0,
+    "retained_arr_attributable": 0
+   }
+  },
+  {
+   "channel": "DEOS-GC-80k-par-compte",
+   "investment_ttm": {
+    "programs": 0,
+    "headcount_cost": 52000,
+    "partner_program_cost": 0,
+    "mdf": 0,
+    "tooling": 17200.0,
+    "training": 4000
+   },
+   "returns_ttm": {
+    "new_arr": 160000,
+    "expansion_arr": 0,
+    "retained_arr_attributable": 0
+   }
+  },
+  {
+   "channel": "DEOS-GC-120k-par-compte",
+   "investment_ttm": {
+    "programs": 0,
+    "headcount_cost": 52000,
+    "partner_program_cost": 0,
+    "mdf": 0,
+    "tooling": 25200.0,
+    "training": 4000
+   },
+   "returns_ttm": {
+    "new_arr": 240000,
+    "expansion_arr": 0,
+    "retained_arr_attributable": 0
+   }
+  },
+  {
+   "channel": "DEOS-GC-180k-par-compte",
+   "investment_ttm": {
+    "programs": 0,
+    "headcount_cost": 52000,
+    "partner_program_cost": 0,
+    "mdf": 0,
+    "tooling": 37200.0,
+    "training": 4000
+   },
+   "returns_ttm": {
+    "new_arr": 360000,
+    "expansion_arr": 0,
+    "retained_arr_attributable": 0
+   }
+  }
+ ]
+}

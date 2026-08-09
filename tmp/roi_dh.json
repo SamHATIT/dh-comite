@@ -1,0 +1,37 @@
+{
+ "profile": "saas",
+ "channels": [
+  {
+   "channel": "Pro-selfserve-LinkedIn",
+   "investment_ttm": {
+    "programs": 3000,
+    "headcount_cost": 24000,
+    "partner_program_cost": 0,
+    "mdf": 0,
+    "tooling": 4728,
+    "training": 0
+   },
+   "returns_ttm": {
+    "new_arr": 35280,
+    "expansion_arr": 0,
+    "retained_arr_attributable": 0
+   }
+  },
+  {
+   "channel": "Team-direct-ETI",
+   "investment_ttm": {
+    "programs": 2000,
+    "headcount_cost": 35200,
+    "partner_program_cost": 0,
+    "mdf": 0,
+    "tooling": 11928,
+    "training": 0
+   },
+   "returns_ttm": {
+    "new_arr": 107280,
+    "expansion_arr": 0,
+    "retained_arr_attributable": 0
+   }
+  }
+ ]
+}

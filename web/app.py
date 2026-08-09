@@ -381,7 +381,7 @@ def page_rapports():
             n = _o.path.basename(f)
             fichiers.append((d, n, _o.path.getsize(f)))
     li = "".join(
-        f'<li><span class="d">{d}</span> <a href="/rapport/{d}/{n}">{n}</a>'
+        f'<li><span class="d">{d}</span> <a href="rapport/{d}/{n}">{n}</a>'
         f' <span class="t">{k//1024} Ko</span></li>' for d, n, k in fichiers)
     return HTMLResponse(
         '<html><head><meta charset="utf-8"><title>Rapports du comité</title>'
@@ -432,7 +432,7 @@ def page_rapport(direction: str, nom: str):
         'li{margin-left:18px;margin-bottom:4px}p{margin:10px 0}'
         'a{color:#C8A97E}.retour{font-size:10px;letter-spacing:.2em;text-transform:uppercase;'
         'color:#6F6B62;text-decoration:none;display:inline-block;margin-bottom:20px}'
-        '</style></head><body><a class="retour" href="/rapports">← Tous les rapports</a><p>'
+        '</style></head><body><a class="retour" href="../rapports">← Tous les rapports</a><p>'
         + h + '</p></body></html>')
 
 
@@ -450,7 +450,7 @@ def page_wip(nom: str):
 def page_wip_index():
     import os as _os
     f = sorted(x for x in _os.listdir(f"{BASE}/web/wip") if x.endswith(".png"))
-    liens = "".join(f'<li><a href="/wip/{x}">{x}</a></li>' for x in f)
+    liens = "".join(f'<li><a href="wip/{x}">{x}</a></li>' for x in f)
     return HTMLResponse(
         '<html><head><meta charset="utf-8"><title>Captures WIP</title>'
         '<style>body{background:#0A0A0B;color:#F5F2EC;font-family:system-ui;padding:40px}'

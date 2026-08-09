@@ -1,0 +1,94 @@
+{
+ "segments": [
+  "ETI",
+  "Grand compte",
+  "Secteur regule"
+ ],
+ "current_pricing": {
+  "good": 1490,
+  "better": 4500,
+  "best": 7500
+ },
+ "features": [
+  {
+   "name": "Comite de direction augmente (6 directions, rondes planifiees)",
+   "importance": 0.95,
+   "cost_to_serve": 2.0,
+   "segment_fit": {
+    "ETI": 0.9,
+    "Grand compte": 0.8,
+    "Secteur regule": 0.7
+   }
+  },
+  {
+   "name": "Brief quotidien consolide et registre des decisions horodate",
+   "importance": 0.9,
+   "cost_to_serve": 1.0,
+   "segment_fit": {
+    "ETI": 0.8,
+    "Grand compte": 0.9,
+    "Secteur regule": 0.95
+   }
+  },
+  {
+   "name": "Curseur d'autonomie reglable par direction ET par type de tache",
+   "importance": 0.95,
+   "cost_to_serve": 3.0,
+   "segment_fit": {
+    "ETI": 0.5,
+    "Grand compte": 0.95,
+    "Secteur regule": 0.98
+   }
+  },
+  {
+   "name": "Garde-fou technique : refus trace avant chaque appel d'outil",
+   "importance": 0.85,
+   "cost_to_serve": 3.5,
+   "segment_fit": {
+    "ETI": 0.4,
+    "Grand compte": 0.9,
+    "Secteur regule": 0.99
+   }
+  },
+  {
+   "name": "Journal d'audit exportable (preuve de refus, historique des curseurs)",
+   "importance": 0.75,
+   "cost_to_serve": 4.0,
+   "segment_fit": {
+    "ETI": 0.2,
+    "Grand compte": 0.8,
+    "Secteur regule": 0.99
+   }
+  },
+  {
+   "name": "Tableau de bord de gouvernance (deux compteurs, execution)",
+   "importance": 0.7,
+   "cost_to_serve": 2.0,
+   "segment_fit": {
+    "ETI": 0.7,
+    "Grand compte": 0.8,
+    "Secteur regule": 0.8
+   }
+  },
+  {
+   "name": "Connecteurs metier (Salesforce, base client, logs)",
+   "importance": 0.65,
+   "cost_to_serve": 5.0,
+   "segment_fit": {
+    "ETI": 0.8,
+    "Grand compte": 0.7,
+    "Secteur regule": 0.6
+   }
+  },
+  {
+   "name": "Cloisonnement des donnees et DPA sur mesure",
+   "importance": 0.7,
+   "cost_to_serve": 4.5,
+   "segment_fit": {
+    "ETI": 0.3,
+    "Grand compte": 0.85,
+    "Secteur regule": 0.99
+   }
+  }
+ ]
+}

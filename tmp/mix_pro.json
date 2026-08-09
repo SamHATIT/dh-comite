@@ -1,0 +1,65 @@
+{
+ "profile": "saas",
+ "channels": [
+  {
+   "name": "Pro-selfserve-60-abonnes",
+   "deal_count_ttm": 60,
+   "arr_ttm": 35280,
+   "avg_deal_size": 588,
+   "gross_margin_pct": 10.07,
+   "cac": 528.8,
+   "sales_cycle_days": 7,
+   "retention_rate": 0.7,
+   "expansion_rate": 1.02,
+   "partner_discount_pct": 0
+  },
+  {
+   "name": "Pro-selfserve-100-abonnes",
+   "deal_count_ttm": 100,
+   "arr_ttm": 58800,
+   "avg_deal_size": 588,
+   "gross_margin_pct": 42.04,
+   "cac": 340.8,
+   "sales_cycle_days": 7,
+   "retention_rate": 0.7,
+   "expansion_rate": 1.02,
+   "partner_discount_pct": 0
+  },
+  {
+   "name": "Pro-selfserve-150-abonnes",
+   "deal_count_ttm": 150,
+   "arr_ttm": 88200,
+   "avg_deal_size": 588,
+   "gross_margin_pct": 58.03,
+   "cac": 246.8,
+   "sales_cycle_days": 7,
+   "retention_rate": 0.7,
+   "expansion_rate": 1.02,
+   "partner_discount_pct": 0
+  },
+  {
+   "name": "Pro-selfserve-300-abonnes",
+   "deal_count_ttm": 300,
+   "arr_ttm": 176400,
+   "avg_deal_size": 588,
+   "gross_margin_pct": 74.01,
+   "cac": 152.8,
+   "sales_cycle_days": 7,
+   "retention_rate": 0.7,
+   "expansion_rate": 1.02,
+   "partner_discount_pct": 0
+  },
+  {
+   "name": "Pro-selfserve-500-abonnes",
+   "deal_count_ttm": 500,
+   "arr_ttm": 294000,
+   "avg_deal_size": 588,
+   "gross_margin_pct": 80.41,
+   "cac": 115.2,
+   "sales_cycle_days": 7,
+   "retention_rate": 0.7,
+   "expansion_rate": 1.02,
+   "partner_discount_pct": 0
+  }
+ ]
+}

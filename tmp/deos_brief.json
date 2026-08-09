@@ -1,0 +1,23 @@
+{
+  "industry": "Gouvernance d'agents IA en entreprise (dispositif de direction augmentee, curseur d'autonomie, tracabilite des decisions)",
+  "deal_size_avg": 60000,
+  "customer_count": 0,
+  "value_drivers": [
+    "tracabilite auditable des decisions prises par des agents (exigence DORA art.5/8, AI Act art.12-14)",
+    "reduction du risque d'action non autorisee d'un agent (curseur d'autonomie applique techniquement)",
+    "temps de direction recupere sur le suivi d'execution",
+    "capacite a repondre a un controle ACPR/CNIL sans reconstruire l'historique"
+  ],
+  "adoption_curve": "top-down",
+  "consumption_pattern": {
+    "seat-based": 0.15,
+    "usage-based": 0.25,
+    "value-based": 0.8,
+    "hybrid": 0.6
+  },
+  "competitor_pricing_models": [
+    "custom enterprise pricing (Credo AI, Holistic AI, IBM watsonx.governance)",
+    "prestation de conseil en TJM (ESN, integrateurs, freelances senior)",
+    "hybrid base fee + usage"
+  ]
+}
