@@ -15,7 +15,11 @@ fresh() {
 {
 echo "# CONTEXTE DU COMITÉ HEBDO — $TS (UTC)"
 echo ""; echo "## Rapports du matin (rondes du jour)"
-for D in delivery commercial marketing cs cos; do echo "### rapport_$D"; fresh "rapport_$D"; echo ""; done
+# 09/08 : le Financier est ajoute. Il ne tourne PAS en ronde quotidienne
+# (rien a observer chaque jour, et 45 EUR/mois de plus serait paradoxal pour
+# la direction chargee des couts) mais il est PRESENT au comite avec une
+# position preparee — arbitrage de Sam.
+for D in delivery commercial marketing cs cos financier; do echo "### rapport_$D"; fresh "rapport_$D"; echo ""; done
 echo "## Référentiels"
 echo "### okr_h2"; fresh okr_h2
 echo "### objectifs_commerciaux"; fresh objectifs_commerciaux

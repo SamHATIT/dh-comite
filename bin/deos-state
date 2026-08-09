@@ -12,6 +12,8 @@ declare -A SCOPES=(
   # ses rapports etaient refuses en silence, d'ou le "0 rapport legal" constate
   # pendant cinq jours. La direction travaillait, rien n'arrivait.
   [legal]="rapport_legal conformite_ia registre_traitements"
+  # 09/08 : Directeur Financier. Invoque a la demande, present au comite.
+  [financier]="rapport_financier projection_tresorerie couts_engages"
   [ceo]="brief"
   [sam]="*"
 )
