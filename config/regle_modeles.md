@@ -42,6 +42,26 @@ adapté au besoin, dans sa dernière version »** : Haiku pour l'extraction
 mécanique, Sonnet pour les rondes, Opus pour le brief, Fable pour l'analyse
 croisée hebdomadaire.
 
+## Missions ponctuelles de directeurs — règle du 09/08
+
+**Sonnet par défaut.** Une mission lancée à la main (« produis le plan de
+lancement », « instruis ce point juridique ») tourne sur `sonnet`, pas sur
+`opus`.
+
+**Pourquoi cette règle existe.** Le 08/08, quatre missions de directeurs ont
+été lancées sur Opus avec des contextes de 140 000 à 171 000 jetons — près d'un
+euro l'appel. Résultat : **24 € d'Opus sur la seule journée**, contre 8 € de
+Sonnet. C'est ce qui a fait sauter le plafond mensuel.
+
+**Mise en perspective utile** : le comité hebdomadaire sur Fable coûte 6 à 7 €.
+Les rituels ne sont pas le poste de dépense — les missions ponctuelles le sont.
+
+**Quand demander Opus** : uniquement pour l'analyse croisée (incohérences,
+collisions de plans, synergies manquées) ou une production dont la qualité est
+directement visible par un client. **Et dans ce cas, annoncer le coût estimé à
+Sam AVANT de lancer** — c'est sa règle sur les propositions, elle s'applique
+aussi à ce que Claude engage.
+
 ## État au 06/08/2026
 
 | Usage | Modèle | Forme |

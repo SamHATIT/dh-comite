@@ -1,7 +1,10 @@
 # Journal — dh-comite
 
 > Genere automatiquement depuis les messages de commit.
-> Derniere mise a jour : 08/08/2026 18:58 UTC
+> Derniere mise a jour : 09/08/2026 08:14 UTC
+
+## 2026-08-09
+- Liens des rapports corriges (signale par Sam le 09/08) : les liens etaient absolus (href=/rapport/...) alors que nginx sert le comite sous /comite/ via proxy_pass vers 127.0.0.1:8090/. Le navigateur sortait donc du comite et retombait sur le tableau de bord de la plateforme. Trois liens rendus relatifs : rapports, retour, wip. Verifie au clic reel : la page s'ouvre, le contenu s'affiche, le retour fonctionne. `99ca924`
 
 ## 2026-08-08
 - Positionnement DEOS formule par Sam : outil de gouvernance qui fait evoluer l'organisation AVEC le systeme, pas seulement un controle. Le curseur d'autonomie est la demonstration du mecanisme. Trois consequences commerciales tracees : on est compare a une transformation et non a un outil d'observabilite ; le decideur est la direction generale ; DEOS est la seule offre non gatee par Salesforce. `a8933f3`
