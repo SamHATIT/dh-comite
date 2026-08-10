@@ -722,7 +722,8 @@ def page_graphiques():
             "<p style='font:16px sans-serif;padding:40px'>Gabarits non deposes. "
             "Attendu dans <code>web/handoff_graphiques/graphiques/</code>.</p>",
             status_code=404)
-    return FileResponse(chemin, media_type="text/html")
+    return FileResponse(chemin, media_type="text/html",
+                        headers={"Cache-Control": "no-store"})
 
 
 @app.get("/graphique/{nom}")
@@ -735,4 +736,7 @@ def page_graphique(nom: str):
     chemin = f"{BASE}/web/handoff_graphiques/graphiques/{nom}.html"
     if not os.path.exists(chemin):
         return HTMLResponse("gabarit introuvable", status_code=404)
-    return FileResponse(chemin, media_type="text/html")
+    # no-store : ces fichiers changent pendant la mise au point, et le cache
+    # navigateur a masque deux corrections successives le 10/08.
+    return FileResponse(chemin, media_type="text/html",
+                        headers={"Cache-Control": "no-store"})
