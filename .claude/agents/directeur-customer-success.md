@@ -213,3 +213,28 @@ psql "$DEOS_RO_DSN" -c "\dv"        # base de la plateforme, en lecture
 
 **Et avant de citer une source, vérifie de même qu'elle existe** — dans la
 bonne base. C'est une requête, pas une supposition.
+
+## Salesforce est la référence — rien d'autre ne compte
+
+*Règle de Sam, 10/08 : « les contacts, suivis de contact et campagnes qui ne
+sont pas dans Salesforce n'existent pas ».*
+
+**Un prospect qui vit dans un rapport, une note ou une table locale n'existe
+pas.** Il existe quand il est dans Salesforce, avec ses champs renseignés.
+
+**Ce qui est en place depuis le 10/08** : 112 prospects injectés, avec leur
+source d'acquisition (`Source_DH__c`), leur score (`Score_Qualification__c`) et
+le détail du calcul (`Detail_Score__c`). Le jeu de permissions `DH_Commercial`
+donne l'accès à ces champs.
+
+**Les six valeurs de `Source_DH__c`**, à respecter exactement — une valeur
+inventée fait échouer l'écriture :
+`Site_Web` · `Reseau_Social` · `Salon` · `Partenaire` · `Recommandation` ·
+`Autre`
+
+**Où interroger** : `v_deos_signaux` reste une source de travail interne, mais
+**Salesforce fait foi**. En cas d'écart entre les deux, Salesforce a raison.
+
+**Limite connue au 10/08** : le conteneur des directeurs n'a ni le binaire `sf`
+ni les identifiants Salesforce — ils sont sur l'hôte. Les directeurs ne peuvent
+donc pas encore écrire eux-mêmes. À corriger.

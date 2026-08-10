@@ -1,0 +1,31 @@
+#!/bin/bash
+# Écrit un prospect dans Salesforce. Depuis l'hôte OU depuis le conteneur.
+#
+# POURQUOI CE SCRIPT (10/08) : le Commercial a signale ne pas pouvoir ecrire
+# dans Salesforce — verification faite, le conteneur des directeurs n'a ni le
+# binaire `sf` ni les identifiants. Ils sont sur l'hote. Plutot que d'installer
+# Salesforce dans chaque conteneur et d'y copier les identifiants, on expose
+# une route : le service web relaie vers l'hote.
+#
+# REGLE DE SAM, 10/08 : les contacts, suivis de contact et campagnes qui ne
+# sont pas dans Salesforce N'EXISTENT PAS.
+#
+#   sf-lead '{"Company":"Schneider Electric","LastName":"—","Source_DH__c":"Salon"}'
+set -uo pipefail
+JSON="${1:?usage: sf-lead '<json des champs>'}"
+ORG="${SF_ORG:-shatit.e1b77a94f3cb@agentforce.com}"
+
+if command -v sf >/dev/null 2>&1; then
+  # ── Depuis l'hôte : appel direct ──
+  VALEURS=$(python3 -c "
+import json, sys
+d = json.loads(sys.argv[1])
+print(' '.join(f'{k}={json.dumps(str(v))}' for k, v in d.items()))
+" "$JSON")
+  eval sf data create record --sobject Lead --values "\"$VALEURS\"" \
+       --target-org "$ORG" --json
+else
+  # ── Depuis le conteneur : par le service web, qui tourne sur l'hôte ──
+  curl -s -X POST "http://comite-web:8090/api/sf/lead" \
+       -H "Content-Type: application/json" -d "$JSON"
+fi
