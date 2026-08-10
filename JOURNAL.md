@@ -1,7 +1,10 @@
 # Journal — dh-comite
 
 > Genere automatiquement depuis les messages de commit.
-> Derniere mise a jour : 09/08/2026 22:40 UTC
+> Derniere mise a jour : 10/08/2026 09:29 UTC
+
+## 2026-08-10
+- Comite du 10/08 casse par mon propre commentaire : en documentant la bascule sur Opus, j'avais insere des lignes # AU MILIEU d'une commande continuee par backslash. Bash termine la commande au premier commentaire, d'ou --model: command not found et un comite vide. Commentaires deplaces AVANT la commande. Verification passee sur tous les scripts bin/. `ed9e466`
 
 ## 2026-08-09
 - Dette d'execution : le CEO relance nommement au comite (C5), le Chief of Staff compte tous les jours. Demande de Sam le 09/08 apres avoir constate 31 decisions accordees jamais executees, contre 10 seulement en attente de son arbitrage. La dette grossissait sans bruit parce que le compteur les additionnait. Trois questions imposees par decision de plus de 7 jours : encore pertinente, bloquee par quoi, quand. Ton ferme mais pas accusateur — une direction qui n'execute pas manque souvent d'un moyen, et l'absence de relance est la faute du CEO. `eb09414`

@@ -1,7 +1,8 @@
 """Comité DH — API lecture seule pour le tableau de bord (V1.1, 14/07/2026)."""
 import os, glob
+import html as _h   # echappement des contenus injectes dans le HTML
 import psycopg2, psycopg2.extras
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.responses import HTMLResponse, JSONResponse
 
 DSN = os.environ["COMITE_DB_DSN"]
@@ -384,7 +385,7 @@ def page_rapports():
         f'<li><span class="d">{d}</span> <a href="rapport/{d}/{n}">{n}</a>'
         f' <span class="t">{k//1024} Ko</span></li>' for d, n, k in fichiers)
     return HTMLResponse(
-        '<html><head><meta charset="utf-8"><title>Rapports du comité</title>'
+        '<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Rapports du comité</title>'
         '<style>body{background:#0A0A0B;color:#B5B0A4;font-family:"JetBrains Mono",monospace;'
         'padding:48px 32px;font-size:13px;line-height:2}h1{font-family:Georgia,serif;'
         'font-weight:300;font-size:30px;color:#F5F2EC;font-style:italic;margin-bottom:28px}'
@@ -420,7 +421,7 @@ def page_rapport(direction: str, nom: str):
     h = _r.sub(r'<td>[-: ]+</td>', '', h)
     h = h.replace('\n\n', '</p><p>')
     return HTMLResponse(
-        '<html><head><meta charset="utf-8"><title>' + _h.escape(nom) + '</title>'
+        '<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>' + _h.escape(nom) + '</title>'
         '<style>body{background:#0A0A0B;color:#B5B0A4;font-family:"JetBrains Mono",monospace;'
         'font-size:13px;line-height:1.9;padding:44px 28px 90px;max-width:1000px;margin:0 auto}'
         'h1,h2,h3{font-family:Georgia,serif;font-weight:300;color:#F5F2EC;font-style:italic;'
@@ -452,7 +453,7 @@ def page_wip_index():
     f = sorted(x for x in _os.listdir(f"{BASE}/web/wip") if x.endswith(".png"))
     liens = "".join(f'<li><a href="wip/{x}">{x}</a></li>' for x in f)
     return HTMLResponse(
-        '<html><head><meta charset="utf-8"><title>Captures WIP</title>'
+        '<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Captures WIP</title>'
         '<style>body{background:#0A0A0B;color:#F5F2EC;font-family:system-ui;padding:40px}'
         'a{color:#C8A97E}li{margin:8px 0}</style></head><body>'
         '<h1 style="font-weight:300">Captures des trois écrans</h1>'
@@ -477,3 +478,180 @@ def page_gouvernance():
 def index():
     with open(f"{BASE}/web/index.html", encoding="utf-8") as f:
         return f.read()
+
+
+# ═══════════════════════════════════════════════════════════════════════════
+# ARBITRAGE DEPUIS LE WEB — DEC-2026-0714-01, partie interaction
+# ═══════════════════════════════════════════════════════════════════════════
+# Les 14 routes precedentes sont TOUTES en lecture. Sam pouvait tout
+# consulter, rien valider — il dictait donc ses arbitrages en conversation.
+# D'ou le cercle vicieux releve le 10/08 : la decision qui rendrait les
+# arbitrages faciles attendait depuis 27 jours, parce que l'arbitrer
+# demandait justement le mecanisme qu'elle devait creer.
+#
+# Concu pour le TELEPHONE d'abord : c'est la que Sam arbitre, entre deux
+# rendez-vous. Une decision par ecran, trois boutons, rien d'autre.
+
+@app.get("/arbitrer")
+def page_arbitrage():
+    lignes = q(DSN, """
+        SELECT id, origine, date, texte, recommandation,
+               (now()::date - date::date) AS jours
+        FROM decisions WHERE statut = 'attente_sam'
+        ORDER BY date
+    """)
+
+    if not lignes:
+        corps = ('<div class="vide"><p>Aucune décision en attente.</p>'
+                 '<p class="sec">Tout est tranché.</p></div>')
+    else:
+        cartes = []
+        for d in lignes:
+            j = d["jours"]
+            urgence = "vieux" if j >= 14 else "moyen" if j >= 7 else "recent"
+            texte = _h.escape(d["texte"] or "")
+            reco = _h.escape(d["recommandation"] or "") if d.get("recommandation") else ""
+            cartes.append(f"""
+            <article class="dec {urgence}" id="{d['id']}">
+              <header>
+                <span class="ref">{d['id']}</span>
+                <span class="age">{j} jour{'s' if j > 1 else ''}</span>
+              </header>
+              <div class="txt">{texte}</div>
+              {f'<div class="reco"><span class="lab">Recommandation</span>{reco}</div>' if reco else ''}
+              <div class="actions">
+                <button class="b ok"  onclick="trancher('{d['id']}','accordee')">Accorder</button>
+                <button class="b non" onclick="trancher('{d['id']}','refusee')">Refuser</button>
+                <button class="b att" onclick="trancher('{d['id']}','differee')">Différer</button>
+              </div>
+              <div class="etat" id="etat-{d['id']}"></div>
+            </article>""")
+        corps = "".join(cartes)
+
+    return HTMLResponse(f"""<!doctype html><html lang="fr"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Arbitrer — {len(lignes)} décision(s)</title>
+<style>
+*{{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}}
+body{{background:#0E0E10;color:#CFCAC0;font:400 16px/1.65 -apple-system,BlinkMacSystemFont,
+  'Segoe UI',Roboto,sans-serif;padding:18px 14px 60px}}
+h1{{font-size:1.45rem;font-weight:400;color:#F5F2EC;margin-bottom:4px}}
+.compte{{font-size:13px;color:#6E6B66;margin-bottom:22px;
+  padding-bottom:16px;border-bottom:1px solid #C8A97E33}}
+.dec{{background:#16161A;border:1px solid #FFFFFF14;border-left:3px solid #C8A97E;
+  padding:16px 16px 14px;margin-bottom:16px;border-radius:3px}}
+.dec.vieux{{border-left-color:#9B4A4A}}
+.dec.moyen{{border-left-color:#C8A97E}}
+.dec.recent{{border-left-color:#4E8C6A}}
+.dec.fait{{opacity:.35}}
+header{{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:10px}}
+.ref{{font:500 11px/1 ui-monospace,monospace;letter-spacing:.06em;color:#A98C63}}
+.age{{font:400 11px/1 ui-monospace,monospace;color:#6E6B66}}
+.txt{{font-size:14.5px;color:#CFCAC0;line-height:1.6;margin-bottom:12px}}
+.reco{{background:#C8A97E0D;border-left:2px solid #7A6647;padding:10px 12px;
+  margin-bottom:14px;font-size:13.5px;color:#9A968E;line-height:1.55}}
+.lab{{display:block;font:500 9.5px/1 ui-monospace,monospace;letter-spacing:.16em;
+  text-transform:uppercase;color:#7A6647;margin-bottom:5px}}
+.actions{{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}}
+.b{{font:500 14px/1 inherit;padding:13px 8px;border:1px solid;background:none;
+  border-radius:3px;cursor:pointer;transition:all .18s}}
+.b.ok{{color:#6FA98A;border-color:#4E8C6A66}}
+.b.ok:active{{background:#4E8C6A2A}}
+.b.non{{color:#C87A7A;border-color:#9B4A4A66}}
+.b.non:active{{background:#9B4A4A2A}}
+.b.att{{color:#9A968E;border-color:#FFFFFF1F}}
+.b.att:active{{background:#FFFFFF14}}
+.etat{{font-size:13px;margin-top:10px;min-height:0}}
+.etat.ok{{color:#6FA98A}} .etat.err{{color:#C87A7A}}
+.vide{{text-align:center;padding:60px 20px;color:#6E6B66}}
+.vide .sec{{font-size:13px;margin-top:8px;color:#4A4845}}
+@media(min-width:700px){{body{{max-width:720px;margin:0 auto;padding:36px 24px 80px}}}}
+</style></head><body>
+<h1>Décisions à trancher</h1>
+<p class="compte">{len(lignes)} en attente · la plus ancienne remonte à
+   {max((d['jours'] for d in lignes), default=0)} jours</p>
+{corps}
+<script>
+async function trancher(id, verdict) {{
+  const carte = document.getElementById(id);
+  const etat = document.getElementById('etat-' + id);
+  carte.querySelectorAll('.b').forEach(b => b.disabled = true);
+  etat.className = 'etat';
+  etat.textContent = 'Enregistrement…';
+  try {{
+    const r = await fetch('/api/arbitrer', {{
+      method: 'POST',
+      headers: {{'Content-Type': 'application/json'}},
+      body: JSON.stringify({{id: id, verdict: verdict}})
+    }});
+    const d = await r.json();
+    if (d.ok) {{
+      etat.className = 'etat ok';
+      etat.textContent = d.message;
+      carte.classList.add('fait');
+    }} else {{
+      etat.className = 'etat err';
+      etat.textContent = d.message || 'Échec';
+      carte.querySelectorAll('.b').forEach(b => b.disabled = false);
+    }}
+  }} catch (e) {{
+    etat.className = 'etat err';
+    etat.textContent = 'Erreur réseau — non enregistré';
+    carte.querySelectorAll('.b').forEach(b => b.disabled = false);
+  }}
+}}
+</script></body></html>""")
+
+
+@app.post("/api/arbitrer")
+async def api_arbitrer(requete: Request):
+    """Enregistre un arbitrage de Sam. SEULE route en ecriture du service.
+
+    Trois garde-fous, parce qu'elle modifie l'etat du dispositif :
+      · verdict limite a trois valeurs, jamais de texte libre en base
+      · on verifie que la decision EST en attente — sinon on refuse plutot
+        que d'ecraser un arbitrage deja rendu
+      · l'origine est tracee comme 'sam-web', pour distinguer d'un arbitrage
+        dicte en conversation
+    """
+    VERDICTS = {
+        "accordee": "Accordée",
+        "refusee":  "Refusée",
+        "differee": "Différée",
+    }
+    try:
+        corps = await requete.json()
+    except Exception:
+        return JSONResponse({"ok": False, "message": "requête illisible"}, status_code=400)
+
+    did = (corps.get("id") or "").strip()
+    verdict = (corps.get("verdict") or "").strip()
+
+    if not did or verdict not in VERDICTS:
+        return JSONResponse({"ok": False, "message": "verdict inconnu"}, status_code=400)
+
+    try:
+        with psycopg2.connect(DSN) as c, c.cursor() as cur:
+            # On ne tranche que ce qui attend REELLEMENT — evite d'ecraser
+            # un arbitrage deja rendu depuis un autre canal.
+            cur.execute(
+                "UPDATE decisions SET statut = %s, validation_par = 'sam', "
+                "  updated_at = now(), "
+                "  preuve = COALESCE(preuve, '{}'::jsonb) || jsonb_build_object("
+                "    'arbitre_par', 'sam-web', "
+                "    'arbitre_le', now()::text) "
+                "WHERE id = %s AND statut = 'attente_sam' RETURNING id",
+                (verdict, did),
+            )
+            touche = cur.fetchone()
+            c.commit()
+
+        if not touche:
+            return JSONResponse({"ok": False,
+                                 "message": "déjà tranchée ailleurs"}, status_code=409)
+
+        return JSONResponse({"ok": True, "message": VERDICTS[verdict] + " — enregistré"})
+
+    except Exception as e:
+        return JSONResponse({"ok": False, "message": f"erreur : {str(e)[:90]}"},
+                            status_code=500)

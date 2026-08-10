@@ -1,103 +1,150 @@
 # Page de suivi — Digital·Humans
-Générée par le Chief of Staff · ronde du 2026-08-10 (manuelle, en parallèle de la ronde cron 07:00Z dont les fichiers `rondes/*-2026-08-10.json` sont encore à 0 octet pour les 5 directions au moment de la rédaction — pas un échec constaté, juste pas encore disponible).
+Générée par le Chief of Staff · ronde du 2026-08-10 + **complément hebdomadaire du 10/08 — trois points de contrôle instruits avec preuve (10h00Z), puis clôture de comité par le CEO (~10h30Z) avec liste de priorités arbitrée par Sam**.
 
-Sources : `psql "$COMITE_DB_DSN"` (table `decisions`, 85 lignes, dont `updated_at` pour dater les mouvements réels) · dernier brief consolidé disponible : **2026-08-09 07:46Z** (`decisions_attendues`, `compteurs_decisions`) · `find .claude/skills-proposed` · `deos-state get priorites_semaine/cash_suivi/rapport_financier`.
+Sources : `psql "$COMITE_DB_DSN"` (table `decisions`) · `deos_state_history` (rapport_commercial du 07/08T07:12:22Z, rapport_legal du 08/08) · fichiers `/workspace/config/contenus/CONT-2026-0804-02/03/04` · `git log -- bin/rondes.sh` (commits b0d6084, 476ddf1) · `/repo` (commits 03fc6e6, 3bcd757, vérifiés) · `curseurs` (table) · `find .claude/skills-proposed` · `deos-state get priorites_semaine/cash_suivi`.
 
 ---
 
-## §0 — Le chiffre qui compte : la dette d'exécution monte pour la 3e mesure consécutive
+## §0 — Le chiffre qui compte : dette d'exécution, écart expliqué, comité clôturé
 
 | mesure | date/source | accordées | en_execution | **total ouvert** |
 |---|---|---|---|---|
 | 1 | 08/08 matin, brief CEO | — | — | **24** |
-| 2 | 09/08 matin, brief CEO (`compteurs_decisions.accordees_en_attente_execution`) | 28 | 2 | **30** |
-| 3 | **10/08, cette ronde (mesure directe `psql decisions GROUP BY statut`)** | 31 | 2 | **33** |
+| 2 | 09/08 matin, brief CEO | 28 | 2 | **30** |
+| 3 | 10/08 07h06 (ronde CoS) | 31 | 2 | **33** |
+| 4 | 10/08 09h30 (comptage direct de Sam) | 35 | 2 | **37** |
+| 5 | 10/08 10h00 (complément CoS, après 2 clôtures + 4 requalifications) | 29 | 6 | **35** |
+| 6 | **10/08 ~10h30 (clôture de comité par le CEO, confirmée en base)** | 29 | 5 | **34** |
 
-**Alerte, conformément à la consigne du 09/08** : le chiffre monte depuis 3 relevés d'affilée (24 → 30 → 33), ce n'est plus un constat isolé. La hausse du 09/08 au 09/08 était mécanique (7 requalifications + 4 nouveaux routages, 2 clôtures) ; la hausse du 09/08 au 10/08 (+3) vient de 4 décisions accordées le 09/08 en fin de journée (réouverture site, BUILD de validation, hygiène dispositif, routage sécurité données) sans qu'aucune des plus anciennes n'ait été close entre-temps. **Le stock ancien ne se vide pas, il s'empile sous un stock neuf.**
+### Point de contrôle (1) — écart 33 → 37 expliqué, avec les 4 identifiants
+**Cause : (a) — quatre décisions ont basculé `attente_sam → accordee` entre ma ronde (07h06) et le comptage de Sam (09h30).** Pas une erreur de requête : mon 33 et son 37 étaient tous les deux exacts, à deux instants différents.
+
+Les 4 identifiants exacts, tous `validation_par='sam'`, horodatage `updated_at = 2026-08-10 08:06:27Z` :
+- `DEC-2026-0806-08` — audit de sécurité des accès
+- `DEC-2026-0806-09` — offre intégrateur
+- `DEC-2026-0806-14` — opportunité Crédit Logement
+- `DEC-2026-0809-06` — mot de passe du comité régénéré
+
+**Leçon retenue** : horodater explicitement chaque publication du chiffre (« mesuré à HH:MM ») pour qu'un écart de ce type se lise d'emblée comme un décalage temporel et non comme une erreur.
+
+### Mouvement 37 → 35 → 34, entièrement tracé et vérifié
+- **10h00 (CoS)** : 2 clôtures avec preuve (DEC-2026-0716-01, DEC-2026-0716-05) + 4 requalifications `accordee → en_execution` (DEC-2026-0803-03/04/05, DEC-2026-0806-12). Détail au §1.
+- **~10h30 (CEO, en séance)** : 4 clôtures supplémentaires avec preuve (DEC-2026-0802-08, DEC-2026-0803-02, DEC-2026-0808-05, DEC-2026-0806-01) + 6 décisions créées, dont 3 sont des arbitrages propres du CEO correctement exclus du compteur de Sam (DEC-2026-0810-05 accordée, DEC-2026-0810-07 close, DEC-2026-0810-08 accordée) et 3 des escalades vers Sam (DEC-2026-0810-06, -09, -10, en `attente_sam`).
+
+**Vérification indépendante effectuée par le CoS** (pas une simple confirmation de façade) :
+- Les 4 clôtures du CEO portent chacune une preuve exploitable (`preuve` JSON non nul, motif + source + parfois commit).
+- Les commits cités (`03fc6e6` FIX-GIT-001, `3bcd757` FIX-TASKENUM-001) **existent réellement sur `/repo`**, message cohérent avec la preuve enregistrée — vérifié par `git log`, pas seulement pris pour argent comptant.
+- Les 3 décisions d'arbitrage propre du CEO (`-05`, `-07`, `-08`) ont `validation_par='ceo'` et un statut `accordee`/`clos` — elles ne polluent pas le compteur `attente_sam` de Sam.
+- **Compteurs confirmés en base, exacts** : `attente_sam` = **16**, `accordee` = **29**, `en_execution` = **5** → dette d'exécution = **34**.
 
 ---
 
-## §1 — Décisions (85 au total : 14 attente_sam · 31 accordée · 2 en_execution · 34 clos · 4 refusée)
+## §1 — Décisions (95 au total : 16 attente_sam · 29 accordée · 5 en_execution · 41 clos · 4 refusée)
 
-### 1.1 Les trois plus anciennes décisions accordées jamais exécutées (nommées, avec les 3 questions imposées)
+### Point de contrôle (2) — le constat du 06/08 sur le livre blanc et 3 autres décisions était erroné pour l'une, incomplet pour les trois autres
+
+J'ai ouvert et vérifié sur disque les 4 fichiers cités par le Marketing. Verdict, dossier par dossier :
+
+| décision | fichier de preuve | ce qu'il contient réellement | verdict |
+|---|---|---|---|
+| **DEC-2026-0716-05** (cadrage livre blanc) | `CONT-2026-0804-04_cadrage-livre-blanc.md` (déposé 04/08 07:07) | Sujet, plan en 5 parties, jalons, responsables — **exactement** le mandat de la décision. | Mandat rempli. **Clôturée** avec preuve citée (`--par cos`). |
+| **DEC-2026-0803-04** (page LinkedIn) | `CONT-2026-0804-02_page-linkedin.json` (déposé 04/08 07:07) | Accroche + résumé livrés (réemploi validé le 14/07). Bannière **explicitement différée**. | 2/3 de l'objet produit, mandat pas rempli en entier. Requalifiée `en_execution`. |
+| **DEC-2026-0803-03** (portraits N&B) | `CONT-2026-0804-03_concept-visuel-portraits-identite.json` (déposé 04/08 07:07) | Un **concept d'orientation** — le document dit lui-même : « rien n'est produit ni engagé sur les 10 portraits avant la mesure du traitement Sophie ». | Cadrage réel, production non commencée, en attente de validation Sam. Requalifiée `en_execution`. |
+| **DEC-2026-0803-05** (identité directeurs) | même fichier | Idem : principe défini, rien produit ni mis en ligne. | Même verdict. Requalifiée `en_execution`. |
+
+**Ce que ça change** : ces 4 dossiers sortent de la case « personne n'a travaillé ». Seul 0716-05 remplit intégralement son mandat ; les trois autres attendent une **validation d'orientation de Sam**, restée sans réponse depuis 6 jours — une dette de validation, pas une dette d'exécution du Marketing.
+
+### Point de contrôle (3) — deux clôtures instruites par le CoS, deux autres confirmées par le CEO en séance
+
+**DEC-2026-0716-01 (source de comptes cibles) → clôturée.** Preuve vérifiée indépendamment : `deos_state_history.rapport_commercial` du **2026-08-07T07:12:22Z**, 10 sociétés dont les `signal_source` correspondent exactement aux ids cités (`v_deos_signaux #48,59,62,63,65,66,67,68,69,73`), croisées avec une fiche ICP sur 78 projets réels. Réserve conservée dans la preuve : aucun compte demo-ready, aucun saisi en pipeline.
+
+**DEC-2026-0806-12 (chemin critique réouverture du site) → non clôturée, requalifiée `en_execution`.** Le sous-objet (FIX-LEGAL-001) est prouvé (commit `b0d6084`) mais l'objet réel (réouverture du site) reste bloqué — `rapport_legal` du 08/08 défavorable, 5 bloquants B1-B5. **Rang 1 des priorités de la semaine désormais** (voir §3) — le CEO l'a escaladée en `DEC-2026-0810-06` : « il n'y a personne pour exécuter ».
+
+**Confirmées par le CEO en séance, avec preuve, indépendamment vérifiées par le CoS :**
+- `DEC-2026-0802-08` + `DEC-2026-0803-02` (mission Entracte) → **closes**, arbitrage `DEC-2026-0810-07` : mission suspendue, le concept déjà en ligne (`ENTR-2026-0803-01`) est réemployé, le volet Delivery jamais engagé n'a rien coûté.
+- `DEC-2026-0808-05` (FIX-GIT-001) → **close**, commit `03fc6e6` (10/08 09:07:57Z), vérifié sur `/repo`. Elle traînait en `attente_sam` alors que le problème technique était déjà résolu en code — Sam n'avait plus rien à y trancher.
+- `DEC-2026-0806-01` (statut démo phare) → **close**, réponse du Delivery : la démo n'est pas en retard, elle est derrière une porte que la décision elle-même a posée (après le 15/08, preuve d'un BUILD de bout en bout).
+
+### 1.1 Les trois plus anciennes décisions accordées/en_execution jamais exécutées
 
 | id | quoi | âge | encore pertinente ? | bloquée par quoi | depuis quand / par qui |
 |---|---|---|---|---|---|
-| **DEC-2026-0714-01** | Interface web globale de suivi du comité (tableaux de bord par domaine) | **27j** | Oui — objet de la Mission collective DEC-2026-0804-05 et d'un arbitrage collectif annoncé pour **aujourd'hui 10/08** par le CEO le 09/08. | La consolidation DSI attendue depuis le **05/08** (5j) n'est toujours pas produite — c'est elle qui bloque, pas une absence de volonté. | Bloquée depuis le 05/08 par le **collectif/DSI** (porteur nommé : Delivery, en tant qu'agrégateur). |
-| **DEC-2026-0716-01** | Source de comptes cibles régime A (sourcing prospection) | **25j** | Oui, et **en exécution réelle** : le Commercial l'exploite depuis le 07/08 (10 comptes qualifiés cités dans le brief CEO du 09/08, sur la base des 112 signaux `v_deos_signaux`). | Rien de bloquant. Le retard est un **défaut de clôture formelle** (DH-COS-002) : personne n'a encore cité la liste des 10 comptes comme preuve pour clore. Rappel : Sam a explicitement refusé une nouvelle sollicitation le 06/08 (« j'ai déjà donné... proposez »). | Activité réelle depuis le 07/08 (3j), porteur = **Commercial**. Action : demander au Commercial de citer sa liste en preuve, pas une relance de fond. |
-| **DEC-2026-0716-05** | Cadrer le livre blanc v1 (sujet, plan, responsable, jalons) | **25j** | Oui — échéance 30/11/2026 toujours valable, mais le cadrage lui-même n'a pas commencé formellement. | Aucun cadrage écrit produit. Le CEO notait le 09/08 « toujours au stade cadrage » ; relance prévue **aujourd'hui 10/08** avec la méthode qui a marché ailleurs (instruction écrite, bornée, contrainte de réutilisation de l'existant). | Aucune activité constatée depuis la création (25j), porteur = **Marketing**. |
+| **DEC-2026-0714-01** | Interface web globale de suivi du comité | **27j** | Oui. | Consolidation DSI attendue depuis le 05/08 (5j). | Collectif/DSI, porteur nommé Delivery. |
+| **DEC-2026-0802-07** | AI Act art. 50 — mise en conformité | **8j** | Oui, urgente. | Rien de bloquant : `en_execution` réel — libellés IA livrés. Reste : intégration technique widget (Delivery). | Activité continue, Legal + Delivery. |
+| **DEC-2026-0802-05** | Mission juridique — vente hors France | **8j** | Oui — DEC-2026-0809-12 montre que Sam raisonne déjà hors France. | Le Légal reconnaît lui-même (rapport du 10/08) : « reconnu en retard, pas livré » — priorisation implicite non signalée. Livraison engagée pour le **13/08**. | 8j sans livrable, statut et date propres depuis aujourd'hui — Legal. |
 
-### 1.2 Reste du stock ouvert (30 décisions, par tranche d'âge)
+**Franchissement du seuil de 7j** : DEC-2026-0802-05 passe en « risque d'oubli », mais avec statut et date auto-déclarés le jour même — pas de silence, pas d'escalade à Sam.
 
-| tranche d'âge | nombre | ids | porteur(s) principal(aux) | commentaire |
-|---|---|---|---|---|
-| 8j (>7j, en risque d'oubli) | 8 | DEC-2026-0802-01,02,03,04,05,06,07,08 | delivery, legal, sam/collectif | Hétérogène : 0802-04 a une note explicite (« arbitrage de principe donné, exécution non prouvée »), 0802-06 est « largement livré » (41 Ko le 08/08) mais pas formellement clos, 0802-05 (juridique vente hors France) est à **0 % produit** — absent du dernier rapport Légal (08/08). 0802-07 progresse réellement (pages légales, mentions IA). |
-| 7j | 6 | DEC-2026-0803-01,02,03,04,05,06 | delivery, marketing | 0803-01 (correctif BUILD) avance concrètement (13/14 correctifs livrés le 08/08, GO de validation donné le 09/08, plafond 20 EUR). 0803-03/04/05 (portraits, LinkedIn, identité) sans trace de production confirmée. |
-| 6j | 3 | DEC-2026-0804-01,02,05 | delivery/sam, collectif | 0804-01 (fiabilisation logs) : proposition chiffrée prête depuis le 05/08, choix toujours entre les mains de Sam. |
-| 5j | 1 | DEC-2026-0805-01 | commercial/sam | Étude livrée, offre canonique pas encore mise à jour — attend la validation de la grille (DEC-2026-0809-02). |
-| 4j | 2 | DEC-2026-0806-01,12 | delivery/marketing, sam | 0806-12 vient d'obtenir une réponse partielle de Sam le 09/08 (DEC-2026-0809-01, GO vitrine conditionnel). |
-| 2j | 6 | DEC-2026-0808-01,08,09,11,12,13 | marketing, legal, sam, delivery | Trop récentes pour un jugement de retard ; à revoir demain si toujours ouvertes. |
-| 1j | 4 | DEC-2026-0809-01,03,04,05 | sam, delivery | Fraîches (arbitrées hier soir) — aucune action aujourd'hui. |
-
-### 1.3 attente_sam (14 — arbitrage de Sam attendu, hors dette d'exécution)
-Toutes datées du 09/08 (1 jour), sous le seuil de relance (3j). Liste : DEC-2026-0806-08/09 (calendrier), DEC-2026-0806-14 + DEC-2026-0809-02 (Crédit Logement), DEC-2026-0808-05 (jeton GitHub), DEC-2026-0808-10 (clé de sauvegarde), DEC-2026-0809-06/07/08/09/10/11/12/13 (mot de passe, GPU/souveraineté, concurrent Naaia, positionnement, carte bancaire x2, prix x2). Aucune action de ma part aujourd'hui sauf listing.
-
-### 1.4 Clôturées avec preuve depuis la dernière ronde CoS (07/08 → aujourd'hui)
-**22 décisions closes avec preuve**, mouvement réel confirmé par `updated_at` : DEC-2026-0806-02/03/04/05/07/10/11/13/18/19/20/21/22/23, DEC-2026-0807-01/02, DEC-2026-0802-02/03 (routage), DEC-2026-0808-02/03/04/06/07/14. C'est un vrai signal positif de purge — mais il porte sur le stock **récent** (5-8 août), pas sur le stock **ancien** (§1.1), qui lui reste immobile.
+### 1.2 — Mouvements du jour, tous tracés (`validation_par`/`preuve` en base)
+- CoS : `DEC-2026-0716-01`, `DEC-2026-0716-05` → clos · `DEC-2026-0803-03/04/05`, `DEC-2026-0806-12` → en_execution · `DEC-2026-0810-04` créée (curseur ecrire_base).
+- CEO : `DEC-2026-0802-08`, `DEC-2026-0803-02`, `DEC-2026-0808-05`, `DEC-2026-0806-01` → clos · `DEC-2026-0810-05` (accordée, arbitrage propre) · `DEC-2026-0810-06` (attente_sam, escalade réouverture) · `DEC-2026-0810-07` (close, arbitrage propre Entracte) · `DEC-2026-0810-08` (accordée, routage Marketing Crédit Logement) · `DEC-2026-0810-09` (attente_sam, escalade GO sécurité B2) · `DEC-2026-0810-10` (attente_sam, escalade cash/budget — non nommée dans le message de clôture mais présente et correctement comptée).
 
 ---
 
 ## §2 — Skills proposés par les directeurs
-**File toujours vide** : `find /workspace/.claude/skills-proposed -mindepth 1` → 0 résultat, vérifié ce jour. Aucun skill en attente de validation de Sam.
+File toujours vide : `find /workspace/.claude/skills-proposed -mindepth 1` → 0 résultat. Aucun skill en attente de validation de Sam.
 
 ---
 
-## §3 — Priorités / OKR de la semaine (source : `deos-state get priorites_semaine`, alimenté par cos le **2026-08-03** — 7 jours, jamais rafraîchi depuis)
+## §3 — Priorités / OKR de la semaine du 10 au 16/08 — arbitrées par Sam, stockées ce jour
+`priorites_semaine` mise à jour via `deos-state set priorites_semaine --par cos` (précédente version du 03/08, désormais périmée).
 
-**Constat de process à signaler** : nous sommes lundi, une semaine complète s'est écoulée depuis la dernière fixation de priorités et aucune n'a été reposée pour la semaine du 10-16/08. Rétrospective de la semaine écoulée :
+| rang | titre | responsable | appui | OKR | échéance / condition |
+|---|---|---|---|---|---|
+| 1 | **Réouverture du site** | Sam (geste VPS Hostinger) | Legal (mentions légales, livrées ce soir) · Delivery (mention IA widget Sophie, ~1h) · Marketing (contenu prêt depuis le 03/08) | O2, O3 | Accordée depuis le 09/08, non exécutée à J+1, non bloquée juridiquement — escaladée en `DEC-2026-0810-06`. |
+| 2 | **Correctif de sécurité B2** (identifiants Salesforce clients en clair) | Delivery | — | O4 | 5-15 USD API, 2-4h agents BUILD. Condition de l'ouverture des inscriptions de septembre. GO demandé à Sam (`DEC-2026-0810-09`), verdict T1-T4 dû le 11/08. |
+| 3 | **BUILD de validation jusqu'au sandbox** | Delivery | — | O2 | Plafond 20 EUR déjà accordé (09/08, `DEC-2026-0809-03`), 3,77 EUR consommés. Débloque le jalon commercial du 15/08 et la démo phare (`DEC-2026-0802-01`, après le 15/08). |
+| 4 | **Support visuel Crédit Logement** | Marketing | Commercial (3 prérequis sous 48h) | O1 | Relecture Sam le 12/08 ; présentation DSI dernière semaine d'août, avant les congés de Sam (`DEC-2026-0810-08`). |
+| 5 | **Canal de support minimal au 01/09** | Customer Success | — | O1, O4 | Stopgap à coût nul (adresse relevée manuellement + réponse-type carte bancaire validée par Sam + journal des demandes). Indépendant du câblage Email-to-Case, resté sans porteur. |
 
-| rang | titre | responsable | bilan de la semaine écoulée |
+**Points de suivi hors priorités (à ne pas traiter comme rangs)** : les 4 clôtures et les 3 arbitrages propres du CEO (§0/§1.2) — intégrés au suivi, pas promus en priorité.
+
+---
+
+## §4 — Cash (DH-COS-003 : lecture/alerte, jamais d'estimation de ma part)
+- **Solde de trésorerie : 0 EUR, déclaré par Sam le 2026-07-14 — inchangé depuis 27 jours.** Surveillance toujours inactive, signalé sans estimation de ma part.
+- **Seuil d'alerte : 50 EUR** (Sam, 03/08, DEC-2026-0716-03, clos). Solde déclaré sous ce seuil, mais périmé depuis 27 jours — l'alerte ne peut pas se déclencher utilement.
+- **Budget API** : le CEO a escaladé ce jour (`DEC-2026-0810-10`) un dépassement chiffré par le Financier — 11,90 USD/jour, 357 USD projetés/mois contre un plafond informel de 150 USD, soit 2,4x. Les cinq questions d'optimisation ont été posées avant toute demande de rallonge (économies déjà actées ~35-45 USD/mois, cf. `DEC-2026-0810-05`). Ce n'est pas une découverte du CoS ; je le relaie sourcé, en attente_sam.
+- `cash_suivi` (mon périmètre propre) non alimenté depuis le 06/08 (4 jours) — surveillance à réactiver, signalé.
+
+---
+
+## §5 — Relances émises ce jour
+| destinataire | décision(s) | objet | pourquoi |
 |---|---|---|---|
-| 1 | BUILD checkpoint 15/08 | delivery | Actif : 13/14 correctifs livrés (08/08), GO de validation donné par Sam (09/08, plafond 20 EUR). |
-| 2 | Purger le lot d'arbitrage prioritaire | chief-of-staff | Actif : 22 décisions closes avec preuve, 7 requalifiées avec porteur nommé. |
-| 3 | Jalons commerciaux 15/08 (bibliothèque 15/15, trames) | commercial | **Stagnant** : bibliothèque 8/15 et trames 3/3 inchangées depuis le 03-05/08 (source : rapport_commercial du 07/08, lui-même non renouvelé depuis 3 jours). Échéance dans **5 jours**. |
-| 4 | Conformité AI Act art. 50 | legal | Actif : B1 corrigé, mentions IA posées, pages légales prêtes (08/08). |
-| 5 | Séquence éditoriale | marketing | Débloquée : DEC-2026-0716-04 (arbitrage carte 4) est désormais **clos** ; dépend maintenant de la réouverture du site (DEC-2026-0809-01, GO vitrine partiel du 09/08). |
-
-**Pénalité appliquée au score** : rang 3 est resté sans mouvement constaté toute la semaine sur un jalon à échéance proche et sans rapport Commercial depuis 3 jours — traité comme priorité sans activité à mi-semaine (voir §6). Pas de relance émise pour autant (DH-COS-004) : j'attends le rapport Commercial du jour avant de qualifier un blocage.
+| CEO | DEC-2026-0714-01 | Interface web, 27j, bloquée par consolidation DSI absente depuis le 05/08. | Doyenne du stock. |
+| CEO | DEC-2026-0802-05 | Mission juridique vente hors France — statut et date (13/08) auto-déclarés ce jour, à vérifier au prochain cycle. | Franchit 7j, mais le Légal rend compte. |
+| Sam (via CEO, attente_sam) | DEC-2026-0810-06, -09, -10 | Réouverture du site, GO sécurité B2, visibilité cash/budget. | Escaladées par le CEO en séance, non par moi — je les relaie. |
+| Sam (info) | — | Dette : 33 → 37 → 35 → **34** (mouvement complet tracé en §0). | Le chiffre bouge dans les deux sens — signe que le suivi fonctionne. |
 
 ---
 
-## §4 — Cash (mandat DH-COS-003 : lecture/alerte uniquement, jamais d'estimation de ma part)
+## §6 — Complément hebdomadaire (demande du CEO, 10/08)
 
-- **Solde de trésorerie : 0 EUR, déclaré par Sam le 2026-07-14 — inchangé depuis 27 jours.** Surveillance toujours largement inactive, signalé conformément au mandat, sans estimation de ma part.
-- **Seuil d'alerte : 50 EUR**, confirmé par Sam le 2026-08-03 (DEC-2026-0716-03, clos avec preuve). Le solde déclaré (0 EUR) est sous ce seuil — mais la donnée elle-même est périmée depuis 27 jours, donc l'alerte ne peut pas se déclencher utilement sur une base fiable.
-- **Budget API (distinct de la trésorerie)** : rythme de consommation **11,92 USD/jour**, projection médiane à 30j = **358 USD**, contre un plafond mensuel de 150 USD — chiffré par le **Directeur Financier le 09/08** (`rapport_financier`, document `config/financier/position_2026-08-09.md`), confirmé indépendamment par `bin/couts.py` le même jour. Ce n'est pas une découverte de ma part, déjà traité par Sam le 09/08 (missions ponctuelles passées sur Sonnet par défaut) — je le rappelle car il reste sourcé et daté, pas pour redemander un arbitrage.
-- Aucune échéance de trésorerie connue déclarée.
+### tendances_7j
+1. **Dette d'exécution en dents de scie, pas en hausse continue** : 24 → 30 → 33 → 37 → 35 → **34**, purge du stock ancien amorcée pour la première fois (pas seulement le stock récent).
+2. **Le Directeur Légal, passé de « 0 rapport jamais reçu » à un rapport quotidien fiable** (FIX-LEGAL-001/002), mais son avis sur la réouverture du site reste défavorable — devenu le rang 1 des priorités de la semaine.
+3. **Des livrables Marketing du 04/08 étaient invisibles dans mon comptage** jusqu'à vérification sur disque ce jour — la vérification directe des fichiers doit précéder toute qualification « sans activité ».
+
+### plan_semaine (10-16/08, relié à O5)
+| # | intention | coût € | temps de Sam | coût de l'inaction |
+|---|---|---|---|---|
+| 1 | Horodater chaque publication du chiffre de dette. | 0 € | 0 | Sam recompte lui-même chaque jour. |
+| 2 | Router toute question inter-directions sans réponse en 48h vers une DEC- (fait pour `ecrire_base`, `DEC-2026-0810-04`). | 0 € | ~2 min | Angles morts répétés, découverts seulement quand remontés manuellement. |
+| 3 | Vérifier sur disque avant de qualifier une décision de « sans activité ». | 0 € | 0 | Constats erronés corrigés a posteriori par les directeurs. |
+| 4 | Suivre les 3 échéances fraîches (11/08 verdict T1-T4, 12/08 relecture visuel, 13/08 mission Légal hors France). | 0 € | 0 (déjà engagé) | Échéances à 24-72h qui glissent sans qu'on le note. |
+| 5 | Relance nommée (une fois) au Légal sur DEC-2026-0802-05 au prochain cycle. | 0 € | 0 | La date auto-déclarée du 13/08 peut glisser sans suivi. |
+
+### besoin_arbitrage
+`DEC-2026-0810-04` (curseur `ecrire_base` du Commercial) reste le seul point que je ne peux pas trancher moi-même — en attente_sam, non résolu par ce comité.
+
+### Point mort signalé par le Commercial (07/08) — confirmé et corrigé
+Confirmé dans `deos_state_history.rapport_commercial` (10/08 09:44Z) : question posée au CoS le 07/08, restée sans réponse ni DEC- pendant 3 jours, absente de mon propre rapport du 07/08. Corrigé : `DEC-2026-0810-04` créée. Recherche d'autres cas limitée par l'indisponibilité de `/workspace/bin/memoire` (module `chromadb` absent) — aucun autre cas confirmé dans le temps disponible ; règle structurelle proposée (action 2 du plan) plutôt qu'un balayage manuel répété.
+
+### priorites_semaine
+**Stockée ce jour** (§3), arbitrée par Sam, transmise par le CEO en clôture de comité.
 
 ---
 
-## §5 — Relances émises cette ronde (2026-08-10)
-
-| destinataire | décision(s) | objet | pourquoi maintenant |
-|---|---|---|---|
-| **CEO** (le CEO relance nommément, cf. règle du 09/08) | DEC-2026-0714-01 | Interface web globale, 27j, bloquée par l'absence de consolidation DSI attendue depuis le 05/08 — à réclamer en tête de l'arbitrage collectif prévu aujourd'hui. | Doyenne du stock, échéance d'arbitrage tombant précisément aujourd'hui. |
-| **CEO** | DEC-2026-0716-05 | Livre blanc v1, 25j, aucun cadrage écrit — relance avec la méthode qui a fonctionné ailleurs (instruction bornée). | Deuxième plus ancienne, porteur Marketing nommé. |
-| **CEO** | DEC-2026-0802-05 | Mission juridique vente hors France, 8j, **0 % produit**, absente du rapport Légal du 08/08 alors que la mission jumelle (0802-06) a été largement livrée. Un seul cycle de relance CEO fait à ce jour (06/08, DEC-2026-0806-02) — 2e demande nécessaire avant d'envisager Sam. | Franchit le seuil des 7j sans aucun livrable, porteur Legal nommé. |
-| **Sam** (info, pas d'arbitrage demandé) | — | Score d'exécution à 0/100 (plancher) pour la première fois depuis la mise en place du calcul — dette d'exécution en hausse 3 mesures d'affilée (24→30→33). Pas une nouvelle question : un signal, conformément au mandat. | Seuil de gravité franchi. |
-| — (aucune relance, à surveiller) | rang 3 priorités semaine (jalons commerciaux) | Bibliothèque et trames inchangées depuis 5-7 jours, échéance dans 5 jours, rapport Commercial vieux de 3 jours. | DH-COS-004 : j'attends le rapport du jour avant de qualifier un blocage et d'escalader. |
-
----
-
-## §6 — Score d'exécution du jour
-
-**Score = 0/100 — ROUGE (plancher)**
-
-Calcul (formule visible), base 100 :
-− 8 × 23 décisions en retard (accordée/en_execution, âge >3j) = **−184**
-− 15 × 11 décisions en risque d'oubli (âge >7j) : DEC-2026-0714-01, 0716-01, 0716-05, 0802-01/02/03/04/05/06/07/08 = **−165**
-− 5 × 0 skill proposé sans traitement >14j (file vide) = **0**
-− 10 × 1 priorité de semaine sans activité à mi-semaine (rang 3, jalons commerciaux) = **−10**
-= 100 − 184 − 165 − 0 − 10 = **−259, plancher 0**
-
-**Lecture** : ce n'est pas une dégradation soudaine de l'activité — 22 décisions ont été closes avec preuve depuis la dernière ronde CoS (07/08), un vrai signal positif. C'est un changement de **résolution de la mesure** : cette ronde applique pour la première fois la consigne du 09/08 (compter la dette d'exécution tous les jours, pas seulement au comité hebdomadaire) sur l'intégralité du stock ouvert plutôt que sur la seule vague la plus récente. Le stock ancien (0714-01, 0716-01, 0716-05, la vague du 02/08) ne bouge pas pendant que le stock récent se renouvelle. Le score à 0 est le signal exact que le dispositif est censé produire : la dette ne se résorbe pas, elle s'accumule sous un flux qui, lui, tourne bien.
+## §7 — Score d'exécution
+Score du matin : 0/100 (plancher), calcul détaillé dans `rapport_cos` du 2026-08-10T07:08:43Z. Stock ouvert : 33 → 37 → 35 → **34** après le comité complet (2 clôtures CoS + 4 clôtures CEO, 4 requalifications, 6 créations dont 3 hors compteur Sam). Recalcul formel du score à la prochaine ronde quotidienne, sur base stabilisée.
