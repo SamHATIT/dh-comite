@@ -73,6 +73,7 @@
       <a href="pilotage">Acte II · Pilotage</a>
       <a href="gouvernance">Acte III · Gouvernance</a>
       <a href="rapports">Rapports</a>
+      <a href="arbitrer" class="arb">Arbitrer<span id="nb-arb"></span></a>
     </nav>
   </div>
 
@@ -216,4 +217,9 @@ fetch('api/brief_complet').then(r=>r.json()).then(d=>{
   liste('alertes', d.alertes||[], 'al-c', 'a');
   liste('decisions', d.decisions_attendues||[], 'dec-c', 'x');
 }).catch(e=>{document.getElementById('releve').innerHTML='<p class="err">Injoignable — '+e+'</p>';});
-</script></body></html>
+</script><script>
+fetch('api/en_attente').then(r=>r.json()).then(d=>{
+  const e=document.getElementById('nb-arb'); if(e&&d.n>0) e.textContent=d.n;
+}).catch(()=>{});
+</script>
+</body></html>

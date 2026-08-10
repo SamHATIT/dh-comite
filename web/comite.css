@@ -92,3 +92,14 @@ h2{font-family:var(--serif);font-style:italic;font-weight:400;font-size:1.5rem;
   .lv-v{text-align:left}
 }
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+
+/* Lien Arbitrer — ajoute le 10/08. Signale par un point laiton quand des
+   decisions attendent, pour que Sam le voie sans avoir a cliquer. */
+.nav a.arb { position: relative; }
+.nav a.arb #nb-arb {
+  display: inline-block; margin-left: 7px; padding: 1px 6px;
+  font-size: 10px; letter-spacing: 0; border-radius: 9px;
+  background: #C8A97E; color: #0E0E10; font-weight: 600;
+  vertical-align: 1px;
+}
+.nav a.arb #nb-arb:empty { display: none; }

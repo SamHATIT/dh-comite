@@ -658,3 +658,13 @@ async def api_arbitrer(requete: Request):
     except Exception as e:
         return JSONResponse({"ok": False, "message": f"erreur : {str(e)[:90]}"},
                             status_code=500)
+
+
+@app.get("/api/en_attente")
+def api_en_attente():
+    """Nombre de decisions qui attendent Sam. Alimente le compteur du menu."""
+    try:
+        r = q(DSN, "SELECT count(*) AS n FROM decisions WHERE statut = 'attente_sam'")
+        return JSONResponse({"n": r[0]["n"] if r else 0})
+    except Exception:
+        return JSONResponse({"n": 0})
