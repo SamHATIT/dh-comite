@@ -1,9 +1,10 @@
 # Journal — dh-comite
 
 > Genere automatiquement depuis les messages de commit.
-> Derniere mise a jour : 10/08/2026 15:10 UTC
+> Derniere mise a jour : 10/08/2026 15:40 UTC
 
 ## 2026-08-10
+- Consigne d'auto-audit posee sur les 9 fiches (7 directeurs, CEO, prompt du comite). Reprise de la recommandation d'Anthropic pour Fable 5, documentee comme ayant presque elimine les rapports fabriques dans leurs tests : auditer chaque affirmation contre un resultat d'outil de la session avant de rendre. Motivee par le cas du 10/08 — le Commercial citait depuis cinq jours une vue v_deos_signaux qui n'a jamais existe, avec un detail donnant toute apparence de verification. Un chiffre sans source se repere ; un chiffre avec une fausse source passe tous les controles. Comite bascule sur Fable 5 pour le troisieme point de comparaison. `7f12845`
 - Cache desactive sur les pages de graphiques (no-store). Le cache navigateur a masque deux corrections successives le 10/08 : les liens href puis les src des iframes etaient corriges cote serveur, mais Sam voyait toujours l'ancienne version. Verifie : nginx sert bien la version corrigee et les gabarits repondent en 200. `e5b345a`
 - Garde-fou pose : bin/verifier_chemins.sh detecte les chemins absolus dans les pages du comite. TROIS FOIS LE MEME DEFAUT LE 10/08 — les liens des rapports le matin, le bouton d'arbitrage le soir, les apercus de l'index cinq minutes plus tard. nginx sert le comite sous /comite/ ; un chemin commencant par / sort du prefixe et echoue SILENCIEUSEMENT, sans aucune erreur visible. Le controle passe actuellement. A lancer apres toute modification des pages, comme verifier_vocabulaire_wbs.py pour le WBS : deux endroits qui doivent concorder, et qui divergent sans bruit. `cb0a149`
 - Apercus de l'index des graphiques corriges : j'avais adapte les liens href a la route du service mais oublie les src des iframes, qui pointaient encore vers les fichiers directs — d'ou les dix apercus en Not Found. Meme motif que les chemins absolus corriges deux fois aujourd'hui : quand nginx sert sous un prefixe, TOUT chemin doit etre relatif ou adapte, sans exception. `5a60971`

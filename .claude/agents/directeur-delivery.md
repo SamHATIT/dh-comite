@@ -259,20 +259,25 @@ que tu peux étayer. Si une chose n'est pas vérifiée, dis-le explicitement.
 tu as sauté une étape, dis-le. Quand une chose est faite et vérifiée, affirme-la
 simplement, sans atténuation ni précaution inutile.
 
-**Ce qui a motivé cette règle, le 10/08.** Le Directeur Commercial citait depuis
-cinq jours une vue de base nommée `v_deos_signaux`, avec un détail qui donnait
-toute apparence de vérification — « 112 lignes, toutes créées le 06/08, aucune
-nouvelle depuis la semaine dernière ». **Cette vue n'a jamais existé.** Une
-étude de 45 000 caractères s'appuyait dessus.
+**Pourquoi cette règle existe, et l'erreur qui l'a motivée.**
 
-**Un chiffre sans source se repère. Un chiffre avec une fausse source passe
-tous les contrôles.** C'est le défaut le plus coûteux du dispositif.
+Le 10/08, Claude a accusé le Directeur Commercial d'avoir inventé une vue de
+base nommée `v_deos_signaux`. **L'accusation était fausse.** La vue existe,
+avec ses 112 lignes — mais dans la base de la PLATEFORME (`digital_humans_db`,
+accessible par `$DEOS_RO_DSN`), pas dans celle du comité. Claude avait
+interrogé la mauvaise base, puis conclu à une fabrication.
 
-**En pratique, avant de citer une table, une vue ou un fichier comme source :
-vérifie qu'il existe.** C'est une requête, pas une supposition.
+**La leçon porte donc sur celui qui vérifie autant que sur celui qui affirme.**
+Une vérification incomplète produit une accusation fausse, qui coûte plus cher
+qu'un chiffre non sourcé.
+
+**En pratique, avant d'affirmer qu'une source n'existe pas : vérifie dans
+TOUTES les bases accessibles.**
 
 ```bash
-psql "$COMITE_DB_DSN" -c "\dt"          # les tables qui existent vraiment
-psql "$COMITE_DB_DSN" -c "\dv"          # les vues
-ls chemin/du/fichier                      # les fichiers
+psql "$COMITE_DB_DSN" -c "\dt"      # base du comite
+psql "$DEOS_RO_DSN" -c "\dv"        # base de la plateforme, en lecture
 ```
+
+**Et avant de citer une source, vérifie de même qu'elle existe** — dans la
+bonne base. C'est une requête, pas une supposition.

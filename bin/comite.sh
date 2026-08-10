@@ -75,10 +75,18 @@ TOKEN=$(grep '^TELEGRAM_BOT_TOKEN=' /workspace/.env | cut -d= -f2)
 CHAT=$(grep '^TELEGRAM_CHAT_ID=' /workspace/.env | cut -d= -f2)
 if [ -n "${TOKEN:-}" ] && [ -n "${CHAT:-}" ]; then
   SANTE=$(/workspace/bin/deos-state get brief 2>/dev/null | jq -r '.sante.score // "?"')
-  NDEC=$(psql "$COMITE_DB_DSN" -tA -c "SELECT count(*) FROM decisions WHERE statut NOT IN ('clos','refusee');" 2>/dev/null)
+  # 10/08 : meme correctif que daily.sh, oublie ici. Le compteur unique
+  # melangeait les decisions qui attendent SAM et celles deja tranchees qui
+  # attendent les DIRECTEURS — 68 affichees alors que Sam n'en avait que 10.
+  # Ses decisions etaient noyees dans le travail des autres.
+  NDEC=$(psql "$COMITE_DB_DSN" -tA -c "SELECT count(*) FROM decisions WHERE statut='attente_sam';" 2>/dev/null)
+  NEXEC=$(psql "$COMITE_DB_DSN" -tA -c "SELECT count(*) FROM decisions WHERE statut IN ('accordee','en_execution');" 2>/dev/null)
   NALERTE=$(/workspace/bin/deos-state get brief 2>/dev/null | jq -r '[.alertes[]? | select((.gravite//"")|test("haute";"i"))] | length')
   MSG="Comite du $TS — sante $SANTE/100
-Alertes hautes : ${NALERTE:-0}   ·   Decisions en attente : ${NDEC:-0}
+Alertes hautes : ${NALERTE:-0}
+
+A TON ARBITRAGE : ${NDEC:-0}
+Accordees, cote directeurs : ${NEXEC:-0}
 Dossier complet (graphiques, tableaux) :
 https://app.digital-humans.fr/comite/dossier/$(basename "${DOC:-comite-$TS.docx}")"
   curl -s --max-time 15 "https://api.telegram.org/bot$TOKEN/sendMessage" \
