@@ -1,17 +1,22 @@
 #!/bin/bash
 # Interroge la mémoire du comité — décisions, rapports, briefs, rondes.
 #
-# Posé le 09/08/2026 sur la remarque de Sam : « ça ne t'oblige pas à alourdir
-# chaque contexte, mais tout est accessible et indexé donc efficace ».
+# CORRECTIF 10/08 : ce script tournait UNIQUEMENT depuis l'hôte. Depuis le
+# conteneur des directeurs, chromadb n'est pas installé et le chemin
+# /root/workspace/digital-humans-production/backend n'existe pas — signalé par
+# le Delivery, qui l'a vérifié plutôt que de le supposer.
 #
-#   memoire "prix du tier Pro"
-#   memoire "cloisonnement des donnees clients" 5
+# On détecte donc où l'on tourne. Depuis le conteneur, on délègue à l'hôte par
+# l'API du service web plutôt que d'installer chromadb partout.
 set -uo pipefail
 Q="${1:?usage: memoire \"votre question\" [nombre de resultats]}"
 N="${2:-4}"
-cd /root/workspace/digital-humans-production/backend
-source venv/bin/activate 2>/dev/null
-Q="$Q" N="$N" python3 - <<'PY'
+
+if [ -d /root/workspace/digital-humans-production/backend ]; then
+  # ── Depuis l'hôte : accès direct ──
+  cd /root/workspace/digital-humans-production/backend
+  source venv/bin/activate 2>/dev/null
+  Q="$Q" N="$N" python3 - <<'PY'
 import os, chromadb
 c = chromadb.PersistentClient(path="/opt/digital-humans/rag/chromadb_v2")
 col = c.get_collection("comite_collection")
@@ -20,3 +25,18 @@ for i, (d, m) in enumerate(zip(r["documents"][0], r["metadatas"][0]), 1):
     print(f"\n[{i}] {m.get('titre','?')}   ({m.get('source','?')})")
     print("   " + d.replace("\n", "\n   ")[:900])
 PY
+else
+  # ── Depuis le conteneur : par l'API du service web ──
+  curl -s -G "http://comite-web:8090/api/memoire" \
+       --data-urlencode "q=$Q" --data-urlencode "n=$N" 2>/dev/null \
+    | python3 -c "
+import json, sys
+try:
+    d = json.load(sys.stdin)
+except Exception:
+    print('  mémoire injoignable — le service web répond-il ?'); raise SystemExit
+for i, x in enumerate(d.get('resultats', []), 1):
+    print(f\"\n[{i}] {x.get('titre','?')}   ({x.get('source','?')})\")
+    print('   ' + (x.get('extrait') or '').replace(chr(10), chr(10)+'   ')[:900])
+"
+fi

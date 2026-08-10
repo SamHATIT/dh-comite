@@ -44,9 +44,14 @@ services:
     container_name: dh-comite-web
     working_dir: /workspace/web
     env_file: .env
-    command: sh -c "pip install --quiet --no-cache-dir fastapi uvicorn psycopg2-binary && uvicorn app:app --host 0.0.0.0 --port 8090"
+    command: sh -c "pip install --quiet --no-cache-dir fastapi uvicorn psycopg2-binary chromadb && uvicorn app:app --host 0.0.0.0 --port 8090"
     volumes:
       - ./:/workspace:ro
+      # 10/08 : index de la memoire du comite, en LECTURE SEULE — le service
+      # ne fait qu interroger — mais chromadb ecrit son journal meme en lecture,
+      # donc pas de :ro. Signale par le Delivery : bin/memoire ne
+      # fonctionnait que depuis l'hote.
+      - /opt/digital-humans/rag/chromadb_v2:/opt/digital-humans/rag/chromadb_v2
     ports:
       - "127.0.0.1:8090:8090"
     networks: [comite_net]

@@ -668,3 +668,29 @@ def api_en_attente():
         return JSONResponse({"n": r[0]["n"] if r else 0})
     except Exception:
         return JSONResponse({"n": 0})
+
+
+@app.get("/api/memoire")
+def api_memoire(q: str = "", n: int = 4):
+    """Interroge la memoire du comite. Sert bin/memoire depuis le conteneur.
+
+    Ajoute le 10/08 : le script bin/memoire ne fonctionnait que depuis l'hote
+    (chromadb absent du conteneur des directeurs, chemin du depot inexistant).
+    Signale par le Delivery, qui avait teste plutot que suppose. Plutot que
+    d'installer chromadb dans chaque conteneur, on expose une route.
+    """
+    if not q.strip():
+        return JSONResponse({"resultats": [], "erreur": "question vide"})
+    try:
+        import chromadb
+        c = chromadb.PersistentClient(path="/opt/digital-humans/rag/chromadb_v2")
+        col = c.get_collection("comite_collection")
+        r = col.query(query_texts=[q], n_results=max(1, min(int(n), 12)))
+        return JSONResponse({"resultats": [
+            {"titre": m.get("titre", "?"),
+             "source": m.get("source", "?"),
+             "extrait": d[:1200]}
+            for d, m in zip(r["documents"][0], r["metadatas"][0])
+        ]})
+    except Exception as e:
+        return JSONResponse({"resultats": [], "erreur": str(e)[:150]})
