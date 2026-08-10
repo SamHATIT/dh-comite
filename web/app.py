@@ -579,7 +579,10 @@ async function trancher(id, verdict) {{
   etat.className = 'etat';
   etat.textContent = 'Enregistrement…';
   try {{
-    const r = await fetch('/api/arbitrer', {{
+    // Chemin RELATIF : nginx sert le comite sous /comite/. Une adresse
+    // commencant par / sortirait du comite et n'atteindrait jamais le
+    // service — meme defaut que les liens de rapports, corrige le 10/08.
+    const r = await fetch('api/arbitrer', {{
       method: 'POST',
       headers: {{'Content-Type': 'application/json'}},
       body: JSON.stringify({{id: id, verdict: verdict}})

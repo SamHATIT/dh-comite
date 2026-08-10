@@ -1,9 +1,10 @@
 # Journal — dh-comite
 
 > Genere automatiquement depuis les messages de commit.
-> Derniere mise a jour : 10/08/2026 09:29 UTC
+> Derniere mise a jour : 10/08/2026 14:00 UTC
 
 ## 2026-08-10
+- DEC-2026-0714-01 — partie interaction livree : Sam peut enfin arbitrer depuis le web. Les 14 routes precedentes etaient TOUTES en lecture ; il dictait donc ses arbitrages en conversation. D'ou le cercle vicieux releve ce jour par le comite : la decision qui rendrait les arbitrages faciles attendait depuis 27 jours, parce que l'arbitrer demandait le mecanisme qu'elle devait creer. AJOUTE : page /arbitrer concue POUR LE TELEPHONE d'abord — une decision par carte, trois boutons, code couleur par anciennete, aucune fioriture. Route POST /api/arbitrer avec trois garde-fous : verdict limite a trois valeurs, refus si la decision n'est plus en attente (pas d'ecrasement d'un arbitrage rendu ailleurs), et tracabilite via validation_par et preuve. CORRIGE AUSSI : la balise viewport manquait sur les 3 pages existantes — le navigateur mobile affichait en largeur bureau puis reduisait, d'ou l'illisibilite signalee par Sam. Verifie : page 200, garde-fous testes, authentification active sur la route d'ecriture. `e9d938b`
 - Comite du 10/08 casse par mon propre commentaire : en documentant la bascule sur Opus, j'avais insere des lignes # AU MILIEU d'une commande continuee par backslash. Bash termine la commande au premier commentaire, d'ou --model: command not found et un comite vide. Commentaires deplaces AVANT la commande. Verification passee sur tous les scripts bin/. `ed9e466`
 
 ## 2026-08-09
