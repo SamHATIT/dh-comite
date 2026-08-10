@@ -43,7 +43,6 @@ PROMPT=$(mktemp)
   echo "INSTRUCTION : préside le comité hebdo du $TS — déroule les quatre temps, écris le CR dans /workspace/briefs/comite-$TS.md et restitue-le."
 } > "$PROMPT"
 
-cat "$PROMPT" | claude -p \
   # ESSAI DU 10/08 (arbitrage Sam 09/08) : le comite bascule sur OPUS 5 pour
   # une semaine, afin de comparer a conditions egales avec les comites Fable
   # precedents — memes outils, meme prompt, donnees reelles.
@@ -60,8 +59,9 @@ cat "$PROMPT" | claude -p \
   #
   # A REVOIR APRES LE COMITE DU 10/08. Si Opus tient, on garde et on gagne la
   # retention zero. Sinon, revenir a claude-fable-5 (sauvegarde : comite.sh.pre-opus).
+cat "$PROMPT" | claude -p \
   --model claude-opus-5 \
-  --allowedTools "Task,Bash,Read,Grep,Glob,Write" \
+--allowedTools "Task,Bash,Read,Grep,Glob,Write" \
   --output-format json > "briefs/comite-$TS.meta.json" 2> "briefs/comite-$TS.err"
 RC=$?
 rm -f "$CTX" "$PROMPT"
