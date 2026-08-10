@@ -114,3 +114,28 @@ et **regarder les pages**. Un document qu'on n'a pas vu n'est pas fini.
 soffice --headless --convert-to pdf doc.docx
 pdftoppm -jpeg -r 85 doc.pdf page
 ```
+
+---
+
+## Ne pas encombrer la file d'arbitrage de Sam
+
+*Règle posée le 10/08, après que Claude eut créé huit décisions « en attente »
+en un après-midi — pour des choses que Sam venait lui-même de trancher.*
+
+**Une décision `attente_sam` est une QUESTION POSÉE À SAM.** Pas un compte
+rendu, pas une note, pas un arbitrage qu'il vient de rendre en conversation.
+
+**Le test avant de créer une décision en attente** : *y a-t-il quelque chose
+que Sam doit décider et qu'il n'a pas déjà décidé ?*
+
+| Ce qu'il a dit | Ce qu'on enregistre |
+| --- | --- |
+| « tout est dans Salesforce » | **accordée** — c'est un arbitrage rendu |
+| « on pourrait faire X ? » | **attente_sam** si la question reste ouverte |
+| un constat technique | **accordée** ou une note, jamais en attente |
+| une rectification d'erreur | **close** — il n'y a rien à trancher |
+
+**Pourquoi ça compte.** Sam a liquidé 26 décisions en une soirée depuis son
+téléphone, puis en a retrouvé onze le lendemain — dont huit créées par Claude
+pour des choses déjà décidées. Une file d'arbitrage qui se remplit de faux
+positifs cesse d'être lue.
