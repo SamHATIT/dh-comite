@@ -694,3 +694,45 @@ def api_memoire(q: str = "", n: int = 4):
         ]})
     except Exception as e:
         return JSONResponse({"resultats": [], "erreur": str(e)[:150]})
+
+
+# ═══════════════════════════════════════════════════════════════════════════
+# GABARITS DE GRAPHIQUES — livres le 10/08 par Claude Design
+# ═══════════════════════════════════════════════════════════════════════════
+# CE NE SONT PAS DES MAQUETTES A RECREER. Ce sont des composants autonomes a
+# servir tels quels : HTML, CSS et JavaScript dans le meme fichier, aucune
+# bibliotheque externe, aucune etape de compilation.
+#
+# Trois usages, du plus simple au plus integre :
+#   1. servir le fichier tel quel — c'est ce que fait cette route
+#   2. injecter les donnees cote serveur en remplacant le bloc DATA
+#   3. extraire le fragment .card et son script pour l'inserer ailleurs
+#
+# PIEGES DE CONTENU signales dans le README, a respecter lors du branchement :
+# `null` n'est PAS `0` — une valeur absente ne se dessine pas comme un zero,
+# et un trou dans une serie ne s'interpole pas.
+
+@app.get("/graphiques")
+def page_graphiques():
+    """Index des gabarits — pour choisir d'un coup d'oeil."""
+    from fastapi.responses import FileResponse
+    chemin = f"{BASE}/web/handoff_graphiques/graphiques/index.html"
+    if not os.path.exists(chemin):
+        return HTMLResponse(
+            "<p style='font:16px sans-serif;padding:40px'>Gabarits non deposes. "
+            "Attendu dans <code>web/handoff_graphiques/graphiques/</code>.</p>",
+            status_code=404)
+    return FileResponse(chemin, media_type="text/html")
+
+
+@app.get("/graphique/{nom}")
+def page_graphique(nom: str):
+    """Sert un gabarit. Le nom est filtre — pas de traversee de repertoire."""
+    from fastapi.responses import FileResponse
+    import re
+    if not re.fullmatch(r"[0-9a-z-]+", nom or ""):
+        return HTMLResponse("nom invalide", status_code=400)
+    chemin = f"{BASE}/web/handoff_graphiques/graphiques/{nom}.html"
+    if not os.path.exists(chemin):
+        return HTMLResponse("gabarit introuvable", status_code=404)
+    return FileResponse(chemin, media_type="text/html")

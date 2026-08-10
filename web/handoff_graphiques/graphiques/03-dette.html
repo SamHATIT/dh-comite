@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>03 · Une dette qui vieillit</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=Inter:wght@300;400;500&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+--bg:#0E0E10;--bg-2:#16161A;--fg:#CFCAC0;--fg-strong:#F5F2EC;--fg-mute:#6E6B66;
+--brass:#C8A97E;--brass-dk:#7A6647;--good:#4E8C6A;--bad:#9B4A4A;--rule:#FFFFFF14;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);}
+body{color:var(--fg);font-family:Inter,system-ui,sans-serif;font-weight:300;padding:28px;-webkit-font-smoothing:antialiased}
+a{color:var(--brass);text-decoration:none}
+a:hover{color:var(--fg-strong)}
+.card{background:var(--bg-2);border:1px solid var(--rule);border-radius:4px;padding:26px 28px 24px;max-width:920px;margin:0 auto}
+.head{display:flex;align-items:flex-start;gap:20px;flex-wrap:wrap;padding-bottom:20px;border-bottom:1px solid var(--rule)}
+.kicker{font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:400;letter-spacing:.22em;color:var(--brass-dk)}
+h1{font-family:'Cormorant Garamond',serif;font-weight:400;font-size:29px;line-height:1.15;color:var(--fg-strong);margin:9px 0 0}
+.sub{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:17px;color:var(--fg);margin-top:5px;opacity:.9}
+.usage{margin-left:auto;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.16em;color:var(--brass);border:1px solid var(--rule);border-radius:2px;padding:5px 9px;white-space:nowrap}
+.plot{padding:26px 0 4px}
+.note{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:300;line-height:1.95;color:var(--fg-mute);padding-top:18px;border-top:1px solid var(--rule);max-width:74ch}
+.legend{display:flex;gap:20px;flex-wrap:wrap;margin-top:16px}
+.lg{display:flex;align-items:center;gap:7px;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.1em;color:var(--fg-mute)}
+.sw{width:10px;height:10px;border-radius:1px;display:inline-block}
+text{font-family:'JetBrains Mono',monospace}
+</style></head>
+<body>
+<div class="card">
+<div class="head"><div><div class="kicker">GABARIT 03 · ANCIENNETÉ</div><h1>Une dette qui vieillit</h1><div class="sub">Trié par âge, seuil à sept jours, et l’anomalie qui décroche du lot.</div></div><div class="usage">BUREAU ET MOBILE</div></div>
+<div class="plot" id="plot"></div><div class="legend" id="lg"></div>
+<div class="note">Le tri par ancienneté fait apparaître l’anomalie sans qu’on ait à la désigner. Le seuil de sept jours est une règle de gouvernance, pas une moyenne : il reste fixe quelles que soient les données. Remplacer <span style="color:var(--brass)">DATA.lignes</span>. Sous 640 px, le gabarit se recompose en lignes empilées — libellé sur sa ligne, barre pleine largeur dessous — plutôt que de réduire un SVG large.</div>
+</div>
+<script>
+const DATA = {
+  seuil: 7, seuilNom: "RISQUE D\u2019OUBLI",
+  tranches: [ {min:21, couleur:"#9B4A4A", nom:"PLUS DE 21 J"}, {min:7, couleur:"#C8A97E", nom:"7 \u00C0 21 J"}, {min:0, couleur:"#7A6647", nom:"MOINS DE 7 J"} ],
+  lignes: [
+    { nom:"Date d\u2019application du correctif NoneType", age:27 },
+    { nom:"Pr\u00E9alables du sourcing de comptes cibles",  age:21 },
+    { nom:"P\u00E9rim\u00E8tre de fiabilisation des logs",       age:14 },
+    { nom:"Mise \u00E0 jour de l\u2019offre canonique",          age:9  },
+    { nom:"Cl\u00F4ture de la vue de lecture des leads",   age:4  },
+    { nom:"Arbitrage du calendrier \u00E9ditorial",         age:2  }
+  ]
+};
+</script>
+<script>
+(function(){
+var P=DATA,W=880,rowH=44,padL=310,padR=64,padT=34,padB=28;
+var rows=P.lignes.slice().sort(function(a,b){return b.age-a.age;});
+var max=Math.max.apply(null,rows.map(function(r){return r.age;}))*1.12;
+var pw=W-padL-padR, H=padT+rows.length*rowH+padB;
+function x(v){ return padL+(v/max)*pw; }
+function col(a){ for(var i=0;i<P.tranches.length;i++){ if(a>=P.tranches[i].min) return P.tranches[i].couleur; } return '#6E6B66'; }
+if(window.matchMedia('(max-width: 640px)').matches){
+  var m=[];
+  m.push('<div style="font-family:\'JetBrains Mono\',monospace;font-size:9px;letter-spacing:.15em;color:#C8A97E;padding-bottom:14px">'+P.seuilNom+' \u00B7 AU-DEL\u00C0 DE '+P.seuil+' JOURS</div>');
+  rows.forEach(function(r){
+    var c=col(r.age), tard=r.age>=P.seuil;
+    m.push('<div style="padding:14px 0;border-bottom:1px solid #FFFFFF14">'
+      +'<div style="display:flex;align-items:baseline;gap:12px">'
+      +'<span style="font-family:Inter,sans-serif;font-size:13px;font-weight:300;color:#CFCAC0;line-height:1.55;flex:1">'+r.nom+'</span>'
+      +'<span style="font-family:\'Cormorant Garamond\',serif;font-size:22px;color:'+c+'">'+r.age+'</span>'
+      +'<span style="font-family:\'JetBrains Mono\',monospace;font-size:9px;color:#6E6B66">J</span></div>'
+      +'<div style="position:relative;height:6px;margin-top:10px;background:#FFFFFF0A">'
+      +'<div style="position:absolute;left:0;top:0;height:6px;width:'+((r.age/max)*100).toFixed(1)+'%;background:'+c+'"></div>'
+      +'<div style="position:absolute;left:'+((P.seuil/max)*100).toFixed(1)+'%;top:-3px;bottom:-3px;width:1px;background:'+(tard?'#C8A97E':'#FFFFFF24')+'"></div>'
+      +'</div></div>');
+  });
+  document.getElementById('plot').innerHTML=m.join('');
+  document.getElementById('lg').innerHTML=P.tranches.map(function(t){ return '<div class="lg"><span class="sw" style="background:'+t.couleur+'"></span>'+t.nom+'</div>'; }).join('');
+  return;
+}
+var s=[];
+s.push('<svg viewBox="0 0 '+W+' '+H+'" width="100%" style="display:block">');
+s.push('<rect x="'+padL+'" y="'+padT+'" width="'+(x(P.seuil)-padL)+'" height="'+(rows.length*rowH)+'" fill="#FFFFFF" opacity=".02"/>');
+s.push('<line x1="'+x(P.seuil)+'" y1="'+(padT-14)+'" x2="'+x(P.seuil)+'" y2="'+(padT+rows.length*rowH+6)+'" stroke="#C8A97E" stroke-width="1" stroke-dasharray="3 3"/>');
+s.push('<text x="'+(x(P.seuil)+8)+'" y="'+(padT-18)+'" font-size="9" letter-spacing="1.5" fill="#C8A97E">'+P.seuilNom+' \u00B7 '+P.seuil+' J</text>');
+rows.forEach(function(r,i){
+  var cy=padT+i*rowH+rowH/2, c=col(r.age);
+  s.push('<line x1="'+padL+'" y1="'+(cy+rowH/2)+'" x2="'+(W-padR+40)+'" y2="'+(cy+rowH/2)+'" stroke="#FFFFFF14"/>');
+  s.push('<text x="'+(padL-18)+'" y="'+(cy+4)+'" text-anchor="end" font-size="11.5" fill="#CFCAC0">'+r.nom+'</text>');
+  s.push('<rect x="'+padL+'" y="'+(cy-5)+'" width="'+(x(r.age)-padL)+'" height="10" fill="'+c+'"/>');
+  s.push('<text x="'+(x(r.age)+10)+'" y="'+(cy+4.5)+'" font-size="12" fill="#F5F2EC">'+r.age+' J</text>');
+});
+s.push('</svg>');
+document.getElementById('plot').innerHTML=s.join('');
+var lg=P.tranches.map(function(t){ return '<div class="lg"><span class="sw" style="background:'+t.couleur+'"></span>'+t.nom+'</div>'; }).join('');
+document.getElementById('lg').innerHTML=lg;
+})();
+</script>
+</body></html>

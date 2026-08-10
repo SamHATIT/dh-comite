@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>06 · Répartition d’un coût</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=Inter:wght@300;400;500&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+--bg:#0E0E10;--bg-2:#16161A;--fg:#CFCAC0;--fg-strong:#F5F2EC;--fg-mute:#6E6B66;
+--brass:#C8A97E;--brass-dk:#7A6647;--good:#4E8C6A;--bad:#9B4A4A;--rule:#FFFFFF14;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);}
+body{color:var(--fg);font-family:Inter,system-ui,sans-serif;font-weight:300;padding:28px;-webkit-font-smoothing:antialiased}
+a{color:var(--brass);text-decoration:none}
+a:hover{color:var(--fg-strong)}
+.card{background:var(--bg-2);border:1px solid var(--rule);border-radius:4px;padding:26px 28px 24px;max-width:920px;margin:0 auto}
+.head{display:flex;align-items:flex-start;gap:20px;flex-wrap:wrap;padding-bottom:20px;border-bottom:1px solid var(--rule)}
+.kicker{font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:400;letter-spacing:.22em;color:var(--brass-dk)}
+h1{font-family:'Cormorant Garamond',serif;font-weight:400;font-size:29px;line-height:1.15;color:var(--fg-strong);margin:9px 0 0}
+.sub{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:17px;color:var(--fg);margin-top:5px;opacity:.9}
+.usage{margin-left:auto;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.16em;color:var(--brass);border:1px solid var(--rule);border-radius:2px;padding:5px 9px;white-space:nowrap}
+.plot{padding:26px 0 4px}
+.note{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:300;line-height:1.95;color:var(--fg-mute);padding-top:18px;border-top:1px solid var(--rule);max-width:74ch}
+.legend{display:flex;gap:20px;flex-wrap:wrap;margin-top:16px}
+.lg{display:flex;align-items:center;gap:7px;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.1em;color:var(--fg-mute)}
+.sw{width:10px;height:10px;border-radius:1px;display:inline-block}
+text{font-family:'JetBrains Mono',monospace}
+</style></head>
+<body>
+<div class="card">
+<div class="head"><div><div class="kicker">GABARIT 06 · RÉPARTITION</div><h1>Répartition d’un coût</h1><div class="sub">Des barres, jamais un camembert — l’œil compare mal les angles.</div></div><div class="usage">BUREAU</div></div>
+<div class="plot" id="plot"></div>
+<div class="note">Tri décroissant, part en pourcentage alignée à droite, bande de composition en tête pour l’ordre de grandeur. Un seul laiton : la teinte ne code rien ici, seule la longueur porte l’information. Remplacer <span style="color:var(--brass)">DATA.postes</span>.</div>
+</div>
+<script>
+const DATA = {
+  unite: "$", periode: "PAR MOIS",
+  postes: [
+    { nom:"Brief quotidien",        valeur:112 },
+    { nom:"Analyse de rapports",    valeur:78  },
+    { nom:"G\u00E9n\u00E9ration SDS",         valeur:64  },
+    { nom:"Veille et collecte",     valeur:41  },
+    { nom:"Recherche augment\u00E9e",   valeur:27  },
+    { nom:"Divers",                 valeur:14  }
+  ]
+};
+</script>
+<script>
+(function(){
+var P=DATA,W=880,rowH=46,padL=250,padR=112,padT=64;
+var rows=P.postes.slice().sort(function(a,b){return b.valeur-a.valeur;});
+var tot=rows.reduce(function(a,r){return a+r.valeur;},0);
+var max=rows[0].valeur, pw=W-padL-padR, H=padT+rows.length*rowH+10;
+var s=[];
+s.push('<svg viewBox="0 0 '+W+' '+H+'" width="100%" style="display:block">');
+var cx=padL;
+rows.forEach(function(r,i){
+  var w=(r.valeur/tot)*pw;
+  s.push('<rect x="'+cx+'" y="18" width="'+(w-1)+'" height="14" fill="#C8A97E" opacity="'+(1-i*0.13).toFixed(2)+'"/>');
+  cx+=w;
+});
+s.push('<text x="'+(padL-18)+'" y="'+29+'" text-anchor="end" font-size="9" letter-spacing="1.5" fill="#6E6B66">COMPOSITION</text>');
+s.push('<text x="'+(padL+pw+12)+'" y="29" font-size="10" fill="#F5F2EC">'+tot+' '+P.unite+'</text>');
+rows.forEach(function(r,i){
+  var cy=padT+i*rowH+rowH/2, pct=(r.valeur/tot*100);
+  s.push('<line x1="'+padL+'" y1="'+(cy+rowH/2)+'" x2="'+(W-padR+70)+'" y2="'+(cy+rowH/2)+'" stroke="#FFFFFF14"/>');
+  s.push('<text x="'+(padL-18)+'" y="'+(cy+4)+'" text-anchor="end" font-size="11.5" fill="#CFCAC0">'+r.nom+'</text>');
+  s.push('<rect x="'+padL+'" y="'+(cy-5)+'" width="'+((r.valeur/max)*pw)+'" height="10" fill="#C8A97E"/>');
+  s.push('<text x="'+(padL+pw+12)+'" y="'+(cy+4)+'" font-size="11.5" fill="#F5F2EC">'+r.valeur+' '+P.unite+'</text>');
+  s.push('<text x="'+(W-8)+'" y="'+(cy+4)+'" text-anchor="end" font-size="10.5" fill="#6E6B66">'+pct.toFixed(0)+' %</text>');
+});
+s.push('</svg>');
+document.getElementById('plot').innerHTML=s.join('');
+})();
+</script>
+</body></html>

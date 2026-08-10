@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>09 · Un état binaire</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=Inter:wght@300;400;500&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+--bg:#0E0E10;--bg-2:#16161A;--fg:#CFCAC0;--fg-strong:#F5F2EC;--fg-mute:#6E6B66;
+--brass:#C8A97E;--brass-dk:#7A6647;--good:#4E8C6A;--bad:#9B4A4A;--rule:#FFFFFF14;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);}
+body{color:var(--fg);font-family:Inter,system-ui,sans-serif;font-weight:300;padding:28px;-webkit-font-smoothing:antialiased}
+a{color:var(--brass);text-decoration:none}
+a:hover{color:var(--fg-strong)}
+.card{background:var(--bg-2);border:1px solid var(--rule);border-radius:4px;padding:26px 28px 24px;max-width:920px;margin:0 auto}
+.head{display:flex;align-items:flex-start;gap:20px;flex-wrap:wrap;padding-bottom:20px;border-bottom:1px solid var(--rule)}
+.kicker{font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:400;letter-spacing:.22em;color:var(--brass-dk)}
+h1{font-family:'Cormorant Garamond',serif;font-weight:400;font-size:29px;line-height:1.15;color:var(--fg-strong);margin:9px 0 0}
+.sub{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:17px;color:var(--fg);margin-top:5px;opacity:.9}
+.usage{margin-left:auto;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.16em;color:var(--brass);border:1px solid var(--rule);border-radius:2px;padding:5px 9px;white-space:nowrap}
+.plot{padding:26px 0 4px}
+.note{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:300;line-height:1.95;color:var(--fg-mute);padding-top:18px;border-top:1px solid var(--rule);max-width:74ch}
+.legend{display:flex;gap:20px;flex-wrap:wrap;margin-top:16px}
+.lg{display:flex;align-items:center;gap:7px;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.1em;color:var(--fg-mute)}
+.sw{width:10px;height:10px;border-radius:1px;display:inline-block}
+text{font-family:'JetBrains Mono',monospace}
+
+.row{display:flex;align-items:baseline;gap:14px;padding:14px 0;border-bottom:1px solid var(--rule)}
+.gl{font-family:'JetBrains Mono',monospace;font-size:12px;width:16px;flex:none}
+.rt{font-family:Inter,sans-serif;font-size:13.5px;font-weight:300;color:var(--fg);line-height:1.6;flex:1}
+.rs{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.14em}
+.tot{display:flex;gap:22px;flex-wrap:wrap;padding-bottom:16px}
+.tot div{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.14em;color:var(--fg-mute)}
+.tot b{font-family:'Cormorant Garamond',serif;font-weight:400;font-size:20px;margin-right:6px}
+</style></head>
+<body>
+<div class="card">
+<div class="head"><div><div class="kicker">GABARIT 09 · ÉTAT</div><h1>Un état binaire</h1><div class="sub">Ce qui est démontrable, ce qui ne l’est pas, ce qui est bloqué.</div></div><div class="usage">BUREAU ET MOBILE</div></div>
+<div class="plot" id="plot"></div>
+<div class="note">Trois états seulement, et bloqué n’est pas non fait : l’un attend un geste, l’autre attend une levée. Le pictogramme et la couleur disent la même chose deux fois, pour que la vue tienne en noir et blanc. Compteur en tête. Remplacer <span style="color:var(--brass)">DATA.lignes</span>.</div>
+</div>
+<script>
+const DATA = {
+  titre: "D\u00C9MONTRABLE FIN AO\u00DBT",
+  etats: {
+    fait:   { glyphe:"\u2713", nom:"D\u00C9MONTRABLE",  couleur:"#4E8C6A" },
+    encours:{ glyphe:"\u25AB", nom:"EN COURS",      couleur:"#C8A97E" },
+    bloque: { glyphe:"\u2715", nom:"BLOQU\u00C9",       couleur:"#9B4A4A" }
+  },
+  lignes: [
+    { nom:"Cha\u00EEne SDS compl\u00E8te sur un besoin r\u00E9el",       etat:"fait" },
+    { nom:"Rapport de comit\u00E9 quotidien, six directions",   etat:"fait" },
+    { nom:"Grille d\u2019autonomie et journal des refus",        etat:"fait" },
+    { nom:"Passage BUILD vers SANDBOX",                     etat:"bloque" },
+    { nom:"D\u00E9mo Agentforce",                                etat:"bloque" },
+    { nom:"Biblioth\u00E8que de cas d\u2019usage, quinze entr\u00E9es",    etat:"encours" },
+    { nom:"Trames de proposition et de d\u00E9mo",               etat:"encours" },
+    { nom:"Reprise de donn\u00E9es sur org client",               etat:"bloque" }
+  ]
+};
+</script>
+<script>
+(function(){
+var P=DATA,cnt={};
+Object.keys(P.etats).forEach(function(k){ cnt[k]=0; });
+P.lignes.forEach(function(l){ cnt[l.etat]++; });
+var h=[];
+h.push('<div class="tot">');
+Object.keys(P.etats).forEach(function(k){
+  var e=P.etats[k];
+  h.push('<div><b style="color:'+e.couleur+'">'+cnt[k]+'</b>'+e.nom+'</div>');
+});
+h.push('</div>');
+P.lignes.forEach(function(l){
+  var e=P.etats[l.etat];
+  h.push('<div class="row"><span class="gl" style="color:'+e.couleur+'">'+e.glyphe+'</span><span class="rt">'+l.nom+'</span><span class="rs" style="color:'+e.couleur+'">'+e.nom+'</span></div>');
+});
+document.getElementById('plot').innerHTML=h.join('');
+})();
+</script>
+</body></html>

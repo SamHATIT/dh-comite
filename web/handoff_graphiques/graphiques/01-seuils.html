@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>01 · Situer une valeur entre deux seuils</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=Inter:wght@300;400;500&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+--bg:#0E0E10;--bg-2:#16161A;--fg:#CFCAC0;--fg-strong:#F5F2EC;--fg-mute:#6E6B66;
+--brass:#C8A97E;--brass-dk:#7A6647;--good:#4E8C6A;--bad:#9B4A4A;--rule:#FFFFFF14;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);}
+body{color:var(--fg);font-family:Inter,system-ui,sans-serif;font-weight:300;padding:28px;-webkit-font-smoothing:antialiased}
+a{color:var(--brass);text-decoration:none}
+a:hover{color:var(--fg-strong)}
+.card{background:var(--bg-2);border:1px solid var(--rule);border-radius:4px;padding:26px 28px 24px;max-width:920px;margin:0 auto}
+.head{display:flex;align-items:flex-start;gap:20px;flex-wrap:wrap;padding-bottom:20px;border-bottom:1px solid var(--rule)}
+.kicker{font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:400;letter-spacing:.22em;color:var(--brass-dk)}
+h1{font-family:'Cormorant Garamond',serif;font-weight:400;font-size:29px;line-height:1.15;color:var(--fg-strong);margin:9px 0 0}
+.sub{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:17px;color:var(--fg);margin-top:5px;opacity:.9}
+.usage{margin-left:auto;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.16em;color:var(--brass);border:1px solid var(--rule);border-radius:2px;padding:5px 9px;white-space:nowrap}
+.plot{padding:26px 0 4px}
+.note{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:300;line-height:1.95;color:var(--fg-mute);padding-top:18px;border-top:1px solid var(--rule);max-width:74ch}
+.legend{display:flex;gap:20px;flex-wrap:wrap;margin-top:16px}
+.lg{display:flex;align-items:center;gap:7px;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.1em;color:var(--fg-mute)}
+.sw{width:10px;height:10px;border-radius:1px;display:inline-block}
+text{font-family:'JetBrains Mono',monospace}
+</style></head>
+<body>
+<div class="card">
+<div class="head"><div><div class="kicker">GABARIT 01 · SEUILS</div><h1>Situer une valeur entre deux seuils</h1><div class="sub">Sous le plancher on détruit de la valeur ; au-dessus de la parité on gagne.</div></div><div class="usage">BUREAU</div></div>
+<div class="plot" id="plot"></div><div class="legend"><div class="lg"><span class="sw" style="background:#9B4A4A"></span>SOUS LE PLANCHER</div><div class="lg"><span class="sw" style="background:#C8A97E"></span>ZONE DE JUGEMENT</div><div class="lg"><span class="sw" style="background:#4E8C6A"></span>AU-DELÀ DE LA PARITÉ</div></div>
+<div class="note">Le gabarit le plus utilisé. Les deux seuils sont des faits, pas des cibles : la zone médiane est une zone de jugement, pas une zone tiède. La couleur ne juge pas la barre, elle dit dans quelle zone elle tombe. Remplacer <span style="color:var(--brass)">DATA.options</span>, <span style="color:var(--brass)">DATA.plancher</span> et <span style="color:var(--brass)">DATA.parite</span>.</div>
+</div>
+<script>
+const DATA = {
+  unite: "\u20AC",
+  max: 110000,
+  plancher: 31800,
+  parite:   79400,
+  plancherNom: "PLANCHER",
+  pariteNom:   "PARIT\u00C9",
+  options: [
+    { nom: "Socle — cadrage seul",        valeur: 28000 },
+    { nom: "Standard — SDS + build",      valeur: 46500 },
+    { nom: "\u00C9tendu — + reprise",         valeur: 68000 },
+    { nom: "Int\u00E9gral — + exploitation",  valeur: 94000 }
+  ]
+};
+</script>
+<script>
+(function(){
+var P=DATA, W=880, rowH=54, padL=250, padR=86, padT=62, padB=30;
+var plotW=W-padL-padR, H=padT+P.options.length*rowH+padB;
+function x(v){ return padL+(v/P.max)*plotW; }
+function fmt(v){ return v.toLocaleString('fr-FR')+' '+P.unite; }
+var bodyTop=padT, bodyH=H-padT-padB;
+var s=[];
+s.push('<svg viewBox="0 0 '+W+' '+H+'" width="100%" style="display:block">');
+s.push('<defs><pattern id="hz" width="7" height="7" patternTransform="rotate(135)" patternUnits="userSpaceOnUse"><line x1="0" y1="0" x2="0" y2="7" stroke="#4E8C6A" stroke-width="1" opacity=".5"/></pattern></defs>');
+s.push('<rect x="'+padL+'" y="'+bodyTop+'" width="'+(x(P.plancher)-padL)+'" height="'+bodyH+'" fill="#9B4A4A" opacity=".13"/>');
+s.push('<rect x="'+x(P.plancher)+'" y="'+bodyTop+'" width="'+(x(P.parite)-x(P.plancher))+'" height="'+bodyH+'" fill="#C8A97E" opacity=".05"/>');
+s.push('<rect x="'+x(P.parite)+'" y="'+bodyTop+'" width="'+(x(P.max)-x(P.parite))+'" height="'+bodyH+'" fill="url(#hz)" opacity=".55"/>');
+var mid=[[padL,x(P.plancher),'VALEUR D\u00C9TRUITE','#9B4A4A'],[x(P.plancher),x(P.parite),'ZONE DE JUGEMENT','#7A6647'],[x(P.parite),x(P.max),'GAGNANT','#4E8C6A']];
+for(var m=0;m<mid.length;m++){
+  s.push('<text x="'+((mid[m][0]+mid[m][1])/2)+'" y="20" text-anchor="middle" font-size="9" letter-spacing="1.6" fill="'+mid[m][3]+'">'+mid[m][2]+'</text>');
+}
+[[P.plancher,P.plancherNom,'end',-8],[P.parite,P.pariteNom,'start',8]].forEach(function(k){
+  s.push('<line x1="'+x(k[0])+'" y1="30" x2="'+x(k[0])+'" y2="'+(H-padB+4)+'" stroke="#C8A97E" stroke-width="1"/>');
+  s.push('<text x="'+(x(k[0])+k[3])+'" y="46" text-anchor="'+k[2]+'" font-size="9.5" letter-spacing="1.4" fill="#C8A97E">'+k[1]+' '+fmt(k[0])+'</text>');
+});
+P.options.forEach(function(o,i){
+  var cy=bodyTop+i*rowH+rowH/2;
+  var col = o.valeur<P.plancher ? '#9B4A4A' : (o.valeur>=P.parite ? '#4E8C6A' : '#C8A97E');
+  s.push('<line x1="'+padL+'" y1="'+(cy+22)+'" x2="'+(W-padR+40)+'" y2="'+(cy+22)+'" stroke="#FFFFFF14"/>');
+  s.push('<text x="'+(padL-18)+'" y="'+(cy+4)+'" text-anchor="end" font-size="11.5" fill="#CFCAC0">'+o.nom+'</text>');
+  s.push('<rect x="'+padL+'" y="'+(cy-6)+'" width="'+(x(o.valeur)-padL)+'" height="12" fill="'+col+'"/>');
+  s.push('<text x="'+(x(o.valeur)+10)+'" y="'+(cy+4)+'" font-size="11.5" fill="#F5F2EC">'+fmt(o.valeur)+'</text>');
+});
+for(var t=0;t<=4;t++){
+  var v=P.max*t/4;
+  s.push('<text x="'+x(v)+'" y="'+(H-8)+'" text-anchor="middle" font-size="9" fill="#6E6B66">'+Math.round(v/1000)+'k</text>');
+}
+s.push('</svg>');
+document.getElementById('plot').innerHTML=s.join('');
+})();
+</script>
+</body></html>

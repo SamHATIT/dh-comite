@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Gabarits de graphiques — Digital·Humans</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=Inter:wght@300;400;500&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+--bg:#0E0E10;--bg-2:#16161A;--fg:#CFCAC0;--fg-strong:#F5F2EC;--fg-mute:#6E6B66;
+--brass:#C8A97E;--brass-dk:#7A6647;--good:#4E8C6A;--bad:#9B4A4A;--rule:#FFFFFF14;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);}
+body{color:var(--fg);font-family:Inter,system-ui,sans-serif;font-weight:300;padding:28px;-webkit-font-smoothing:antialiased}
+a{color:var(--brass);text-decoration:none}
+a:hover{color:var(--fg-strong)}
+.card{background:var(--bg-2);border:1px solid var(--rule);border-radius:4px;padding:26px 28px 24px;max-width:920px;margin:0 auto}
+.head{display:flex;align-items:flex-start;gap:20px;flex-wrap:wrap;padding-bottom:20px;border-bottom:1px solid var(--rule)}
+.kicker{font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:400;letter-spacing:.22em;color:var(--brass-dk)}
+h1{font-family:'Cormorant Garamond',serif;font-weight:400;font-size:29px;line-height:1.15;color:var(--fg-strong);margin:9px 0 0}
+.sub{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:17px;color:var(--fg);margin-top:5px;opacity:.9}
+.usage{margin-left:auto;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.16em;color:var(--brass);border:1px solid var(--rule);border-radius:2px;padding:5px 9px;white-space:nowrap}
+.plot{padding:26px 0 4px}
+.note{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:300;line-height:1.95;color:var(--fg-mute);padding-top:18px;border-top:1px solid var(--rule);max-width:74ch}
+.legend{display:flex;gap:20px;flex-wrap:wrap;margin-top:16px}
+.lg{display:flex;align-items:center;gap:7px;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.1em;color:var(--fg-mute)}
+.sw{width:10px;height:10px;border-radius:1px;display:inline-block}
+text{font-family:'JetBrains Mono',monospace}
+
+body{padding:40px 32px 80px}
+.wrap{max-width:1280px;margin:0 auto}
+.hero{padding-bottom:26px;border-bottom:1px solid var(--rule)}
+.hero h1{font-size:44px}
+.hero .sub{font-size:20px;max-width:60ch}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:26px;margin-top:34px}
+.gcard{display:block;background:var(--bg-2);border:1px solid var(--rule);border-radius:4px;padding:16px;text-decoration:none;transition:border-color .3s ease,transform .3s ease}
+.gcard:hover{border-color:#C8A97E5C;transform:translateY(-2px)}
+.gtop{display:flex;align-items:baseline;gap:12px}
+.gnum{font-family:'Cormorant Garamond',serif;font-size:20px;color:var(--brass-dk)}
+.gu{margin-left:auto;font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:.16em;color:var(--brass);border:1px solid var(--rule);border-radius:2px;padding:4px 7px}
+.gframe{position:relative;height:210px;margin:14px 0 16px;overflow:hidden;border:1px solid var(--rule);border-radius:2px;background:var(--bg)}
+.gframe iframe{position:absolute;top:0;left:0;width:200%;height:200%;border:0;transform:scale(.5);transform-origin:top left;pointer-events:none}
+.gh{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:21px;color:var(--fg-strong)}
+.gd{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:300;line-height:1.85;color:var(--fg-mute);margin-top:8px}
+.rules{margin-top:56px;padding-top:26px;border-top:1px solid var(--rule);display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:0;border:1px solid var(--rule);border-radius:4px}
+.rules > div{padding:22px 24px;border-right:1px solid var(--rule)}
+.rules h3{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.18em;color:var(--brass);margin:0;font-weight:400}
+.rules p{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:300;line-height:2;color:var(--fg);margin:12px 0 0}
+.pal{display:flex;flex-wrap:wrap;gap:0;margin-top:34px;border:1px solid var(--rule);border-radius:4px;overflow:hidden}
+.pal div{flex:1;min-width:120px;padding:16px;border-right:1px solid var(--rule)}
+.pal b{display:block;height:26px;border-radius:2px}
+.pal span{display:block;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.1em;color:var(--fg-mute);margin-top:10px}
+</style></head>
+<body><div class="wrap">
+<div class="hero">
+<div class="kicker">DIGITAL·HUMANS · COMITÉ · AOÛT 2026</div>
+<h1>Gabarits de graphiques</h1>
+<div class="sub">Dix composants autonomes, sans dépendance, aux couleurs du comité. Chacun se branche sur un objet <span style="font-family:'JetBrains Mono',monospace;font-size:14px;color:#C8A97E">DATA</span> en tête de fichier.</div>
+</div>
+<div class="grid">
+<a class="gcard" href="graphique/01-seuils" target="_blank"><div class="gtop"><span class="gnum">01</span><span class="gu">BUREAU</span></div><div class="gframe"><iframe src="01-seuils.html" loading="lazy" scrolling="no"></iframe></div><div class="gh">Situer une valeur entre deux seuils</div><div class="gd">Plancher, parité, et trois zones. Le gabarit le plus utilisé.</div></a>
+<a class="gcard" href="graphique/02-divergence" target="_blank"><div class="gtop"><span class="gnum">02</span><span class="gu">BUREAU</span></div><div class="gframe"><iframe src="02-divergence.html" loading="lazy" scrolling="no"></iframe></div><div class="gh">Deux courbes qui divergent</div><div class="gd">Croisement marqué, zone de gain hachurée au-delà.</div></a>
+<a class="gcard" href="graphique/03-dette" target="_blank"><div class="gtop"><span class="gnum">03</span><span class="gu">BUREAU ET MOBILE</span></div><div class="gframe"><iframe src="03-dette.html" loading="lazy" scrolling="no"></iframe></div><div class="gh">Une dette qui vieillit</div><div class="gd">Tri par ancienneté, seuil à sept jours, anomalie visible.</div></a>
+<a class="gcard" href="graphique/04-poincon" target="_blank"><div class="gtop"><span class="gnum">04</span><span class="gu">BUREAU ET MOBILE</span></div><div class="gframe"><iframe src="04-poincon.html" loading="lazy" scrolling="no"></iframe></div><div class="gh">Un poinçon de santé</div><div class="gd">Score sur cent, arc laiton, assiette du calcul.</div></a>
+<a class="gcard" href="graphique/05-progression" target="_blank"><div class="gtop"><span class="gnum">05</span><span class="gu">BUREAU ET MOBILE</span></div><div class="gframe"><iframe src="05-progression.html" loading="lazy" scrolling="no"></iframe></div><div class="gh">Une progression sur un objectif</div><div class="gd">Barre fine, cible marquée, piste hachurée à zéro.</div></a>
+<a class="gcard" href="graphique/06-repartition" target="_blank"><div class="gtop"><span class="gnum">06</span><span class="gu">BUREAU</span></div><div class="gframe"><iframe src="06-repartition.html" loading="lazy" scrolling="no"></iframe></div><div class="gh">Répartition d’un coût</div><div class="gd">Barres et bande de composition. Jamais de camembert.</div></a>
+<a class="gcard" href="graphique/07-comparaison" target="_blank"><div class="gtop"><span class="gnum">07</span><span class="gu">BUREAU UNIQUEMENT</span></div><div class="gframe"><iframe src="07-comparaison.html" loading="lazy" scrolling="no"></iframe></div><div class="gh">Comparaison de trois options</div><div class="gd">Grille de critères, fond de cellule, colonne retenue.</div></a>
+<a class="gcard" href="graphique/08-evolution" target="_blank"><div class="gtop"><span class="gnum">08</span><span class="gu">BUREAU</span></div><div class="gframe"><iframe src="08-evolution.html" loading="lazy" scrolling="no"></iframe></div><div class="gh">Évolution dans le temps</div><div class="gd">Peu de points, tous marqués, trous non interpolés.</div></a>
+<a class="gcard" href="graphique/09-binaire" target="_blank"><div class="gtop"><span class="gnum">09</span><span class="gu">BUREAU ET MOBILE</span></div><div class="gframe"><iframe src="09-binaire.html" loading="lazy" scrolling="no"></iframe></div><div class="gh">Un état binaire</div><div class="gd">Fait, en cours, bloqué — pictogramme et couleur.</div></a>
+<a class="gcard" href="graphique/10-decision" target="_blank"><div class="gtop"><span class="gnum">10</span><span class="gu">MOBILE D’ABORD</span></div><div class="gframe"><iframe src="10-decision.html" loading="lazy" scrolling="no"></iframe></div><div class="gh">Une carte de décision</div><div class="gd">Âge, recommandation, trois gestes. Zones de 48 px.</div></a>
+</div>
+
+<div class="rules">
+<div><h3>UN FICHIER, AUCUNE DÉPENDANCE</h3><p>HTML, CSS et JavaScript dans le même fichier. Pas de D3, pas de Chart.js, pas d’étape de compilation. Du SVG écrit à la main. Servi tel quel par l’application Python.</p></div>
+<div><h3>LES DONNÉES EN TÊTE</h3><p>Un objet <span style="color:#C8A97E">DATA</span> ouvre chaque fichier. On voit immédiatement quoi remplacer, et rien n’est codé en dur plus bas dans le rendu.</p></div>
+<div><h3>BUREAU POUR COMPRENDRE, MOBILE POUR DÉCIDER</h3><p>Chaque gabarit porte son usage en haut à droite. Le gabarit 07 dit qu’il est de bureau plutôt que de se réduire mal : sur téléphone, il devient une pile de fiches.</p></div>
+<div style="border-right:none"><h3>UN CHIFFRE N’EST PAS UN FEU TRICOLORE</h3><p>La couleur situe, elle ne juge pas. Le laiton porte l’accent, le vert et le rouge ne servent qu’aux seuils franchis. Une valeur absente s’affiche <span style="color:#C8A97E">n.c.</span> et garde sa place — jamais un zéro.</p></div>
+</div>
+
+<div class="pal">
+<div><b style="background:#0E0E10;border:1px solid #FFFFFF14"></b><span>#0E0E10 · FOND</span></div>
+<div><b style="background:#16161A;border:1px solid #FFFFFF14"></b><span>#16161A · CARTE</span></div>
+<div><b style="background:#CFCAC0"></b><span>#CFCAC0 · TEXTE</span></div>
+<div><b style="background:#F5F2EC"></b><span>#F5F2EC · ACCENTUÉ</span></div>
+<div><b style="background:#6E6B66"></b><span>#6E6B66 · DISCRET</span></div>
+<div><b style="background:#C8A97E"></b><span>#C8A97E · LAITON</span></div>
+<div><b style="background:#7A6647"></b><span>#7A6647 · LAITON FONCÉ</span></div>
+<div><b style="background:#4E8C6A"></b><span>#4E8C6A · FAVORABLE</span></div>
+<div style="border-right:none"><b style="background:#9B4A4A"></b><span>#9B4A4A · ALERTE</span></div>
+</div>
+
+</div></body></html>

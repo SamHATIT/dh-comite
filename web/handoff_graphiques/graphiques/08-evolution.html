@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>08 · Évolution dans le temps</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=Inter:wght@300;400;500&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+--bg:#0E0E10;--bg-2:#16161A;--fg:#CFCAC0;--fg-strong:#F5F2EC;--fg-mute:#6E6B66;
+--brass:#C8A97E;--brass-dk:#7A6647;--good:#4E8C6A;--bad:#9B4A4A;--rule:#FFFFFF14;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);}
+body{color:var(--fg);font-family:Inter,system-ui,sans-serif;font-weight:300;padding:28px;-webkit-font-smoothing:antialiased}
+a{color:var(--brass);text-decoration:none}
+a:hover{color:var(--fg-strong)}
+.card{background:var(--bg-2);border:1px solid var(--rule);border-radius:4px;padding:26px 28px 24px;max-width:920px;margin:0 auto}
+.head{display:flex;align-items:flex-start;gap:20px;flex-wrap:wrap;padding-bottom:20px;border-bottom:1px solid var(--rule)}
+.kicker{font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:400;letter-spacing:.22em;color:var(--brass-dk)}
+h1{font-family:'Cormorant Garamond',serif;font-weight:400;font-size:29px;line-height:1.15;color:var(--fg-strong);margin:9px 0 0}
+.sub{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:17px;color:var(--fg);margin-top:5px;opacity:.9}
+.usage{margin-left:auto;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.16em;color:var(--brass);border:1px solid var(--rule);border-radius:2px;padding:5px 9px;white-space:nowrap}
+.plot{padding:26px 0 4px}
+.note{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:300;line-height:1.95;color:var(--fg-mute);padding-top:18px;border-top:1px solid var(--rule);max-width:74ch}
+.legend{display:flex;gap:20px;flex-wrap:wrap;margin-top:16px}
+.lg{display:flex;align-items:center;gap:7px;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.1em;color:var(--fg-mute)}
+.sw{width:10px;height:10px;border-radius:1px;display:inline-block}
+text{font-family:'JetBrains Mono',monospace}
+</style></head>
+<body>
+<div class="card">
+<div class="head"><div><div class="kicker">GABARIT 08 · ÉVOLUTION</div><h1>Évolution dans le temps</h1><div class="sub">Peu de points, tous marqués — on lit une trajectoire, pas un signal.</div></div><div class="usage">BUREAU</div></div>
+<div class="plot" id="plot"></div>
+<div class="note">Cinq à quinze points, jamais des milliers. Chaque point est marqué : à cette échelle, une donnée manquante doit se voir. Un point sans valeur interrompt le trait au lieu de l’interpoler — relier deux mesures par-dessus un trou serait une invention. Remplacer <span style="color:var(--brass)">DATA.points</span>.</div>
+</div>
+<script>
+const DATA = {
+  yNom:"SCORE DE SANT\u00C9", yMin:40, yMax:100,
+  points: [
+    {t:"26/07", v:71},{t:"27/07", v:69},{t:"28/07", v:72},{t:"29/07", v:66},
+    {t:"30/07", v:64},{t:"31/07", v:null},{t:"01/08", v:61},{t:"02/08", v:58},
+    {t:"03/08", v:60},{t:"04/08", v:63},{t:"05/08", v:65},{t:"06/08", v:68}
+  ]
+};
+</script>
+<script>
+(function(){
+var P=DATA,W=880,H=360,padL=58,padR=34,padT=26,padB=52;
+var pw=W-padL-padR, ph=H-padT-padB, n=P.points.length;
+function x(i){ return padL+(i/(n-1))*pw; }
+function y(v){ return padT+ph-((v-P.yMin)/(P.yMax-P.yMin))*ph; }
+var s=[];
+s.push('<svg viewBox="0 0 '+W+' '+H+'" width="100%" style="display:block">');
+for(var g=0;g<=3;g++){
+  var gv=P.yMin+(P.yMax-P.yMin)*g/3, gy=y(gv);
+  s.push('<line x1="'+padL+'" y1="'+gy+'" x2="'+(W-padR)+'" y2="'+gy+'" stroke="#FFFFFF14"/>');
+  s.push('<text x="'+(padL-12)+'" y="'+(gy+3.5)+'" text-anchor="end" font-size="9" fill="#6E6B66">'+Math.round(gv)+'</text>');
+}
+var seg=[];
+P.points.forEach(function(p,i){
+  if(p.v==null){ if(seg.length>1) s.push('<polyline points="'+seg.join(' ')+'" fill="none" stroke="#C8A97E" stroke-width="1.5"/>'); seg=[]; return; }
+  seg.push(x(i).toFixed(1)+','+y(p.v).toFixed(1));
+});
+if(seg.length>1) s.push('<polyline points="'+seg.join(' ')+'" fill="none" stroke="#C8A97E" stroke-width="1.5"/>');
+P.points.forEach(function(p,i){
+  if(p.v==null){
+    s.push('<line x1="'+x(i)+'" y1="'+padT+'" x2="'+x(i)+'" y2="'+(padT+ph)+'" stroke="#9B4A4A" stroke-width="1" stroke-dasharray="2 4" opacity=".5"/>');
+    s.push('<text x="'+x(i)+'" y="'+(padT-8)+'" text-anchor="middle" font-size="8.5" letter-spacing="1.2" fill="#9B4A4A">N.C.</text>');
+    return;
+  }
+  var last=(i===n-1);
+  s.push('<circle cx="'+x(i)+'" cy="'+y(p.v)+'" r="'+(last?4.5:3)+'" fill="'+(last?'#0E0E10':'#C8A97E')+'" stroke="'+(last?'#F5F2EC':'none')+'" stroke-width="1.5"/>');
+  if(last) s.push('<text x="'+(x(i))+'" y="'+(y(p.v)-14)+'" text-anchor="end" font-size="12" fill="#F5F2EC">'+p.v+'</text>');
+});
+P.points.forEach(function(p,i){
+  if(i%2) return;
+  s.push('<text x="'+x(i)+'" y="'+(H-24)+'" text-anchor="middle" font-size="9" fill="#6E6B66">'+p.t+'</text>');
+});
+s.push('<text x="'+padL+'" y="'+(H-4)+'" font-size="9" letter-spacing="1.6" fill="#6E6B66">'+P.yNom+'</text>');
+s.push('</svg>');
+document.getElementById('plot').innerHTML=s.join('');
+})();
+</script>
+</body></html>
