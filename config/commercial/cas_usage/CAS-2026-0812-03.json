@@ -1,0 +1,22 @@
+{
+  "id": "CAS-2026-0812-03",
+  "type": "fiche_cas_usage_anonymise",
+  "titre_anonymise": "Automatisation d'un pipeline commercial pour une équipe de vente",
+  "produit_salesforce": "Sales Cloud / gestion et suivi du pipeline d'opportunités",
+  "tier_illustre": "Pro (79 €/mois — 59 €/mois pendant les 30 jours suivant l'annonce de lancement, arbitrage Sam 11/08) — livrable SDS uniquement (architect_solution_design 36 233 caractères + architect_gap_analysis 30 433 caractères + architect_wbs, non vides ; PAS de BUILD, PAS de déploiement)",
+  "preuve_technique": {
+    "project_id": 75,
+    "execution_id": 117,
+    "etat_final": "COMPLETED / last_completed_phase = phase6_export (fin de pipeline SDS, aucune phase BUILD atteinte)",
+    "tokens": 351168,
+    "duree_s": "2686 (13/12/2025 13:06:35 -> 14:21:21, calculée à partir de started_at/completed_at)",
+    "cout": "non disponible — total_cost = 0 pour cette exécution du 13/12/2025, antérieure à l'activation du suivi de coût (même trou de données que CAS-2026-0805-01, pas une preuve de gratuité)"
+  },
+  "disclaimer": "Projet de test interne Digital·Humans, aucun client réel (aucun avant le lancement de septembre 2026) — à ne jamais présenter comme référence client. NOTE : cette exécution a produit plusieurs itérations du même type de livrable (38 lignes dans v_deos_sections, dont des doublons ba_use_cases) — reflet d'un test technique avec plusieurs passages, pas une anomalie du cas d'usage ; seules les versions les plus longues/les plus tardives sont citées ci-dessus.",
+  "source": "v_deos_projects#75 ; v_deos_executions#117 ; v_deos_sections#117, 38 lignes dont plusieurs itérations, aucune vide (psql $DEOS_RO_DSN 2026-08-12)",
+  "verification_produit": {
+    "verifie_contre": "/workspace/config/offre_dh.md#2026-08-12 — tier Pro : équipe complète + upload + mémoire, livrable = SDS, PAS de BUILD, PAS de déploiement",
+    "resultat": "Conforme : le cas s'arrête au SDS (solution design et gap analysis non vides), aucun prix client communiqué, aucune promesse de BUILD [DH-CRO-002]."
+  },
+  "cree_le": "2026-08-12"
+}

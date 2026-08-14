@@ -13,7 +13,10 @@
 #   sf-lead '{"Company":"Schneider Electric","LastName":"—","Source_DH__c":"Salon"}'
 set -uo pipefail
 JSON="${1:?usage: sf-lead '<json des champs>'}"
-ORG="${SF_ORG:-shatit.e1b77a94f3cb@agentforce.com}"
+# CORRECTIF 11/08 : ecrivait dans equipe-dev, une org que le code de la plateforme
+# ne lit nulle part (0 reference dans le depot, contre 11 pour digital-humans-dev).
+# Chaque lead cree y devenait invisible du backend, de Marcus et des tests E2E.
+ORG="${SF_ORG:-Production}"
 
 if command -v sf >/dev/null 2>&1; then
   # ── Depuis l'hôte : appel direct ──

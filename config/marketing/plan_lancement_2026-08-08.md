@@ -3,6 +3,12 @@
 > **Commande :** Sam, 08/08/2026 — plan de ciblage, campagne, messages, maquettes, indicateurs.
 > **Curseur :** « envoyer vers l'extérieur » = Conseille. Tout ce qui suit est **préparé, rien n'est envoyé**.
 > **Règle appliquée :** chaque chiffre porte sa source ; toute estimation est annoncée comme telle.
+> **Révision du 12/08 (DEC-2026-0811-07 + DEC-2026-0810-05 doctrine)** : (1) prix du Pro aligné sur
+> l'arbitrage de Sam du 11/08 — 79 €/mois, 59 €/mois pendant les 30 jours suivant l'annonce de
+> lancement — remplaçant les 49 € de la version du 08/08 dans les seize occurrences repérées ;
+> (2) l'angle 3 (§3.3) est réécrit : il s'appuyait sur les coupes d'effectifs chez Salesforce,
+> ce que la doctrine posée par Sam le 08/08 exclut (« on ne communique jamais sur des pertes ou
+> réductions d'emploi, chez qui que ce soit »). Le reste du document est inchangé sur le fond.
 
 ---
 
@@ -29,18 +35,20 @@ Ce régime porte deux plafonds de chiffre d'affaires :
 
 *(Seuils repris du livrable du Directeur Juridique, `config/legal/pages_legales_2026-08-06.md` §5.)*
 
-**Traduction en abonnements Pro.** Un Pro à 49 €/mois représente 588 € de CA annuel.
+**Traduction en abonnements Pro.** Un Pro au prix canonique de 79 €/mois représente 948 € de CA annuel (DEC-2026-0811-07, 11/08 — remplace les 49 €/588 € de la version du 08/08 ; le tarif de lancement à 59 €/mois ne vaut que pour le premier mois de chaque cohorte et n'entre pas dans ce calcul de plafond annuel).
 
 | Plafond | Équivalent en abonnements Pro tenus 12 mois | Calcul |
 | --- | --- | --- |
-| Franchise TVA (base) | **64 Pro** | 37 500 / 588 |
-| Franchise TVA (majoré) | **71 Pro** | 41 250 / 588 |
-| Régime micro | **133 Pro** | 77 700 / 588 |
+| Franchise TVA (base) | **39 Pro** | 37 500 / 948 |
+| Franchise TVA (majoré) | **43 Pro** | 41 250 / 948 |
+| Régime micro | **81 Pro** | 77 700 / 948 |
 
 **Et le Team consomme presque tout l'espace.** Les 3 Team de l'objectif O1 pèsent
 53 640 €/an (3 × 1 490 × 12). Il ne reste alors que **24 060 € sous le plafond micro,
-soit 41 abonnements Pro** — et la franchise de TVA est perdue par le seul effet du
-Team, avant même le premier Pro.
+soit 25 abonnements Pro** (24 060 / 948, prix à 79 €, contre 41 dans la version du 08/08 au
+prix de 49 €) — et la franchise de TVA est perdue par le seul effet du Team, avant même le
+premier Pro. Le plafond se referme donc plus vite qu'au 08/08 : le prix plus élevé est meilleur
+pour la marge, mais il rapproche le mur statutaire.
 *(Source O1 : `deos_state.okr_h2#2026-07-14`, validé par Sam — « 11 clients signés au 31/12
 dont 3 Team ; MRR ≥ 4 800 € ». Le nominal 3 Team + 8 Pro donne 4 862 €/mois, chiffre que
 l'on retrouve à l'identique dans la projection du Juridique — les deux documents parlent
@@ -48,8 +56,12 @@ bien du même plan.)*
 
 **Ce que ça ne veut PAS dire.** Ce n'est pas une raison de viser petit. Le calendrier
 protège 2026 : sur septembre-décembre, seuls 4 mois de CA comptent, et même un scénario
-à 50 Pro reste très en dessous de 37 500 € sur l'exercice *(≈ 16 000 €, détail en §5.4)*.
-Le mur est en **2027**, au premier exercice plein.
+à 50 Pro reste très en dessous de 37 500 € sur l'exercice — l'ordre de grandeur du 08/08
+(≈ 16 000 €) portait sur l'ancien prix de 49 € ; **le chiffre exact au nouveau prix (79 €/59 €)
+reste à recalculer par le Financier**, je ne republie pas une estimation non revérifiée au bon
+prix [DH-CMO-002], mais la conclusion qualitative (très en dessous du seuil) tient a fortiori à
+prix plus élevé sur seulement 4 mois de montée en charge. Le mur est en **2027**, au premier
+exercice plein.
 
 **Ce que ça veut dire.** Le succès de cette campagne crée mécaniquement une obligation
 statutaire. Il faut la préparer pendant la campagne, pas la découvrir en janvier. Le
@@ -119,7 +131,7 @@ le 06/08** *(`config/commercial/strategie_approche.md`)* :
 
 | Moteur | Cible | Langue | Canal |
 | --- | --- | --- | --- |
-| **Pro** (49 €) — entrant par le contenu | Praticiens Salesforce, mondial | **Anglais d'abord**, français en second | LinkedIn, communautés, blog/SEO |
+| **Pro** (79 €, 59 € au lancement) — entrant par le contenu | Praticiens Salesforce, mondial | **Anglais d'abord**, français en second | LinkedIn, communautés, blog/SEO |
 | **Team** (1 490 €) — approche personnalisée | PME/ETI françaises | **Français** | Commercial, approche directe |
 
 Et une règle non négociable : **l'anglais se transcrée, il ne se traduit pas** [DH-CMO-003].
@@ -139,10 +151,11 @@ C'est la différence de nature entre le Pro et le Team, et elle commande tout le
 
 Le Team se vend à une **entreprise** : un décideur, un budget, un cycle. Le Pro se vend à
 une **personne** : elle décide seule, elle paie en trois clics, elle n'en parle à personne
-au début. 49 €/mois est en dessous de tous les seuils d'approbation d'achat de toutes les
-entreprises du monde. C'est précisément l'intérêt du tier, et c'est ce que Sam décrit
-quand il dit qu'une personne d'une DSI essaie à 49 € ce qu'elle n'achèterait jamais par
-les achats *(`config/commercial/strategie_approche.md`, arbitrage du 06/08)*.
+au début. 79 €/mois — 59 € pendant le mois de lancement — reste en dessous de tous les seuils
+d'approbation d'achat de toutes les entreprises du monde. C'est précisément l'intérêt du tier,
+et c'est ce que Sam décrit quand il dit qu'une personne d'une DSI essaie ce qu'elle n'achèterait
+jamais par les achats *(`config/commercial/strategie_approche.md`, arbitrage du 06/08 — ce
+document cite encore 49 €, sa mise à jour au prix du 11/08 revient au Commercial, DEC-2026-0811-07)*.
 
 Donc : **on ne cible pas des comptes, on cible des métiers.** La volumétrie qui suit est
 une volumétrie de personnes.
@@ -171,7 +184,7 @@ ci-dessus proviennent des résultats de recherche, dont la fiabilité est indiqu
 
 ### 1.3 Les six segments, nommés, avec leur canal
 
-Chaque segment porte : qui, pourquoi il paie 49 €, où on l'atteint, et une estimation de
+Chaque segment porte : qui, pourquoi il paie 79 € (59 € au lancement), où on l'atteint, et une estimation de
 volume **annoncée comme estimation**.
 
 ---
@@ -193,7 +206,7 @@ volume **annoncée comme estimation**.
 **Segment B — Le consultant Salesforce indépendant / freelance**
 *Il facture son temps ; la spécification est du temps non facturable.*
 
-- **Pourquoi il paie** : 49 € contre plusieurs heures de rédaction par mission. Le calcul
+- **Pourquoi il paie** : 79 € (59 € au lancement) contre plusieurs heures de rédaction par mission. Le calcul
   est immédiat et il le fait seul. C'est le segment au **retour sur investissement le plus
   évident à démontrer**.
 - **Où on l'atteint** : LinkedIn (c'est son outil de travail), communautés, blog/SEO.
@@ -207,13 +220,14 @@ volume **annoncée comme estimation**.
 **Segment C — Le praticien dans un grand compte (le cheval de Troie)**
 *Membre d'une DSI, d'un centre d'excellence Salesforce, d'une équipe CRM.*
 
-- **Pourquoi il paie** : il veut essayer sans passer par les achats. 49 € sur sa carte,
-  ou sur une note de frais qui ne déclenche aucune validation.
+- **Pourquoi il paie** : il veut essayer sans passer par les achats. 79 € sur sa carte (59 €
+  au lancement), ou sur une note de frais qui ne déclenche aucune validation.
 - **Où on l'atteint** : LinkedIn exclusivement — c'est là qu'il lit, et c'est le seul
   canal qui franchit le pare-feu d'un grand groupe.
 - **Volume estimé** : faible en nombre, **très élevé en valeur d'option**. C'est
   littéralement la stratégie grands comptes de Sam *(strategie_approche.md : « une personne
-  de la DSI découvre, essaie à 49 €, l'outil se répand par le bas »)*.
+  de la DSI découvre, essaie [à 49 € dans le texte du Commercial, à mettre à jour à 79 €/59 €
+  de lancement, DEC-2026-0811-07], l'outil se répand par le bas »)*.
 - **Ne pas confondre** : on ne démarche pas le grand compte. On publie, il vient.
 
 ---
@@ -250,7 +264,7 @@ volume **annoncée comme estimation**.
 **Segment F — L'étudiant / la reconversion Salesforce**
 *Celui qui apprend l'écosystème pour y entrer.*
 
-- **Pourquoi il compte** : il ne paiera pas 49 € aujourd'hui. Il sera admin dans dix-huit
+- **Pourquoi il compte** : il ne paiera pas 79 € aujourd'hui. Il sera admin dans dix-huit
   mois. Il est massivement présent sur les mêmes canaux et il partage énormément.
 - **Traitement** : servi par le tier **Free**, jamais ciblé par une dépense. Coût nul,
   valeur différée.
@@ -453,28 +467,38 @@ Cinq angles. Chacun a un public, une preuve, et un rôle distinct dans l'entonno
 
 ### 3.3 Angle 3 — « Faire autant, avec moins » ⚡ le plus opportun
 
-- **Public** : segment A (admins par accident), équipes ayant perdu des effectifs.
-- **Rôle** : c'est l'angle de **l'actualité**, celui qui capte l'attention maintenant.
-- **Preuve, datée et sourcée** : Salesforce a procédé à des coupes d'effectifs touchant
-  **Tableau, Trailhead, la Communauté et les Événements**.
-  *(Source : [Salesforce Ben, exclusif](https://www.salesforceben.com/exclusive-salesforce-cuts-jobs-across-tableau-trailhead-community-and-events/),
-  remonté par notre propre veille N8N le 06/08/2026 — `v_deos_veille`, rapport n° 5.)*
-- **L'argument** : l'écosystème réduit précisément le soutien gratuit — formation,
-  communauté, accompagnement — au moment où les équipes doivent en faire plus avec moins.
-  Le studio comble ce vide, sans embaucher.
-- **Précaution de ton, et elle est impérative** : on ne se réjouit pas des licenciements
-  et on ne nomme pas Salesforce comme un adversaire. Salesforce est **la plateforme sur
-  laquelle nous vivons**. L'angle est « le soutien se raréfie, voici une réponse », jamais
-  « Salesforce vous abandonne ». Une maladresse ici coûterait notre place dans l'écosystème.
-- **Cet angle est le premier bénéfice concret de la veille réactivée le 06/08.** Il n'existait
-  pas il y a trois jours.
+**Réécrit le 12/08.** La version du 08/08 prenait appui sur les coupes d'effectifs chez
+Salesforce (Tableau, Trailhead, Communauté, Événements) comme preuve datée. **Cet ancrage est
+écarté** : Sam a posé le 08/08 une règle de ligne éditoriale qui l'exclut explicitement — « on
+ne communique jamais sur des pertes ou réductions d'emploi, chez qui que ce soit ». Le sujet de
+veille correspondant (n° 35) a d'ailleurs été rejeté sur ce fondement. Deux raisons, qui valent
+au-delà de ce cas : Salesforce est notre socle, pas notre concurrent, et nous visons son
+programme partenaire Consulting — capitaliser sur ses difficultés fermerait cette porte ; et on
+ne se vend pas sur le malheur des gens — un lecteur touché par ces coupes, ou dont un collègue
+l'a été, ne devient jamais client de qui en a fait un argument.
+
+- **Public** : segment A (admins par accident), équipes déjà en sous-effectif structurel.
+- **Rôle** : l'angle de la **pression opérationnelle actuelle**, sans événement nommé ni
+  source à charge contre qui que ce soit.
+- **L'argument, reformulé** : les équipes Salesforce internes sont sous tension — moins de
+  profils qualifiés disponibles sur le marché, délais de livraison qui se resserrent, et un
+  soutien externe (formation, documentation, accompagnement communautaire) qui ne suit pas
+  toujours le rythme. Le studio comble ce vide en capacité, sans qu'il soit besoin de nommer
+  une cause ni un acteur précis.
+- **Preuve à chercher, pas à inventer** : cet angle a besoin d'un fait structurel (pénurie de
+  profils Salesforce certifiés, délais moyens de recrutement, charge des équipes internes) —
+  pas d'un événement ponctuel chez un acteur nommé. Rien d'assez sourcé n'est disponible
+  aujourd'hui pour ce remplacement : l'angle reste donc **hypothèse déclarée** tant qu'une
+  source datée n'est pas trouvée par la veille ou par le Commercial (flux croisé — les
+  secteurs régulés qu'il qualifie aujourd'hui, finance/santé/assurance, sont précisément ceux
+  où cette pénurie de profils se fait sentir).
 
 ### 3.4 Angle 4 — « Le cahier des charges, ce soir »
 
 - **Public** : segments B (freelances) et A. **C'est l'angle qui convertit.**
 - **Rôle** : le calcul de retour sur investissement, fait par le lecteur lui-même.
 - **L'argument** : rédiger une spécification Salesforce prend des heures non facturables.
-  Le Pro produit le SDS. 49 €.
+  Le Pro produit le SDS. 79 € (59 € au lancement).
 - **Preuve, et sa limite** : 78 projets et 165 exécutions en base, dont **20 au statut
   `SDS_GENERATED` et 8 `SDS_APPROVED`**. *(Vérifié le 08/08 : `v_deos_projects`.)*
 - **⚠️ Contrainte de véracité, appliquée sans exception** : ce sont des **projets de test
@@ -520,6 +544,31 @@ pas au calque.
 > **Arbitrage demandé n° 6 — Sam :** la ligne anglaise touche au positionnement, donc je
 > ne la valide pas seul [DH-CMO-004]. **« Not a tool. A studio. Autonomous by design. »** —
 > à valider ou à corriger avant toute production EN.
+
+---
+
+### 3.7 Le prix de lancement (12/08) — cadrage, pas remise affichée
+
+Le Financier a transmis le 10/08 une question qui n'est pas la sienne à trancher : faut-il
+communiquer 59 € comme une remise affichée (79 € barré, 59 € à côté) ou comme un simple prix
+d'entrée ? C'est un choix de registre, donc le mien — je le tranche ici plutôt que de le
+remonter en arbitrage à Sam [pas de positionnement en jeu, DH-CMO-004 ne s'applique pas].
+
+**Je choisis le prix d'entrée simple, sans barré.** Trois raisons :
+
+1. **`dh-references-marche`** : le prix barré est le registre du commerce en ligne grand
+   public — pas celui d'un outil tech × luxe qui vend de la crédibilité durable. Une remise
+   affichée dit « c'est cher d'habitude » ; un prix d'entrée dit « rejoignez maintenant ».
+2. **`marketing-psychology`** : l'effet de rareté fonctionne mieux sur une fenêtre de temps
+   («*59 € pendant les 30 premiers jours*») que sur un écart de prix barré, qui s'use dès la
+   deuxième lecture et incite à attendre la prochaine promotion plutôt qu'à agir maintenant.
+3. **Cohérence avec DEC-2026-0809-13** : la décision de Sam justifiait déjà le tarif de
+   lancement comme *« une raison de s'inscrire maintenant »*, pas comme un rabais permanent
+   déguisé. Le barré suggère un rabais ; le cadrage temporel suggère une fenêtre.
+
+**Formulation retenue, à reprendre sur la page de tarification et dans tout support de
+lancement** : « *59 €/mois pendant vos 30 premiers jours, 79 €/mois ensuite.* » — jamais
+« 79 € ~~barré~~ 59 € ».
 
 ---
 
@@ -702,30 +751,41 @@ C'est le point de rupture du plan, et il ne coûte pas d'argent — il coûte de
 
 ### 5.3 Les trois scénarios
 
+**Recalculé le 12/08 au prix canonique (79 €, 59 € le premier mois de chaque cohorte,
+DEC-2026-0811-07)**, en reprenant pour le scénario nominal les valeurs déjà vérifiées par le
+Financier (`config/financier/besoins_et_projections_2026-08-09.md`,
+`config/financier/long_terme_2026-08-10.md`) et en appliquant la même formule aux scénarios
+prudent et ambitieux, qu'il n'avait pas chiffrés.
+
 | Jalon | Prudent | **Nominal** | Ambitieux |
 | --- | --- | --- | --- |
-| **J+30 (01/10)** | 5 Pro | **8 Pro** | 15 Pro |
-| **J+60 (01/11)** | 15 Pro | **25 Pro** | 45 Pro |
-| **J+90 (01/12)** | 25 Pro | **50 Pro** | 90 Pro |
-| MRR Pro à J+90 | 1 225 € | **2 450 €** | 4 410 € |
-| MRR Pro net après Stripe | 1 200 € | **2 401 €** | 4 321 € |
+| **J+30 (01/10), prix de lancement 59 €** | 5 Pro | **8 Pro** | 15 Pro |
+| **J+60 (01/11), prix plein 79 €** | 15 Pro | **25 Pro** | 45 Pro |
+| **J+90 (01/12), prix plein 79 €** | 25 Pro | **50 Pro** | 90 Pro |
+| MRR Pro brut à J+90 | 1 975 € | **3 950 €** | 7 110 € |
+| MRR Pro net après frais du prestataire de paiement (Stripe) à J+90 | 1 939 € | **3 878 €** | 6 980 € |
 
-*Net = 49 € − (1,5 % + 0,25 €) = **48,02 €** par abonnement. Source des frais :
-`config/offre_dh.md` (cartes EEE).*
+*Net (mois de lancement, 59 €) = 59 € × 0,985 − 0,25 € = **57,87 €** par abonnement. Net (prix
+plein, 79 €) = 79 € × 0,985 − 0,25 € = **77,56 €** par abonnement. Formule et barème :
+`config/offre_dh.md` (cartes EEE). Le nominal à J+90 (3 878 €) et à J+60 (1 939 €) reprend
+exactement les chiffres déjà vérifiés par le Financier le 10/08 ; je ne les recalcule pas, je
+les cite. Le nominal à J+30 (463 € net, 8 abonnés à 59 €) reprend de même son chiffrage.*
 
-**Le scénario ambitieux déclenche le plafond statutaire** (§0.1) : 90 Pro + 3 Team =
-92 460 €/an, au-dessus du plafond micro de 77 700 €. C'est un bon problème, mais il se
-prépare — et il confirme la recommandation d'instruire la société en novembre.
+**Le scénario ambitieux déclenche le plafond statutaire** (§0.1), et plus tôt qu'au 08/08 :
+90 Pro + 3 Team = **138 960 €/an** (90 × 79 × 12 + 53 640), très au-dessus du plafond micro de
+77 700 € — contre 92 460 € calculés au 08/08 avec le prix à 49 €. Le prix plus élevé améliore
+la marge mais rapproche le mur statutaire (voir §0.1) : c'est un bon problème, mais il se
+prépare, et il confirme d'autant plus la recommandation d'instruire la société en novembre.
 
 ### 5.4 Confrontation à l'objectif O1 — je propose de le réviser
 
 | | O1 actuel *(validé 14/07)* | **Proposition, scénario nominal** |
 | --- | --- | --- |
 | Clients au 31/12 | 11, dont 3 Team | **53, dont 3 Team + 50 Pro** |
-| MRR au 31/12 | ≥ 4 800 € | **6 920 €** (4 470 Team + 2 450 Pro) |
-| CA encaissé sur 2026 | — | **≈ 16 100 €** *(4 mois, montée en charge progressive)* |
-| Franchise TVA franchie en 2026 ? | — | **Non** (16 100 € ≪ 37 500 €) |
-| Franchise TVA franchie en 2027 ? | — | **Oui**, dès le premier exercice plein |
+| MRR au 31/12 (prix plein 79 €) | ≥ 4 800 € | **8 420 €** (4 470 Team + 3 950 Pro) |
+| CA encaissé sur 2026 | — | **à recalculer par le Financier au prix de 79 €/59 €** *(l'ordre de grandeur du 08/08, ≈ 16 100 €, portait sur l'ancien prix de 49 € — je ne republie pas un chiffre non revérifié [DH-CMO-002])* |
+| Franchise TVA franchie en 2026 ? | — | **Non**, très probablement — le CA sur 4 mois de montée en charge reste largement sous 37 500 € même au nouveau prix, à confirmer par le chiffrage ci-dessus |
+| Franchise TVA franchie en 2027 ? | — | **Oui**, dès le premier exercice plein, et plus tôt qu'au 08/08 (seuil micro atteint dès 81 Pro au lieu de 133, §0.1) |
 
 L'objectif O1 n'a que **8 abonnements Pro** dans son scénario nominal. La demande de Sam du
 08/08 — un matelas d'abonnements mondial — est d'un autre ordre de grandeur. **Les deux ne

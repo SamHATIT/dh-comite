@@ -1,0 +1,218 @@
+<!doctype html><html lang="fr"><head><meta charset="utf-8"><title>B · Business — La Une</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+--brass:#C8A97E; --brass-dk:#8A7448;
+--ink:#1A1A1A; --ink-0:#121213; --ink-2:#212124;
+--bone:#F4F2ED; --bone-70:#B4B1AB; --bone-45:#7C7A76;
+--rule:#FFFFFF16; --rule-2:#FFFFFF0C;
+--d-ok:#4E9E6A; --d-warn:#C8A97E; --d-down:#C0524F;
+--d-azur:#5B8FD4; --d-ambre:#D4813F; --d-violine:#8B76CE;
+--d-turquoise:#3FA8A0; --d-fuchsia:#C75B8A; --d-olive:#97A04A;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:#0C0C0D}
+body{font-family:Inter,system-ui,sans-serif;font-weight:300;color:var(--bone-70);-webkit-font-smoothing:antialiased;display:flex;justify-content:center}
+.screen{width:1440px;height:900px;flex:none;flex-shrink:0;overflow:hidden;background:var(--ink);position:relative;display:flex;flex-direction:column;padding:34px 46px 0}
+a{color:var(--brass);text-decoration:none}
+a:hover{color:var(--bone)}
+.m{font-family:'JetBrains Mono',monospace}
+.c{font-family:'Cormorant Garamond',serif}
+.lbl{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.22em;color:var(--bone-45);text-transform:uppercase}
+.src{font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:.12em;color:var(--brass-dk)}
+.src:hover{color:var(--brass)}
+
+.mast{display:flex;align-items:flex-end;gap:24px;flex:none;padding-bottom:16px;border-bottom:1px solid var(--brass)}
+.mast h1{font-family:'Cormorant Garamond',serif;font-weight:400;font-size:40px;color:var(--bone);margin:8px 0 0;line-height:1}
+.mast .rt{margin-left:auto;text-align:right}
+.verdict{flex:none;display:flex;align-items:flex-end;gap:40px;padding:30px 0 26px;border-bottom:1px solid var(--rule)}
+.verdict .num{font-family:'JetBrains Mono',monospace;font-weight:300;font-size:118px;line-height:.92;letter-spacing:-.04em}
+.verdict .say{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:38px;color:var(--bone);line-height:1.1}
+.verdict .det{font-family:Inter,sans-serif;font-size:14px;font-weight:300;line-height:1.75;color:var(--bone-70);margin-top:12px;max-width:52ch}
+.cols{flex:1;display:flex;gap:0;min-height:0;padding-top:24px}
+.col{flex:1;padding:0 30px;min-width:0;display:flex;flex-direction:column;border-right:1px solid var(--rule)}
+.col:first-child{padding-left:0}
+.col:last-child{padding-right:0;border-right:none}
+.ch{display:flex;align-items:baseline;gap:10px;flex:none;padding-bottom:12px}
+.ch .r{margin-left:auto}
+.ln{display:flex;align-items:baseline;gap:10px;padding:7px 0;border-top:1px solid var(--rule-2)}
+.ln .k{font-family:'JetBrains Mono',monospace;font-size:10.5px;color:var(--bone-70);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ln .v{margin-left:auto;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--bone);white-space:nowrap}
+.fig{font-family:'JetBrains Mono',monospace;font-weight:300;letter-spacing:-.02em;color:var(--bone);line-height:1}
+.dot{width:7px;height:7px;flex:none;display:inline-block}
+.bar{height:6px;background:#FFFFFF0A;position:relative;overflow:hidden}
+.bar i{position:absolute;left:0;top:0;bottom:0;display:block}
+.strip{flex:none;display:flex;align-items:center;gap:0;height:62px;margin-top:0;border-top:1px solid var(--brass)}
+.strip .s{flex:1;padding:0 22px;border-right:1px solid var(--rule);display:flex;align-items:baseline;gap:9px}
+.strip .s:first-child{padding-left:0}
+.strip .s:last-child{border-right:none;padding-right:0}
+.strip .n{font-family:'JetBrains Mono',monospace;font-weight:300;font-size:24px;color:var(--bone);line-height:1;letter-spacing:-.02em}
+.strip .t{font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:.14em;color:var(--bone-45);line-height:1.5}
+.off{display:flex;align-items:center;gap:16px;padding:14px 0}
+
+.fun{display:flex;flex-direction:column;gap:6px}
+.fun .st{display:flex;align-items:center;gap:11px}
+.fun .bx{height:26px;display:flex;align-items:center;padding:0 9px;font-family:'JetBrains Mono',monospace;font-size:11px;color:#121213;font-weight:500}
+.fun .cap{font-family:'JetBrains Mono',monospace;font-size:9.5px;color:var(--bone-70);white-space:nowrap}
+/* ZONE 1 · la barre de couverture */
+.cov{position:relative;height:22px;border:1px solid var(--rule);overflow:hidden}
+.cov i{position:absolute;top:0;bottom:0;display:block}
+.cov .solid{left:0;background:var(--brass)}
+.cov .hatch{background:repeating-linear-gradient(135deg,rgba(212,129,63,.55) 0 1px,transparent 1px 6px);border-left:1px solid var(--d-ambre)}
+.bar.hatch-bar i{background:repeating-linear-gradient(135deg,rgba(212,129,63,.6) 0 1px,transparent 1px 5px);border-right:1px solid var(--d-ambre)}
+.trou{display:flex;align-items:baseline;gap:10px;padding:5px 0}
+.trou .tn{font-family:'JetBrains Mono',monospace;font-size:9.5px;color:var(--bone-70);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.trou .tr{margin-left:auto;font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:.1em;color:var(--d-ambre);white-space:nowrap}
+/* ZONE 2 · la bande de placement */
+.agezone{width:252px;max-width:100%}
+.strip2{position:relative;height:56px;margin-top:14px;border-bottom:1px solid var(--rule);overflow:hidden}
+.strip2 .seuil{position:absolute;top:0;bottom:0;width:1px;background:var(--brass);opacity:.75}
+.strip2 .pile{position:absolute;bottom:0;display:flex;flex-direction:column-reverse;align-items:center;transform:translateX(-50%)}
+.strip2 .pile s{display:block;border-radius:50%;text-decoration:none;flex:none}
+.strip2 .pile u{order:99;font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:.06em;color:var(--brass);text-decoration:none;padding-bottom:2px;flex:none}
+.strip2 .pile u:empty{display:none}
+.axe{position:relative;height:14px;margin-top:5px}
+.axe span{position:absolute;top:0;font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:.12em;color:var(--bone-45);white-space:nowrap;transform:translateX(-50%)}
+.axe span.fin{transform:translateX(-100%)}
+</style></head><body><div class="screen">
+
+<div class="mast">
+  <div><div class="lbl" style="color:var(--brass-dk)">PROPOSITION B · LA UNE — ÉCRAN 2 SUR 2</div><h1>Business</h1></div>
+  <div class="rt"><div class="lbl">MERCREDI 12 AOÛT 2026 · 08 H 14</div>
+  <div class="m" style="font-size:10px;letter-spacing:.14em;color:var(--bone-45);margin-top:6px">SALESFORCE · COMITÉ · CONTENU</div></div>
+</div>
+
+<div class="verdict">
+  <div class="num" style="color:{{verdict_couleur}}">{{verdict_nombre}}</div>
+  <div style="flex:1;min-width:0">
+    <div class="say">{{verdict_phrase}}</div>
+    <div class="det">{{verdict_detail}}</div>
+  </div>
+  <div style="flex:none;padding-bottom:4px">
+    <div class="agezone">
+  <div style="display:flex;align-items:baseline;gap:9px">
+    <span class="fig" style="font-size:34px;color:{{age_statut_couleur}}">{{age_max}}</span>
+    <span class="m" style="font-size:9px;letter-spacing:.14em;color:var(--bone-45);line-height:1.6">JOURS · LA PLUS<br>ANCIENNE ATTENTE</span>
+  </div>
+  <div class="m" style="font-size:8.5px;letter-spacing:.14em;color:{{age_statut_couleur}};margin-top:7px">{{age_statut_glyphe}} {{age_statut_mot}}</div>
+
+  <div class="strip2" role="img"
+       aria-label="{{attente_n}} décisions placées sur leur âge, de {{age_min}} à {{age_max}} jours. Seuil de gouvernance à {{age_seuil}} jours. {{age_hors_seuil}} au-delà du seuil.">
+    <i class="seuil" style="left:{{age_seuil_pct}}%"></i>
+    <!--{{#age_colonnes}}-->
+    <b class="pile" style="left:{{col_x_pct}}%;gap:{{age_gap_px}}px"><u>{{col_reste}}</u><!--{{#col_points}}--><s style="width:{{age_point_px}}px;height:{{age_point_px}}px;background:{{col_couleur}}"></s><!--{{/col_points}}--></b>
+    <!--{{/age_colonnes}}-->
+  </div>
+  <div class="axe">
+    <span style="left:{{age_zero_pct}}%">0</span>
+    <span style="left:{{age_seuil_pct}}%;color:var(--brass)">{{age_seuil}} J · SEUIL</span>
+    <span class="fin" style="left:{{age_fin_pct}}%">{{age_axe_max}} J</span>
+  </div>
+  <div style="text-align:right;margin-top:9px"><a class="src" href="{{lien_comite}}">▸ SIGNER DANS LE SUIVI DU COMITÉ</a></div>
+</div>
+</div>
+
+<div class="cols">
+
+  <!-- Colonne 1 · le pipeline -->
+  <div class="col">
+    <div class="ch"><span class="lbl">Le pipeline</span><span class="r src">SALESFORCE · {{sf_total}} LEADS</span></div>
+    <div class="fun" role="img" aria-label="Entonnoir commercial : 107 non contactés, 12 en cours, 3 convertis, 4 abandonnés.">
+      <div class="st"><div class="bx" style="width:{{sf_pct_froid}}%;background:var(--d-azur)">{{sf_froid}}</div><span class="cap">jamais contactés</span></div>
+      <div class="st"><div class="bx" style="width:{{sf_pct_encours}}%;background:var(--d-turquoise);min-width:36px">{{sf_encours}}</div><span class="cap">en cours</span></div>
+      <div class="st"><div class="bx" style="width:{{sf_pct_convertis}}%;background:var(--d-ok);min-width:32px">{{sf_convertis}}</div><span class="cap">convertis · {{sf_taux_conv}} %</span></div>
+      <div class="st"><div class="bx" style="width:{{sf_pct_abandon}}%;background:var(--d-down);min-width:32px">{{sf_abandon}}</div><span class="cap">abandonnés</span></div>
+    </div>
+    <div class="det" style="font-size:13px;margin-top:16px;max-width:44ch">{{sf_commentaire}}</div>
+
+    <div class="ch" style="margin-top:auto;padding-top:20px;border-top:1px solid var(--rule)"><span class="lbl">Signaux qualifiés</span><span class="r src">{{sig_total}} AU TOTAL</span></div>
+    <div class="ln" style="border-top:none"><span class="k"><i class="dot" style="background:var(--d-fuchsia);margin-right:7px"></i>Relations à prévenir</span><span class="v">{{sig_reseau}}</span></div>
+    <div class="ln"><span class="k"><i class="dot" style="background:var(--d-ambre);margin-right:7px"></i>Offres en attente</span><span class="v">{{sig_offres}}</span></div>
+    <div class="ln"><span class="k"><i class="dot" style="background:var(--d-violine);margin-right:7px"></i>À qualifier</span><span class="v">{{sig_qualifier}}</span></div>
+    <div class="ln"><span class="k"><i class="dot" style="background:var(--d-azur);margin-right:7px"></i>Nouveaux</span><span class="v">{{sig_nouveaux}}</span></div>
+  </div>
+
+  <!-- Colonne 2 · le registre -->
+  <div class="col">
+    <div class="ch"><span class="lbl">Le registre du comité</span><span class="r src">{{dec_total}} ENTRÉES</span></div>
+    <div style="display:flex;height:18px" role="img" aria-label="Registre du comité : 74 closes, 28 accordées non exécutées, 16 en attente de signature, 6 en exécution.">
+      <i style="width:59.7%;background:var(--d-ok)"></i><i style="width:22.6%;background:var(--d-ambre)"></i><i style="width:12.9%;background:var(--d-down)"></i><i style="width:4.8%;background:var(--d-azur)"></i>
+    </div>
+    <div class="ln" style="border-top:none;padding-top:13px"><span class="k"><i class="dot" style="background:var(--d-ok);border-radius:50%;margin-right:7px"></i>Closes — exécution prouvée</span><span class="v">{{dec_closes}}</span></div>
+    <div class="ln"><span class="k" style="color:var(--d-ambre)"><i class="dot" style="background:var(--d-ambre);border-radius:2px;margin-right:7px"></i>Accordées, jamais exécutées ▲</span><span class="v" style="color:var(--d-ambre)">{{dec_accordees}}</span></div>
+    <div class="ln"><span class="k" style="color:var(--d-down)"><i class="dot" style="background:var(--d-down);transform:rotate(45deg);margin-right:7px"></i>En attente de signature ✕</span><span class="v" style="color:var(--d-down)">{{dec_attente_sam}}</span></div>
+    <div class="ln"><span class="k"><i class="dot" style="background:var(--d-azur);border-radius:50%;margin-right:7px"></i>En exécution</span><span class="v">{{dec_execution}}</span></div>
+    <div class="det" style="font-size:13px;margin-top:16px;max-width:44ch">La dette d’exécution — <b style="font-weight:500;color:var(--d-ambre)">{{dec_accordees}}</b> — dépasse la file de signature. La sortie coince plus que l’entrée.</div>
+
+    <div class="ch" style="margin-top:auto;padding-top:20px;border-top:1px solid var(--rule)"><span class="lbl">Production de contenu</span></div>
+    <div style="display:flex;align-items:flex-end;gap:22px">
+      <div><div class="fig" style="font-size:38px;color:var(--d-turquoise)">{{cont_veille}}</div><div class="lbl" style="font-size:7.5px;margin-top:4px">RAPPORTS<br>DE VEILLE</div></div>
+      <div><div class="fig" style="font-size:38px;color:var(--d-violine)">{{cont_brouillons}}</div><div class="lbl" style="font-size:7.5px;margin-top:4px">POSTS<br>EN BROUILLON</div></div>
+      <div style="padding-left:18px;border-left:1px solid var(--rule)"><div class="fig" style="font-size:38px;color:var(--d-down)">{{cont_publies}}</div><div class="lbl" style="font-size:7.5px;margin-top:4px;color:var(--d-down)">ARTICLE ✕<br>PUBLIÉ</div></div>
+    </div>
+    <div class="lbl" style="font-size:7.5px;margin-top:11px">NEUF PIÈCES ÉCRITES, AUCUNE PUBLIÉE</div>
+  </div>
+
+  <!-- Colonne 3 · couts, avec sa couverture -->
+  <div class="col cost">
+  <div class="ch"><span class="lbl">Ce que ça coûte</span><span class="r src">{{cout_fenetre}}</span></div>
+
+  <!-- le chiffre mesuré -->
+  <div style="display:flex;align-items:baseline;gap:10px">
+    <span class="fig" style="font-size:52px;color:var(--brass)">{{cout_mesure}}</span>
+    <span class="m" style="font-size:13px;color:var(--bone-45)">{{cout_unite}}</span>
+    <span class="m" style="margin-left:auto;font-size:9px;letter-spacing:.14em;color:var(--d-ambre);align-self:flex-end;padding-bottom:6px">▲ PARTIEL</span>
+  </div>
+  <div class="lbl" style="font-size:7.5px;margin-top:6px">MESURÉ · COUVRE {{cout_couverture_pct}} % DE LA FACTURE</div>
+
+  <!-- le chiffre ET sa couverture, dans une seule barre -->
+  <div class="cov" style="margin-top:11px" role="img"
+       aria-label="Couverture de la mesure : {{cout_mesure}} {{cout_unite}} attribués sur une facture d’environ {{cout_facture}} {{cout_unite}}, soit {{cout_couverture_pct}} pour cent. Les {{cout_manquant}} {{cout_unite}} restants échappent à tout compteur.">
+    <i class="solid" style="width:{{cout_couverture_pct}}%"></i>
+    <i class="hatch" style="left:{{cout_couverture_pct}}%;right:0"></i>
+  </div>
+  <div style="display:flex;align-items:baseline;gap:10px;margin-top:7px">
+    <span class="m" style="font-size:8.5px;letter-spacing:.12em;color:var(--brass)">■ MESURÉ {{cout_mesure}} {{cout_unite}}</span>
+    <span class="m" style="margin-left:auto;font-size:8.5px;letter-spacing:.12em;color:var(--d-ambre)">▲ HORS COMPTEUR ≈ {{cout_manquant}} {{cout_unite}}</span>
+  </div>
+  <div class="lbl" style="font-size:7.5px;margin-top:5px">FACTURE FOURNISSEURS ≈ {{cout_facture}} {{cout_unite}}</div>
+
+  <!-- composition : deux postes mesurés, un territoire non couvert · même dénominateur -->
+  <div class="ln" style="margin-top:16px">
+    <span class="k"><i class="dot" style="background:var(--d-azur);margin-right:7px"></i>{{poste_1_nom}}</span>
+    <span class="v">{{poste_1_montant}} {{cout_unite}}</span></div>
+  <div class="bar" style="margin:3px 0 0"><i style="width:{{poste_1_pct}}%;background:var(--d-azur)"></i></div>
+
+  <div class="ln"><span class="k"><i class="dot" style="background:var(--d-turquoise);margin-right:7px"></i>{{poste_2_nom}}</span>
+    <span class="v">{{poste_2_montant}} {{cout_unite}}</span></div>
+  <div class="bar" style="margin:3px 0 0"><i style="width:{{poste_2_pct}}%;background:var(--d-turquoise)"></i></div>
+
+  <div class="ln"><span class="k" style="color:var(--d-ambre)">▲ Hors compteur</span>
+    <span class="v" style="color:var(--d-ambre)">≈ {{cout_manquant}} {{cout_unite}}</span></div>
+  <div class="bar hatch-bar" style="margin:3px 0 0"><i style="width:{{cout_manquant_pct}}%"></i></div>
+
+  <!-- ce qui manque, nommé -->
+  <div class="ch" style="margin-top:15px;padding-top:13px;border-top:1px solid var(--rule)">
+    <span class="lbl" style="color:var(--d-ambre)">{{cout_trous_n}} sources sans compteur</span>
+    <span class="r m" style="font-size:8px;letter-spacing:.12em;color:var(--bone-45)">RÉPARTITION INCONNUE</span></div>
+  <!--{{#cout_trous}}-->
+  <div class="trou"><span class="tn">{{trou_nom}}</span><span class="tr">{{trou_raison}}</span></div>
+  <!--{{/cout_trous}}-->
+
+  <div class="ch" style="margin-top:auto;padding-top:16px;border-top:1px solid var(--rule)"><span class="lbl">Le détail est ailleurs</span></div>
+  <div style="display:flex;flex-direction:column;gap:6px">
+    <a class="src" href="{{lien_comite}}">▸ SUIVI DU COMITÉ</a>
+    <a class="src" href="{{lien_admin}}">▸ CONSOLE D’ADMINISTRATION</a>
+  </div>
+</div>
+</div>
+
+</div>
+
+<div class="strip">
+  <div class="s"><span class="n" style="color:var(--d-down)">{{dec_age_max}}</span><span class="t">JOURS · LA PLUS ANCIENNE<br>DÉCISION NON SIGNÉE</span></div>
+  <div class="s"><span class="n" style="color:var(--d-down)">{{sf_froid}}</span><span class="t">LEADS JAMAIS<br>CONTACTÉS</span></div>
+  <div class="s"><span class="n" style="color:var(--d-ambre)">{{dec_accordees}}</span><span class="t">ACCORDÉES,<br>JAMAIS EXÉCUTÉES</span></div>
+  <div class="s"><span class="n" style="color:var(--d-ok)">{{sf_convertis}}</span><span class="t">LEADS CONVERTIS<br>SUR {{sf_total}}</span></div>
+  <div class="s"><span class="t" style="letter-spacing:.16em">{{bandeau_phrase}}<br><span style="color:var(--brass)">SIGNER LES SEIZE</span></span></div>
+</div>
+</div></body></html>

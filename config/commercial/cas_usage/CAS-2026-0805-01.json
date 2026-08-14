@@ -3,7 +3,7 @@
   "type": "fiche_cas_usage_anonymise",
   "titre_anonymise": "Gestion locative et suivi de biens pour une agence immobilière",
   "produit_salesforce": "Sales Cloud / gestion de portefeuille de biens",
-  "tier_illustre": "Pro (49€/mois) — livrable SDS uniquement (research_analyst_sds_document 693 642 caractères + architect_wbs 66 978 caractères, non vides ; PAS de BUILD, PAS de déploiement)",
+  "tier_illustre": "Pro (79 €/mois — 59 €/mois pendant les 30 jours suivant l'annonce de lancement, arbitrage Sam 11/08) — livrable SDS uniquement (research_analyst_sds_document 693 642 caractères + architect_wbs 66 978 caractères, non vides ; PAS de BUILD, PAS de déploiement)",
   "preuve_technique": {
     "project_id": 90,
     "execution_id": 138,

@@ -1,0 +1,22 @@
+{
+  "id": "CAS-2026-0812-01",
+  "type": "fiche_cas_usage_anonymise",
+  "titre_anonymise": "Cadrage d'un CRM pour un organisme de formation professionnelle",
+  "produit_salesforce": "Sales Cloud / gestion des inscriptions et du suivi pédagogique",
+  "tier_illustre": "Pro (79 €/mois — 59 €/mois pendant les 30 jours suivant l'annonce de lancement, arbitrage Sam 11/08) — livrable SDS uniquement (research_analyst_sds_document 173 160 caractères + architect_wbs 53 546 caractères + architect_gap_analysis 79 679 caractères, non vides ; PAS de BUILD, PAS de déploiement)",
+  "preuve_technique": {
+    "project_id": 81,
+    "execution_id": 126,
+    "etat_final": "COMPLETED / last_completed_phase = phase6_export (fin de pipeline SDS, aucune phase BUILD atteinte)",
+    "tokens": 1156847,
+    "duree_s": "5905 (19/12/2025 13:09:21 -> 14:47:46, calculée à partir de started_at/completed_at)",
+    "cout": "non disponible — total_cost = 0 pour cette exécution du 19/12/2025, antérieure à l'activation du suivi de coût (même trou de données que CAS-2026-0805-01, pas une preuve de gratuité)"
+  },
+  "disclaimer": "Projet de test interne Digital·Humans, aucun client réel (aucun avant le lancement de septembre 2026) — à ne jamais présenter comme référence client.",
+  "source": "v_deos_projects#81 ; v_deos_executions#126 ; v_deos_sections#126, 12 livrables non vides (psql $DEOS_RO_DSN 2026-08-12)",
+  "verification_produit": {
+    "verifie_contre": "/workspace/config/offre_dh.md#2026-08-12 — tier Pro : équipe complète + upload + mémoire, livrable = SDS, PAS de BUILD, PAS de déploiement",
+    "resultat": "Conforme : le cas s'arrête à phase6_export/sds (SDS 173 160 caractères, WBS et gap analysis non vides), aucun prix client communiqué, aucune promesse de BUILD [DH-CRO-002]."
+  },
+  "cree_le": "2026-08-12"
+}

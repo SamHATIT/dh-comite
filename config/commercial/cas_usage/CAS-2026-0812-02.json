@@ -1,0 +1,22 @@
+{
+  "id": "CAS-2026-0812-02",
+  "type": "fiche_cas_usage_anonymise",
+  "titre_anonymise": "Structuration d'un dispositif de feedback client pour une PME",
+  "produit_salesforce": "Sales Cloud / collecte et suivi de la voix du client",
+  "tier_illustre": "Pro (79 €/mois — 59 €/mois pendant les 30 jours suivant l'annonce de lancement, arbitrage Sam 11/08) — livrable SDS uniquement (architect_solution_design 18 924 caractères + architect_wbs 84 202 caractères + qa_qa_specifications 20 720 caractères, non vides ; PAS de BUILD, PAS de déploiement)",
+  "preuve_technique": {
+    "project_id": 71,
+    "execution_id": 116,
+    "etat_final": "COMPLETED / execution_state = sds_complete (champ last_completed_phase non renseigné pour cette exécution, à signaler comme trou de donnée, pas comme un défaut du cas)",
+    "tokens": 181342,
+    "duree_s": "1273 (12/12/2025 12:36:23 -> 12:57:36, calculée à partir de started_at/completed_at)",
+    "cout": "non disponible — total_cost = 0 pour cette exécution du 12/12/2025, antérieure à l'activation du suivi de coût (même trou de données que CAS-2026-0805-01, pas une preuve de gratuité)"
+  },
+  "disclaimer": "Projet de test interne Digital·Humans, aucun client réel (aucun avant le lancement de septembre 2026) — à ne jamais présenter comme référence client.",
+  "source": "v_deos_projects#71 ; v_deos_executions#116 ; v_deos_sections#116, 11 livrables non vides (psql $DEOS_RO_DSN 2026-08-12)",
+  "verification_produit": {
+    "verifie_contre": "/workspace/config/offre_dh.md#2026-08-12 — tier Pro : équipe complète + upload + mémoire, livrable = SDS, PAS de BUILD, PAS de déploiement",
+    "resultat": "Conforme : le cas s'arrête au SDS (solution design, WBS, spécifications QA non vides), aucun prix client communiqué, aucune promesse de BUILD [DH-CRO-002]."
+  },
+  "cree_le": "2026-08-12"
+}

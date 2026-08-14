@@ -19,12 +19,15 @@
    **52 sont déjà engagés dans le scénario médian, 72 dans le scénario haut.** À ce
    niveau de burn, un « nombre de mois de piste » n'a aucun sens : la contrainte est le
    calendrier, pas la caisse.
-3. **Les trois marques partagent une seule enveloppe fiscale, et elle sature.** Une
-   seule entité (SIREN 343 172 490, entrepreneur individuel, BNC, franchise en base).
-   La franchise de TVA (37 500 €) vaut **47 jours de Sam facturés**, le plafond micro
-   (77 700 €) en vaut **97** — et sa capacité intégralement facturée produirait
-   96 000 €. **Le régime est dimensionné pour moins que sa propre capacité.** La
-   franchise tombe dans les trois scénarios, le plafond micro dans deux sur trois.
+3. **L'enveloppe fiscale n'est pas partagée avec le conseil — correction majeure du
+   10/08.** Le revenu de conseil est perçu **en portage salarial** (déclaré par Sam,
+   10/08) : il est facturé par la société de portage et perçu en salaire. **Il n'entre
+   pas dans le chiffre d'affaires de l'entité** (SIREN 343 172 490, entrepreneur
+   individuel, BNC, franchise en base) et ne consomme donc **ni la franchise de TVA
+   (37 500 €), ni le plafond micro (77 700 €)**. Les deux plafonds sont **intégralement
+   disponibles pour Digital·Humans et DEOS**. Le régime ne sature que si le logiciel
+   vend — ce qui déclasse le risque R3 et repousse la question de la société.
+   *La version antérieure de ce dossier posait l'inverse ; c'était faux.*
 4. **Ce qui bloque le revenu logiciel ne coûte pas d'argent.** Six constats bloquants
    juridiques, établis par preuve technique le 08/08, interdisent l'ouverture des
    inscriptions ; je n'ai trouvé au dossier **aucune preuve de levée à ce jour**. Tant
@@ -42,11 +45,12 @@
 | --- | ---: | --- |
 | Revenu récurrent | **0 €** | `cash_suivi.mrr_reel`, maj 02/08 |
 | Clients payants, toutes marques | **0** | idem ; zéro référence client (étude 08/08) |
-| Revenu de conseil (SH Conseil) | **non mesuré** | aucune donnée au dossier — demandé |
+| Revenu de conseil (portage) | **700 €/j facturés → ~350 €/j nets** | déclaré par Sam, 10/08 — voir §2.5 |
 | Solde bancaire déclaré | **0 €, provisoire** | `cash_suivi`, déclaré le 14/07, non mis à jour depuis 27 j |
 | Dépense mesurée du dispositif | **360 $/mois** (11,99 $/j) | `bin/couts.py` 30 j au 10/08, 68 exécutions |
-| Capacité du fondateur | **~120 j/an** | mission Sam ; `H2` étude 08/08 |
-| Coût d'opportunité d'un jour | **800 €** | `H3` étude 08/08 (réf. marché portage) |
+| Régime de temps du fondateur | **mission à temps plein** ; DH construit hors temps de mission | déclaré par Sam, 10/08 — voir §3 |
+| Coût d'opportunité d'un jour ouvré perdu | **350 € nets** (`H3` corrigée) | déclaré par Sam, 10/08 |
+| Jours de mission manqués, juillet-août | **11 j ≈ 3 850 € nets**, imputés à DH | déclaré par Sam, 10/08 |
 | Décisions en attente d'arbitrage | **3** (contre ~20 le 07/08) | table `decisions`, `$COMITE_DB_DSN` |
 | Blocages juridiques ouverts | **6 sur 6** | `conformite_donnees_2026-08-08.md` |
 
@@ -55,12 +59,13 @@
 passée d'une vingtaine de décisions gelées jusqu'à 27 jours à **trois**. Le dispositif
 de gouvernance qu'on vend (§2.3) vient de faire la preuve de son propre usage.
 
-**Ce qui inquiète, dans l'ordre.** Le revenu de conseil n'est pas mesuré, donc rien
-n'est projetable sérieusement (§4). L'enveloppe fiscale unique sature avant que la
-plateforme n'ait un seul client (§2.4). Et la mention « SH Conseil », sous laquelle il
-est prévu de facturer 8 000 € à un établissement financier, **ne correspond à aucune
-entité documentée** — point soulevé par la direction juridique le 08/08, escaladé à
-Sam, non résolu.
+**Ce qui inquiète, dans l'ordre.** Le revenu réel dépend à 100 % d'un **intermédiaire
+unique**, lui-même exposé à un client final unique (§2.5, R9). Le rythme de mission
+s'érode : 11 jours manqués en deux mois, soit environ 3 850 € nets, absorbés par le
+développement du produit (§3) — c'est le premier coût du projet, très au-delà de sa
+facture technique. Et la mention « SH Conseil », sous laquelle il est prévu de facturer
+8 000 € à un établissement financier, **ne correspond à aucune entité documentée** —
+point soulevé par la direction juridique le 08/08, escaladé à Sam, non résolu.
 
 ---
 
@@ -73,7 +78,12 @@ marge : c'est **le jour de Sam**, seule ressource qu'elles se disputent réellem
 
 ![Marge de contribution par jour de Sam consommé, par offre, scénario bas](graphiques/economie_unitaire_marque_2026-08-10.png)
 
-*Lecture : en rouge, ce qui rapporte moins qu'un jour facturé chez SH Conseil (800 €).
+> **Réserve — graphique non régénéré.** Sa ligne de référence est tracée à 800 €, valeur
+> corrigée à **350 € nets** le 10/08 (§2.5). **La barre baisse de moitié** : plusieurs
+> offres classées en rouge passent au-dessus du seuil. À régénérer avant diffusion.
+
+*Lecture : en rouge, ce qui rapporte moins qu'un jour facturé (barre tracée à 800 € —
+lire 350 €).
 Sources : marge Pro reconstruite depuis la formule vérifiée le 09/08 ; DEOS SaaS =
 86 400 €/an à 56,9 % de marge sur 20 jours (étude 08/08 §4.2) ; DEOS installé =
 182 928 € de recette an 1 à 38,6 % (étude 09/08 §2), sur **35 jours — `Hypothèse`** :
@@ -81,7 +91,7 @@ le nombre de jours de la première affaire installée n'est pas chiffré au doss
 
 | Marque | Ce qu'elle est | Économie unitaire | État |
 | --- | --- | --- | --- |
-| **SH Conseil** | pratique de conseil, prestation de jours | **800 €/jour facturé** (`H3`) | **seul revenu réel**, montant non mesuré |
+| **SH Conseil** | prestation de jours, **en sous-traitance via portage** (§2.5) | **700 €/j facturés → ~350 €/j nets** | **seul revenu réel** ; perçu en salaire, hors CA de l'entité |
 | **Digital·Humans** | plateforme en libre-service, Pro 79 €/mois, Team 1 490 €/mois | Pro : **+44,0 % à 100 abonnés** (bas), −31,6 % (haut) ; seuil **38 abonnés** | 0 client · gatée par Salesforce · 6 blocages |
 | **DEOS** | gouvernance d'agents, SaaS ou installé | **2 458 €/jour** à 86 400 €/an ; plancher **31 800 €**, parité Team **79 400 €** | 0 client, 0 référence, 0 installation |
 
@@ -92,7 +102,8 @@ accordée, `validation_par = sam`). Net encaissé 77,56 €/mois après frais de
 **Un chiffre est systématiquement mal lu, et je le corrige ici.** On lit ailleurs que
 « le Pro perd de l'argent en dessous de 38 abonnés ». C'est vrai **en coût complet et
 faux en trésorerie** : le coût fixe de 25 200 €/an qui produit ce seuil se compose de
-24 000 € de **temps de Sam** (30 jours de production de contenu à 800 €) et de 1 200 €
+10 500 € de **temps de Sam** (30 jours de production de contenu à 350 €, `H3` corrigée
+le 10/08 — le chiffre de 24 000 € qui figurait ici reposait sur 800 €) et de 1 200 €
 d'outillage. **C'est un coût d'opportunité, pas une sortie de caisse.**
 
 | Scénario d'ingénierie | Coût variable par abonné | Contribution nette mensuelle |
@@ -176,15 +187,20 @@ applicables à l'entité — franchise de TVA 37 500 € (seuil majoré 41 250 �
 micro 77 700 € (`pages_legales_2026-08-06.md` §5.1, impots.gouv.fr). Le conseil, les
 abonnements et le cadrage s'additionnent dans le même compteur.*
 
-1. **La franchise de TVA tombe dans les trois scénarios**, y compris le plus bas où la
-   plateforme ne vend rien : 47 jours de conseil facturés suffisent. Ce n'est pas un
-   risque de croissance, c'est un fait d'exploitation.
-2. **Le plafond micro tombe dans deux scénarios sur trois** — dès 12 mois en médian
-   (78 104 €), largement en haut (148 702 €). Franchi deux années consécutives, il fait
-   basculer au régime de la déclaration contrôlée.
-3. **Le revenu du conseil consomme le plafond du logiciel.** Chaque jour facturé retire
-   800 € de la marge de manœuvre disponible pour les abonnements. C'est l'argument le
-   plus solide en faveur d'une scission — plus solide que l'optimisation fiscale.
+1. **Le conseil ne compte pas dans ces plafonds.** Perçu en portage salarial, il est
+   hors du chiffre d'affaires de l'entité (§2.5). Les recettes à comparer aux deux
+   seuils sont **celles du logiciel et du cadrage seuls** — ce que le graphique
+   ci-dessus n'isole pas encore.
+2. **La franchise de TVA ne tombe plus dans le scénario bas.** Sans vente logicielle et
+   sans cadrage conclu, les recettes de l'entité sont proches de zéro. Elle tombe en
+   médian et en haut, **par le logiciel** : environ 45 000 € de recettes d'entité en
+   médian (37 464 € d'abonnements + 8 000 € de cadrage) et environ 126 000 € en haut.
+3. **Le plafond micro ne tombe plus que dans le scénario haut.** En médian, les
+   ~45 000 € d'entité restent nettement sous 77 700 €. C'est un an de marge de manœuvre
+   qui n'existait pas dans la version précédente de ce dossier.
+4. **Ce qui reste vrai, et qui ne dépend pas du régime** : la responsabilité illimitée
+   sur le patrimoine personnel dans un contrat d'installation avec un établissement
+   financier supervisé. Le motif de passer en société est là, pas dans la fiscalité.
 
 **Ma recommandation, en distinguant le motif du déclencheur.** Le motif décisif de
 passer en société n'est pas fiscal : c'est **la responsabilité illimitée sur le
@@ -202,12 +218,79 @@ semaine de la démonstration Crédit Logement.
 
 ---
 
+### 2.5 La chaîne du revenu réel — ajoutée le 10/08
+
+Le dossier décrivait « SH Conseil » comme une pratique de conseil facturant ses clients.
+**Ce n'est pas la structure réelle**, et l'écart change plusieurs conclusions.
+
+| Maillon | Rôle | Ce qui circule |
+| --- | --- | --- |
+| Crédit Logement | client final | commande la prestation |
+| Éric | titulaire du contrat, facture le client final | marge non connue de nous |
+| Société de portage | emploie Sam, facture Éric | frais de gestion |
+| Sam | exécute la mission | **700 €/jour facturés → ~350 €/jour nets** |
+
+**Quatre conséquences.**
+
+1. **Crédit Logement n'est pas un client de l'entité.** Il est le client d'Éric. Sam
+   dispose de son accord pour le citer comme référence, mais la relation contractuelle
+   n'existe pas. Toute présentation commerciale doit en tenir compte.
+2. **Ce revenu est un salaire, pas un chiffre d'affaires.** Il ne consomme aucun des
+   deux plafonds de l'entité (§2.4) et n'apparaît pas dans ses recettes.
+3. **Le coût d'opportunité réel est de 350 €, pas 800 €** — la moitié de ce que ce
+   dossier supposait partout ailleurs avant correction.
+4. **Le portage ouvre des droits à l'assurance chômage.** Pour un fondateur solo sans
+   revenu récurrent, c'est un élément de solidité financière que ce dossier omettait :
+   il existe un filet en cas d'arrêt, ce qui rend le pari produit moins exposé qu'il
+   n'y paraît. À confirmer auprès de la société de portage.
+
+**Ce que nous ne savons pas et qu'il faut demander** : la marge prise par Éric entre le
+client final et Sam, la durée contractuelle de son engagement, et l'existence d'une
+clause d'exclusivité ou de non-concurrence qui interdirait de vendre DEOS au même client
+depuis l'entité. **Sam indique une visibilité jusqu'à l'été 2027, voire fin 2027** —
+information favorable, mais déclarative et non contractualisée à notre niveau.
+
+---
+
 ## 3. Le temps de Sam — la seule ressource véritablement rare
 
-Sam tient un autre emploi. Sa capacité est d'environ **120 jours par an**, et son jour
-vaut **800 €** de conseil non facturé ailleurs.
+**Correction du 10/08 : le modèle de temps de ce dossier était faux.** Il posait
+120 jours par an répartissables entre le conseil et la plateforme, comme si Sam
+arbitrait entre les deux. Ce n'est pas ce qui se passe. Sam est **en mission à temps
+plein** (environ 21 jours ouvrés par mois) et **Digital·Humans se construit hors temps
+de mission** — soirées et week-ends. Il n'y a pas d'arbitrage entre facturer et
+développer : les deux se cumulent dans la même journée.
 
-![Répartition des 120 jours de Sam selon les trois scénarios](graphiques/temps_sam_2026-08-10.png)
+Le coût d'un jour donné au produit a donc **deux régimes**, et non un taux unique :
+
+| Nature du temps | Coût d'opportunité |
+| --- | ---: |
+| Soirée, week-end, congé | **0 €** — aucun revenu n'y était possible |
+| Jour ouvré de mission non facturé | **350 € nets** (700 € facturés, ~50 % après portage et charges) |
+
+**Et c'est le second régime qui se lit dans les chiffres.** Sur un rythme plein
+d'environ 21 jours, **juillet n'a compté que 14 jours facturés** — 7 jours perdus, soit
+**2 450 € nets**. **Août en compte déjà 4 de perdus**, soit **1 400 €**. Onze jours en
+deux mois, **environ 3 850 € nets**, imputés par Sam au développement du produit.
+
+**À rapprocher de la facture technique du dispositif : 690 € sur les deux mêmes mois.**
+Le coût réel du projet est donc **environ 5,6 fois sa dépense d'infrastructure**, et
+cette part n'apparaissait nulle part au dossier. C'est le chiffre le plus important de
+cette revue.
+
+**Ce que cela dit du modèle, et qu'il faut écrire plutôt que lisser** : un temps plein
+en mission additionné d'un produit construit le soir produit exactement cette courbe —
+des jours facturés qui s'effritent. L'érosion n'est pas un accident de calendrier, c'est
+la signature du régime de travail actuel. La question posée à la revue n'est pas
+« comment répartir 120 jours » mais **combien de temps ce rythme peut tenir, et ce qui
+cède en premier**.
+
+![Répartition des jours consacrés au produit selon les trois scénarios](graphiques/temps_sam_2026-08-10.png)
+
+> **Réserve — ce graphique n'a pas encore été régénéré.** Il repose sur le modèle des
+> 120 jours répartissables, invalidé ci-dessus, et sur un jour à 800 €. Les volumes de
+> jours par poste restent indicatifs ; leur valorisation est à diviser par deux et leur
+> imputation à relire comme du temps hors mission. À reprendre avant diffusion large.
 
 *Lecture : postes chiffrés depuis les plans existants — 30 jours/an de production de
 contenu (les 24 000 € de « coût marketing fixe » de l'étude du 09/08), 12 jours/an de
@@ -215,18 +298,38 @@ comité et d'arbitrage (`Hypothèse` : un jour par mois), 2 à 30 jours de DEOS 
 s'arrête au cadrage (8 jours) ou qu'on porte une affaire complète (20 jours, `H2`). Le
 solde est ce qui reste disponible pour facturer du conseil.*
 
-**Ce que ce graphique dit plus vite qu'un tableau** : dans le scénario haut — celui où
-tout marche — **il ne reste que 48 jours pour la seule activité qui rapporte de l'argent
-aujourd'hui.** Le succès de la plateforme et de DEOS se paie en revenu de conseil perdu.
-Ce n'est pas un argument pour ne rien faire : c'est la raison pour laquelle la séquence
-(§7) compte plus que l'ambition.
+### Le creux de septembre — absence planifiée, à ne pas confondre avec l'érosion
 
-**Une contradiction dans les sources, que je signale plutôt que de la lisser.** La
-mission de Sam pose 120 jours comme sa capacité **totale**. L'hypothèse `H2` de l'étude
-commerciale du 08/08 pose 120 jours **pour Digital·Humans et DEOS réunis**, « le reste »
-allant à SH Conseil. Les deux lectures sont incompatibles et l'écart vaut plusieurs
-dizaines de milliers d'euros de projection. **J'ai retenu la lecture de Sam, la plus
-contraignante.** C'est une question à trancher.
+Sam est absent **du 7 au 20 septembre**, sans rémunération. Septembre 2026 compte
+22 jours ouvrés ; l'absence en couvre **10**.
+
+| | jours ouvrés | revenu net |
+| --- | ---: | ---: |
+| Mois plein | 22 | 7 700 € |
+| Septembre 2026 | 12 | **4 200 €** |
+| **Écart** | **−10** | **−3 500 €** |
+
+**Cette absence n'est pas de l'érosion et ne doit pas être additionnée à l'indicateur
+n°1.** Juillet et août mesurent un rythme qui cède ; septembre mesure un choix assumé,
+décidé à l'avance. Les confondre masquerait le seul signal qui compte.
+
+**Lecture inverse, qui vaut d'être posée** : ces 10 jours ouvrés sont les seuls de
+l'année où du temps produit est disponible **à coût d'opportunité nul** — le revenu est
+déjà renoncé, la décision est prise. C'est la plus grosse réserve de temps produit de
+l'exercice, et elle tombe juste après l'ouverture.
+
+**Ce que la trésorerie ne montre pas, et qu'il faut dire.** Dans le scénario haut, la charge produit
+dépasse ce qu'une soirée absorbe : elle déborde sur les jours ouvrés, et chaque
+débordement vaut 350 € nets. Le succès de la plateforme ne se paie pas en jours de
+conseil arbitrés d'avance — il se paie **en jours de mission manqués, après coup**,
+exactement le mécanisme observé en juillet et en août.
+
+**La contradiction de sources est tranchée.** Ce dossier posait 120 jours de capacité
+totale, l'étude commerciale du 08/08 posait 120 jours pour la plateforme seule. **Les
+deux sont caduques** : la capacité de mission est d'environ 250 jours ouvrés, presque
+intégralement engagée, et le temps produit vient s'ajouter en dehors. Ce qu'il faut
+mesurer désormais n'est pas une répartition mais **un taux d'érosion** : jours de
+mission manqués par mois. Il vaut 7 en juillet, 4 à mi-août.
 
 ---
 
@@ -248,8 +351,20 @@ inconnu**. Tout chiffre de « mois restants » serait une fausse précision.
 | **Flux net cumulé** | **+39 349 €** | **+71 787 €** | **+139 085 €** |
 | Recettes en régime de croisière (année pleine) | 43 680 € | 79 179 € | 106 810 € |
 
-**Hypothèses communes** : jour de Sam à 800 € (`H3`) ; taux d'occupation du conseil
-**60 %** (`Hypothèse`, aucune source) ; dépense API mesurée à 360 $/mois convertie à
+> **Réserve de périmètre, ajoutée le 10/08 — à lire avant le tableau.** La ligne
+> « Recettes 12 mois » **agrège le conseil et le logiciel**. Or le conseil est perçu en
+> portage salarial, hors de l'entité (§2.5). Ces montants décrivent donc **ce que Sam
+> perçoit toutes sources confondues**, et non le chiffre d'affaires de l'entité.
+> Pour les plafonds fiscaux, seules comptent les lignes d'abonnements et de cadrage :
+> environ **0 €** en bas, **45 000 €** en médian, **126 000 €** en haut. Le modèle
+> n'a pas été réexécuté ce soir ; ces trois montants sont recomposés à la main depuis
+> les lignes existantes et doivent être recalculés avant diffusion.
+
+**Hypothèses communes** : jour de Sam **à 350 € nets** (`H3` corrigée le 10/08 :
+700 € facturés via portage, ~50 % après frais de gestion et charges — les projections
+ci-dessous n'ont pas encore été réexécutées avec cette valeur et **surestiment le
+revenu de conseil d'un facteur proche de 2**) ; taux d'occupation du conseil **60 %**
+(`Hypothèse` — caduque : la mission est à temps plein, voir §3) ; dépense API mesurée à 360 $/mois convertie à
 1 $ ≈ 0,92 € (`Hypothèse`, reprise du 09/08) ; VPS Hostinger à **30 €/mois**
 (`Hypothèse` — montant réel introuvable, demandé depuis le 09/08) ; frais de carte
 0,985 × prix − 0,25 €.
@@ -267,11 +382,13 @@ inconnu**. Tout chiffre de « mois restants » serait une fausse précision.
 
 **Les trois fragilités, par ordre d'importance :**
 
-1. **Le taux d'occupation du conseil est une hypothèse sans aucune source.** Entre 40 %
-   et 80 %, le résultat médian bouge de **21 760 €** — soit **58 % de tout ce que le
-   lancement du Pro rapporte dans le même scénario.** La variable la plus déterminante
-   de ce dossier n'est pas le prix du logiciel : c'est le carnet de commandes du
-   conseil, et il n'est pas documenté.
+1. **La variable déterminante n'est plus le carnet de commandes, c'est le taux
+   d'érosion.** La mission est à temps plein : le conseil n'est pas limité par la
+   demande mais par les jours que Sam parvient à honorer. À 350 € nets, **chaque jour
+   manqué coûte autant qu'environ sept abonnements Pro mensuels**. Au rythme observé —
+   7 jours en juillet, 4 à mi-août — l'érosion représente **~23 000 € nets sur douze
+   mois**, davantage que ce que le lancement du Pro rapporte dans le scénario médian.
+   **C'est le poste le plus lourd du dossier et il n'était pas compté.**
 2. **L'élasticité prix n'est pas mesurée.** La trajectoire d'abonnés a été construite
    pour un prix de 49 € et s'applique ici à 79 €. C'est l'hypothèse la plus optimiste
    du dossier.
@@ -283,7 +400,10 @@ inconnu**. Tout chiffre de « mois restants » serait une fausse précision.
 **Ce que la trésorerie ne montre pas, et qu'il faut dire** : dans les trois scénarios le
 flux est positif et le burn dérisoire. **Cette entreprise ne peut pas manquer d'argent
 au sens habituel — elle ne peut manquer que de jours de Sam.** C'est pourquoi le §3
-précède celui-ci.
+précède celui-ci. Et depuis le 10/08 on sait que ces jours ne se perdent pas par
+arbitrage mais **par fatigue** : le fondateur déclare lui-même que les onze jours
+manqués tiennent au cumul mission plus produit. **Aucune ligne de ce dossier ne couvre
+ce risque, et c'est la question la plus utile à poser à la revue.**
 
 ---
 
@@ -294,8 +414,8 @@ tableau de bord. Sept suffisent.
 
 | # | Indicateur | Où on en est | Décision qu'il déclenche |
 | --- | --- | --- | --- |
-| 1 | **Jours de conseil facturés / mois** | **non mesuré** | c'est le revenu réel : sous 3 j/mois, arrêter tout investissement de temps dans la plateforme |
-| 2 | **Recettes cumulées de l'entité, année civile** (3 marques) | non mesuré | > 30 000 € : instruire la société ; > 37 500 € : préparer la TVA |
+| 1 | **Jours de mission manqués / mois** (taux d'érosion — **hors absences planifiées**, cf. §3) | **7 en juillet, 4 à mi-août** | au-delà de 3 j/mois deux mois de suite : réduire la charge produit, le rythme n'est pas tenable |
+| 2 | **Recettes de l'entité, année civile** — logiciel + cadrage **hors portage** | **0 €** (inscriptions fermées) | > 30 000 € : instruire la société ; > 37 500 € : préparer la TVA |
 | 3 | Solde bancaire déclaré | 0 €, provisoire, 27 j sans mise à jour | sous 50 € : alerte (seuil confirmé par Sam le 03/08) |
 | 4 | **Blocages juridiques ouverts** | **6 sur 6** | tant que > 0 : aucune projection de revenu logiciel n'est opposable |
 | 5 | Abonnés Pro actifs | 0 (inscriptions fermées) | sous 60 % de la courbe nominale 2 semaines de suite : changer d'angle |
@@ -319,8 +439,11 @@ qui précèdent.**
 | --- | --- | --- | --- |
 | **R1** | **Concentration totale sur une personne** — un porteur, une source de revenu, aucun salarié | perte de 100 % du revenu en cas d'indisponibilité | non couvert. Aucune assurance, aucun second porteur. À poser à la revue |
 | **R2** | **Six blocages juridiques gatent 100 % du revenu logiciel** (identifiants clients en clair, cloisonnement non prouvable, pages légales non publiées) | tout le §4 hors conseil | chemin critique. Ne coûte pas d'argent, coûte des jours |
-| **R3** | **L'enveloppe fiscale unique sature** (37 500 € / 77 700 € partagés par les 3 marques) | régime, facturation, CGV, forme juridique | instruire à 30 000 €, trancher avant 41 250 € (§2.4) |
-| **R4** | **Le revenu réel n'est pas mesuré**, solde bancaire non suivi depuis 27 jours | toute décision d'engagement | demande n°1 à Sam. Sans ce chiffre, aucun arbitrage n'est fondé |
+| **R3** | **L'enveloppe fiscale sature** — **déclassé le 10/08** : le conseil étant en portage, les deux plafonds sont intégralement disponibles pour le logiciel | régime, forme juridique | instruire à 30 000 € de recettes **d'entité**, trancher avant 41 250 €. Le motif reste la responsabilité illimitée, pas la fiscalité (§2.4) |
+| **R4** | **Le solde bancaire n'est pas suivi** depuis 27 jours (le revenu de conseil, lui, est désormais mesuré : §2.5) | toute décision d'engagement | demande à Sam. Le TJM est connu, le solde ne l'est pas |
+| **R9** | **Dépendance à un intermédiaire unique** — 100 % du revenu réel transite par un sous-traitant (Éric), lui-même exposé à un client final unique (Crédit Logement), le tout via une société de portage | perte de la totalité du revenu réel si la chaîne se rompt à n'importe lequel de ses trois maillons | **non couvert.** Aucun second donneur d'ordre. À poser à la revue en priorité |
+| **R11** | **Ouverture le 1er septembre, absence du 7 au 20** — les six premiers jours d'exploitation sont suivis de deux semaines sans le fondateur, sur la fenêtre où arrivent les premiers inscrits, les premiers incidents et les premières questions. Les trois échéances réglementaires tombent le même 1er septembre | image de marque au lancement, incidents non traités, conformité non finalisée | **arbitré par Sam le 11/08 : ouverture maintenue au 1er.** Dispositif : Telegram en canal d'urgence, le CEO du comité assure la continuité. Décalage au 21 septembre écarté |
+| **R10** | **Soutenabilité du régime de travail** — mission à temps plein plus produit construit le soir ; érosion mesurée à 11 jours sur juillet-août (~3 850 € nets) | la ressource critique du dossier, et la seule non substituable | aucun dispositif. Suivi par l'indicateur n°1 (§5) |
 | **R5** | **La marge du Pro dépend d'un arbitrage d'ingénierie non pris** | facteur 25 sur la contribution par abonné (§2.1) | obtenir l'engagement technique **avant** d'ouvrir les inscriptions |
 | **R6** | **Le canal Team est indisponible** — chaîne BUILD en échec, exécution 165, échec encore constaté au 10/08 | le palier à 1 490 €/mois, soit 18,9 abonnés Pro par client | exclu des projections du §4. Aucun revenu Team supposé |
 | **R7** | **DEOS : zéro référence, zéro installation, connecteur Azure OpenAI inexistant et non chiffré** | la seule offre ouverte aux grands comptes | ne rien promettre en août au-delà de la démonstration et du cadrage |
@@ -417,6 +540,10 @@ reconstruction est fidèle.
 
 **Modèle de trésorerie.** 12 mois, septembre 2026 → août 2027. Recettes = (jours
 disponibles × 60 % × 800 €)/12 + abonnés × 77,56 € + cadrage + encaissement DEOS.
+**Formule caduque au 10/08** : le terme de conseil doit être remplacé par
+(jours de mission honorés × 350 € nets), hors chiffre d'affaires de l'entité, et le
+taux d'occupation de 60 % n'a plus d'objet (mission à temps plein). Modèle à
+réexécuter.
 Dépenses = API (331 €/mois, × facteur linéaire 1 → 2 hors scénario bas) + VPS 30 € +
 forfait GPU 275 € en scénario haut seulement. Trajectoires d'abonnés : celles du plan de
 lancement du 08/08 (nominale 8/25/50, ambitieuse 15/45/90), **gelées à leur dernier

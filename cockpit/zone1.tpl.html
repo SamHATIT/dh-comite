@@ -1,0 +1,51 @@
+<div class="col cost">
+  <div class="ch"><span class="lbl">Ce que ça coûte</span><span class="r src">{{cout_fenetre}}</span></div>
+
+  <!-- le chiffre mesuré -->
+  <div style="display:flex;align-items:baseline;gap:10px">
+    <span class="fig" style="font-size:52px;color:var(--brass)">{{cout_mesure}}</span>
+    <span class="m" style="font-size:13px;color:var(--bone-45)">{{cout_unite}}</span>
+    <span class="m" style="margin-left:auto;font-size:9px;letter-spacing:.14em;color:var(--d-ambre);align-self:flex-end;padding-bottom:6px">▲ PARTIEL</span>
+  </div>
+  <div class="lbl" style="font-size:7.5px;margin-top:6px">MESURÉ · COUVRE {{cout_couverture_pct}} % DE LA FACTURE</div>
+
+  <!-- le chiffre ET sa couverture, dans une seule barre -->
+  <div class="cov" style="margin-top:11px" role="img"
+       aria-label="Couverture de la mesure : {{cout_mesure}} {{cout_unite}} attribués sur une facture d’environ {{cout_facture}} {{cout_unite}}, soit {{cout_couverture_pct}} pour cent. Les {{cout_manquant}} {{cout_unite}} restants échappent à tout compteur.">
+    <i class="solid" style="width:{{cout_couverture_pct}}%"></i>
+    <i class="hatch" style="left:{{cout_couverture_pct}}%;right:0"></i>
+  </div>
+  <div style="display:flex;align-items:baseline;gap:10px;margin-top:7px">
+    <span class="m" style="font-size:8.5px;letter-spacing:.12em;color:var(--brass)">■ MESURÉ {{cout_mesure}} {{cout_unite}}</span>
+    <span class="m" style="margin-left:auto;font-size:8.5px;letter-spacing:.12em;color:var(--d-ambre)">▲ HORS COMPTEUR ≈ {{cout_manquant}} {{cout_unite}}</span>
+  </div>
+  <div class="lbl" style="font-size:7.5px;margin-top:5px">FACTURE FOURNISSEURS ≈ {{cout_facture}} {{cout_unite}}</div>
+
+  <!-- composition : deux postes mesurés, un territoire non couvert · même dénominateur -->
+  <div class="ln" style="margin-top:16px">
+    <span class="k"><i class="dot" style="background:var(--d-azur);margin-right:7px"></i>{{poste_1_nom}}</span>
+    <span class="v">{{poste_1_montant}} {{cout_unite}}</span></div>
+  <div class="bar" style="margin:3px 0 0"><i style="width:{{poste_1_pct}}%;background:var(--d-azur)"></i></div>
+
+  <div class="ln"><span class="k"><i class="dot" style="background:var(--d-turquoise);margin-right:7px"></i>{{poste_2_nom}}</span>
+    <span class="v">{{poste_2_montant}} {{cout_unite}}</span></div>
+  <div class="bar" style="margin:3px 0 0"><i style="width:{{poste_2_pct}}%;background:var(--d-turquoise)"></i></div>
+
+  <div class="ln"><span class="k" style="color:var(--d-ambre)">▲ Hors compteur</span>
+    <span class="v" style="color:var(--d-ambre)">≈ {{cout_manquant}} {{cout_unite}}</span></div>
+  <div class="bar hatch-bar" style="margin:3px 0 0"><i style="width:{{cout_manquant_pct}}%"></i></div>
+
+  <!-- ce qui manque, nommé -->
+  <div class="ch" style="margin-top:15px;padding-top:13px;border-top:1px solid var(--rule)">
+    <span class="lbl" style="color:var(--d-ambre)">{{cout_trous_n}} sources sans compteur</span>
+    <span class="r m" style="font-size:8px;letter-spacing:.12em;color:var(--bone-45)">RÉPARTITION INCONNUE</span></div>
+  <!--{{#cout_trous}}-->
+  <div class="trou"><span class="tn">{{trou_nom}}</span><span class="tr">{{trou_raison}}</span></div>
+  <!--{{/cout_trous}}-->
+
+  <div class="ch" style="margin-top:auto;padding-top:16px;border-top:1px solid var(--rule)"><span class="lbl">Le détail est ailleurs</span></div>
+  <div style="display:flex;flex-direction:column;gap:6px">
+    <a class="src" href="{{lien_comite}}">▸ SUIVI DU COMITÉ</a>
+    <a class="src" href="{{lien_admin}}">▸ CONSOLE D’ADMINISTRATION</a>
+  </div>
+</div>

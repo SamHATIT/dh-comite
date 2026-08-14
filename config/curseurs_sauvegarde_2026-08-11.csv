@@ -1,0 +1,37 @@
+id,direction,type_tache,niveau,justification,regle_code,maj_par,maj_le,evolution_prevue,canal_impose
+7,delivery,ecrire_base,2,"Propose, nécrit pas.",DH-COS-002,sam,2026-08-06 16:12:21.528817+00,,
+8,commercial,ecrire_base,2,"Propose, nécrit pas.",DH-COS-002,sam,2026-08-06 16:12:21.528817+00,,
+9,marketing,ecrire_base,2,"Propose, nécrit pas.",DH-COS-002,sam,2026-08-06 16:12:21.528817+00,,
+10,customer-success,ecrire_base,2,"Propose, nécrit pas.",DH-COS-002,sam,2026-08-06 16:12:21.528817+00,,
+12,legal,ecrire_base,2,"Propose, nécrit pas.",DH-COS-002,sam,2026-08-06 16:12:21.528817+00,,
+13,delivery,agir_production,1,"Observe seulement. Aucun redemarrage, aucun conteneur, aucun identifiant applicatif.",DH-DEL-001,sam,2026-08-06 16:12:21.528817+00,,
+14,commercial,agir_production,1,Hors perimetre.,DH-DEL-001,sam,2026-08-06 16:12:21.528817+00,,
+15,marketing,agir_production,1,Hors perimetre.,DH-DEL-001,sam,2026-08-06 16:12:21.528817+00,,
+16,customer-success,agir_production,1,Hors perimetre.,DH-DEL-001,sam,2026-08-06 16:12:21.528817+00,,
+17,chief-of-staff,agir_production,1,Hors perimetre.,DH-DEL-001,sam,2026-08-06 16:12:21.528817+00,,
+18,legal,agir_production,1,Hors perimetre.,DH-DEL-001,sam,2026-08-06 16:12:21.528817+00,,
+19,delivery,envoyer_externe,1,Aucun envoi.,DH-CRO-001,sam,2026-08-06 16:12:21.528817+00,,
+21,marketing,envoyer_externe,2,"Prepare les contenus, ne publie pas.",DH-CRO-001,sam,2026-08-06 16:12:21.528817+00,,
+22,customer-success,envoyer_externe,2,"Prepare les reponses, nenvoie pas.",DH-CRO-001,sam,2026-08-06 16:12:21.528817+00,,
+23,chief-of-staff,envoyer_externe,1,Aucun envoi.,DH-CRO-001,sam,2026-08-06 16:12:21.528817+00,,
+24,legal,envoyer_externe,1,Aucun envoi.,DH-CRO-001,sam,2026-08-06 16:12:21.528817+00,,
+25,delivery,engager_depense,2,Chiffre et fait approuver. Nengage jamais.,DH-BUDGET-001,sam,2026-08-06 16:12:21.528817+00,,
+26,commercial,engager_depense,2,Idem.,DH-BUDGET-001,sam,2026-08-06 16:12:21.528817+00,,
+27,marketing,engager_depense,2,Idem.,DH-BUDGET-001,sam,2026-08-06 16:12:21.528817+00,,
+28,customer-success,engager_depense,2,Idem.,DH-BUDGET-001,sam,2026-08-06 16:12:21.528817+00,,
+29,chief-of-staff,engager_depense,2,Idem. Surveille le seuil de tresorerie (50 EUR).,DH-BUDGET-001,sam,2026-08-06 16:12:21.528817+00,,
+30,legal,engager_depense,2,Idem — y compris honoraires davocat.,DH-BUDGET-001,sam,2026-08-06 16:12:21.528817+00,,
+31,delivery,modifier_dispositif,1,"Peut proposer une evolution, ne la pose jamais.",R14,sam,2026-08-06 16:12:21.528817+00,,
+32,commercial,modifier_dispositif,1,Idem.,R14,sam,2026-08-06 16:12:21.528817+00,,
+33,marketing,modifier_dispositif,1,Idem.,R14,sam,2026-08-06 16:12:21.528817+00,,
+34,customer-success,modifier_dispositif,1,Idem.,R14,sam,2026-08-06 16:12:21.528817+00,,
+35,chief-of-staff,modifier_dispositif,1,Idem.,R14,sam,2026-08-06 16:12:21.528817+00,,
+36,legal,modifier_dispositif,1,Idem.,R14,sam,2026-08-06 16:12:21.528817+00,,
+20,commercial,envoyer_externe,2,"Prepare tout — dossiers, brouillons, sequences — nenvoie RIEN.",DH-CRO-001,sam,2026-08-06 16:12:21.528817+00,"Passage prevu au niveau 3 (agit sous validation) a louverture du regime commercial. DATE NON FIXEE — Sam la validera quand le dispositif sera pret : site rouvert, parcours dessai fonctionnel, offre canonique a jour.",
+11,chief-of-staff,ecrire_base,4,"Ecrit au registre en autonomie, exclusivement via deos-decisions. La tracabilite integrale tient lieu de controle : Sam relit apres coup plutot que davaliser chaque ecriture.",DH-COS-002,sam,2026-08-06 16:12:21.528817+00,,"Exclusivement via loutil deos-decisions, qui trace auteur, date, preuve et justification. Aucune ecriture SQL directe : elle est bloquee par DH-COS-002 meme au niveau autonomie."
+1,delivery,observer,4,Lecture et rapport : le metier meme de la direction.,,sam,2026-08-06 16:12:21.528817+00,,Lecture seule sur les vues v_deos_* uniquement. Les identifiants applicatifs de production sont bloques (DH-DEL-002).
+2,commercial,observer,4,Idem.,,sam,2026-08-06 16:12:21.528817+00,,Lecture seule sur les vues v_deos_* uniquement. Les identifiants applicatifs de production sont bloques (DH-DEL-002).
+3,marketing,observer,4,Idem.,,sam,2026-08-06 16:12:21.528817+00,,Lecture seule sur les vues v_deos_* uniquement. Les identifiants applicatifs de production sont bloques (DH-DEL-002).
+4,customer-success,observer,4,Idem.,,sam,2026-08-06 16:12:21.528817+00,,Lecture seule sur les vues v_deos_* uniquement. Les identifiants applicatifs de production sont bloques (DH-DEL-002).
+5,chief-of-staff,observer,4,Idem — cest son role principal.,,sam,2026-08-06 16:12:21.528817+00,,Lecture seule sur les vues v_deos_* uniquement. Les identifiants applicatifs de production sont bloques (DH-DEL-002).
+6,legal,observer,4,Veille reglementaire autonome.,,sam,2026-08-06 16:12:21.528817+00,,Lecture seule sur les vues v_deos_* uniquement. Les identifiants applicatifs de production sont bloques (DH-DEL-002).

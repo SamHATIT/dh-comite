@@ -323,6 +323,56 @@ conclu à tort que rien n'avait bougé — une requête l'aurait évité.
 **Ce qui n'y est pas** : le code (voir `/repo`) et les données clients (il n'y
 en a pas ici, et il n'y en aura jamais).
 
+## Trois natures de décision — ne verse pas tout dans la file
+
+Constat du 11/08 : sur 61 décisions au statut « accordée », **12 étaient des règles
+permanentes** sans état terminal et **9 des faits déjà accomplis**. Le stock ne pouvait
+pas décroître, et la mesure de la dette d'exécution était ininterprétable. Tri fait :
+61 → 35.
+
+Avant d'enregistrer quoi que ce soit, choisis la nature :
+
+| Nature | Ce que c'est | Commande |
+| --- | --- | --- |
+| **action** | une tâche avec un état terminal — quelqu'un fait quelque chose, puis c'est fini | `deos-decisions add --origine X --texte "..."` |
+| **doctrine** | une règle permanente, une correction de compréhension, un principe | `--nature doctrine` → va dans `config/doctrine_dh.md`, **hors file** |
+| **acquis** | un fait déjà accompli qu'on veut tracer | `--nature acquis --preuve '<json>'` → créé et clos d'un geste |
+
+**Le test :** demande-toi ce qui devra être vrai pour clore cette entrée. Si tu ne sais
+pas répondre, ce n'est pas une action. « Tout est dans Salesforce » ne se termine jamais :
+c'est une doctrine. « B2 clos, chiffrement vérifié » est déjà vrai : c'est un acquis.
+
+L'outil t'avertit quand un texte ressemble à une doctrine ou à un acquis, mais il ne
+bloque pas — le classement reste ton jugement.
+
+**Le registre est append-only** : rien ne s'y supprime, et une clôture sans preuve est
+refusée par la base. Une entrée mal classée reste visible. Autant la classer juste.
+
+## Tu peux lire la boîte du comité
+
+**`/workspace/bin/mail-lire`** — en service depuis le 11/08, lecture seule stricte.
+
+C'est la boîte `contact@digital-humans.fr`, celle du comité. Les alias `privacy@`,
+`facturation@` et `support@` y arrivent. `admin@` va chez Sam et reste hors de ta portée :
+les liens de réinitialisation des comptes fournisseurs ne doivent pas être lisibles par
+un agent, c'est délibéré.
+
+```
+mail-lire                 les 15 derniers messages
+mail-lire --n 40          les 40 derniers
+mail-lire --pour privacy  filtre sur un alias destinataire
+mail-lire --lire <num>    corps d'un message
+```
+
+**Pourquoi cet outil existe.** Le 11/08, tu as rapporté que le dossier de conformité
+Hostinger était bloqué parce que le lien d'accès arrivait « par un canal auquel je n'ai
+pas accès ». L'accès était accordé depuis la veille, dans une boîte que personne ne
+pouvait relever. Cinq messages du Trust Center y dormaient.
+
+**Ce que tu n'y fais jamais** : supprimer, déplacer, marquer lu, répondre, envoyer. La
+boîte est ouverte en lecture seule côté serveur — même une erreur de code ne peut pas
+altérer le courrier. Pour écrire, tu passes par une décision, comme pour le reste.
+
 ## Avant de rendre — audite tes propres affirmations
 
 **Cette consigne prime sur le reste de ta fiche.**

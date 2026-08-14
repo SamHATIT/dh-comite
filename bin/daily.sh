@@ -11,7 +11,12 @@ if [ "$(date -u +%u)" = "1" ]; then echo "lundi : daily remplacé par le comité
 # rien changer, et on evite de payer une generation obsolete.
 # Une version figee ne se justifie que pour reproduire un resultat a
 # l'identique, et doit alors porter la raison en commentaire.
-CEO_MODEL=opus
+# COUT (11/08) : le brief tournait sur Opus quand les rondes des directeurs, qui
+# font le travail d'analyse, tournent sur Sonnet. Personne n'avait arbitre cela.
+# Mesure du 11/08 : 5,48 USD, dont 47% relecture de contexte, 33% sortie,
+# 20% ecriture de cache. Bascule Sonnet : ~2,19 USD.
+# Surchargeable pour un A/B : CEO_MODEL=haiku bin/daily.sh
+CEO_MODEL=${CEO_MODEL:-sonnet}
 CTX=$(mktemp)
 
 fresh() { # $1=cle : affiche le rapport avec son état de fraîcheur
@@ -61,11 +66,17 @@ PROMPT=$(mktemp)
   echo "1. D'abord le bloc JSON brief_data (schéma Gate 1), stocké via :"
   echo "   echo '<json>' | /workspace/bin/deos-state set brief --par ceo"
   echo "2. Puis le Markdown complet (8 sections), écrit dans /workspace/briefs/brief-$TS.md"
-  echo "3. Restitue aussi le Markdown dans ta réponse."
+  # COUT (11/08) : cette ligne demandait de restituer le brief ENTIER dans la
+  # reponse, en plus du fichier deja ecrit — 26 Ko produits deux fois. Rien ne lit
+  # cette reponse : alerte Telegram, dossier illustre et score de sante partent
+  # tous du fichier ou de la base. Verifie avant suppression le 11/08.
+  echo "3. Ne restitue PAS le Markdown dans ta réponse : le fichier fait foi."
+  echo "   Termine par une seule ligne : sections écrites et nombre d'alertes hautes."
 } > "$PROMPT"
 
 cat "$PROMPT" | claude -p \
   --model "$CEO_MODEL" \
+  --max-turns "${CEO_MAX_TURNS:-20}" \
   --allowedTools "Bash,Read,Grep,Glob,Write" \
   --output-format json > "briefs/daily-$TS.meta.json" 2> "briefs/daily-$TS.err"
 RC=$?

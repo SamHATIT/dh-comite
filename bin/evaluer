@@ -1,0 +1,123 @@
+#!/usr/bin/env python3
+"""Evaluateur gele — calcule le score de chaque direction SANS LLM.
+
+POURQUOI (11/08) : verification sur les 12 rondes des 10 et 11/08 — un seul score
+exploitable (Delivery). Sa serie : 88 le 09/08, 68 le 10/08, 56 le 11/08. Trente-deux
+points en deux jours, avec une formule reinventee a chaque ronde et visible nulle part
+ailleurs que dans la reponse du modele. Ce n'est pas une mesure.
+
+PRINCIPE (pattern autoresearch, Karpathy) : l'agent ne note pas son propre travail.
+Le score est calcule ici, par des requetes deterministes, et les directeurs le LISENT.
+Toute metrique doit se compter sans jugement : un nombre de lignes en base, un age en
+jours. Si une metrique demande une appreciation, elle n'a rien a faire ici.
+
+USAGE : bin/evaluer [direction]        calcule et affiche, n'ecrit rien
+        bin/evaluer --ecrire           calcule et enregistre dans deos_state
+"""
+import subprocess, sys, json, os
+from datetime import date
+
+COMITE = os.environ.get("COMITE_DB_DSN", "")
+PLAT = "postgresql://digital_humans:DH_SecurePass2025!@172.19.0.1:5432/digital_humans_db"
+
+def q(dsn, sql):
+    r = subprocess.run(["psql", dsn, "-tAc", sql], capture_output=True, text=True)
+    if r.returncode != 0:
+        return None
+    v = r.stdout.strip()
+    return v if v else None
+
+def n(dsn, sql):
+    v = q(dsn, sql)
+    try: return int(v)
+    except: return 0
+
+# Chaque entree : (libelle, valeur mesuree, seuil, penalite, requete pour audit)
+def grille_cos():
+    a = n(COMITE, "select count(*) from decisions where statut='accordee'")
+    age = n(COMITE, "select coalesce(max(now()::date - date::date),0) from decisions where statut='accordee'")
+    sam = n(COMITE, "select count(*) from decisions where statut='attente_sam'")
+    sam_vieux = n(COMITE, "select count(*) from decisions where statut='attente_sam' and now()::date - date::date > 7")
+    return [
+        ("decisions accordees non executees", a, 10, min(30, max(0,(a-10))//2), "statut='accordee'"),
+        ("age de la plus vieille accordee (j)", age, 14, min(20, max(0,(age-14))), "max(age) accordee"),
+        ("decisions en attente de Sam", sam, 5, min(10, max(0,(sam-5))*2), "statut='attente_sam'"),
+        ("dont en attente depuis plus de 7 j", sam_vieux, 0, min(15, sam_vieux*5), "attente_sam > 7j"),
+    ]
+
+def grille_delivery():
+    fail = n(PLAT, "select count(*) from v_deos_executions where status='FAILED' and coalesce(completed_at,created_at) > now()-interval '7 days'")
+    jours = n(PLAT, "select coalesce(extract(day from now()-max(completed_at))::int, 99) from v_deos_executions where status='COMPLETED'")
+    phases = n(PLAT, "select count(*) from v_deos_build_phases where status='FAILED'")
+    # CORRECTIF 11/08 : WAITING_BR_VALIDATION est dans status, pas dans execution_state
+    # (ou la valeur est en minuscules). La requete initiale renvoyait 0 et donnait un
+    # Delivery a 100/100 le jour ou son directeur se notait rouge a 56, faits a l appui.
+    bloq = n(PLAT, "select count(*) from v_deos_executions where status='WAITING_BR_VALIDATION'")
+    # SDS et BUILD sont deux choses distinctes : le dernier SDS date d hier, aucun BUILD
+    # n a abouti depuis le 08/08. Ne mesurer que le SDS masquait exactement le blocage signale.
+    jours_build = n(PLAT, "select coalesce(extract(day from now()-max(completed_at))::int, 99) from v_deos_build_phases where status='COMPLETED'")
+    return [
+        ("executions FAILED sur 7 j", fail, 0, min(25, fail*5), "status=FAILED"),
+        ("jours depuis dernier SDS abouti", jours, 3, min(15, max(0,(jours-3))*3), "max(completed_at) SDS"),
+        ("jours depuis dernier BUILD abouti", jours_build, 3, min(25, max(0,(jours_build-3))*3), "max(completed_at) build_phases"),
+        ("phases BUILD en echec", phases, 0, min(20, phases*4), "build_phases FAILED"),
+        ("executions bloquees en validation", bloq, 3, min(15, max(0,(bloq-3))*2), "WAITING_BR_VALIDATION"),
+    ]
+
+def grille_commercial():
+    leads = n(PLAT, "select count(*) from v_deos_leads where created_at > now()-interval '30 days'")
+    sig_non = n(PLAT, "select count(*) from v_deos_signaux where statut is null or statut in ('nouveau','non_qualifie')")
+    sig_age = n(PLAT, "select coalesce(extract(day from now()-min(signal_date))::int,0) from v_deos_signaux where statut is null or statut in ('nouveau','non_qualifie')")
+    return [
+        ("leads crees sur 30 j", leads, 5, min(25, max(0,(5-leads))*5), "v_deos_leads 30j"),
+        ("signaux non qualifies", sig_non, 20, min(25, max(0,(sig_non-20))//4), "statut nouveau/null"),
+        ("age du plus vieux signal non traite (j)", sig_age, 30, min(20, max(0,(sig_age-30))//2), "min(signal_date)"),
+    ]
+
+def grille_marketing():
+    art = n(PLAT, "select count(*) from v_deos_blog_articles where coalesce(published_at,generated_at) > now()-interval '30 days'")
+    depuis = n(PLAT, "select coalesce(extract(day from now()-max(published_at))::int, 99) from v_deos_blog_articles")
+    veille = n(PLAT, "select coalesce(extract(day from now()-max(report_date))::int, 99) from v_deos_veille")
+    return [
+        ("contenus publies sur 30 j", art, 4, min(30, max(0,(4-art))*8), "blog_articles 30j"),
+        ("jours depuis derniere publication", depuis, 10, min(20, max(0,(depuis-10))), "max(published_at)"),
+        ("jours depuis dernier rapport de veille", veille, 10, min(15, max(0,(veille-10))), "max(report_date)"),
+    ]
+
+GRILLES = {"chief-of-staff": grille_cos, "delivery": grille_delivery,
+           "commercial": grille_commercial, "marketing": grille_marketing}
+# customer-success : aucun client a ce jour, aucune metrique n'a d'objet.
+# legal : aucune table d'echeances reglementaires en base. Source a creer avant toute grille.
+SANS_GRILLE = {"customer-success": "aucun client — la metrique n'a pas d'objet",
+               "legal": "aucune source d'echeances en base — a creer avant de noter"}
+
+def evaluer(d):
+    lignes = GRILLES[d]()
+    total = sum(l[3] for l in lignes)
+    return max(0, 100 - total), lignes
+
+def main():
+    ecrire = "--ecrire" in sys.argv
+    cible = next((a for a in sys.argv[1:] if not a.startswith("--")), None)
+    res = {}
+    for d in (["chief-of-staff","delivery","commercial","marketing"] if not cible else [cible]):
+        if d in SANS_GRILLE:
+            print(f"\n{d.upper()} — pas de grille : {SANS_GRILLE[d]}"); continue
+        if d not in GRILLES:
+            print(f"direction inconnue : {d}"); continue
+        s, lignes = evaluer(d)
+        res[d] = s
+        print(f"\n{d.upper()} — score {s}/100")
+        for lib, val, seuil, pen, src in lignes:
+            etat = "OK " if pen == 0 else f"-{pen:<3}"
+            print(f"  {etat} {lib:44} = {val:<5} (seuil {seuil})   [{src}]")
+    if ecrire and res:
+        payload = json.dumps({"jour": str(date.today()), "scores": res, "source": "bin/evaluer"})
+        subprocess.run(["/workspace/bin/deos-state", "set", "scores_calcules", "--par", "evaluateur"],
+                       input=payload, text=True)
+        print(f"\nEnregistre dans deos_state.scores_calcules")
+    elif res:
+        print("\n(rien ecrit — ajouter --ecrire pour enregistrer)")
+
+if __name__ == "__main__":
+    main()

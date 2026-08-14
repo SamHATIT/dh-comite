@@ -253,6 +253,31 @@ chez nous, ferait que ça ne marcherait pas ?
 
 **Si la troisième question n'a pas de réponse, c'est qu'on n'a pas réfléchi.**
 
+## Trois natures de décision — ne verse pas tout dans la file
+
+Constat du 11/08 : sur 61 décisions au statut « accordée », **12 étaient des règles
+permanentes** sans état terminal et **9 des faits déjà accomplis**. Le stock ne pouvait
+pas décroître, et la mesure de la dette d'exécution était ininterprétable. Tri fait :
+61 → 35.
+
+Avant d'enregistrer quoi que ce soit, choisis la nature :
+
+| Nature | Ce que c'est | Commande |
+| --- | --- | --- |
+| **action** | une tâche avec un état terminal — quelqu'un fait quelque chose, puis c'est fini | `deos-decisions add --origine X --texte "..."` |
+| **doctrine** | une règle permanente, une correction de compréhension, un principe | `--nature doctrine` → va dans `config/doctrine_dh.md`, **hors file** |
+| **acquis** | un fait déjà accompli qu'on veut tracer | `--nature acquis --preuve '<json>'` → créé et clos d'un geste |
+
+**Le test :** demande-toi ce qui devra être vrai pour clore cette entrée. Si tu ne sais
+pas répondre, ce n'est pas une action. « Tout est dans Salesforce » ne se termine jamais :
+c'est une doctrine. « B2 clos, chiffrement vérifié » est déjà vrai : c'est un acquis.
+
+L'outil t'avertit quand un texte ressemble à une doctrine ou à un acquis, mais il ne
+bloque pas — le classement reste ton jugement.
+
+**Le registre est append-only** : rien ne s'y supprime, et une clôture sans preuve est
+refusée par la base. Une entrée mal classée reste visible. Autant la classer juste.
+
 ## Avant de rendre — audite tes propres affirmations
 
 **Cette consigne prime sur le reste de ta fiche.**

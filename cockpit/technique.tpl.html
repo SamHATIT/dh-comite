@@ -1,0 +1,156 @@
+<!doctype html><html lang="fr"><head><meta charset="utf-8"><title>B · Technique — La Une</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+--brass:#C8A97E; --brass-dk:#8A7448;
+--ink:#1A1A1A; --ink-0:#121213; --ink-2:#212124;
+--bone:#F4F2ED; --bone-70:#B4B1AB; --bone-45:#7C7A76;
+--rule:#FFFFFF16; --rule-2:#FFFFFF0C;
+--d-ok:#4E9E6A; --d-warn:#C8A97E; --d-down:#C0524F;
+--d-azur:#5B8FD4; --d-ambre:#D4813F; --d-violine:#8B76CE;
+--d-turquoise:#3FA8A0; --d-fuchsia:#C75B8A; --d-olive:#97A04A;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:#0C0C0D}
+body{font-family:Inter,system-ui,sans-serif;font-weight:300;color:var(--bone-70);-webkit-font-smoothing:antialiased;display:flex;justify-content:center}
+.screen{width:1440px;height:900px;flex:none;flex-shrink:0;overflow:hidden;background:var(--ink);position:relative;display:flex;flex-direction:column;padding:34px 46px 0}
+a{color:var(--brass);text-decoration:none}
+a:hover{color:var(--bone)}
+.m{font-family:'JetBrains Mono',monospace}
+.c{font-family:'Cormorant Garamond',serif}
+.lbl{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.22em;color:var(--bone-45);text-transform:uppercase}
+.src{font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:.12em;color:var(--brass-dk)}
+.src:hover{color:var(--brass)}
+
+.mast{display:flex;align-items:flex-end;gap:24px;flex:none;padding-bottom:16px;border-bottom:1px solid var(--brass)}
+.mast h1{font-family:'Cormorant Garamond',serif;font-weight:400;font-size:40px;color:var(--bone);margin:8px 0 0;line-height:1}
+.mast .rt{margin-left:auto;text-align:right}
+.verdict{flex:none;display:flex;align-items:flex-end;gap:40px;padding:30px 0 26px;border-bottom:1px solid var(--rule)}
+.verdict .num{font-family:'JetBrains Mono',monospace;font-weight:300;font-size:118px;line-height:.92;letter-spacing:-.04em}
+.verdict .say{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:38px;color:var(--bone);line-height:1.1}
+.verdict .det{font-family:Inter,sans-serif;font-size:14px;font-weight:300;line-height:1.75;color:var(--bone-70);margin-top:12px;max-width:52ch}
+.cols{flex:1;display:flex;gap:0;min-height:0;padding-top:24px}
+.col{flex:1;padding:0 30px;min-width:0;display:flex;flex-direction:column;border-right:1px solid var(--rule)}
+.col:first-child{padding-left:0}
+.col:last-child{padding-right:0;border-right:none}
+.ch{display:flex;align-items:baseline;gap:10px;flex:none;padding-bottom:12px}
+.ch .r{margin-left:auto}
+.ln{display:flex;align-items:baseline;gap:10px;padding:7px 0;border-top:1px solid var(--rule-2)}
+.ln .k{font-family:'JetBrains Mono',monospace;font-size:10.5px;color:var(--bone-70);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ln .v{margin-left:auto;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--bone);white-space:nowrap}
+.fig{font-family:'JetBrains Mono',monospace;font-weight:300;letter-spacing:-.02em;color:var(--bone);line-height:1}
+.dot{width:7px;height:7px;flex:none;display:inline-block}
+.bar{height:6px;background:#FFFFFF0A;position:relative;overflow:hidden}
+.bar i{position:absolute;left:0;top:0;bottom:0;display:block}
+.strip{flex:none;display:flex;align-items:center;gap:0;height:62px;margin-top:0;border-top:1px solid var(--brass)}
+.strip .s{flex:1;padding:0 22px;border-right:1px solid var(--rule);display:flex;align-items:baseline;gap:9px}
+.strip .s:first-child{padding-left:0}
+.strip .s:last-child{border-right:none;padding-right:0}
+.strip .n{font-family:'JetBrains Mono',monospace;font-weight:300;font-size:24px;color:var(--bone);line-height:1;letter-spacing:-.02em}
+.strip .t{font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:.14em;color:var(--bone-45);line-height:1.5}
+.off{display:flex;align-items:center;gap:16px;padding:14px 0}
+</style></head><body><div class="screen">
+
+<div class="mast">
+  <div><div class="lbl" style="color:var(--brass-dk)">PROPOSITION B · LA UNE — ÉCRAN 1 SUR 2</div><h1>Technique</h1></div>
+  <div class="rt"><div class="lbl">MERCREDI 12 AOÛT 2026 · 08 H 14</div>
+  <div class="m" style="font-size:10px;letter-spacing:.14em;color:var(--bone-45);margin-top:6px">RELEVÉ IL Y A 40 SECONDES</div></div>
+</div>
+
+<div class="verdict">
+  <div class="num" style="color:{{t_verdict_couleur}}">{{t_verdict_nombre}}</div>
+  <div style="flex:1;min-width:0">
+    <div class="say">{{t_verdict_phrase}}</div>
+    <div class="det">{{t_verdict_detail}}</div>
+  </div>
+  <div style="text-align:right;flex:none;padding-bottom:6px">
+    <div style="display:flex;flex-direction:column;gap:7px;align-items:flex-end">
+      <span class="m" style="font-size:10px;letter-spacing:.14em;color:var(--d-down)">✕ dh-scheduler · ARRÊTÉ</span>
+      <span class="m" style="font-size:10px;letter-spacing:.14em;color:var(--d-warn)">▲ chromadb · 840 ms</span>
+      <span class="m" style="font-size:10px;letter-spacing:.14em;color:var(--d-warn)">▲ elena · MUETTE</span>
+      <a class="src" href="#" style="margin-top:5px">▸ CONSOLE D’ADMINISTRATION</a>
+    </div>
+  </div>
+</div>
+
+<div class="cols">
+
+  <!-- Colonne 1 · l'infrastructure -->
+  <div class="col">
+    <div class="ch"><span class="lbl">L’infrastructure</span><span class="r src">/api/services/status</span></div>
+    <div style="display:flex;align-items:baseline;gap:12px;padding-bottom:14px">
+      <span class="fig" style="font-size:52px;color:{{t_svc_couleur}}">{{t_svc_actifs}}</span>
+      <span class="m" style="font-size:11px;color:var(--bone-45);line-height:1.6">/ 9 SERVICES<br>ACTIFS</span>
+      <span style="width:1px;height:38px;background:var(--rule);margin:0 4px"></span>
+      <span class="fig" style="font-size:52px;color:var(--d-ok)">{{t_docker_actifs}}</span>
+      <span class="m" style="font-size:11px;color:var(--bone-45);line-height:1.6">/ 6 CONTENEURS<br>DOCKER</span>
+    </div>
+    <div class="ln"><span class="k"><i class="dot" style="background:var(--d-ok);border-radius:50%;margin-right:7px"></i>dh-backend · dh-frontend · dh-worker</span><span class="v">18–31 ms</span></div>
+    <div class="ln"><span class="k"><i class="dot" style="background:var(--d-ok);border-radius:50%;margin-right:7px"></i>postgresql · redis · nginx · n8n</span><span class="v">2–52 ms</span></div>
+    <div class="ln"><span class="k" style="color:var(--d-warn)"><i class="dot" style="background:var(--d-warn);border-radius:2px;margin-right:7px"></i>chromadb ▲ lent</span><span class="v" style="color:var(--d-warn)">{{t_chroma_ms}}</span></div>
+    <div class="ln"><span class="k" style="color:var(--d-down)"><i class="dot" style="background:var(--d-down);transform:rotate(45deg);margin-right:7px"></i>dh-scheduler ✕ arrêté</span><span class="v" style="color:var(--d-down)">3 h 42</span></div>
+
+    <div class="ch" style="margin-top:auto;padding-top:20px;border-top:1px solid var(--rule)"><span class="lbl">Base RAG</span><span class="r src">/api/rag/health</span></div>
+    <div style="display:flex;align-items:baseline;gap:12px">
+      <span class="fig" style="font-size:40px">32&#8201;104</span>
+      <span class="m" style="font-size:10px;color:var(--bone-45);line-height:1.6">FRAGMENTS<br>1,4 Go · 6 COLLECTIONS</span>
+    </div>
+  </div>
+
+  <!-- Colonne 2 · le travail en cours -->
+  <div class="col">
+    <div class="ch"><span class="lbl">Le travail en cours</span><span class="r src">/api/dh/workers</span></div>
+    <div style="display:flex;align-items:baseline;gap:12px;padding-bottom:16px">
+      <span class="fig" style="font-size:52px">{{t_exec_actives}}</span>
+      <span class="m" style="font-size:11px;color:var(--bone-45);line-height:1.6">EXÉCUTIONS<br>ACTIVES</span>
+    </div>
+    <div style="display:flex;height:11px" role="img" aria-label="Six exécutions actives : trois en cours, deux en attente, une en reprise.">
+      <i style="width:50%;background:var(--d-azur)"></i><i style="width:33.3%;background:var(--d-violine)"></i><i style="width:16.7%;background:var(--d-turquoise)"></i>
+    </div>
+    <div class="ln" style="border-top:none;padding-top:11px"><span class="k"><i class="dot" style="background:var(--d-azur);margin-right:7px"></i>En cours</span><span class="v">{{t_exec_encours}}</span></div>
+    <div class="ln"><span class="k"><i class="dot" style="background:var(--d-violine);margin-right:7px"></i>En attente</span><span class="v">{{t_exec_attente}}</span></div>
+    <div class="ln"><span class="k"><i class="dot" style="background:var(--d-turquoise);margin-right:7px"></i>Reprise</span><span class="v">{{t_exec_reprise}}</span></div>
+    <div class="ln"><span class="k">File ARQ · clés Redis</span><span class="v">4 · 1&#8201;284</span></div>
+    <div class="ln"><span class="k" style="color:var(--d-down)">Erreurs worker · dernière heure ✕</span><span class="v" style="color:var(--d-down)">{{t_worker_erreurs}}</span></div>
+
+    <div class="ch" style="margin-top:auto;padding-top:20px;border-top:1px solid var(--rule)"><span class="lbl">n8n · 14 jours</span><span class="r src">12 / 20 ACTIFS</span></div>
+    <svg viewBox="0 0 380 62" width="100%" height="62" preserveAspectRatio="none" role="img" aria-label="Exécutions n8n sur quatorze jours, de 22 à 61 par jour ; trois échecs les 10, 11 et 12 août."><title>Exécutions n8n</title><desc>14 points ; 3 échecs en fin de période.</desc>
+      <line x1="0" y1="16" x2="380" y2="16" stroke="#FFFFFF0C"/><line x1="0" y1="42" x2="380" y2="42" stroke="#FFFFFF0C"/>
+      <polyline fill="none" stroke="#5B8FD4" stroke-width="1.6" points="0,50 29,42 58,45 88,30 117,36 146,24 175,27 204,18 234,30 263,21 292,12 321,23 350,17 379,26"/>
+      <g fill="#C0524F"><rect x="288" y="8" width="7.5" height="7.5" transform="rotate(45 292 12)"/><rect x="317" y="19" width="7.5" height="7.5" transform="rotate(45 321 23)"/><rect x="346" y="13" width="7.5" height="7.5" transform="rotate(45 350 17)"/></g>
+      <circle cx="379" cy="26" r="3" fill="#1A1A1A" stroke="#F4F2ED" stroke-width="1.4"/>
+    </svg>
+    <div style="display:flex;margin-top:6px"><span class="lbl" style="font-size:7.5px">30 JUIL.</span><span class="lbl" style="font-size:7.5px;margin-left:auto;color:var(--d-down)">3 ÉCHECS ✕ · 12 AOÛT · 47 EXÉC.</span></div>
+  </div>
+
+  <!-- Colonne 3 · ce qui coûte -->
+  <div class="col" style="flex:.92">
+    <div class="ch"><span class="lbl">Serveur GPU</span><span class="r src">LOUÉ À L’HEURE</span></div>
+    {{t_gpu_bloc}}
+    <div style="display:flex;align-items:center;gap:16px">
+      <div style="position:relative;width:88px;height:88px;flex:none">
+        <svg viewBox="0 0 120 120" width="88" height="88" role="img" aria-label="Budget consommé 1 187 dollars sur 1 800, soit 66 pour cent."><title>Budget</title><desc>1 187 $ sur 1 800 $ — 66 %</desc>
+          <path d="M 25.6 94.4 A 48 48 0 1 1 94.4 94.4" fill="none" stroke="#FFFFFF14" stroke-width="8"/>
+          <path d="M 25.6 94.4 A 48 48 0 1 1 94.4 94.4" fill="none" stroke="#C8A97E" stroke-width="8" stroke-dasharray="226.2" stroke-dashoffset="76.9"/>
+        </svg>
+        <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding-top:5px">
+          <div class="fig" style="font-size:23px">{{t_budget_pct}}<span style="font-size:12px">&#8201;%</span></div>
+        </div>
+      </div>
+      <div style="flex:1;min-width:0">
+        <div class="ln" style="border-top:none;padding-top:0"><span class="k">Mois</span><span class="v">1&#8201;187 $</span></div>
+        <div class="ln"><span class="k">Plafond</span><span class="v">1&#8201;800 $</span></div>
+        <div class="ln"><span class="k" style="color:var(--d-ok)">Marge</span><span class="v" style="color:var(--d-ok)">{{t_budget_marge}}</span></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="strip">
+  <div class="s"><span class="n" style="color:{{t_agents_couleur}}">{{t_agents_sains}}</span><span class="t">AGENTS EN SANTÉ<br>SUR 11</span></div>
+  <div class="s"><span class="n">1&#8201;284</span><span class="t">CLÉS<br>REDIS</span></div>
+  <div class="s"><span class="n" style="color:var(--d-ok)">✓</span><span class="t">SALESFORCE · dh-prod<br>JETON VALIDE 41 J</span></div>
+  <div class="s"><span class="n">{{t_cout_jour}}</span><span class="t">DÉPENSE LLM<br>AUJOURD’HUI</span></div>
+  <div class="s"><span class="t" style="letter-spacing:.16em">● ACTIF &nbsp;&nbsp; ▲ DÉGRADÉ &nbsp;&nbsp; ✕ TOMBÉ<br><span style="color:var(--brass-dk)">FORME ET LIBELLÉ DOUBLENT LA COULEUR</span></span></div>
+</div>
+</div></body></html>

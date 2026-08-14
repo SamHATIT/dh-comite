@@ -1,5 +1,17 @@
 #!/bin/bash
-# deos-decisions add --origine X --texte "..." [--options JSON --reco "..."]
+# deos-decisions add --origine X --texte "..." [--options JSON --reco "..." --nature action|doctrine|acquis]
+#
+# POURQUOI --nature (11/08) : le registre servait a TROIS usages sous un seul statut —
+# file d execution, registre de doctrine, journal de faits accomplis. Sur 61 decisions
+# "accordee", 12 etaient des regles permanentes sans etat terminal et 9 des faits deja
+# accomplis. Le stock ne pouvait pas decroitre, et la metrique du Chief of Staff qui le
+# compte etait ininterpretable. Tri fait le 11/08 : 61 -> 36.
+#
+#   action   (defaut) : une tache avec un etat terminal. Entre dans la file.
+#   doctrine          : une regle permanente. Va dans config/doctrine_dh.md, PAS dans
+#                       la file. Rien a executer, donc rien a compter.
+#   acquis            : un fait deja accompli. Cree et clos dans le meme geste,
+#                       --preuve obligatoire. Trace sans encombrer.
 # deos-decisions status <id> <statut> --par <agent> [--preuve JSON --porte-sur "..."]
 # deos-decisions list [statut]
 set -euo pipefail
@@ -7,12 +19,39 @@ esc() { printf "%s" "$1" | sed "s/'/''/g"; }
 CMD="${1:-}"; shift || true
 case "$CMD" in
   add)
-    ORIGINE=""; TEXTE=""; OPTIONS="null"; RECO=""
+    ORIGINE=""; TEXTE=""; OPTIONS="null"; RECO=""; NATURE="action"; PREUVE=""
     while [ $# -gt 0 ]; do case "$1" in
       --origine) ORIGINE="$2"; shift 2;; --texte) TEXTE="$2"; shift 2;;
       --options) OPTIONS="$2"; shift 2;; --reco) RECO="$2"; shift 2;;
+      --nature) NATURE="$2"; shift 2;; --preuve) PREUVE="$2"; shift 2;;
       *) shift;; esac; done
+    case "$NATURE" in action|doctrine|acquis) ;; *) echo "REFUS: --nature attend action, doctrine ou acquis" >&2; exit 2;; esac
     [ -z "$ORIGINE" ] || [ -z "$TEXTE" ] && { echo "REFUS: --origine et --texte requis" >&2; exit 2; }
+    # Doctrine : hors file. Une regle n a pas d etat terminal, elle n a rien a faire
+    # dans un stock qui mesure du travail en attente.
+    if [ "$NATURE" = "doctrine" ]; then
+      D=$(date +%Y-%m-%d); F=/workspace/config/doctrine_dh.md
+      NUM=$(grep -c "^### " "$F" 2>/dev/null || echo 0); NUM=$((NUM+1))
+      { echo ""; echo "### DOC-$(date +%Y-%m%d)-$(printf %02d $NUM) — $D — $ORIGINE"; echo ""; echo "$TEXTE"; } >> "$F"
+      echo "DOC-$(date +%Y-%m%d)-$(printf %02d $NUM) (doctrine — config/doctrine_dh.md, hors file)"
+      exit 0
+    fi
+    # Fait acquis : clos sans preuve n a pas de sens, et la contrainte clos_avec_preuve
+    # le refuserait de toute facon.
+    if [ "$NATURE" = "acquis" ] && [ -z "$PREUVE" ]; then
+      echo "REFUS: --nature acquis exige --preuve (contrainte clos_avec_preuve)" >&2; exit 2
+    fi
+    # Garde-fou pedagogique, non bloquant : si le texte ressemble a une regle ou a un
+    # fait accompli, on le signale sans empecher. C est ce melange qui a produit
+    # 21 entrees inclassables sur 61.
+    if [ "$NATURE" = "action" ]; then
+      case "$TEXTE" in
+        *CLOS*|*CORRIGE*|*CORRIGÉ*|*REGENERE*|*RÉGÉNÉRÉ*|*RECTIFICATION*)
+          echo "AVIS: ce texte decrit peut-etre un fait accompli — envisager --nature acquis --preuve" >&2;;
+        *"REGLE "*|*"RÈGLE "*|*"PRECISION DE SAM"*|*"PRÉCISION DE SAM"*|*"CORRECTION DE SAM"*)
+          echo "AVIS: ce texte enonce peut-etre une regle permanente — envisager --nature doctrine" >&2;;
+      esac
+    fi
     N=$(psql "$COMITE_DB_DSN" -tA -c "SELECT lpad((count(*)+1)::text, 2, '0') FROM decisions WHERE id LIKE 'DEC-' || to_char(now(),'YYYY-MMDD') || '%';")
     ID="DEC-$(date +%Y-%m%d)-$N"
     # Mode demonstration : si actif, la decision est marquee et sera purgee.
@@ -20,7 +59,12 @@ case "$CMD" in
     # psql renvoie "t"/"f" : on convertit en litteral SQL.
     if [ "$DEMO" = "t" ]; then DEMO=true; else DEMO=false; fi
     psql "$COMITE_DB_DSN" -q -c "INSERT INTO decisions (id, origine, texte, options, recommandation, demo) VALUES ('$ID', '$(esc "$ORIGINE")', '$(esc "$TEXTE")', $([ "$OPTIONS" = "null" ] && echo NULL || echo "'$(esc "$OPTIONS")'::jsonb"), $([ -z "$RECO" ] && echo NULL || echo "'$(esc "$RECO")'"), $DEMO);"
-    echo "$ID" ;;
+    if [ "$NATURE" = "acquis" ]; then
+      psql "$COMITE_DB_DSN" -q -c "UPDATE decisions SET statut='clos', preuve='$(esc "$PREUVE")'::jsonb WHERE id='$ID';"
+      echo "$ID (acquis — cree et clos)"
+    else
+      echo "$ID"
+    fi ;;
   status)
     ID="${1:-}"; STATUT="${2:-}"; shift 2 || true
     PAR=""; PREUVE=""; PORTE=""

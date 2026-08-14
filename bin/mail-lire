@@ -1,0 +1,88 @@
+#!/usr/bin/env python3
+"""Relève la boîte contact@ — LECTURE SEULE.
+
+POURQUOI (11/08) : le comité savait écrire par SMTP mais pas lire. Le dossier de
+conformité Hostinger est resté bloqué plusieurs jours parce que le lien d'accès arrivait
+par courriel et qu'aucun agent ne pouvait relever la boîte. Le Juridique l'a constaté
+lui-même dans sa passe du 11/08 : « le lien arrive par un canal auquel je n'ai pas accès ».
+
+CE QUE CE SCRIPT NE FAIT PAS, ET NE DOIT JAMAIS FAIRE : supprimer, déplacer, marquer lu,
+répondre, envoyer. Lecture seule stricte. La boîte est ouverte en mode readonly côté IMAP,
+donc même une erreur de code ne peut pas altérer le courrier.
+
+PORTÉE : contact@ est la boîte du COMITÉ. Les alias facturation@, privacy@ et support@ y
+arrivent. admin@ arrive chez Sam et reste hors de portée — c'est délibéré : les liens de
+réinitialisation des comptes fournisseurs ne doivent pas être lisibles par un agent.
+
+USAGE : mail-lire                 les 15 derniers messages
+        mail-lire --n 40          les 40 derniers
+        mail-lire --pour privacy  filtre sur un alias destinataire
+        mail-lire --lire <num>    corps d'un message
+"""
+import imaplib, email, os, sys, re
+from email.header import decode_header
+
+def env(cle):
+    for chemin in ("/repo/backend/.env", "/root/workspace/digital-humans-production/backend/.env"):
+        try:
+            for l in open(chemin, encoding="utf-8"):
+                if l.startswith(cle + "="):
+                    return l.split("=", 1)[1].strip()
+        except FileNotFoundError:
+            continue
+    return None
+
+def lisible(v):
+    if not v: return ""
+    out = []
+    for t, enc in decode_header(v):
+        out.append(t.decode(enc or "utf-8", "replace") if isinstance(t, bytes) else t)
+    return re.sub(r"\s+", " ", "".join(out)).strip()
+
+def connexion():
+    h, u, p = env("IMAP_HOST"), env("IMAP_USERNAME"), env("IMAP_PASSWORD")
+    if not all([h, u, p]):
+        sys.exit("identifiants IMAP absents de backend/.env")
+    c = imaplib.IMAP4_SSL(h, int(env("IMAP_PORT") or 993))
+    c.login(u, p)
+    c.select("INBOX", readonly=True)      # readonly : garantie technique, pas une consigne
+    return c
+
+def main():
+    a = sys.argv[1:]
+    def opt(nom, defaut=None):
+        return a[a.index(nom) + 1] if nom in a and a.index(nom) + 1 < len(a) else defaut
+    c = connexion()
+    typ, data = c.search(None, "ALL")
+    ids = data[0].split()
+    if "--lire" in a:
+        num = opt("--lire")
+        typ, d = c.fetch(num.encode(), "(RFC822)")
+        m = email.message_from_bytes(d[0][1])
+        print("De     :", lisible(m.get("From")))
+        print("Pour   :", lisible(m.get("To")))
+        print("Date   :", lisible(m.get("Date")))
+        print("Sujet  :", lisible(m.get("Subject")))
+        print("-" * 60)
+        if m.is_multipart():
+            for part in m.walk():
+                if part.get_content_type() == "text/plain":
+                    print(part.get_payload(decode=True).decode("utf-8", "replace")[:4000]); break
+        else:
+            print(m.get_payload(decode=True).decode("utf-8", "replace")[:4000])
+        c.logout(); return
+    n = int(opt("--n", "15"))
+    pour = opt("--pour")
+    print(f"INBOX contact@ — {len(ids)} messages, {n} derniers affiches")
+    print(f"{'num':>6}  {'date':<17} {'de':<34} sujet")
+    for i in reversed(ids[-n:]):
+        typ, d = c.fetch(i, "(BODY.PEEK[HEADER.FIELDS (FROM TO SUBJECT DATE)])")
+        m = email.message_from_bytes(d[0][1])
+        dest = lisible(m.get("To"))
+        if pour and pour.lower() not in dest.lower():
+            continue
+        print(f"{i.decode():>6}  {lisible(m.get('Date'))[:17]:<17} {lisible(m.get('From'))[:34]:<34} {lisible(m.get('Subject'))[:58]}")
+    c.logout()
+
+if __name__ == "__main__":
+    main()

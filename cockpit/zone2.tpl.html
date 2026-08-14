@@ -1,0 +1,21 @@
+<div class="agezone">
+  <div style="display:flex;align-items:baseline;gap:9px">
+    <span class="fig" style="font-size:34px;color:{{age_statut_couleur}}">{{age_max}}</span>
+    <span class="m" style="font-size:9px;letter-spacing:.14em;color:var(--bone-45);line-height:1.6">JOURS · LA PLUS<br>ANCIENNE ATTENTE</span>
+  </div>
+  <div class="m" style="font-size:8.5px;letter-spacing:.14em;color:{{age_statut_couleur}};margin-top:7px">{{age_statut_glyphe}} {{age_statut_mot}}</div>
+
+  <div class="strip2" role="img"
+       aria-label="{{attente_n}} décisions placées sur leur âge, de {{age_min}} à {{age_max}} jours. Seuil de gouvernance à {{age_seuil}} jours. {{age_hors_seuil}} au-delà du seuil.">
+    <i class="seuil" style="left:{{age_seuil_pct}}%"></i>
+    <!--{{#age_colonnes}}-->
+    <b class="pile" style="left:{{col_x_pct}}%;gap:{{age_gap_px}}px"><u>{{col_reste}}</u><!--{{#col_points}}--><s style="width:{{age_point_px}}px;height:{{age_point_px}}px;background:{{col_couleur}}"></s><!--{{/col_points}}--></b>
+    <!--{{/age_colonnes}}-->
+  </div>
+  <div class="axe">
+    <span style="left:{{age_zero_pct}}%">0</span>
+    <span style="left:{{age_seuil_pct}}%;color:var(--brass)">{{age_seuil}} J · SEUIL</span>
+    <span class="fin" style="left:{{age_fin_pct}}%">{{age_axe_max}} J</span>
+  </div>
+  <div style="text-align:right;margin-top:9px"><a class="src" href="{{lien_comite}}">▸ SIGNER DANS LE SUIVI DU COMITÉ</a></div>
+</div>

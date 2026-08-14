@@ -28,3 +28,10 @@ docker-compose.yml.pre-*
 *.bak2
 web/wip/*.png
 config/legal/preuves/*.pdf
+
+# Sauvegardes horodatees prises avant modification (ajoute le 14/08).
+# Git assure deja cette fonction — les versionner double le bruit.
+*.pre-*
+*.bak
+*.bak-*
+*.v1

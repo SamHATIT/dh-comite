@@ -1,0 +1,191 @@
+{
+  "type": "daily",
+  "date": "2026-08-13",
+  "sante": {
+    "score": 51,
+    "statut": "rouge",
+    "calcul": "Delivery 56×0,30=16,80 ; Commercial 50×0,25=12,50 ; Exécution(CoS) 37×0,10=3,70. Somme=33,00. Marketing exclu (rapport périmé depuis 24h, aucune ronde fraîche ce jour, poids 0,15 retiré) ; Customer Success exclu (rapport frais mais domain_score structurellement non calculable — 0 client réel, confirmé normal par Sam jusqu'à septembre — poids 0,20 retiré). Diviseur=0,65. 33,00/0,65=50,77 → 51.",
+    "tendance": "51 contre 43 le 12/08 (+8), mais ce n'est PAS une amélioration réelle et je le dis explicitement pour ne pas répéter l'artefact du 11-12/08 sur le Commercial. Domaine par domaine : Delivery inchangé (56), Commercial inchangé (50), Exécution recule (47→37, -10, malus mi-semaine déclenché pour la 1ère fois par le CoS). Le saut vient uniquement du retrait de Marketing (2/100 hier, poids 0,15) de la formule aujourd'hui faute de rapport frais — retirer le plus mauvais chiffre gonfle mécaniquement la moyenne sans qu'aucun fait n'ait changé en mieux. Statut maintenu à rouge (pas ambre) : un critique (B3) reste ouvert, la gouvernance des 3 GO reste non clarifiée, et Exécution s'est dégradé.",
+    "graphique": "briefs/graphiques/sante_domaines_2026-08-13.png",
+    "domaines_manquants": [
+      "Marketing : aucune ronde fraîche ce jour, dernier rapport daté du 12/08 (~24h de péremption). Premier jour d'absence constaté sur ce domaine — sous le seuil d'alerte haute (48h) mais à traiter en alerte si toujours absent demain (14/08).",
+      "Customer Success : rapport frais et complet reçu ce jour (13/08), mais domain_score structurellement non calculable (0 compte client réel, situation confirmée normale par Sam jusqu'à septembre 2026). Ce n'est PAS un défaut de ronde — à distinguer clairement du cas Marketing."
+    ]
+  },
+  "source": "briefs/brief-2026-08-13.json — rapports directeurs du 13/08 (delivery 07:08Z, commercial 07:1xZ, cs 07:0xZ, cos ronde complète), rapport_marketing du 12/08 déclaré périmé ce jour, priorites_semaine du 10/08 déclarée périmée (63h). Vérifications directes du CEO ce jour : psql COMITE_DB_DSN sur decisions (GROUP BY statut, statuts individuels de DEC-2026-0809-03/0810-09/0811-02/0812-01/0813-01/0813-02/0813-03, statuts des DEC-2026-0806-0x de la note de Sam du 06/08), git log direct dans /repo (HEAD=293adec, 2026-08-10T13:01:13Z, inchangé), curl direct sur digital-humans.fr (200, titre Entracte), lecture de /workspace/config/note_sam_2026-08-06.md.",
+  "hier": {
+    "delivery": [
+      { "texte": "Services sains : /health 200, redis connecté, 0 job en file, 0 ERROR/WARNING sur 24h.", "source": "rapport_delivery 13/08" },
+      { "texte": "0 exécution ni projet créé depuis 3 jours (dernière activité le 10/08). Chaîne BUILD exec165/166/167 : 11e jour sans nouvelle tentative, checkpoint du 15/08 désormais à J-2.", "source": "rapport_delivery 13/08" },
+      { "texte": "CORRECTION du Delivery lui-même : le rapport du 12/08 avait qualifié DEC-2026-0810-09 d'« accordée » à tort — vérification directe ce jour confirme qu'elle est toujours attente_sam, comme DEC-2026-0809-03.", "source": "rapport_delivery 13/08 ; confirmé indépendamment par le CEO, psql COMITE_DB_DSN" },
+      { "texte": "B2 volet code : toujours 0/6 sites corrigés dans projects.py, HEAD inchangé.", "source": "rapport_delivery 13/08" },
+      { "texte": "N8N : le service répond (healthz 200) mais le statut des 3 workflows de supervision reste non vérifiable depuis ce conteneur — fait nouveau (service joignable) qui ne referme pas DEC-2026-0811-05.", "source": "rapport_delivery 13/08" }
+    ],
+    "commercial": [
+      { "texte": "Pipeline inchangé à 11 entrées depuis le 10/08. Curseur du jour = Observer et rapporter, aucune écriture.", "source": "rapport_commercial 13/08" },
+      { "texte": "Mesure de rendement du canal BOAMP : 44 avis 'salesforce' depuis 2022, 0/44 correspondant à l'ICP PME/ETI privé (100% public/parapublic) — canal à ne pas industrialiser pour la cible actuelle.", "source": "rapport_commercial 13/08" },
+      { "texte": "Découverte non construite par le Commercial : bin/collecte-boamp.py et la table signaux_collecte existent déjà (créés les 11-12/08) mais lecture refusée au rôle deos_ro — à recouper avec Delivery.", "source": "rapport_commercial 13/08" },
+      { "texte": "Confirmation d'une incohérence de gouvernance déjà connue : le curseur écrire_base (niveau 3, canal sf-lead) est contredit par le garde-fou technique qui classe l'appel envoyer_externe (niveau 2) et bloque tout appel, y compris via le canal officiellement désigné.", "source": "rapport_commercial 13/08" }
+    ],
+    "cs": [
+      { "texte": "Toujours 0 compte client réel (30 jours sans mouvement), 0 canal de tickets actif — normal avant septembre, confirmé par Sam.", "source": "rapport_cs 13/08" },
+      { "texte": "Lecture Salesforce (Cases, Knowledge) toujours absente du conteneur — 3e jour consécutif de constat, non redemandé.", "source": "rapport_cs 13/08" },
+      { "texte": "0 décision au registre avec origine=cs, 0 décision attente_sam le concernant ce jour.", "source": "rapport_cs 13/08" }
+    ],
+    "marketing": [
+      { "texte": "PÉRIMÉ — aucune ronde fraîche ce jour. Dernier rapport disponible daté du 12/08 (score 2/100, 3e jour au plancher, cause structurelle : jalon de réouverture du site).", "source": "rapport_marketing 12/08, déclaré périmé ce jour" }
+    ],
+    "execution": [
+      { "texte": "Score exécution 37/100 (rouge), -10 vs le 12/08 : malus 'priorité sans activité à mi-semaine' déclenché pour la 1ère fois (jour 4/7), en plus du retard AI Act (DEC-2026-0802-07, à 1j du basculement) et des 3 décisions en risque d'oubli depuis 11 jours.", "source": "rapport_cos 13/08" },
+      { "texte": "Découverte majeure : le dépôt Delivery n'a reçu AUCUN commit depuis le 2026-08-10T13:01:13Z — 3 jours calendaires pleins de silence total, confirmé indépendamment par le CEO (git log direct).", "source": "rapport_cos 13/08 ; vérifié par le CEO ce jour" },
+      { "texte": "Écart brief/table réévalué à 11 décisions attente_sam manquantes du brief du 12/08 (vs 3 estimé la veille) — vérification précédente incomplète, refaite sur un périmètre plus large.", "source": "rapport_cos 13/08" },
+      { "texte": "Manquement du CoS lui-même corrigé en direct : 3e ronde consécutive où l'absence de déploiement des pages légales était signalée sans qu'une décision d'exécution soit ouverte. Ouverte et accordée ce jour (DEC-2026-0813-03), porteur proposé Delivery, échéance 14/08.", "source": "rapport_cos 13/08" }
+    ]
+  },
+  "kpis": [
+    { "nom": "sante_globale", "statut": "rouge", "valeur": "51/100 (calcul methodologique, pas une amélioration réelle — voir sante.tendance)" },
+    { "nom": "gouvernance_3_go_orphelins", "statut": "critique", "valeur": "DEC-2026-0809-03, DEC-2026-0810-09, DEC-2026-0810-10 toujours attente_sam en base, 4e jour, vérifié par le CEO ce jour" },
+    { "nom": "cloisonnement_donnees_clients_B3", "statut": "critique", "valeur": "0/48 tables protégées, chiffrage 3 options prêt depuis le 12/08 (DEC-2026-0812-01), aucun GO" },
+    { "nom": "chaine_build_exec165_167", "statut": "haute", "valeur": "11e jour sans tentative, checkpoint 15/08 à J-2" },
+    { "nom": "depot_delivery_activite", "statut": "critique", "valeur": "0 commit depuis 3 jours calendaires (293adec, 10/08 13:01Z), vérifié par le CEO" },
+    { "nom": "site_public_reouverture", "statut": "haute", "valeur": "Entracte, J+4 depuis le GO (DEC-2026-0809-01), vérifié par le CEO ce jour" },
+    { "nom": "pages_legales_3_sites", "statut": "critique", "valeur": "toujours absentes/mortes, contenu prêt depuis le 06/08, DEC-2026-0813-03 ouverte ce jour par le CoS" },
+    { "nom": "ecarts_legaux_sophie_nouveaux", "statut": "haute", "valeur": "prompt public + CGV encore à 49€ (DEC-2026-0813-01), durée de rétention RGPD contradictoire code/politique (DEC-2026-0813-02) — 0 exposition réelle aujourd'hui, à corriger avant activation" },
+    { "nom": "tresorerie_surveillance", "statut": "rouge", "valeur": "cash_suivi inactif 7j (maj 06/08), rapport_financier 4j (maj 09/08)" },
+    { "nom": "score_execution", "statut": "rouge", "valeur": "37/100, -10 vs le 12/08" },
+    { "nom": "marketing_rapport", "statut": "ambre", "valeur": "périmé, 1er jour d'absence" },
+    { "nom": "priorites_semaine", "statut": "ambre", "valeur": "périmées depuis 63h, ne reflète pas DEC-2026-0812-01 ni les décisions légales du 13/08" },
+    { "nom": "n8n_supervision", "statut": "ambre", "valeur": "service joignable (healthz 200) mais 3 workflows non vérifiables, DEC-2026-0811-05 attente_sam" }
+  ],
+  "compteurs": {
+    "en_attente_de_ton_arbitrage": 18,
+    "accordees_en_attente_execution": 35,
+    "verifie_le": "2026-08-13, psql COMITE_DB_DSN GROUP BY statut : accordee=29, en_execution=6, attente_sam=18, refusee=4, clos=le reste",
+    "reserve_de_lecture": "Ces deux chiffres ne s'additionnent jamais : le premier appelle une réponse de Sam, le second appelle des comptes des directions. Parmi les 18 en attente d'arbitrage, 3 (DEC-2026-0809-03, DEC-2026-0810-09, DEC-2026-0810-10) sont depuis 2 jours faussement traitées ailleurs comme tranchées — vérifié à nouveau ce jour, situation inchangée depuis le 12/08.",
+    "graphique": "briefs/graphiques/dette_execution_2026-08-13.png"
+  },
+  "alertes": [
+    {
+      "texte": "Le dépôt Delivery (/repo, branche main) n'a reçu aucun commit depuis 2026-08-10T13:01:13Z — 3 jours calendaires pleins, vérifié directement par le CEO (git log). Explique mécaniquement l'immobilité de DEC-2026-0802-02/03/04, DEC-2026-0810-09 (B2 code) et DEC-2026-0812-01 (B3).",
+      "gravite": "critique",
+      "source": "git log -1 /repo, vérifié par le CEO le 2026-08-13"
+    },
+    {
+      "texte": "Cloisonnement des données clients (B3) toujours sans protection technique effective : 0/48 tables, chiffrage à 3 options prêt depuis le 12/08 (DEC-2026-0812-01), aucun GO donné. Premier client réel dans environ trois semaines.",
+      "gravite": "critique",
+      "source": "rapport_delivery 12-13/08"
+    },
+    {
+      "texte": "ESCALADE inchangée depuis le 12/08 : trois décisions traitées ailleurs comme tranchées (B2 sécurité DEC-2026-0810-09, BUILD DEC-2026-0809-03, plafond cash DEC-2026-0810-10) sont réellement toujours attente_sam — reconfirmé indépendamment par le CEO ce jour. Le checkpoint BUILD du 15/08 est désormais à J-2.",
+      "gravite": "critique",
+      "source": "psql COMITE_DB_DSN, requête directe le 2026-08-13 ; rapport_delivery 13/08"
+    },
+    {
+      "texte": "Pages légales toujours absentes/mortes sur les 3 sites, contenu prêt depuis le 06/08. 3e ronde consécutive de simple constat — le CoS a corrigé son propre manquement en ouvrant et accordant une décision d'exécution ce jour (DEC-2026-0813-03, porteur Delivery, échéance 14/08). Bloque de fait la réouverture du site déjà accordée par Sam (DEC-2026-0809-01, J+4).",
+      "gravite": "critique",
+      "source": "rapport_cos 13/08, vérification HTTP directe"
+    },
+    {
+      "texte": "Deux nouveaux écarts de conformité découverts par le Juridique et tracés ce jour : le prompt public de Sophie et le brouillon CGV affichent encore 49€/BUILD (offre obsolète depuis le 11/08) ; la durée de rétention des conversations Sophie diverge entre le code (90 jours, non implémenté) et le brouillon de politique (12 mois). Exposition réelle nulle aujourd'hui (aucun composant frontend n'appelle encore le concierge public) mais à corriger avant toute activation.",
+      "gravite": "haute",
+      "source": "decisions#DEC-2026-0813-01, DEC-2026-0813-02"
+    },
+    {
+      "texte": "Marketing sans ronde fraîche pour la première fois (dernier rapport 12/08, ~24h). Sous le seuil d'alerte haute (48h) mais à traiter en alerte haute si toujours absent demain.",
+      "gravite": "moyenne",
+      "source": "constat CEO le 2026-08-13"
+    },
+    {
+      "texte": "Trésorerie non surveillée depuis 7 jours (maj 06/08, en aggravation), rapport_financier vieux de 4 jours (09/08). Question du plafond mensuel (DEC-2026-0810-10) sans réponse depuis 3 jours.",
+      "gravite": "haute",
+      "source": "rapport_cos 13/08"
+    },
+    {
+      "texte": "priorites_semaine périmées depuis 63h (dernière version du 10/08) — ne reflète ni le chiffrage B3, ni les deux nouveaux écarts légaux, ni le glissement du checkpoint BUILD à J-2. À rafraîchir par le CoS, pas une action pour Sam.",
+      "gravite": "basse",
+      "source": "constat CEO le 2026-08-13"
+    }
+  ],
+  "opportunites": [
+    { "texte": "B2 code (6 sites), option 1 du chiffrage B3 (filtre documentaire, 15-25 USD) et le lancement de la chaîne BUILD de validation partagent le même profil : déjà chiffrés, risque bas, bloqués uniquement par l'absence de GO. Un seul geste de clarification (2-3 min) sur les 3 GO orphelins débloquerait mécaniquement les trois.", "source": "rapport_delivery 12-13/08" },
+    { "texte": "Le canal BOAMP mesuré ce jour confirme, sans coût d'industrialisation, qu'il faut prioriser le canal recrutement Salesforce et le canal partenaire (30 signaux AppExchange/intégrateurs non exploités) plutôt que les appels d'offres publics pour l'ICP actuel.", "source": "rapport_commercial 13/08" }
+  ],
+  "analyse_decisions": [
+    {
+      "id": "DEC-2026-0810-09 + DEC-2026-0809-03 + DEC-2026-0810-10",
+      "intitule": "ESCALADE — 3 GO crus donnés (sécurité B2, BUILD, plafond cash) : aucun n'est enregistré",
+      "demandeur": "le CoS a escalé le premier le 11-12/08 ; le CEO a vérifié et étendu le constat aux deux autres ; reconfirmé indépendamment par le CEO ce jour, 2e jour d'immobilité complète depuis la découverte",
+      "argument": "Trois rapports différents (Delivery, priorités de la semaine, brief du 12/08) ont cité ces trois décisions comme tranchées, mais leur statut réel en base est attente_sam pour les trois — vérifié à nouveau ce jour par requête directe. Cela correspond probablement à une reclassification faite le 11/08 qui a touché ces lignes sans obtenir de réponse réelle de Sam.",
+      "argument_contraire": "Il est possible que ces GO aient été donnés oralement, comme cela s'est déjà produit une fois (PROP-2026-0805-01). Dans ce cas ce n'est pas un refus mais un défaut d'enregistrement, corrigible en confirmant les trois en une phrase.",
+      "options": ["CONFIRMER les trois si donnés oralement", "PRÉCISER lesquelles restent réellement ouvertes", "ARBITRER maintenant celles jamais discutées"],
+      "recommandation": "CONFIRMER si c'est le cas — 2-3 minutes lèvent un doute qui bloque trois chantiers (sécurité, BUILD, budget) depuis 4 jours et le checkpoint BUILD est désormais à J-2. Cadre applicable : porte à sens unique évitée par une simple vérification.",
+      "cout": { "temps_sam": "2-3 minutes", "direct_eur": "0 EUR", "cout_inaction": "non chiffrable précisément mais structurel : 2 fronts bloqués 11 jours de plus, dépassement de budget cash non arbitré" }
+    },
+    {
+      "id": "DEC-2026-0812-01",
+      "intitule": "Cloisonnement des données clients (B3) : choisir une option de correctif",
+      "demandeur": "le directeur-delivery, chiffrage rendu le 12/08 en avance sur l'échéance du 13/08",
+      "argument": "3 options chiffrées : (1) filtre documentaire obligatoire, 4-6h, 15-25 USD, risque bas, rétroactif ; (2) séparation physique par projet, 16-24h, 30-60 USD, risque moyen-haut ; (3) protection au niveau base par paliers, 3-5j le 1er palier, 40-80 USD, risque haut mais réversible. Recommandation du Delivery : option 1 seule pour commencer.",
+      "argument_contraire": "L'option 1 seule laisse la donnée non protégée en base (RLS toujours désactivé sur 48/48 tables) — c'est le défaut structurel déjà signalé par le Juridique. Un chiffrage 'petit' validé seul pourrait donner un faux sentiment de dossier clos avant le premier client réel de septembre.",
+      "options": ["GO option 1 seule, maintenant", "GO option 1 + programmer le palier 1 de l'option 3 avant septembre", "ATTENDRE la donnée manquante (volumétrie documents clients)"],
+      "recommandation": "Option 1 maintenant, palier 1 de l'option 3 programmé avant le premier client de septembre. Referme le risque immédiat à coût quasi nul sans fermer le dossier prématurément.",
+      "cout": { "temps_sam": "5 minutes", "direct_eur": "15-25 USD immédiat, 40-80 USD à programmer", "cout_inaction": "bloquant pour le calendrier client de septembre — 2e des deux raisons de l'avis juridique défavorable à l'ouverture" }
+    },
+    {
+      "id": "DEC-2026-0809-01 + DEC-2026-0813-03",
+      "intitule": "Réouverture du site bloquée par les pages légales jamais déployées",
+      "demandeur": "personne — constat croisé Marketing/CoS/Juridique ; le geste hébergeur n'appartient qu'à Sam, le déploiement des pages légales est maintenant tracé (DEC-2026-0813-03, porteur Delivery, échéance 14/08)",
+      "argument": "Le GO de réouverture (09/08) est accordé mais non exécuté depuis 4 jours — le geste technique (hébergeur) n'appartient à aucun directeur. Le Juridique conditionne de facto ce GO à la publication des 3 pages légales (contenu prêt depuis le 06/08, jamais intégré au code). Le CoS a ouvert et accordé DEC-2026-0813-03 ce jour pour que ce ne soit plus un simple constat répété.",
+      "argument_contraire": "Aucun — les deux gestes (bascule hébergeur, déploiement des pages) sont chacun à coût nul et déjà tranchés sur le fond ; il ne manque que l'exécution.",
+      "options": ["Sam exécute la bascule hébergeur dès que les pages légales sont en ligne (14/08)", "Sam relance directement Delivery sur DEC-2026-0813-03 si rien ne bouge d'ici le 14/08"],
+      "recommandation": "Attendre la preuve d'exécution de DEC-2026-0813-03 (échéance 14/08), puis Sam bascule l'hébergeur dans la foulée. Ne pas rouvrir le débat de fond, seulement exiger la preuve.",
+      "cout": { "temps_sam": "quelques minutes pour la bascule hébergeur une fois les pages en ligne", "direct_eur": "0 EUR", "cout_inaction": "chaque jour de blocage décale le calendrier de contenu (11/13 rangs) et le J0 commercial d'autant" }
+    },
+    {
+      "id": "DEC-2026-0813-01 + DEC-2026-0813-02",
+      "intitule": "Deux écarts de conformité sur Sophie (prix/périmètre obsolètes, rétention RGPD contradictoire)",
+      "demandeur": "le directeur-legal, découvert et tracé ce jour (13/08)",
+      "argument": "Le prompt public de Sophie et le brouillon CGV affichent encore 49€/BUILD (offre remplacée par 79/59€ + tier Team le 11/08). La politique de confidentialité en brouillon annonce 12 mois de rétention des conversations alors que le code documente une intention de 90 jours jamais implémentée (aucun cron de purge). Aucun composant frontend n'appelle encore le concierge public — exposition nulle aujourd'hui.",
+      "argument_contraire": "Aucun désaccord de fond : ce sont des écarts de synchronisation, pas des choix contestés. Le seul arbitrage réel est le choix de la durée de rétention (90 jours ou 12 mois) avant d'implémenter le cron correspondant.",
+      "options": ["Trancher 90 jours (implémenter le cron, publier cette durée)", "Trancher 12 mois (justifier la durée, implémenter le cron correspondant)", "Corriger le prix dans le prompt et les CGV sans attendre l'arbitrage rétention"],
+      "recommandation": "Corriger le prix immédiatement (aucun arbitrage requis, c'est une mise à jour mécanique) et trancher 90 jours pour la rétention — c'est la durée déjà documentée dans le code, la plus courte, et la plus facile à défendre en cas de contrôle.",
+      "cout": { "temps_sam": "5 minutes pour le choix de durée", "direct_eur": "0 EUR direct, coût de dev du cron non chiffré par le Juridique", "cout_inaction": "non chiffrable en euros — mais publier une durée non appliquée techniquement est exactement le type d'écart que le Juridique a pour mandat de prévenir avant tout client réel" }
+    },
+    {
+      "id": "DEC-2026-0809-02 + DEC-2026-0811-02",
+      "intitule": "Dossier Credit Logement : prix DEOS et garde-fou du curseur, avant la relecture de Sam",
+      "demandeur": "le Commercial (prix, 4 jours, sous le seuil de relance) et le CEO (garde-fou, 2 jours) — même échéance de fond : la présentation au DSI fin août",
+      "argument": "Deux sujets distincts bloquent la même relecture : (1) valider la grille A (1200 EUR/direction/mois, 43 200-86 400 EUR/an) et un plafond de jours ; (2) corriger deux axes du curseur (écrire en base, modifier le dispositif) qui ne se déclenchent pas comme annoncé — exactement ce qu'un DSI vérifie.",
+      "argument_contraire": "Le prix DEOS est sous le seuil de relance (4j<7j), donc pas encore urgent en soi. Mais le Commercial signale que Sam part bientôt en congés, ce qui change le calcul de délai.",
+      "options": ["VALIDER la grille A + corriger le garde-fou avant la relecture", "CORRIGER seulement le garde-fou, différer le prix", "ATTENDRE — traiter les deux après les congés de Sam"],
+      "recommandation": "Traiter les deux avant le départ en congés : le garde-fou coûte 15 minutes et est réversible (porte à sens unique évitée), le prix coûte 25 minutes et conditionne la présentation elle-même.",
+      "cout": { "temps_sam": "40 minutes au total", "direct_eur": "0 EUR", "cout_inaction": "valeur de l'affaire selon la grille : 43 200-86 400 EUR/an ; la présentation a lieu avant les congés de Sam selon le Commercial" }
+    }
+  ],
+  "priorites_du_jour": [
+    { "rang": 1, "titre": "ESCALADE — Confirmer ou préciser les 3 GO orphelins (B2 sécurité, BUILD, plafond cash)", "decision": ["DEC-2026-0810-09", "DEC-2026-0809-03", "DEC-2026-0810-10"], "porteur": "sam", "pourquoi": "2-3 minutes, débloque mécaniquement 2 chantiers et clarifie le budget, checkpoint BUILD à J-2" },
+    { "rang": 2, "titre": "Cloisonnement des données clients (B3) : choisir une option", "decision": ["DEC-2026-0812-01"], "porteur": "sam puis directeur-delivery", "pourquoi": "critique, chiffrage prêt, échéance client de septembre" },
+    { "rang": 3, "titre": "Pages légales et réouverture du site", "decision": ["DEC-2026-0813-03", "DEC-2026-0809-01"], "porteur": "directeur-delivery puis sam", "pourquoi": "3e ronde de simple constat corrigée ce jour par le CoS ; bloque 11/13 rangs de contenu et le J0 commercial" },
+    { "rang": 4, "titre": "Deux écarts de conformité Sophie (prix, rétention RGPD)", "decision": ["DEC-2026-0813-01", "DEC-2026-0813-02"], "porteur": "sam puis delivery/marketing", "pourquoi": "exposition nulle aujourd'hui mais à corriger avant toute activation du concierge public" },
+    { "rang": 5, "titre": "Dossier Credit Logement : prix DEOS et garde-fou du curseur", "decision": ["DEC-2026-0809-02", "DEC-2026-0811-02"], "porteur": "sam", "pourquoi": "seule échéance commerciale datée du portefeuille, avant les congés de Sam" }
+  ],
+  "decisions_attendues": [
+    { "id": "DEC-2026-0810-09", "titre": "ESCALADE — 3 GO crus toujours attente_sam (sécurité, BUILD, cash)", "escalade": true, "recommandation": "confirmer les trois si donnés oralement, sinon préciser" },
+    { "id": "DEC-2026-0812-01", "titre": "Cloisonnement données clients (B3) : choisir une option", "escalade": false, "recommandation": "option 1 maintenant + programmer le palier 1 de l'option 3 avant septembre" },
+    { "id": "DEC-2026-0813-03", "titre": "ESCALADE — Pages légales : exiger la preuve d'exécution le 14/08", "escalade": true, "recommandation": "laisser le porteur (Delivery) exécuter, vérifier la preuve à la ronde du 14/08" },
+    { "id": "DEC-2026-0813-01", "titre": "Écarts Sophie : prix obsolète (prompt+CGV) et rétention RGPD contradictoire", "escalade": false, "recommandation": "corriger le prix immédiatement, trancher 90 jours pour la rétention" },
+    { "id": "DEC-2026-0809-02", "titre": "Prix DEOS grands comptes et garde-fou avant Credit Logement", "escalade": false, "recommandation": "traiter les deux avant le départ en congés de Sam" }
+  ],
+  "surveillance_comite": {
+    "rondes_fraiches": "4/6 aujourd'hui — delivery, commercial, cs et cos ont rapporté ce matin (13/08). Marketing absent (1er jour, ~24h, sous le seuil de 48h). Legal hors ronde quotidienne (régime normal à la demande, aucune alerte) mais a produit 2 constats datés ce jour.",
+    "defaut_signale": "Aucun nouveau défaut de transmission au-delà de l'écart de gouvernance déjà traité en alerte critique (section 6). Pas d'escalade 'comité en panne' aujourd'hui : un seul domaine sans rapport frais (Marketing), sous le seuil des deux domaines requis, et le cas Customer Success n'est pas un défaut de ronde (rapport frais et complet, score seulement non calculable pour raison structurelle confirmée par Sam)."
+  },
+  "verification_produit": [
+    { "resultat": "vérifié de première main", "affirmation": "DEC-2026-0809-03, DEC-2026-0810-09, DEC-2026-0811-02, DEC-2026-0812-01 sont attente_sam ; DEC-2026-0813-01 et 0813-02 sont attente_sam ; DEC-2026-0813-03 est accordée", "verifie_contre": "psql COMITE_DB_DSN, requête directe le 2026-08-13" },
+    { "resultat": "vérifié de première main", "affirmation": "18 attente_sam, 29 accordée, 6 en_execution, 4 refusee (hors clos)", "verifie_contre": "psql COMITE_DB_DSN GROUP BY statut, le 2026-08-13" },
+    { "resultat": "vérifié de première main", "affirmation": "HEAD de /repo est 293adec (2026-08-10T13:01:13Z), 0 commit depuis", "verifie_contre": "git log -1 direct dans /repo le 2026-08-13" },
+    { "resultat": "vérifié de première main", "affirmation": "Le site public affiche toujours Entracte (code 200)", "verifie_contre": "curl direct sur digital-humans.fr le 2026-08-13" },
+    { "resultat": "vérifié de première main", "affirmation": "Les 4 demandes de statut et 9 arbitrages de la note de Sam du 06/08 (DEC-2026-0806-01 à 09) sont tous clos ou accordés — rien de cette note n'est resté sans suite", "verifie_contre": "lecture de /workspace/config/note_sam_2026-08-06.md ; psql COMITE_DB_DSN sur les IDs DEC-2026-0806-0x le 2026-08-13" },
+    { "resultat": "NON VÉRIFIÉ par le CEO ce jour — reporté tel que fourni par les rapports directeurs", "affirmation": "Le détail des sous-scores domain_score de Delivery (56), Commercial (50) et Exécution (37), et le contenu intégral des KPIs BOAMP/N8N/backlog", "verifie_contre": "rapports directeurs du 13/08, non ré-exécutés indépendamment faute de temps — seuls les points critiques listés ci-dessus ont été recroisés" }
+  ]
+}
