@@ -28,7 +28,20 @@ print(' '.join(f'{k}={json.dumps(str(v))}' for k, v in d.items()))
   eval sf data create record --sobject Lead --values "\"$VALEURS\"" \
        --target-org "$ORG" --json
 else
-  # ── Depuis le conteneur : par le service web, qui tourne sur l'hôte ──
-  curl -s -X POST "http://comite-web:8090/api/sf/lead" \
-       -H "Content-Type: application/json" -d "$JSON"
+  # ── Depuis le conteneur : par une FILE, traitee sur l'hote ──
+  #
+  # CORRECTIF DU 14/08. La version precedente appelait
+  # http://comite-web:8090/api/sf/lead — une route qui N'A JAMAIS EXISTE.
+  # Le service web n'expose que des routes de lecture. Verifie ce jour a la
+  # demande de Sam : le Commercial n'a pu creer AUCUN lead depuis le 11/08,
+  # date a laquelle ce canal lui a ete ouvert. Il repondait {"detail":"Not Found"}.
+  #
+  # Ecrire la route n'aurait pas suffi : dh-comite-web est lui aussi un
+  # conteneur, sans le binaire `sf`. On depose donc dans une file que l'hote
+  # traite — ce qui a l'avantage de laisser une trace de chaque demande, et de
+  # respecter le curseur du Commercial : il propose, un mecanisme execute.
+  mkdir -p /workspace/file-salesforce
+  H=$(date -u +%Y%m%d-%H%M%S)-$$
+  printf '%s\n' "$JSON" > "/workspace/file-salesforce/$H.json"
+  echo "{\"file\":\"$H\",\"etat\":\"depose\",\"note\":\"traite par l hote sous 5 min\"}"
 fi

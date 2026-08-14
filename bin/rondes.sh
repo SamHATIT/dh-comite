@@ -62,6 +62,17 @@ if [ "$DOW" -le 5 ]; then
   # securite des donnees clients (cloisonnement, chiffrement, engagement de
   # non-utilisation). A rebasculer sur le lundi seul quand ce sera termine.
   run directeur-legal ""
+  # FIX-FINANCIER-001 (14/08) : le Directeur Financier n'etait dans AUCUNE ronde,
+  # ni dans la table des curseurs. Il existait uniquement sous forme de fiche.
+  # Exactement le meme defaut que FIX-LEGAL-001 huit jours plus tot.
+  # Constat de Sam : deux decisions lui avaient ete assignees le 13/08
+  # (DEC-2026-0813-04 architecture LLM, DEC-2026-0813-05 forfait MiniMax) avec
+  # echeance a la ronde du 15/08 — il ne les aurait JAMAIS vues.
+  # Il tourne le LUNDI et le VENDREDI : son perimetre est le suivi du budget et
+  # le chiffrage, une cadence quotidienne serait du gaspillage.
+  if [ "$DOW" -eq 1 ] || [ "$DOW" -eq 5 ]; then
+    run directeur-financier ""
+  fi
 fi
 wait
 

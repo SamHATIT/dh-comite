@@ -71,6 +71,43 @@ if [ "$TOOL" = "Bash" ]; then
   if echo "$CMD" | grep -qiE '\b(INSERT[[:space:]]+INTO|UPDATE|DELETE[[:space:]]+FROM|DROP|ALTER|TRUNCATE)\b'; then
       verifier_curseur "ecrire_base" 3 "ecriture en base de donnees"
   fi
+
+  # ── DH-FS-001 (14/08) : PROTECTION DU SYSTEME DE FICHIERS ──────────────
+  # Verifie ce jour a la demande de Sam : le garde-fou bloquait correctement
+  # le SQL et les envois externes, et laissait passer TOUTES les destructions
+  # de fichiers. `rm -rf /workspace` etait AUTORISE — comme `mv`, `find -delete`
+  # ou vider un fichier par redirection. Une direction pouvait effacer la
+  # configuration entiere du comite : fiches, offre, dossiers juridiques,
+  # contenus. C'est la meme cause que DEC-2026-0811-02 : on controlait des
+  # motifs SQL, jamais des effets sur le disque.
+  #
+  # Les chemins proteges sont ceux dont la perte serait irreversible.
+  # /repo-delivery n'y figure PAS : c'est l'espace de travail du Delivery,
+  # un clone dont la perte ne coute qu'un reclonage.
+  ZONES_PROTEGEES='/workspace(/|[[:space:]]|"|$)|/repo(/|[[:space:]]|"|$)|/backlog|/prodlogs|/root/\.claude'
+
+  # Destruction ou deplacement massif
+  if echo "$CMD" | grep -qE '(^|[;&|[:space:]])(rm|mv|shred|dd)([[:space:]])' \
+     && echo "$CMD" | grep -qE "$ZONES_PROTEGEES"; then
+      deny "DH-FS-001 destruction ou deplacement dans une zone protegee — passe par une decision"
+  fi
+  # Suppression en masse par find
+  if echo "$CMD" | grep -qE 'find[[:space:]]' \
+     && echo "$CMD" | grep -qE '\-delete|\-exec[[:space:]]+rm' \
+     && echo "$CMD" | grep -qE "$ZONES_PROTEGEES"; then
+      deny "DH-FS-001 suppression en masse dans une zone protegee"
+  fi
+  # Vidage par redirection : > fichier  ou  : > fichier  ou  truncate
+  if echo "$CMD" | grep -qE '(^|[;&|[:space:]])(:?[[:space:]]*>[^>]|truncate)' \
+     && echo "$CMD" | grep -qE '/workspace/(config|bin|\.claude)|/repo/' \
+     && ! echo "$CMD" | grep -qE '>>'; then
+      deny "DH-FS-001 vidage de fichier dans une zone protegee — utilise un editeur"
+  fi
+  # Modification des droits ou du proprietaire
+  if echo "$CMD" | grep -qE '(^|[;&|[:space:]])(chmod|chown|chgrp)([[:space:]])' \
+     && echo "$CMD" | grep -qE "$ZONES_PROTEGEES"; then
+      verifier_curseur "modifier_dispositif" 4 "modification des droits sur une zone protegee"
+  fi
   if echo "$CMD" | grep -qE '(curl|wget)[^|;]*(-X[[:space:]]*(POST|PUT|PATCH|DELETE)|--data|-d[[:space:]])|(^|[;&| ])(mail|sendmail|mutt|msmtp)([ ]|$)'; then
       verifier_curseur "envoyer_externe" 3 "envoi vers l exterieur"
   fi
