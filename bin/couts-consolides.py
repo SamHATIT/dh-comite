@@ -23,7 +23,22 @@ from datetime import datetime, timedelta, timezone
 
 JOURS = int(sys.argv[sys.argv.index("--jours")+1]) if "--jours" in sys.argv else 30
 DEPUIS = datetime.now(timezone.utc) - timedelta(days=JOURS)
-PLAT = "postgresql://digital_humans:DH_SecurePass2025!@127.0.0.1:5432/digital_humans_db"
+# Racine du depot, deduite du chemin du script : /workspace dans le conteneur,
+# /root/workspace/dh-comite sur l hote. Juste dans les deux cas.
+BASE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+# CORRECTIF DU 14/08. La version precedente codait 127.0.0.1 en dur — une adresse
+# qui n existe QUE sur l hote. Depuis le conteneur des directeurs, le script
+# renvoyait 0,00 USD sans erreur : "Aucune execution tracee sur 30 jours".
+# Le Directeur Financier l a trouve lui-meme lors de sa premiere ronde et a eu le
+# bon reflexe : "Ce n est pas une depense nulle, c est un outil aveugle depuis cet
+# environnement. Je le signale plutot que de presenter un zero comme un chiffre."
+# Un compteur de couts qui affiche zero quand il ne voit rien est pire qu absent.
+#
+# Le conteneur dispose de DEOS_RO_DSN, un acces en LECTURE a la base plateforme.
+# On l utilise quand il existe, sinon on retombe sur l acces direct de l hote.
+PLAT = os.environ.get("DEOS_RO_DSN") or \
+       "postgresql://digital_humans:DH_SecurePass2025!@127.0.0.1:5432/digital_humans_db"
 
 # Tarifs au 12/08/2026. La hausse Sonnet du 01/09 a ete ANNULEE le 10/08 :
 # 2/10 est desormais le prix standard, pas un tarif d introduction.
@@ -34,9 +49,16 @@ def sql(q):
     return [l.split("|") for l in r.stdout.strip().split("\n") if l]
 
 def pipeline():
-    q = f"""SELECT coalesce(agent_id,'?'), coalesce(model,'?'), count(*),
-            coalesce(sum(tokens_input),0), coalesce(sum(tokens_output),0)
-            FROM llm_interactions WHERE created_at > now() - interval '{JOURS} days'
+    # On interroge la VUE et non la table : le role de lecture du comite n a pas
+    # acces a llm_interactions, et c est voulu — le detail des appels contient
+    # des fragments de prompts clients. La vue v_deos_couts_pipeline (creee le
+    # 14/08) n expose que des agregats. Sans elle, ce script comptait le pipeline
+    # a zero depuis le conteneur, ce que le Financier a signale des sa premiere
+    # ronde plutot que de presenter ce zero comme un chiffre.
+    q = f"""SELECT agent_id, model, sum(appels)::bigint,
+            sum(tokens_input)::bigint, sum(tokens_output)::bigint
+            FROM v_deos_couts_pipeline
+            WHERE jour > (now() - interval '{JOURS} days')::date
             GROUP BY 1,2"""
     total, sans_entree, lignes = 0.0, 0, []
     for agent, modele, n, tin, tout in sql(q):
@@ -50,7 +72,10 @@ def pipeline():
 
 def comite():
     total, n = 0.0, 0
-    for f in glob.glob("/root/workspace/dh-comite/*/*.json"):
+    # Meme correctif que pour le DSN : le chemin etait code en dur sur l hote.
+    # BASE se deduit du chemin du script, donc /workspace dans le conteneur et
+    # /root/workspace/dh-comite sur l hote — juste dans les deux cas.
+    for f in glob.glob(os.path.join(BASE, "*", "*.json")):
         if datetime.fromtimestamp(os.path.getmtime(f), timezone.utc) < DEPUIS:
             continue
         try: d = json.load(open(f))
