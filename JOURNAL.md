@@ -1,7 +1,10 @@
 # Journal — dh-comite
 
 > Genere automatiquement depuis les messages de commit.
-> Derniere mise a jour : 10/08/2026 17:26 UTC
+> Derniere mise a jour : 14/08/2026 09:41 UTC
+
+## 2026-08-14
+- Quatre jours de gouvernance : relance du CoS, cockpit, couts consolides `634a07e`
 
 ## 2026-08-10
 - 112 prospects injectes dans Salesforce, regle de Sam posee : les contacts, suivis et campagnes qui n'y sont pas N'EXISTENT PAS. DEUX DEFAUTS LEVES AU PASSAGE. (1) Les champs deployes le matin etaient INVISIBLES — presents dans les metadonnees mais aucun profil n'avait le droit de les lire. C'est la phase 5 du brief (jeu de permissions) qui n'a jamais tourne, le BUILD s'arretant en phase 1. Permission Set DH_Commercial cree et assigne. (2) 67 echecs a la premiere passe : j'avais SUPPOSE les valeurs de la liste Source_DH__c au lieu de les lire dans le XML deploye. Les vraies sont Site_Web, Reseau_Social, Salon, Partenaire, Recommandation, Autre. Toujours lire la definition plutot que la deviner. RESULTAT : 112 prospects avec source, score et detail — 89 au-dessus de 80. LIMITE CONNUE : le conteneur des directeurs n'a ni sf ni identifiants Salesforce, ils sont sur l'hote. Ils ne peuvent pas encore ecrire eux-memes. `1df9f60`

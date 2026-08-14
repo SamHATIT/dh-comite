@@ -8,7 +8,18 @@ set -uo pipefail
 # ("Background tasks still running after 600s; terminating"). Son perimetre a
 # grossi (33 decisions, rapprochement brief, page de suivi) : il lui faut plus.
 # Plafond porte a 20 minutes — pas illimite, pour qu'un blocage reel soit vu.
-export CLAUDE_CODE_PRINT_BG_WAIT_CEILING_MS=1200000
+#
+# FIX-BGWAIT-002 (14/08) : MEME INCIDENT SUR LE DELIVERY, huit jours plus tard.
+# Sa ronde du 14/08 a rendu la main en 14 s sur une promesse de rapport, et son
+# subagent a ete tue a 1200 s. Le fichier de sortie annonce pourtant
+# subtype=success, is_error=false : l echec n est QUE dans le .err, que rien ne
+# lisait. Consequence — le CEO a compte la ronde comme absente, la sante globale
+# est tombee a 25/100, et le brief de Sam portait en premiere ligne "silence de
+# Delivery face a une relance personnelle". Le travail avait eu lieu, il venait
+# d etre jete.
+# Plafond porte a 40 minutes : le perimetre du Delivery a grossi comme celui du
+# CoS — onze decisions assignees, chiffrages, verifications de code.
+export CLAUDE_CODE_PRINT_BG_WAIT_CEILING_MS=2400000
 
 cd /workspace
 mkdir -p rondes
@@ -71,3 +82,10 @@ if [ -n "$ECHECS" ] && [ -n "${TOKEN:-}" ] && [ -n "${CHAT:-}" ]; then
     --data-urlencode text="🔴 RONDES EN ÉCHEC ($TS) — le comité sera partiel ce matin :$(printf "$ECHECS")" > /dev/null
 fi
 echo "$TS rondes terminées (DOW=$DOW)$ECHECS" >> rondes/rondes.log
+
+# Attendre toutes les rondes, puis controler qu elles ont produit un rapport.
+# Une ronde tuee au plafond sort en subtype=success : sans ce controle, l echec
+# reste invisible jusqu a ce qu un humain compare les tailles de fichiers.
+wait
+/workspace/bin/controle-rondes.py "$TS" || true
+

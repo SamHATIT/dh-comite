@@ -16,6 +16,21 @@ services:
       # Lecture seule : il propose, il ne modifie pas — conforme a son curseur
       # "ecrire_base = Conseille" et "modifier_dispositif = Observe".
       - /root/workspace/digital-humans-production/docs:/backlog:ro
+      # 14/08 : /repo est monte en LECTURE SEULE, et c'est voulu — le comite
+      # observe la production sans pouvoir y ecrire. Mais trois feux verts
+      # donnes par Sam le 13/08 (correctif de securite B2, filtre de
+      # cloisonnement B3, garde-fou) supposaient d'ecrire dans ce depot. Ils
+      # etaient donc INEXECUTABLES, et le Delivery l'a signale lui-meme des
+      # qu'on lui a demande un etat ligne par ligne : "BLOQUEE, acces manquant".
+      # Ce qu'on lisait comme de l'inaction etait une porte fermee.
+      #
+      # Ce clone lui donne de quoi travailler SANS ouvrir le depot principal.
+      # Il pousse sur la branche delivery/correctifs, Sam relit et fusionne.
+      # Choix delibere plutot qu'un acces direct : le garde-fou cense encadrer
+      # les ecritures d'agents ne fonctionne pas (DEC-2026-0811-02, faux positif
+      # rencontre pendant sa ronde du 14/08). Ouvrir l'ecriture directe pendant
+      # que le controle est casse cumulerait deux risques.
+      - /root/workspace/repo-delivery:/repo-delivery
       # 08/08 : les directeurs ne voyaient QUE quelques vues de base. Le 08/08,
       # quatre d'entre eux ont conclu que "rien n'a bouge sur la plateforme
       # depuis le 02/08" — alors que 32 commits avaient eu lieu, dont 11 ce
