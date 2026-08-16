@@ -22,10 +22,64 @@ import os, subprocess, sys, urllib.parse, urllib.request
 from datetime import datetime, timezone
 
 DEPOTS = [
-    ("plateforme",   "/root/workspace/digital-humans-production"),
-    ("comite",       "/root/workspace/dh-comite"),
-    ("site vitrine", "/var/www/dh-preview"),
+    ("plateforme", "/root/workspace/digital-humans-production"),
+    ("comite",     "/root/workspace/dh-comite"),
+    ("dh-sites",   "/root/workspace/dh-sites"),
 ]
+
+# ── SURVEILLANCE PAR LE CONTENU, PAS PAR L ETAT DU DEPOT (17/08) ──────────
+# /var/www/dh-preview est servi par nginx mais son depot local n a pas de
+# distant : le contenu est sauvegarde dans dh-sites, un depot separe. Le
+# controle signalait donc une alerte permanente sans rien mesurer d utile.
+#
+# Surtout, l alerte portait sur le mauvais risque. Deux fois en trois jours,
+# un fichier de 16 Mo existait UNIQUEMENT sur le serveur — le 14/08 le bundle
+# du vrai site, le 17/08 la variante portant la mention IA. Dans les deux cas
+# le depot etait « propre » : les fichiers etaient EXCLUS par .gitignore, donc
+# invisibles a un git status.
+#
+# On compare desormais les empreintes : un fichier servi qui n existe dans
+# aucune sauvegarde est signale, qu il soit ignore ou non.
+SERVIS = [
+    ("site vitrine", "/var/www/dh-preview", "/root/workspace/dh-sites/dh-preview",
+     ("index.html", "index.html.site-complet", "index.html.avec-mention-ia")),
+]
+
+
+def controler_contenu(nom, servi, sauvegarde, fichiers):
+    pb = []
+    if not os.path.isdir(sauvegarde):
+        return [f"{nom} : sauvegarde introuvable ({sauvegarde})"]
+    import hashlib
+
+    def empreinte(chemin):
+        try:
+            h = hashlib.md5()
+            with open(chemin, "rb") as fh:
+                for bloc in iter(lambda: fh.read(1 << 20), b""):
+                    h.update(bloc)
+            return h.hexdigest()
+        except Exception:
+            return None
+
+    connues = {}
+    for f in os.listdir(sauvegarde):
+        c = os.path.join(sauvegarde, f)
+        if os.path.isfile(c) and f.startswith("index.html"):
+            e = empreinte(c)
+            if e:
+                connues[e] = f
+
+    for f in fichiers:
+        c = os.path.join(servi, f)
+        if not os.path.isfile(c):
+            continue
+        e = empreinte(c)
+        if e and e not in connues:
+            taille = os.path.getsize(c) / 1e6
+            pb.append(f"{nom} : {f} ({taille:.0f} Mo) n existe dans AUCUNE sauvegarde")
+    return pb
+
 SEUIL_HEURES = 24
 
 
@@ -73,6 +127,8 @@ def main():
     tout = []
     for nom, chemin in DEPOTS:
         tout += controler(nom, chemin)
+    for nom, servi, sauvegarde, fichiers in SERVIS:
+        tout += controler_contenu(nom, servi, sauvegarde, fichiers)
 
     if not tout:
         print("Depots : tout est commite et pousse.")
