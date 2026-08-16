@@ -122,8 +122,13 @@ Chat avec deux agents (Chef de projet et Business Analyst). Sessions
 
 3.2 Offre Pro
 Accès complet au chat avec l'ensemble des agents, génération de spécifications
-techniques et fonctionnelles détaillées, mémoire conversationnelle.
-Tarif : 49 € HT/mois.
+techniques et fonctionnelles détaillées, mémoire conversationnelle. L'offre Pro
+ne comprend ni la génération de code, ni le déploiement : ceux-ci relèvent de
+l'offre Team.
+Le nombre de spécifications produites est limité à deux par mois. Le Client est
+informé de sa consommation par un indicateur visible dans l'application.
+Tarif : 79 € HT/mois, ramené à 59 € HT pour le premier mois d'abonnement.
+Le tarif de 79 € HT/mois s'applique à compter du deuxième mois.
 
 3.3 Offre Team
 Ensemble des agents, incluant le développement des fonctionnalités spécifiées

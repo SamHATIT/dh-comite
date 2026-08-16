@@ -1,0 +1,45 @@
+<!doctype html><html><head><meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500&family=Inter:wght@300;400&family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{width:768px;height:1344px;background:#0E0E10;overflow:hidden}
+  /* Le portrait de l agent en fond, comme une affiche de film (idee de Sam,
+     14/08) : sur douze cartons, cela compose une galerie. L image est deja
+     assombrie et viree vers l ambre en amont — ici on ne fait que doser. */
+  .fond{position:absolute;inset:0;background-image:url('fond_sophie_pret.png');
+        background-size:cover;background-position:top center;
+        opacity:var(--of,0);z-index:0}
+  .c{position:relative;z-index:1}
+  .c{width:768px;height:1344px;display:flex;flex-direction:column;
+     align-items:center;justify-content:center}
+  /* Composition RESSERREE (14/08) : la premiere version centrait avec de
+     grandes respirations — juste pour une affiche, creux sur un ecran de
+     telephone. Sam : "ca fait beaucoup de vide au milieu". */
+  .nom{font-family:'Cormorant Garamond',serif;font-size:78px;font-weight:400;
+       color:#F4F2ED;letter-spacing:.10em;line-height:1}
+  .role{font-family:'JetBrains Mono',monospace;font-size:21px;font-weight:300;
+        color:#C8A97E;letter-spacing:.28em;margin-top:18px;text-transform:uppercase}
+  .filet{height:1px;background:#C8A97E;opacity:.55;margin:38px 0;width:0}
+  .marque{font-family:'Cormorant Garamond',serif;font-size:44px;font-weight:400;
+          letter-spacing:.04em}
+  .marque .d{color:#F4F2ED}
+  .marque .pt{color:#C8A97E;margin:0 .04em}
+  .marque .h{color:#C8A97E;font-style:italic}
+  .bl{font-family:Inter,sans-serif;font-size:18px;font-weight:300;
+      color:#B4B1AB;margin-top:14px}
+  .fr{font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:400;
+      font-style:italic;color:#C8A97E;margin-top:34px;letter-spacing:.02em}
+  /* Les etats sont pilotes par des variables CSS que le script de rendu fixe
+     image par image. Aucune animation CSS : on veut un controle exact. */
+  .nom,.role,.marque,.bl,.fr{opacity:var(--o,1);transform:translateY(var(--y,0px))}
+</style></head><body>
+<div class="fond" style="--of:var(--of)"></div>
+<div class="c">
+  <div class="nom"    style="--o:var(--o1);--y:var(--y1)">SOPHIE</div>
+  <div class="role"   style="--o:var(--o2);--y:var(--y2)">AI Project Manager</div>
+  <div class="filet"  style="width:var(--w3)"></div>
+  <div class="marque" style="--o:var(--o4);--y:var(--y4)"><span class="d">Digital</span><span class="pt">&#183;</span><span class="h">Humans</span></div>
+  <div class="bl"     style="--o:var(--o5);--y:var(--y5)">Notre studio ouvre d&#233;but septembre.</div>
+  <div class="fr"     style="--o:var(--o6);--y:var(--y6)">Onze agents. Un studio. Bient&#244;t le v&#244;tre.</div>
+</div>
+</body></html>

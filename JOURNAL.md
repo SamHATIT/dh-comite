@@ -1,9 +1,10 @@
 # Journal — dh-comite
 
 > Genere automatiquement depuis les messages de commit.
-> Derniere mise a jour : 14/08/2026 12:07 UTC
+> Derniere mise a jour : 14/08/2026 13:03 UTC
 
 ## 2026-08-14
+- Le releve des couts etait aveugle depuis le conteneur — corrige `08b58df`
 - Sept circuits verifies de bout en bout, six corriges `bc74c84`
 - Espace d ecriture pour le Delivery : /repo-delivery monte en rw `cacc3a7`
 - Quatre jours de gouvernance : relance du CoS, cockpit, couts consolides `634a07e`
