@@ -1,7 +1,10 @@
 # Journal — dh-comite
 
 > Genere automatiquement depuis les messages de commit.
-> Derniere mise a jour : 14/08/2026 13:03 UTC
+> Derniere mise a jour : 16/08/2026 16:03 UTC
+
+## 2026-08-16
+- Le circuit de cloture etait casse en trois endroits — corrige `aacd33f`
 
 ## 2026-08-14
 - Le releve des couts etait aveugle depuis le conteneur — corrige `08b58df`
