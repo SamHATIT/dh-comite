@@ -360,7 +360,7 @@ Contact données personnelles : privacy@digital-humans.fr
 2.3 Lors de l'utilisation du site (visiteurs)
 | Donnée | Finalité | Base légale | Conservation |
 |--------|----------|-------------|--------------|
-| Conversations avec Sophie | Assistance, prospection | Intérêt légitime | 12 mois |
+| Conversations avec Sophie | Assistance, prospection | Intérêt légitime | 90 jours¹ |
 | Cookies techniques | Fonctionnement du site | Intérêt légitime | Session |
 | Cookies analytiques | Statistiques d'usage | Consentement | 13 mois |
 
@@ -407,13 +407,25 @@ privacy@digital-humans.fr.
 
 6. DURÉES DE CONSERVATION
 
+> ¹ Corrigé le 17/08 par le Directeur Juridique (DEC-2026-0813-02) : le code
+> (`backend/app/models/chat_log.py`, ligne 13) documente une intention de purge
+> à 90 jours, alignée ici par cohérence et par principe de minimisation — mais le
+> job de purge automatique (cron) N'EST PAS implémenté à ce jour (vérifié par grep
+> le 13/08). **Cette ligne ne doit pas être publiée en l'état** : soit le cron est
+> livré et cette durée devient exacte, soit une autre durée est retenue et le code
+> doit être corrigé en conséquence. Ne jamais publier une durée qu'on ne peut pas
+> prouver techniquement (règle du skill `dh-conformite-juridique`). Si Commercial
+> a besoin d'une conservation plus longue pour l'usage prospection (finalité
+> distincte de l'assistance), c'est un traitement à fonder séparément, pas un
+> simple allongement de cette durée — non tranché à ce jour.
+
 | Catégorie | Durée | Fondement |
 |-----------|-------|-----------|
 | Données de compte | Durée du contrat + 3 ans | Prescription civile |
 | Données de facturation | 10 ans | Art. L. 123-22 C. com. |
 | Conversations et documents | Durée du contrat + 30 jours | — |
 | Journaux de sécurité | 12 mois | — |
-| Conversations Sophie (visiteurs) | 12 mois | — |
+| Conversations Sophie (visiteurs) | 90 jours¹ | — |
 
 
 7. VOS DROITS

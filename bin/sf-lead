@@ -13,6 +13,44 @@
 #   sf-lead '{"Company":"Schneider Electric","LastName":"—","Source_DH__c":"Salon"}'
 set -uo pipefail
 JSON="${1:?usage: sf-lead '<json des champs>'}"
+
+# VALIDATION D ENTREE — ajoutee le 17/08.
+# Le Commercial a appele `sf-lead --help` ce matin. Le script ne reconnaissait
+# aucun drapeau et a depose le texte litteral « --help » dans la file, ou
+# l hote l a trouve illisible quelques minutes plus tard. Rien n a atteint
+# Salesforce, mais rien ne l en empechait non plus : le script acceptait
+# n importe quoi.
+case "$JSON" in
+  -h|--help|-*)
+    cat >&2 <<'AIDE'
+usage : sf-lead '<json des champs>'
+
+  Cree un lead dans l org Salesforce Production.
+  L argument doit etre un objet JSON, pas un drapeau.
+
+  exemple :
+    sf-lead '{"Company":"Schneider Electric","LastName":"Martin","Source_DH__c":"Salon"}'
+
+  champs usuels : Company, LastName, FirstName, Email, Phone,
+                  Source_DH__c, Tier_Vise__c, Score_Qualification__c
+AIDE
+    exit 2 ;;
+esac
+
+# L argument DOIT etre un JSON valide et un objet — sinon on refuse avant de
+# deposer quoi que ce soit dans la file.
+if ! printf '%s' "$JSON" | python3 -c "
+import json, sys
+d = json.load(sys.stdin)
+if not isinstance(d, dict):
+    raise SystemExit('doit etre un objet JSON')
+if not d:
+    raise SystemExit('objet vide')
+" 2>/dev/null; then
+  echo "sf-lead : argument invalide — un objet JSON est attendu." >&2
+  echo "          reçu : $(printf '%s' "$JSON" | head -c 60)" >&2
+  exit 2
+fi
 # CORRECTIF 11/08 : ecrivait dans equipe-dev, une org que le code de la plateforme
 # ne lit nulle part (0 reference dans le depot, contre 11 pour digital-humans-dev).
 # Chaque lead cree y devenait invisible du backend, de Marcus et des tests E2E.

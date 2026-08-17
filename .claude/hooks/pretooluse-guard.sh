@@ -86,6 +86,16 @@ if [ "$TOOL" = "Bash" ]; then
   # un clone dont la perte ne coute qu'un reclonage.
   ZONES_PROTEGEES='/workspace(/|[[:space:]]|"|$)|/repo(/|[[:space:]]|"|$)|/backlog|/prodlogs|/root/\.claude'
 
+  # EXCEPTION DU 17/08 : la file de depot Salesforce n est pas une zone a
+  # proteger, c est une BOITE AUX LETTRES. Le Commercial y a depose par erreur
+  # un fichier contenant le texte « --help », a voulu le retirer, et le
+  # garde-fou l en a empeche. Il a rapporte le refus sans le contourner — le
+  # comportement attendu — mais il ne pouvait pas reparer sa propre erreur.
+  # Celui qui depose doit pouvoir retirer.
+  case "$CMD" in
+    *file-salesforce*) ZONES_PROTEGEES='NE_CORRESPOND_A_RIEN_XYZZY' ;;
+  esac
+
   # Destruction ou deplacement massif
   if echo "$CMD" | grep -qE '(^|[;&|[:space:]])(rm|mv|shred|dd)([[:space:]])' \
      && echo "$CMD" | grep -qE "$ZONES_PROTEGEES"; then
@@ -97,11 +107,22 @@ if [ "$TOOL" = "Bash" ]; then
      && echo "$CMD" | grep -qE "$ZONES_PROTEGEES"; then
       deny "DH-FS-001 suppression en masse dans une zone protegee"
   fi
-  # Vidage par redirection : > fichier  ou  : > fichier  ou  truncate
-  if echo "$CMD" | grep -qE '(^|[;&|[:space:]])(:?[[:space:]]*>[^>]|truncate)' \
-     && echo "$CMD" | grep -qE '/workspace/(config|bin|\.claude)|/repo/' \
-     && ! echo "$CMD" | grep -qE '>>'; then
-      deny "DH-FS-001 vidage de fichier dans une zone protegee — utilise un editeur"
+  # Vidage par redirection.
+  # CORRECTIF DU 17/08 : cette regle cherchait un « > » et un chemin protege
+  # N IMPORTE OU dans la commande, sans regarder de quel COTE du chevron se
+  # trouvait le chemin. Consequence : `cat /workspace/config/offre_dh.md >
+  # /tmp/copie.md` etait refuse — une simple LECTURE. Cinq faux positifs
+  # rapportes dans quatre directions le 17/08, dont le blocage du correctif de
+  # securite RAG que Sam avait valide le 13/08.
+  # On n examine desormais que la CIBLE de la redirection.
+  CIBLE=$(echo "$CMD" | grep -oE '[^>]>[[:space:]]*[^[:space:];&|]+' | grep -oE '[^[:space:]>]+$' | head -1)
+  if [ -n "$CIBLE" ] && ! echo "$CMD" | grep -q '>>' \
+     && echo "$CIBLE" | grep -qE '^/workspace/(config|bin|\.claude)|^/repo/'; then
+      deny "DH-FS-001 ecriture directe dans une zone protegee — utilise un editeur"
+  fi
+  if echo "$CMD" | grep -qE '(^|[;&|[:space:]])truncate' \
+     && echo "$CMD" | grep -qE "$ZONES_PROTEGEES"; then
+      deny "DH-FS-001 troncature dans une zone protegee"
   fi
   # Modification des droits ou du proprietaire
   if echo "$CMD" | grep -qE '(^|[;&|[:space:]])(chmod|chown|chgrp)([[:space:]])' \
