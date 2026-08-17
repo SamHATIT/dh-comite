@@ -74,7 +74,7 @@ attente_sam ──► accordee ──► en_execution ──┬──► propose
 | `clos` | `cos`, `ceo` (suppléance), `sam` | **le contrôle croisé** : on ne valide pas son propre travail |
 | `obsolete`, `refusee` | `cos`, `ceo`, `sam` | ce sont des arbitrages, pas des constats |
 | `accordee`, `attente_sam` | `ceo`, `sam` | ce sont des actes de direction |
-| `en_execution` | `cos`, `ceo`, `sam` | **inchangé** — voir §6.2 |
+| `en_execution` | la direction porteuse, ou `cos`, `ceo`, `sam` | **le démarrage n'est pas un acte à contrôler** — voir §6.2 |
 
 L'outil refuse avant la base, avec un message qui dit *pourquoi* :
 
@@ -140,41 +140,61 @@ pas arbitrer. D'où le `--motif` obligatoire.
 
 ## 6. Décisions d'implémentation, et ce qui reste ouvert
 
-### 6.1 « La direction porteuse » n'est pas définie — avis, pas refus
+### 6.1 « La direction porteuse » — définie le 17/08
 
-`SPEC` et `LOT-03` disent « la direction porteuse » sans dire ce qui la désigne. Trois
-lectures possibles : l'`origine` de la décision, le propriétaire d'une de ses tâches,
-ou toute direction. Elles divergent dans un cas banal — une décision **ouverte par le
-CEO et exécutée par le Delivery**.
+`SPEC` et `LOT-03` disaient « la direction porteuse » sans dire ce qui la désigne.
+Trois lectures étaient possibles, et elles divergent dans un cas banal : une décision
+**ouverte par le CEO et exécutée par le Delivery**.
 
-**Non tranché ici.** L'outil accepte toute direction reconnue et **signale** l'écart
-quand `--par` n'est ni l'origine ni le porteur d'une tâche de la décision :
+> **Définition retenue.** La direction porteuse est celle nommée `owner` d'au moins
+> une tâche de la décision ; **à défaut de tâche**, l'`origine`.
+
+**L'ordre compte.** Dès qu'une tâche existe, c'est elle qui désigne le porteur et
+l'origine ne suffit plus — c'est précisément le cas CEO/Delivery. Tant qu'aucune tâche
+n'existe, l'origine fait foi, ce qui couvre la décision fraîchement arbitrée.
+
+**Signalé, jamais refusé.** L'outil accepte toute direction reconnue et émet un avis
+quand l'écart existe :
 
 ```
-AVIS: legal n'est ni l'origine de DEC-Y ni le porteur d'une de ses taches
+AVIS: marketing n'est pas la direction porteuse de DEC-AVEC
+      (owner d'une tache, ou origine si aucune tache)
 ```
 
-Refuser aurait recréé le goulot que le lot supprime, sur une règle que personne n'a
-écrite. Le durcir plus tard est trivial ; débloquer un refus injustifié coûte des
-jours — c'est la leçon du 15/08.
+Refuser aurait recréé le goulot que ce lot supprime, sur une règle que personne n'avait
+écrite. **Durcir plus tard est trivial ; débloquer un refus injustifié coûte des
+jours** — c'est la leçon du 15/08, et elle vaut comme règle générale au-delà de ce cas.
+**Le durcissement est prévu au LOT-04.**
 
-### 6.2 `en_execution` est absent de la matrice — laissé inchangé
+### 6.2 `en_execution` — ouvert à la direction porteuse
 
-La matrice de `LOT-03` couvre neuf statuts et **ne dit rien de `en_execution`**. Le
-comportement précédent est donc conservé tel quel : `cos`, `ceo`, `sam`. Aucune
-invention.
+La matrice initiale du lot l'avait omis. Oubli confirmé le 17/08, et tranché :
+`en_execution` s'ouvre à la direction porteuse, en plus de `cos`, `ceo`, `sam`.
 
-À noter pour LOT-04 : si la boucle d'exécution doit faire passer une décision en
-`en_execution` quand une direction démarre une tâche, il faudra ouvrir ce droit. **À
-trancher à ce moment-là.**
+**Le motif est structurel.** Laisser le démarrage à `cos`/`ceo`/`sam` aurait recréé le
+goulot **au premier pas** : la boucle d'exécution (LOT-04) n'aurait pas pu démarrer une
+tâche sans attendre le Chief of Staff. C'est le même défaut que celui du 15/08,
+déplacé de la fin vers le début du cycle.
 
-### 6.3 Le motif d'`obsolete` va dans `porte_sur` — dette assumée
+> **Le contrôle croisé ne porte pas sur le démarrage. Il porte sur la clôture.**
+> Commencer un travail n'est pas un acte qui demande une contrepartie ; se déclarer
+> quitte, si.
+
+### 6.3 Le motif d'`obsolete` va dans `porte_sur` — dette accordée, à résorber
 
 Il n'existe pas de colonne `motif`. Le motif d'un refus est déjà rangé dans
 `porte_sur` par l'outil existant ; `obsolete` suit la même convention pour ne pas
-créer une seconde façon de faire la même chose. **Une colonne `motif` serait plus
-juste** — c'est une dette, pas un choix de conception. Elle n'a pas été créée ici :
-LOT-03 n'a pas de budget DDL et LOT-01 est clos.
+créer une seconde façon de faire la même chose.
+
+**Une colonne `motif` est plus juste, et elle a été accordée le 17/08.** Elle n'a pas
+été créée ici : LOT-03 n'a pas de budget DDL et LOT-01 est clos.
+
+> **À faire par le prochain lot disposant d'un budget DDL** — vraisemblablement
+> LOT-02, qui doit déjà poser la contrainte sur `tasks.statut`. Reprendre alors le
+> motif rangé dans `porte_sur` vers la nouvelle colonne, sans le perdre.
+>
+> *Consigné ici parce que c'est exactement le genre d'engagement qui se perd : un
+> correctif accordé, posé nulle part, re-diagnostiqué trois semaines plus tard.*
 
 ### 6.4 Trois défauts corrigés en passant
 
@@ -255,7 +275,11 @@ Instance PostgreSQL locale jetable, schéma `db/init/01_schema.sql` + dérive (`
 | `obsolete` sans motif / `blocked` sans les 3 champs | refusés |
 | `failed` incrémente `attempt_count`, garde `last_error` | conforme |
 | Décision inconnue / statut inconnu / `--par` manquant | refusés |
-| AVIS quand `--par` n'est pas porteuse | émis, non bloquant |
+| Porteuse — **sans tâche** : origine acceptée, autre direction → avis | conforme |
+| Porteuse — **avec tâche** : owner accepté, **origine seule → avis** | conforme |
+| `en_execution` par la direction porteuse | accepté |
+| `en_execution` par `cos` | accepté |
+| `en_execution` par un agent inconnu | refusé |
 | Chaîne `failed → propose_cloture → clos` | preuve complète conservée |
 | Non-régression `add` (action, acquis, acquis sans preuve) | conforme |
 | Non-régression `list` | conforme |

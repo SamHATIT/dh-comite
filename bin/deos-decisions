@@ -35,8 +35,19 @@
 #   refusee          cos, ceo, sam
 #   accordee         ceo, sam
 #   attente_sam      ceo, sam
-#   en_execution     cos, ceo, sam — INCHANGE : la matrice de LOT-03 est muette
-#                    sur ce statut, on ne devine pas (voir docs/REGISTRE.md)
+#   en_execution     la direction porteuse, ou cos/ceo/sam
+#
+# POURQUOI EN_EXECUTION EST OUVERT AUX DIRECTIONS (17/08) : la matrice initiale
+# du lot l'avait omis, et le laisser a cos/ceo/sam recreait le goulot au premier
+# pas — la boucle d'execution n'aurait pas pu demarrer une tache sans attendre le
+# Chief of Staff. Le controle croise ne porte pas sur le demarrage, il porte sur
+# la cloture.
+#
+# LA DIRECTION PORTEUSE, DEFINITION (arbitrage du 17/08) : celle nommee owner
+# d'au moins une tache de la decision ; a defaut de tache, l'origine. L'ecart est
+# SIGNALE, jamais refuse — durcir plus tard est trivial, debloquer un refus
+# injustifie coute des jours. C'est la lecon du 15 aout. Le durcissement est
+# prevu au LOT-04.
 set -euo pipefail
 esc() { printf "%s" "$1" | sed "s/'/''/g"; }
 
@@ -124,7 +135,9 @@ case "$CMD" in
       accordee|attente_sam)
         case "$PAR" in ceo|sam) ;; *) echo "REFUS: $STATUT se pose par ceo/sam" >&2; exit 2;; esac ;;
       en_execution)
-        case "$PAR" in cos|ceo|sam) ;; *) echo "REFUS: en_execution se pose par cos/ceo/sam" >&2; exit 2;; esac ;;
+        if ! est_direction "$PAR"; then
+          case "$PAR" in cos|ceo|sam) ;; *) echo "REFUS: en_execution se pose par la direction porteuse ou cos/ceo/sam" >&2; exit 2;; esac
+        fi ;;
       *) echo "REFUS: statut inconnu: $STATUT" >&2; exit 2 ;;
     esac
 
@@ -142,12 +155,19 @@ case "$CMD" in
           echo "       un blocage sans action suivante est invisible : il ne repart jamais" >&2; exit 2; } ;;
     esac
 
-    # Avis non bloquant : --par n'est ni l'origine de la decision, ni le porteur
-    # d'une de ses taches. La SPEC dit "la direction porteuse" sans definir ce
-    # qu'est le porteur ; on signale l'ecart au lieu de trancher (docs/REGISTRE.md).
+    # Avis non bloquant. Definition de la direction porteuse (arbitrage du 17/08) :
+    # owner d'au moins une tache de la decision ; A DEFAUT DE TACHE, l'origine.
+    # L'ordre compte — des qu'une tache existe, c'est elle qui designe le porteur,
+    # et l'origine ne suffit plus. Une decision ouverte par le CEO et executee par
+    # le Delivery a pour porteur le Delivery, pas le CEO.
+    #
+    # On signale, on ne refuse pas : durcir plus tard est trivial, debloquer un
+    # refus injustifie coute des jours (15/08). Durcissement prevu au LOT-04.
     if est_direction "$PAR"; then
-      PORTEUSE=$(psql "$COMITE_DB_DSN" -tA -c "SELECT (d.origine='$(esc "$PAR")') OR EXISTS (SELECT 1 FROM tasks t WHERE t.decision_id=d.id AND t.owner='$(esc "$PAR")') FROM decisions d WHERE d.id='$(esc "$ID")';" 2>/dev/null || echo "t")
-      [ "$PORTEUSE" = "f" ] && echo "AVIS: $PAR n'est ni l'origine de $ID ni le porteur d'une de ses taches" >&2
+      PORTEUSE=$(psql "$COMITE_DB_DSN" -tA -c "SELECT CASE WHEN EXISTS (SELECT 1 FROM tasks t WHERE t.decision_id=d.id) THEN EXISTS (SELECT 1 FROM tasks t WHERE t.decision_id=d.id AND t.owner='$(esc "$PAR")') ELSE (d.origine='$(esc "$PAR")') END FROM decisions d WHERE d.id='$(esc "$ID")';" 2>/dev/null || echo "t")
+      if [ "$PORTEUSE" = "f" ]; then
+        echo "AVIS: $PAR n'est pas la direction porteuse de $ID (owner d'une tache, ou origine si aucune tache)" >&2
+      fi
     fi
 
     SETP=""
