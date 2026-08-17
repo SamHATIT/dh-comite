@@ -219,11 +219,12 @@ au-delà du sous-ensemble, l'autotest le dira avant la ronde.
 
 ---
 
-## 5. Points ouverts rencontrés — signalés, non tranchés
+## 5. Points ouverts rencontrés
 
-Trois des sept points ouverts de `SPEC.md §8` ont été touchés par ce lot. Aucun n'a été
-tranché ici ; chacun est visible dans la sortie du Preflight plutôt que résolu par
-défaut.
+Cinq des sept points ouverts de `SPEC.md §8` ont été touchés par ce lot. **Quatre
+restent ouverts** : aucun n'a été tranché ici, chacun est visible dans la sortie du
+Preflight plutôt que résolu par défaut. **Un a été tranché par Sam le 17/08**, sur la
+mesure produite par ce lot.
 
 **SPEC §8.1 — coût cible du comité.** Le contrôle `budget` est implémenté et
 fonctionnel, mais son seuil n'existe pas. `plafond_usd_mois` vaut `null` pour les sept
@@ -245,14 +246,31 @@ qui **constitue** une preuve suffisante : un commit vide passerait ce contrôle,
 il passerait tout autre. La question appartient à la clôture des tâches (LOT-02,
 LOT-04), pas au Preflight. Elle est ici signalée, pas préemptée.
 
-**SPEC §8.4 — fréquence du Preflight : avant chaque ronde, ou une fois par jour ?**
-Non tranché, et le lot n'a pas eu à le trancher : `preflight.py` est un exécutable sans
-état, sûr à relancer aussi souvent qu'on veut. Le choix de cadence appartient à
-`bin/rondes.sh`, donc au LOT-08. Ordre de grandeur pour arbitrer : mesuré le 17/08 sur
-l'instance de validation, **0,8 s** pour les quatre directions actives, 1,3 s avec les
-trois fonctions en veille. Le coût est donc négligeable devant une ronde ; dans le
-conteneur, il faut y ajouter au pire le délai des services externes joignables mais
-lents, plafonné à 5 s par service.
+### Tranché le 17/08 — SPEC §8.4, fréquence du Preflight
+
+**Arbitrage de Sam : avant chaque ronde.** Le point ouvert n° 4 est clos.
+
+Le lot n'avait pas à le trancher, mais il devait donner de quoi le faire. La question
+« avant chaque ronde, ou une fois par jour ? » n'était un arbitrage que tant que le
+coût du contrôle était inconnu : une passe quotidienne n'aurait eu de sens que pour
+économiser un temps significatif. Mesure du 17/08 sur l'instance de validation :
+**0,8 s** pour les quatre directions actives, 1,3 s avec les trois fonctions en veille.
+Dans le conteneur, il faut y ajouter au pire le délai des services externes joignables
+mais lents, plafonné à 5 s par service. Négligeable devant une ronde. Le compromis
+n'existait donc pas, et Sam a tranché sur le chiffre le jour même.
+
+Ce que cela règle, au-delà de la cadence : une vérification quotidienne aurait laissé
+une fenêtre pendant laquelle un moyen pouvait disparaître — un montage perdu au
+redémarrage d'un conteneur, une clé expirée — sans qu'aucune ronde ne s'en aperçoive
+avant le lendemain. C'est la durée exacte des pannes que ce lot cherche à supprimer.
+
+**Conséquence pour le LOT-08.** `bin/rondes.sh` appelle `preflight.py <direction>`
+avant de lancer chaque ronde, et **une direction NOT_READY n'entre pas dans la ronde** :
+son alerte part au Chief of Staff. `preflight.py` est sans état et sûr à relancer aussi
+souvent qu'on veut ; le code de sortie (0 / 1 / 2) est fait pour être lu par un script,
+et la distinction du 2 compte ici — le LOT-08 ne doit pas confondre « cette direction
+n'est pas prête » avec « le Preflight lui-même est cassé », qui n'est pas une raison de
+supprimer une ronde.
 
 ---
 
@@ -261,19 +279,26 @@ lents, plafonné à 5 s par service.
 Vérification du 17/08 sur une instance PostgreSQL jetable, chargée avec le schéma du
 dépôt et les 36 curseurs de la sauvegarde du 11/08.
 
-| Direction | Constat | Nature |
-| --- | --- | --- |
-| `ceo` | aucun curseur en base pour les six axes | réel — le CEO n'a jamais figuré dans la table |
-| `ceo` | `bin/couts.py` lève une exception sur `--help` | réel — `int(sys.argv[1])` sur « --help » |
-| `growth` | aucun curseur ; les réglages vivent sous `commercial` et `marketing` | réel — bascule SPEC §5 non répercutée |
-| `delivery` | `/backlog`, `/repo`, `/prodlogs`, `/repo-delivery` non montés · `DEOS_RO_DSN` absente | exact hors conteneur — ce sont des montages et une variable du conteneur |
-| `chief-of-staff` | READY | — |
+| Direction | Constat | Nature | Suite donnée (17/08) |
+| --- | --- | --- | --- |
+| `ceo` | aucun curseur en base pour les six axes | réel — le CEO n'a jamais figuré dans la table | Sam pose le curseur en base, avec celui de Growth |
+| `ceo` | `bin/couts.py` lève une exception sur `--help` | réel — `int(sys.argv[1])` sur « --help » | tâche du Delivery |
+| `growth` | aucun curseur ; les réglages vivent sous `commercial` et `marketing` | réel — bascule SPEC §5 non répercutée | Sam pose le curseur en base, même correction |
+| `delivery` | `/backlog`, `/repo`, `/prodlogs`, `/repo-delivery` non montés · `DEOS_RO_DSN` absente | exact hors conteneur — ce sont des montages et une variable du conteneur | sans objet dans le conteneur |
+| `chief-of-staff` | READY | — | — |
 
-Les deux premières lignes sont des trouvailles, pas des faux positifs : elles nomment
+Les trois premières lignes sont des trouvailles, pas des faux positifs : elles nomment
 un maillon manquant, avec l'action et le destinataire. **Leur correction ne relève pas
-du LOT-05** — le curseur du CEO demande un arbitrage de Sam, `couts.py` appartient à
-personne dans ce lot. Elles sont exactement ce que le Preflight est censé produire :
-une alerte assignée au Chief of Staff, qui décidera qui corrige.
+du LOT-05**, et la suite donnée le confirme — deux curseurs posés en base par Sam
+(seul `maj_par` autorisé sur les 36 lignes existantes), un défaut d'outil devenu une
+tâche du Delivery. C'est exactement le trajet prévu : le Preflight émet, le Chief of
+Staff route, celui qui peut corriger corrige.
+
+**Ces deux alertes resteront actives jusqu'à ce que la correction soit faite** — le
+curseur du CEO et de Growth jusqu'à l'écriture en base, `couts.py` jusqu'à la clôture
+de la tâche du Delivery. C'est voulu : un contrôle qui s'éteint sur la promesse d'une
+correction ne mesure plus que la promesse. `ceo` et `growth` sortiront donc NOT_READY
+tant que la base n'aura pas changé, et c'est le comportement correct.
 
 ---
 
@@ -308,7 +333,9 @@ différencier « une direction n'est pas prête » de « le Preflight lui-même 
 - **Il n'enregistre aucune tâche.** L'alerte porte `next_action` et `next_owner` ; sa
   transformation en tâche appartient au LOT-02 et au LOT-04.
 - **Il ne branche pas le Preflight sur les rondes.** `bin/rondes.sh` appartient au
-  LOT-08, qui décidera de la cadence (SPEC §8.4).
+  LOT-08. La cadence, elle, n'est plus à décider : Sam l'a tranchée le 17/08 —
+  **avant chaque ronde** (SPEC §8.4, voir §5). Le LOT-08 l'implémente, il ne
+  l'arbitre pas.
 - **Il n'écrit rien en base.** Seulement des `SELECT` sur `curseurs` et un test
   d'existence sur les tables de preuve. Aucune migration : c'est pourquoi l'invariant
   I6 ne s'applique pas au dépôt réel pour ce lot. Il a néanmoins été appliqué à

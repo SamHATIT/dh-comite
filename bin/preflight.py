@@ -42,6 +42,11 @@ from datetime import date
 RACINE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 CHEMIN_CONFIG = os.path.join(RACINE, "config", "capabilites.yaml")
 
+# CADENCE (arbitrage de Sam, 17/08, SPEC §8.4 — point ouvert n° 4, clos) : le Preflight
+# tourne AVANT CHAQUE RONDE, pas une fois par jour. Une passe complète sur les quatre
+# directions actives coûte 0,8 s ; le compromis qui justifiait une passe quotidienne
+# n'existait pas. Conséquence sur ces délais : ils sont un budget de temps par ronde,
+# pas par jour. Les relever ferait payer chaque ronde, alors garder l'API à 5 s.
 DELAI_OUTIL = 10      # secondes — au-delà, un outil qui ne rend pas la main est suspect
 DELAI_SQL = 15
 DELAI_API = 5         # « délai court » (LOT-05) : le Preflight ne doit pas retarder la ronde
