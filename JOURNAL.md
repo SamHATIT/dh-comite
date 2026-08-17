@@ -1,9 +1,10 @@
 # Journal — dh-comite
 
 > Genere automatiquement depuis les messages de commit.
-> Derniere mise a jour : 17/08/2026 14:49 UTC
+> Derniere mise a jour : 17/08/2026 14:50 UTC
 
 ## 2026-08-17
+- Procedure de bascule V1 vers V2 `dcab58e`
 - LOT-04 integre — la boucle d'execution `dca7789`
 - SPEC : cinq etats de fin, precedence des tables de routage, quatre arbitrages `b16e9ab`
 - SPEC : cinq etats de fin, precedence des tables de routage, quatre arbitrages `79e3647`

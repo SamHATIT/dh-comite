@@ -434,3 +434,35 @@ Deux instances : `comite_repl` (appliquée en deux temps, chemin de mise à nive
 | Contrainte refusée sur données fautives | échec **nommant** les 2 décisions en cause |
 | Remédiation puis rejeu | contrainte posée |
 | Rejouabilité | deux passages complets, code 0, aucune erreur |
+
+---
+
+## 10. Les trois tables du challenge — `challenges`, `propositions`, `avis`
+
+> Ajoutées par **LOT-11**, migration `2026-08-17-v2-challenge.sql`. Le raisonnement
+> complet est dans `docs/CHALLENGE.md` ; ce qui suit est ce qu'un lecteur du modèle
+> de données doit savoir sans ouvrir l'autre fichier.
+
+| Table | Unité | Garde-fou porté par la base |
+| --- | --- | --- |
+| `challenges` | une hypothèse testable, ou une contradiction argumentée | `challenge_testable`, `contradiction_argumentee` |
+| `propositions` | une proposition stratégique et ses quatre étapes | `reponse_de_sam`, `etape_prouvee`, `veille_apres_rappel` |
+| `avis` | l'avis d'une direction sur son axe, dans la boucle collective | `alternative_si_defavorable` |
+
+**Même doctrine que `blocage_avec_suite`.** Chacune de ces contraintes est une
+obligation de la SPEC rendue impossible à contourner, y compris par un `psql` à la
+main : une hypothèse sans critère de réfutation, une acceptation écrite par le CEO
+qu'elle évalue, une mise en veille sans rappel préalable ou un avis défavorable sans
+alternative sont refusés par la base, pas seulement par l'outil.
+
+**Append-only sur les trois tables**, comme `decisions` (DH-COS-002). Motif propre à
+ce lot : le Strategic Yield se calcule sur ces lignes, et il suffirait d'effacer trois
+propositions refusées pour améliorer un taux d'acceptation. C'est l'invariant I3 par
+l'autre bout — non pas écrire son résultat, mais effacer ce qui le contredit.
+
+**Pourquoi une table séparée plutôt que `decisions`.** Une proposition n'est pas un
+point bloquant : la ranger en `attente_sam` la ferait entrer dans la file d'arbitrage,
+et une file d'arbitrage qui se remplit de non-bloquants cesse d'être lue — huit
+entrées reclassées le 10/08 pour ce motif exact. Le vocabulaire de `decisions.statut`
+appartient par ailleurs au LOT-03 : y ajouter `en_veille` modifierait un objet partagé
+pour un besoin qui n'est pas le sien.

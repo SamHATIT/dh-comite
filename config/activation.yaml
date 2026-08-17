@@ -1,0 +1,97 @@
+# L'INTERRUPTEUR — état d'activation des mécanismes de challenge (LOT-11)
+#
+# Principe DEOS, SPEC §5 : **on prépare et on valide tout, on active selon la
+# situation.** Ces mécanismes sont implémentés et testés ; ce fichier dit lesquels
+# tournent aujourd'hui. Le motif est daté : à trois semaines du lancement (1er
+# octobre), on veut la certitude que le dispositif fonctionne le jour où on
+# l'allume, sans en subir les effets de bord avant.
+#
+# TROIS ÉTATS, ET UN SEUL EST SUBTIL :
+#
+#   actif    le mécanisme tourne, ses sorties comptent dans les indicateurs
+#   essai    le mécanisme tourne, ses sorties ne comptent DANS AUCUN indicateur
+#   inactif  le mécanisme ne tourne pas — bin/challenge.py sort en 0 sans rien faire
+#
+# `essai` sert à vérifier que le dispositif fonctionne avant de lui donner du poids.
+# Le régime est enregistré SUR CHAQUE LIGNE au moment où elle est écrite, et jamais
+# recalculé : basculer l'interrupteur en `actif` ne transforme pas rétroactivement un
+# essai en note. Sans cela, personne n'oserait se servir de l'essai.
+#
+# LECTURE FAIL-CLOSED. Une clé absente ou une valeur non reconnue vaut `inactif`,
+# et bin/challenge.py le dit. Un interrupteur qu'on ne sait pas lire vaut éteint :
+# l'inverse allumerait un mécanisme par accident de configuration.
+
+version: 1
+
+# ── Les quatre mécanismes ────────────────────────────────────────────────────────
+
+# 1. Obligation de challenge hebdomadaire (SPEC §4bis). Deux questions à chaque
+#    direction active, avec refus mécanique d'une hypothèse non testable.
+#    EN ESSAI À LA LIVRAISON : c'est le seul des quatre qui tourne. Il ajoute de la
+#    production de réflexion au moment où la refonte vient d'en supprimer — d'où
+#    l'essai plutôt que l'activation directe. Condition de bascule : quelques tours
+#    dont les hypothèses passent le garde-fou sans le contourner.
+challenge_hebdomadaire:   essai
+
+# 2. Strategic Challenge mensuel. Décision après le lancement.
+strategic_challenge:      inactif
+
+# 3. Boucle d'intelligence collective. Décision après le lancement.
+boucle_collective:        inactif
+
+# 4. Innovation Budget (SPEC §4bis : 10 à 15 % de la capacité hors feuille de route).
+#    Inactif : la capacité entière va au lancement jusqu'au 1er octobre.
+innovation_budget:        inactif
+budget_innovation_pct:    12
+
+# ── Strategic Yield : les deux délais ────────────────────────────────────────────
+#
+# « Une proposition sans réponse n'est pas un refus. » 14 jours sans réponse → le CEO
+# rappelle UNE FOIS ; au-delà → veille : ni perdue, ni comptée comme refusée.
+#
+# Le Strategic Yield n'a PAS d'interrupteur, et c'est délibéré : une proposition
+# stratégique relève du mandat du CEO (SPEC §4bis), pas d'un mécanisme optionnel.
+# Ce qui est réglable ici, ce sont les deux délais.
+
+delai_rappel_jours:       14
+
+# NON SPÉCIFIÉ — SIGNALÉ, PAS INVENTÉ. SPEC §4bis écrit « au-delà → veille » sans
+# dire au-delà de quoi. Pris au pied de la lettre, la veille tomberait le jour même
+# du rappel et le rappel ne servirait à rien. Il faut donc un délai de réponse APRÈS
+# le rappel : 7 jours par défaut, valeur posée pour que le mécanisme soit exécutable,
+# à trancher par Sam. Voir docs/CHALLENGE.md § « Ce qui reste à trancher ».
+delai_veille_jours:        7
+
+# ── Strategic Challenge : les sept questions ─────────────────────────────────────
+#
+# SPEC §4bis et LOT-11 §2 donnent le NOMBRE des questions (sept) et la règle qui
+# prime (« une direction doit pouvoir contredire le CEO et Sam, avec ses preuves et
+# une alternative »), jamais leur contenu. On ne les invente pas : SPEC §8 impose de
+# signaler plutôt que de combler. La liste reste donc vide, et `challenge.py
+# strategic` refuse de tourner tant qu'elle l'est, en nommant le point ouvert.
+#
+# Ce que ce vide ne bloque PAS : la contradiction argumentée, elle, est spécifiée et
+# implémentée (`challenge.py contredire`). C'est la seule partie du Strategic
+# Challenge dont le contenu soit écrit quelque part.
+questions_strategic_challenge: []
+
+# ── Boucle d'intelligence collective : un axe par direction ──────────────────────
+#
+# Les six axes sont ceux de LOT-11 §3, mot pour mot. Leur RATTACHEMENT à une
+# direction, lui, n'est écrit nulle part : il est déduit des mandats (docs/MANDATS.md)
+# et reste modifiable ici. Quatre rattachements sont évidents, deux le sont moins et
+# sont signalés dans docs/CHALLENGE.md.
+axes_boucle_collective:
+  chief-of-staff: exécutable
+  delivery:       techniquement réaliste
+  growth:         vendable
+  financier:      économiquement viable
+  # À CONFIRMER — « soutenable » peut se lire comme la conformité (Juridique) ou
+  # comme la maintenabilité (Delivery). Rattaché au Juridique parce que le Delivery
+  # porte déjà « techniquement réaliste », et qu'un axe par direction est ce qui
+  # rend la boucle lisible.
+  legal:          soutenable
+  # À CONFIRMER — « créateur de valeur » est rattaché au Customer Success, qui voit
+  # l'usage réel. Il est en veille jusqu'au premier client : d'ici là, la boucle
+  # tourne à cinq axes et le dit.
+  customer-success: créateur de valeur

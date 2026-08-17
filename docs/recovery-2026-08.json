@@ -1,0 +1,405 @@
+{
+ "decisions": {
+  "DEC-2026-0802-01": {
+   "age_depart_j": 15,
+   "avant": {
+    "statut": "accordee"
+   },
+   "date": "2026-08-02",
+   "origine": "sam",
+   "passages": [],
+   "texte": "DÉMO PHARE (concept validé par Sam) : boucle fermée Agentforce -> DH -> sandbox. Un agent Agentforce du client détecte u"
+  },
+  "DEC-2026-0802-02": {
+   "age_depart_j": 15,
+   "avant": {
+    "statut": "accordee"
+   },
+   "date": "2026-08-02",
+   "origine": "ceo",
+   "passages": [],
+   "texte": "EVOLUTION BUILD — reprise sur incident : le BUILD v2 recommence a la phase 1 a chaque relance, sans sauter les phases de"
+  },
+  "DEC-2026-0802-03": {
+   "age_depart_j": 15,
+   "avant": {
+    "statut": "accordee"
+   },
+   "date": "2026-08-02",
+   "origine": "sam",
+   "passages": [],
+   "texte": "EVOLUTION BUILD — travail incrementiel (delta) : ne renvoyer a Raj que les lots rejetes par Elena et les elements impact"
+  },
+  "DEC-2026-0802-04": {
+   "age_depart_j": 15,
+   "avant": {
+    "statut": "accordee"
+   },
+   "date": "2026-08-02",
+   "origine": "sam",
+   "passages": [],
+   "texte": "RATIONALISATION OUTILLAGE — tout sur Salesforce : canal de tickets = Email-to-Case natif (Service Cloud, licence disponi"
+  },
+  "DEC-2026-0802-06": {
+   "age_depart_j": 15,
+   "avant": {
+    "statut": "accordee"
+   },
+   "date": "2026-08-02",
+   "origine": "sam",
+   "passages": [],
+   "texte": "MISSION JURIDIQUE — audit de conformite du parcours complet. Verifier la legalite et la conformite RGPD de bout en bout "
+  },
+  "DEC-2026-0804-01": {
+   "age_depart_j": 13,
+   "avant": {
+    "statut": "accordee"
+   },
+   "date": "2026-08-04",
+   "origine": "sam",
+   "passages": [],
+   "texte": "RE-ARBITRAGE de DEC-2026-0714-02 (fiabilisation export logs backend, refusee le 14/07) : ACCORDEE par Sam le 03/08 (sess"
+  },
+  "DEC-2026-0804-02": {
+   "age_depart_j": 13,
+   "avant": {
+    "statut": "accordee"
+   },
+   "date": "2026-08-04",
+   "origine": "sam",
+   "passages": [],
+   "texte": "Suivi des 8 chantiers O2 (produit pret 31/08 : 6 bugs clos, RAG v2, Stripe prod, Postmark) : ACCORDEE version minimale p"
+  },
+  "DEC-2026-0804-05": {
+   "age_depart_j": 13,
+   "avant": {
+    "statut": "accordee"
+   },
+   "date": "2026-08-04",
+   "origine": "sam",
+   "passages": [],
+   "texte": "MISSION COLLECTIVE — Interface web globale (suite DEC-2026-0714-01, validee le 04/08). Chaque direction exprime son beso"
+  },
+  "DEC-2026-0805-01": {
+   "age_depart_j": 12,
+   "avant": {
+    "statut": "accordee"
+   },
+   "date": "2026-08-05",
+   "origine": "sam",
+   "passages": [],
+   "texte": "ECART BRIEF/TABLE corrige par le CoS (ronde 05/08) : MAJ DE L'OFFRE CANONIQUE (/workspace/config/offre_dh.md) pour integ"
+  },
+  "DEC-2026-0806-08": {
+   "age_depart_j": 11,
+   "avant": {
+    "statut": "accordee"
+   },
+   "date": "2026-08-06",
+   "origine": "sam",
+   "passages": [],
+   "texte": "AUDIT DE SECURITE DES ACCES — a planifier. Recenser tous les mots de passe et secrets (orgs Salesforce, VPS, base de don"
+  },
+  "DEC-2026-0806-09": {
+   "age_depart_j": 11,
+   "avant": {
+    "statut": "accordee"
+   },
+   "date": "2026-08-06",
+   "origine": "sam",
+   "passages": [],
+   "texte": "OFFRE INTEGRATEUR — a concevoir. 12 integrateurs Salesforce francais identifies et enregistres en statut offre_en_attent"
+  },
+  "DEC-2026-0806-14": {
+   "age_depart_j": 11,
+   "avant": {
+    "statut": "accordee"
+   },
+   "date": "2026-08-06",
+   "origine": "sam",
+   "passages": [],
+   "texte": "OPPORTUNITE DEOS — presentation au DSI du Credit Logement, DERNIERE SEMAINE D AOUT, a son retour de conges. Sam part en "
+  },
+  "DEC-2026-0808-01": {
+   "age_depart_j": 9,
+   "avant": {
+    "statut": "accordee"
+   },
+   "date": "2026-08-08",
+   "origine": "sam",
+   "passages": [],
+   "texte": "AUDIT DES DEUX SITES JAMAIS AUDITES (samhatit-consulting.cloud et deos.cloud) — Sam le 08/08 : a faire rapidement, devra"
+  },
+  "DEC-2026-0808-08": {
+   "age_depart_j": 9,
+   "avant": {
+    "statut": "accordee"
+   },
+   "date": "2026-08-08",
+   "origine": "sam",
+   "passages": [],
+   "texte": "ANGLE MORT DE RELECTURE — constat de Sam du 08/08, valable au-dela du BUILD. CONSTAT TECHNIQUE : Elena relit le PLAN de "
+  },
+  "DEC-2026-0808-10": {
+   "age_depart_j": 9,
+   "avant": {
+    "statut": "accordee"
+   },
+   "date": "2026-08-08",
+   "origine": "sam",
+   "passages": [],
+   "texte": "CLE DE SAUVEGARDE — A METTRE A LABRI (08/08). La sauvegarde chiffree quotidienne est en place (AES-256, testee, restaura"
+  },
+  "DEC-2026-0809-01": {
+   "age_depart_j": 8,
+   "avant": {
+    "statut": "accordee"
+   },
+   "date": "2026-08-09",
+   "origine": "ceo",
+   "passages": [],
+   "texte": "REOUVERTURE DU SITE — TON GO CONDITIONNEL A RECU SA REPONSE, ET ELLE EST PARTIELLEMENT NEGATIVE (09/08). Le 08/08 tu as "
+  },
+  "DEC-2026-0809-04": {
+   "age_depart_j": 8,
+   "avant": {
+    "statut": "accordee"
+   },
+   "date": "2026-08-09",
+   "origine": "ceo",
+   "passages": [],
+   "texte": "HYGIENE DU DISPOSITIF — DEUX CORRECTIONS A 0 EUR (09/08). (1) GARDE-FOU TECHNIQUE, DOUBLE ECART rapporte spontanement pa"
+  },
+  "DEC-2026-0809-05": {
+   "age_depart_j": 8,
+   "avant": {
+    "statut": "accordee"
+   },
+   "date": "2026-08-09",
+   "origine": "ceo",
+   "passages": [],
+   "texte": "ROUTAGE CEO 09/08 vers le DIRECTEUR DELIVERY (porteur) — SECURITE DES DONNEES CLIENTS, B2 et B3 du rapport juridique du "
+  },
+  "DEC-2026-0809-07": {
+   "age_depart_j": 8,
+   "avant": {
+    "statut": "accordee"
+   },
+   "date": "2026-08-09",
+   "origine": "sam",
+   "passages": [],
+   "texte": "GPU ET SOUVERAINETE — deux axes ouverts par Sam le 09/08. CONSTAT DE DEPART : Packet.ai propose un forfait RTX PRO 6000 "
+  },
+  "DEC-2026-0809-08": {
+   "age_depart_j": 8,
+   "avant": {
+    "statut": "accordee"
+   },
+   "date": "2026-08-09",
+   "origine": "sam",
+   "passages": [],
+   "texte": "CONCURRENT DIRECT IDENTIFIE — NAAIA (Paris), signale par Sam le 09/08 apres que Claude ait affirme a tort quaucune refer"
+  },
+  "DEC-2026-0809-10": {
+   "age_depart_j": 8,
+   "avant": {
+    "statut": "accordee"
+   },
+   "date": "2026-08-09",
+   "origine": "sam",
+   "passages": [],
+   "texte": "CARTE BANCAIRE A LINSCRIPTION, Y COMPRIS SUR LE GRATUIT — orientation de Sam le 09/08. RAISONNEMENT : les prix differenc"
+  },
+  "DEC-2026-0810-02": {
+   "age_depart_j": 7,
+   "avant": {
+    "statut": "accordee"
+   },
+   "date": "2026-08-10",
+   "origine": "sam",
+   "passages": [],
+   "texte": "CREER UN COMPTE DORGANISATION DIGITAL-HUMANS — Sam le 10/08. CONSTAT : aujourdhui tout passe par son compte PERSONNEL — "
+  },
+  "DEC-2026-0810-05": {
+   "age_depart_j": 7,
+   "avant": {
+    "statut": "accordee"
+   },
+   "date": "2026-08-10",
+   "origine": "ceo",
+   "passages": [],
+   "texte": "ARBITRAGE CEO comite 10/08 — DISCIPLINE DU COMITE HEBDO, economie 35-45 USD/mois a qualite egale. CONSTAT du Directeur F"
+  },
+  "DEC-2026-0810-08": {
+   "age_depart_j": 7,
+   "avant": {
+    "statut": "accordee"
+   },
+   "date": "2026-08-10",
+   "origine": "ceo",
+   "passages": [],
+   "texte": "ROUTAGE CEO 10/08 vers le DIRECTEUR MARKETING (porteur), avec appui du DIRECTEUR COMMERCIAL — SUPPORT VISUEL CREDIT LOGE"
+  },
+  "DEC-2026-0810-11": {
+   "age_depart_j": 7,
+   "avant": {
+    "statut": "accordee"
+   },
+   "date": "2026-08-10",
+   "origine": "sam",
+   "passages": [],
+   "texte": "DEPLOIEMENT ENTIEREMENT LOCAL CHEZ LE CLIENT — demonstration en cours le 10/08. Sam : ca sert egalement a structurer les"
+  },
+  "DEC-2026-0810-22": {
+   "age_depart_j": 7,
+   "avant": {
+    "statut": "accordee"
+   },
+   "date": "2026-08-10",
+   "origine": "sam",
+   "passages": [],
+   "texte": "AUCUNE NOTIFICATION DES DECISIONS EN ATTENTE — releve par Sam le 10/08 : je nai pas eues dailleurs, a propos de deux dec"
+  },
+  "DEC-2026-0810-23": {
+   "age_depart_j": 7,
+   "avant": {
+    "statut": "accordee"
+   },
+   "date": "2026-08-10",
+   "origine": "sam",
+   "passages": [],
+   "texte": "TABLEAU DE BORD PERIME APRES TOUTE EXECUTION MANUELLE — cause identifiee le 10/08. Sam a remarque que le tableau de bord"
+  },
+  "DEC-2026-0811-01": {
+   "age_depart_j": 6,
+   "avant": {
+    "statut": "accordee"
+   },
+   "date": "2026-08-11",
+   "origine": "cos",
+   "passages": [],
+   "texte": "ECART DE TRACABILITE CORRIGE (ronde CoS du 11/08) : PROP-2026-0805-01 n a jamais ete inscrite au registre. Le commit 985"
+  },
+  "DEC-2026-0811-02": {
+   "age_depart_j": 6,
+   "avant": {
+    "statut": "accordee"
+   },
+   "date": "2026-08-11",
+   "origine": "ceo",
+   "passages": [],
+   "texte": "GARDE-FOU DU COMITE — DEUX FAUX NEGATIFS VERIFIES DE PREMIERE MAIN (constat CEO du 11/08). CE QUI EST DEMANDE : ton go p"
+  },
+  "DEC-2026-0811-04": {
+   "age_depart_j": 6,
+   "avant": {
+    "statut": "accordee"
+   },
+   "date": "2026-08-11",
+   "origine": "ceo",
+   "passages": [],
+   "texte": "ROUTAGE CEO 11/08 vers le DIRECTEUR MARKETING (porteur), avec appui du DIRECTEUR COMMERCIAL — PRECISER CE QUE CHAQUE AXE"
+  },
+  "DEC-2026-0811-05": {
+   "age_depart_j": 6,
+   "avant": {
+    "statut": "accordee"
+   },
+   "date": "2026-08-11",
+   "origine": "delivery",
+   "passages": [],
+   "texte": "Supervision N8N hors service : reparer ou retirer. Constat du 11/08 — Monitoring Services (15 min) totalise 1350 executi"
+  },
+  "DEC-2026-0811-10": {
+   "age_depart_j": 6,
+   "avant": {
+    "statut": "accordee"
+   },
+   "date": "2026-08-11",
+   "origine": "sam",
+   "passages": [],
+   "texte": "RECUPERER LES DOCUMENTS DU TRUST CENTER HOSTINGER — BUTOIR 22/08. Tache pour Sam, personne d autre ne peut la faire : l "
+  },
+  "DEC-2026-0812-01": {
+   "age_depart_j": 5,
+   "avant": {
+    "statut": "accordee"
+   },
+   "date": "2026-08-12",
+   "origine": "delivery",
+   "passages": [],
+   "texte": "CHIFFRAGE B3 (reponse a DEC-2026-0811-03, echeance 13/08 tenue en avance) — cloisonnement RAG/DB des donnees clients. Pr"
+  },
+  "DEC-2026-0813-02": {
+   "age_depart_j": 4,
+   "avant": {
+    "statut": "accordee"
+   },
+   "date": "2026-08-13",
+   "origine": "legal",
+   "passages": [],
+   "texte": "RETENTION DES CONVERSATIONS SOPHIE — ECART ENTRE LE CODE ET LE BROUILLON DE POLITIQUE DE CONFIDENTIALITE, verifie ce jou"
+  },
+  "DEC-2026-0813-03": {
+   "age_depart_j": 4,
+   "avant": {
+    "statut": "accordee"
+   },
+   "date": "2026-08-13",
+   "origine": "cos",
+   "passages": [],
+   "texte": "PAGES LEGALES TOUJOURS ABSENTES SUR LES 3 SITES -- signale par le Juridique le 08/08, reconfirme identique le 10/08 et l"
+  },
+  "DEC-2026-0814-02": {
+   "age_depart_j": 3,
+   "avant": {
+    "statut": "accordee"
+   },
+   "date": "2026-08-14",
+   "origine": "marketing",
+   "passages": [],
+   "texte": "PIPELINE DE PUBLICATION DU MARKETING — ONZE CONTENUS ECRITS, AUCUN MOYEN DE LES PUBLIER. Verifie de bout en bout le 14/0"
+  },
+  "DEC-2026-0815-02": {
+   "age_depart_j": 2,
+   "avant": {
+    "statut": "accordee"
+   },
+   "date": "2026-08-15",
+   "origine": "delivery",
+   "passages": [],
+   "texte": "TROIS COMPTEURS FAUX SUR L ECRAN D EXECUTION — releve par Sam le 16/08 pendant le SDS du projet 110 (Volta Reseaux). CE "
+  },
+  "DEC-2026-0817-03": {
+   "age_depart_j": 0,
+   "avant": {
+    "statut": "accordee"
+   },
+   "date": "2026-08-17",
+   "origine": "legal",
+   "passages": [],
+   "texte": "AI ACT ART.50 — L'IMPLEMENTATION CODE DE LA MENTION IA N'EST PAS TRACEE AU REGISTRE. mentions_ia.md (livre le 06/08, com"
+  },
+  "DEC-2026-0817-04": {
+   "age_depart_j": 0,
+   "avant": {
+    "statut": "accordee"
+   },
+   "date": "2026-08-17",
+   "origine": "legal",
+   "passages": [],
+   "texte": "SUITE DEC-2026-0813-02 — LEGAL TRANCHE LA DUREE, DELIVERY DOIT IMPLEMENTER LE CRON. Choix retenu par Legal (competence p"
+  },
+  "DEC-2026-0817-05": {
+   "age_depart_j": 0,
+   "avant": {
+    "statut": "accordee"
+   },
+   "date": "2026-08-17",
+   "origine": "ceo",
+   "passages": [],
+   "texte": "ARBITRAGE CEO comite 17/08 — GO PERIMETRE ETROIT sur DEC-2026-0802-02 : le Directeur Delivery livre sous 48h (echeance 1"
+  }
+ },
+ "ouvert_le": "2026-08-17T15:22:41+00:00"
+}

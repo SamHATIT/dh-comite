@@ -18,7 +18,19 @@ from datetime import datetime, timedelta, timezone
 from collections import defaultdict
 
 BASE = "/root/workspace/dh-comite"
-JOURS = int(sys.argv[1]) if len(sys.argv) > 1 else 14
+# --help doit rendre l'aide, pas une trace. Le Preflight de LOT-05 controle que
+# chaque outil declare repond a --help : ce script lisait argv[1] comme un nombre
+# de jours et levait ValueError, ce qui le declarait EN PANNE et bloquait toutes
+# les rondes du CEO (constate le 17/08). Un outil qui ne sait pas dire ce qu'il
+# fait est indistinguable d'un outil casse.
+if len(sys.argv) > 1 and sys.argv[1] in ("--help", "-h"):
+    print(__doc__)
+    sys.exit(0)
+try:
+    JOURS = int(sys.argv[1]) if len(sys.argv) > 1 else 14
+except ValueError:
+    print("usage: couts.py [nombre de jours]  (defaut 14)", file=sys.stderr)
+    sys.exit(2)
 DEPUIS = datetime.now(timezone.utc) - timedelta(days=JOURS)
 
 par_jour, par_source, par_modele = defaultdict(float), defaultdict(float), defaultdict(float)

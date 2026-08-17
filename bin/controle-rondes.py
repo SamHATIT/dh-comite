@@ -21,7 +21,21 @@ Sortie : 0 si tout va bien, 1 si au moins une ronde est incomplete.
 import glob, json, os, sys
 from datetime import date
 
-SEUIL = 800          # en dessous, ce n est pas un rapport mais un accuse
+# SEUIL REVU PAR LOT-08 (17/08). Il valait 800 : sous cette longueur, un rapport
+# V1 n etait qu un accuse de reception, et le signaler a rendu service — c est ce
+# controle qui a rattrape FIX-BGWAIT-002.
+#
+# La ronde V2 repond a CINQ QUESTIONS en quelques centaines de mots, avec un
+# plafond HAUT de 3000 caracteres declare dans config/cadence.yaml. Une ronde
+# correcte de 370 caracteres etait donc signalee « trop court », avec pour remede
+# suggere de relever le plafond d attente des subagents — l inverse de ce qu il
+# faut faire. Un controle calibre sur un format disparu ne mesure plus rien : il
+# apprend seulement a ignorer ses alertes.
+#
+# Le seuil ne descend pas a zero pour autant. Une sortie de moins de 120
+# caracteres ne peut pas contenir cinq reponses : c est un accuse de reception,
+# et c est exactement ce que FIX-BGWAIT-002 a produit.
+SEUIL = 120
 BASE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 JOUR = sys.argv[1] if len(sys.argv) > 1 else date.today().isoformat()
 

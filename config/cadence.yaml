@@ -1,0 +1,62 @@
+# Paramètres des rondes — LOT-08, 17 août 2026
+#
+# ─────────────────────────────────────────────────────────────────────────────
+# LA CADENCE N'EST PAS DANS CE FICHIER. Elle est dans config/preflight.yaml.
+# ─────────────────────────────────────────────────────────────────────────────
+#
+# Le contrat de LOT-08 demandait de créer ici la cadence, pour la sortir du code
+# de bin/rondes.sh — où elle vivait sous forme de conditions sur le jour de la
+# semaine. L'intention était juste, et l'historique du script dit pourquoi : le
+# Juridique n'était dans AUCUNE ronde pendant quatre jours (FIX-LEGAL-001), le
+# Financier pendant douze (FIX-FINANCIER-001), tous deux parce qu'une fiche
+# existait sans que personne ait pensé à ajouter la ligne correspondante.
+#
+# Mais LOT-05 a été livré entre-temps, et config/preflight.yaml déclare DÉJÀ
+# `etat` et `cadence` pour chaque direction. `bin/preflight.py --lister` les
+# expose. L'intention du lot est donc déjà tenue : changer une fréquence ne
+# demande plus de modifier du code.
+#
+# Redéclarer la cadence ici en ferait une SECONDE vérité. Deux fichiers portant
+# le même fait divergent — c'est précisément ce qui est arrivé à
+# config/capabilites.yaml, écrit par deux lots avec des structures
+# incompatibles, et séparé le 18/08 pour cette raison. Recréer le problème une
+# semaine plus tard, sur le fichier voisin, serait difficile à défendre.
+#
+# Ce fichier existe donc pour deux raisons :
+#   1. porter ce qui appartient VRAIMENT aux rondes et à rien d'autre ;
+#   2. être trouvé par qui cherche « cadence.yaml » — et lire ici où elle est,
+#      plutôt que de créer le doublon.
+
+version: 2
+
+# Source unique de la cadence et de l'état d'activation.
+# Lue par bin/rondes.sh via `bin/preflight.py --lister`.
+source_cadence: config/preflight.yaml
+
+ronde:
+  # Plafond de sortie. Critère d'acceptation 3 du lot : les rapports faisaient
+  # de 500 à 15 000 caractères. Une ronde n'est pas un rapport d'état du monde.
+  # Dépassement = avertissement au journal, jamais une ronde jetée : le travail
+  # a eu lieu, et FIX-BGWAIT-002 a montré ce que coûte de jeter un travail fait.
+  plafond_caracteres: 3000
+
+  # Plafond d'attente des subagents, en millisecondes.
+  # FIX-BGWAIT-001 (06/08) puis FIX-BGWAIT-002 (14/08) : deux rondes rendues en
+  # 14 s sur une promesse, dont le subagent a été tué à 600 s puis 1200 s. Le
+  # fichier de sortie annonçait pourtant success. Porté à 40 minutes — pas
+  # illimité, pour qu'un blocage réel reste visible.
+  plafond_attente_ms: 2400000
+
+  modele: sonnet
+  outils: "Task,Bash,Read,Grep,Glob"
+
+# Outils supplémentaires par direction, au-delà du socle ci-dessus.
+# Le Chief of Staff produit la PageSuivi : il lui faut Write.
+outils_extra:
+  chief-of-staff: ",Write"
+
+# Correspondance direction → fiche d'agent, quand elle ne se déduit pas.
+# Règle par défaut : `.claude/agents/<id>.md`, sinon `.claude/agents/directeur-<id>.md`.
+# Aucune fiche n'est jamais supprimée (I2) : une fonction en veille garde la
+# sienne, seule sa cadence s'arrête.
+fiches: {}
