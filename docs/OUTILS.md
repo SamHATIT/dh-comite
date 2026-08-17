@@ -282,3 +282,37 @@ migrations LOT-01 et LOT-02.
 
 > **Non appliqué en production.** Le SQL et l'outil sont produits et vérifiés ici ;
 > l'application se fera séparément, après sauvegarde.
+
+---
+
+## 8. `challenge.py` — les mécanismes de challenge et le Strategic Yield
+
+> Ajouté par **LOT-11**. Documentation complète : `docs/CHALLENGE.md`.
+> **Essentiellement inactif à la livraison** — l'état réel se lit par
+> `bin/challenge.py activation`, jamais par supposition.
+
+```bash
+bin/challenge.py activation                  l'état des interrupteurs
+bin/challenge.py collecter                   les deux questions de la semaine
+bin/challenge.py soumettre <direction> …     rendre un challenge (3 champs exigés)
+bin/challenge.py contredire <direction> …    contredire le CEO ou Sam
+bin/challenge.py proposer --texte …          une proposition stratégique
+bin/challenge.py repondre PROP-… --par sam … l'arbitrage de Sam
+bin/challenge.py etape PROP-… --etape …      expérimentée, résultat, impact
+bin/challenge.py yield [--audit]             le Strategic Yield, rappel et veille
+bin/challenge.py --autotest                  les garde-fous, sans toucher la base
+```
+
+**Trois codes de retour, comme `bin/policy.py`** : `0` OK ou mécanisme inactif, `2`
+REFUS, `3` ERREUR. La distinction n'est pas cosmétique : REFUS veut dire « ta demande
+n'est pas recevable, voici ce qui manque », ERREUR veut dire « je n'ai pas pu
+décider » — base injoignable, configuration illisible. Les confondre ferait lire une
+panne comme un refus, et une direction corrigerait sa saisie pendant que la base est à
+terre.
+
+**Un mécanisme inactif sort en 0 sans rien écrire.** L'interrupteur coupe le
+mécanisme ; il ne produit pas une erreur à traiter.
+
+**Le garde-fou refuse un challenge incomplet en nommant les champs manquants**, et la
+base le refuserait de toute façon. Deux fois, parce que ce ne sont pas les mêmes
+lecteurs : la contrainte protège le fait, le message protège l'agent.

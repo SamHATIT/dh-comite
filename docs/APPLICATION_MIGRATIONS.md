@@ -25,7 +25,14 @@ correct est celui de la dépendance, pas celui du nom :
 ```
 1. 2026-08-17-v2-tasks.sql                 crée tasks, étend decisions
 2. 2026-08-17-v2-tasks-statut-motif.sql    contraint tasks.statut, ajoute motif
+3. 2026-08-17-v2-challenge.sql             crée challenges, propositions, avis
 ```
+
+**La troisième (LOT-11) ne dépend d'aucune des deux** : ses tables sont neuves et ne
+référencent ni `decisions` ni `tasks`. Elle est applicable seule, et recrée
+`touch_maj_le()` seulement si la fonction manque — LOT-01 en reste propriétaire. Elle
+se place en dernier parce qu'elle est arrivée en dernier, pas parce qu'elle attend
+quelque chose.
 
 ## La procédure
 
