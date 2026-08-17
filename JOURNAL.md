@@ -1,9 +1,10 @@
 # Journal — dh-comite
 
 > Genere automatiquement depuis les messages de commit.
-> Derniere mise a jour : 17/08/2026 15:25 UTC
+> Derniere mise a jour : 17/08/2026 15:34 UTC
 
 ## 2026-08-17
+- Routage du modele par nature de tache — un trou de la specification `a23d972`
 - Les onze lots integres, et la chaine complete verifiee de bout en bout `f97fa6c`
 - Procedure de bascule V1 vers V2 `dcab58e`
 - LOT-04 integre — la boucle d'execution `dca7789`
