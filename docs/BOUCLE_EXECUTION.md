@@ -81,12 +81,12 @@ Rien n'est perdu, rien n'est inventé, et quelqu'un a la main.
 | `NEEDS_DECISION` | escalade, crée l'entrée `attente_sam` liée |
 | `TIMEBOX_EXPIRED` | la tâche retourne dans la file avec son avancement. **Pas un échec.** |
 
-> **Quatre ou cinq ?** Le lot annonce « quatre états » et son tableau en liste
-> **cinq** : `SPEC §2` en définit quatre, `TIMEBOX_EXPIRED` n'apparaît que dans
-> LOT-04. Les cinq sont implémentés — un dépassement de temps ou de budget n'est ni
-> un échec ni un blocage, et le confondre avec l'un des deux fausserait
-> `attempt_count`. À corriger dans le texte du lot. *(Même nature que l'écart
-> neuf/dix statuts relevé par LOT-01.)*
+> **Quatre ou cinq ? — tranché : cinq.** Le lot annonçait « quatre états » et son
+> tableau en listait **cinq**. Les cinq ont été implémentés ici, et
+> `SPEC.md` a été corrigée le 18/08 dans ce sens : *« Ce texte annonçait quatre
+> états et en listait cinq — relevé par le LOT-04, qui a implémenté les cinq et eu
+> raison. »* Un dépassement de temps n'est ni un échec ni un blocage : le confondre
+> avec l'un des deux fausserait `attempt_count`.
 
 ### Pourquoi `TIMEBOX_EXPIRED` n'est pas un échec
 
@@ -273,7 +273,8 @@ Chaque étape gère son échec et on continue. C'est délibéré, et c'est la se
 | `SPEC §8.2` — ce qu'un commit doit modifier pour valoir preuve | **non tranché.** La boucle accepte `done --evidence-type commit` sans vérifier que le commit change quoi que ce soit. Un commit vide passerait. C'est le lot qui rencontre ce point de plein fouet : il valide des preuves à chaque tour. Signalé, pas décidé. |
 | L'avancement d'une tâche `TIMEBOX_EXPIRED` | aucune colonne ne porte un avancement partiel. Il vit dans le journal de session. La tâche revient entière au tour suivant. |
 | `SPEC §8.3` — concurrence entre agents sur un même périmètre | ouvert. Deux sessions lancées sur la même direction prendraient la même tâche : aucun verrou n'est posé. |
-| `SPEC §8.4` — fréquence du Preflight | ouvert. La boucle ne l'appelle pas ; c'est le périmètre de LOT-05 et LOT-08. |
+| Fréquence du Preflight | **tranché le 18/08 : avant chaque ronde** (0,8 s pour les quatre directions actives). N'est plus un point ouvert. La boucle d'exécution ne l'appelle pas elle-même — le Preflight garde l'entrée de la ronde, en amont, et LOT-08 l'implémente. |
+| Avancement d'une tâche `TIMEBOX_EXPIRED` | ouvert, désormais `SPEC §8.7`, sur signalement de ce lot. |
 
 ---
 
