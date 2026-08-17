@@ -184,9 +184,11 @@ case "$CMD" in
         # qui vient la proposition, et aucune colonne ne porte cette information.
         SETP="$SETP, preuve='$(esc "$PREUVE")'::jsonb || jsonb_build_object('propose_par','$(esc "$PAR")','propose_le',now())" ;;
       obsolete)
-        # Le motif va dans porte_sur, ou est deja range le motif d'un refus. Une
-        # colonne motif serait plus juste — dette signalee dans docs/REGISTRE.md.
-        SETP="$SETP, porte_sur='$(esc "$MOTIF")', validation_par='$(esc "$PAR")'" ;;
+        # Le motif va dans sa propre colonne depuis LOT-02 (migration
+        # 2026-08-17-v2-tasks-statut-motif.sql). Il etait auparavant range dans
+        # porte_sur, qui designe ce sur quoi la decision porte : deux informations
+        # dans une colonne, dont l'une devenait illisible sans deviner laquelle.
+        SETP="$SETP, motif='$(esc "$MOTIF")', validation_par='$(esc "$PAR")'" ;;
       blocked)
         SETP="$SETP, blocker='$(esc "$BLOCKER")', next_action='$(esc "$NEXT_ACTION")', next_owner='$(esc "$NEXT_OWNER")'" ;;
       failed)
