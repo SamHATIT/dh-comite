@@ -35,3 +35,7 @@ config/legal/preuves/*.pdf
 *.bak
 *.bak-*
 *.v1
+
+# Bytecode Python, regenere a chaque appel.
+__pycache__/
+*.pyc
