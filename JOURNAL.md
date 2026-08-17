@@ -1,9 +1,13 @@
 # Journal — dh-comite
 
 > Genere automatiquement depuis les messages de commit.
-> Derniere mise a jour : 16/08/2026 16:11 UTC
+> Derniere mise a jour : 17/08/2026 08:36 UTC
+
+## 2026-08-17
+- Le garde-fou bloquait le travail normal — cinq faux positifs en un matin `1d5c252`
 
 ## 2026-08-16
+- Journal regenere par le crochet post-commit `8590f7f`
 - Le controle des depots surveillait le mauvais risque `be0f7d0`
 - Journal regenere par le crochet post-commit `b26ba6e`
 - Le circuit de cloture etait casse en trois endroits — corrige `aacd33f`
