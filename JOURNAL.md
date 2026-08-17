@@ -1,9 +1,10 @@
 # Journal — dh-comite
 
 > Genere automatiquement depuis les messages de commit.
-> Derniere mise a jour : 17/08/2026 14:40 UTC
+> Derniere mise a jour : 17/08/2026 14:49 UTC
 
 ## 2026-08-17
+- LOT-04 integre — la boucle d'execution `dca7789`
 - SPEC : cinq etats de fin, precedence des tables de routage, quatre arbitrages `b16e9ab`
 - SPEC : cinq etats de fin, precedence des tables de routage, quatre arbitrages `79e3647`
 - Procedure d'application des migrations, repetee sur une copie de la base reelle `50fde8e`
