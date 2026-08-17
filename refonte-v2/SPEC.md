@@ -377,6 +377,52 @@ Puis la session d'exécution, distincte, qui traite la file.
 
 ---
 
+## 6bis. Routage du modèle
+
+Signalé par Sam le 18/08, et absent de toutes les versions précédentes : **certaines
+tâches demanderont toujours un modèle de premier plan.**
+
+Toutes les tâches ne demandent pas la même chose. Appliquer un correctif déjà spécifié
+n'est pas juger si une preuve couvre une décision, ni produire une proposition
+stratégique. Router au moins cher partout coûte en qualité là où elle compte ; router
+au plus capable partout coûte en argent là où cela n'en vaut pas la peine.
+
+### La règle
+
+> **Le routage est déclaratif.** Changer un modèle ne demande jamais de toucher au
+> code. `config/cadence.yaml`, section `routage_modele`.
+
+C'est la leçon de trois incidents : la cadence écrite en conditions sur le jour de la
+semaine, le canal imposé rédigé en prose, et surtout la **liste figée de deux
+fournisseurs GPU** — tout modèle ajouté au fichier de configuration n'était jamais
+enregistré, et un fournisseur configuré est resté inopérant deux jours sans que
+personne ne le sache.
+
+### Cinq natures, pas des directions
+
+C'est la tâche qui décide, pas le titre de celui qui l'exécute.
+
+| Nature | Ce qu'elle couvre |
+| --- | --- |
+| `execution` | appliquer une tâche déjà spécifiée |
+| `diagnostic` | nommer la cause d'un blocage |
+| `validation` | relire une preuve et juger si elle couvre la décision |
+| `strategie` | proposition du CEO, challenge, synthèse |
+| `redaction` | contenu destiné à sortir de l'entreprise |
+
+**État au 18/08 : structure posée, valeurs inchangées.** Tout est sur le même modèle,
+comme aujourd'hui. Basculer une ligne est un réglage, pas un développement — principe
+d'activation appliqué au routage.
+
+### Le fournisseur
+
+Aujourd'hui contraint par le harnais `claude -p`, qui ne parle qu'un format.
+`DEC-2026-0816-01` note que vLLM expose un point d'entrée Anthropic natif : le champ
+`fournisseur` deviendrait alors réellement utile, **sans réécrire les rondes**. À
+instruire, non tranché.
+
+---
+
 ## 7. Dette explicitement acceptée
 
 > **P0 — dette de sécurité connue, tolérance temporaire explicitement acceptée.**
@@ -408,7 +454,11 @@ Ne pas inventer en cours d'implémentation : **signaler**.
 4. Obligations réglementaires datées du Juridique pendant sa veille.
 5. Canal imposé de Growth, qui cumule Salesforce et Ghost.
 6. Date ou condition de re-séparation de Growth.
-7. Avancement d'une tâche `TIMEBOX_EXPIRED` : il ne vit que dans le journal, faute de
+7. **Quel modèle pour `validation` et `strategie` ?** La relecture du CoS décide si une
+   décision est close : une erreur y coûte plus qu'ailleurs. Et **qui peut changer ce
+   routage** — le curseur `engager_depense` est à 1 ou 2 partout, personne ne peut
+   arbitrer une hausse de coût aujourd'hui.
+8. Avancement d'une tâche `TIMEBOX_EXPIRED` : il ne vit que dans le journal, faute de
    colonne. Signalé par le LOT-04.
 
 ### Tranchés — ne plus les rouvrir

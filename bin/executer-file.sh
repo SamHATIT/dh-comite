@@ -33,6 +33,14 @@ RACINE="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$RACINE" || exit 1
 BIN="$RACINE/bin"
 
+# Modele : lu dans config/cadence.yaml (routage_modele), jamais code en dur.
+# Ajoute le 18/08 — le modele etait ecrit ici, ce qui rendait impossible de
+# router une validation autrement qu'une execution. Le defaut du fichier
+# s'applique si la nature n'est pas declaree.
+MODELE=$(sed -n 's/^ *execution: *\([a-z0-9.-]*\).*/\1/p' \
+         /workspace/config/cadence.yaml 2>/dev/null | head -1)
+MODELE="${MODELE:-sonnet}"
+
 DIR="${1:?usage: executer-file.sh <direction> [max_taches] [max_minutes]}"
 MAX_TACHES="${2:-5}"
 MAX_MIN="${3:-45}"
@@ -166,7 +174,7 @@ qui adresser la suite, mets chief-of-staff — c'est son mandat.
 
 Si la tache demande un arbitrage humain, dis-le en une phrase claire : la boucle
 l'escaladera." \
-    --model sonnet --allowedTools "Task,Bash,Read,Grep,Glob" \
+    --model "$MODELE" --allowedTools "Task,Bash,Read,Grep,Glob" \
     --output-format json >"$SORTIE" 2>>"$JOURNAL"
 
   TEXTE=$(jq -r '.result // .[]?.result // ""' "$SORTIE" 2>/dev/null | head -c 4000)

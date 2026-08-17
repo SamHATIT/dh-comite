@@ -246,7 +246,7 @@ qui **constitue** une preuve suffisante : un commit vide passerait ce contrôle,
 il passerait tout autre. La question appartient à la clôture des tâches (LOT-02,
 LOT-04), pas au Preflight. Elle est ici signalée, pas préemptée.
 
-### Tranché le 17/08 — SPEC §8.4, fréquence du Preflight
+### Tranché le 18/08 — SPEC §8, fréquence du Preflight
 
 **Arbitrage de Sam : avant chaque ronde.** Le point ouvert n° 4 est clos.
 

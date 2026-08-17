@@ -48,6 +48,56 @@ ronde:
   plafond_attente_ms: 2400000
 
   modele: sonnet
+
+# ─────────────────────────────────────────────────────────────────────────────
+# ROUTAGE DU MODELE PAR NATURE DE TACHE — 18/08
+# ─────────────────────────────────────────────────────────────────────────────
+#
+# Signale par Sam : certaines taches demanderont toujours un modele de premier
+# plan, et pas forcement le meme fournisseur selon le besoin. La V2 ne le
+# prevoyait nulle part — le modele etait une valeur unique, et
+# bin/executer-file.sh l'avait meme en dur.
+#
+# Toutes les taches ne demandent pas la meme chose. Appliquer un correctif
+# ecrit ailleurs n'est pas juger si une preuve couvre une decision, ni produire
+# une proposition strategique. Router au moins cher partout coute en qualite la
+# ou elle compte ; router au plus capable partout coute en argent la ou ca n'en
+# vaut pas la peine.
+#
+# LE ROUTAGE EST DECLARATIF. Changer un modele ne doit jamais demander de
+# toucher au code — c'est la lecon de la cadence, du canal impose et de la
+# liste figee des fournisseurs GPU (17/08 : deux fournisseurs ecrits en dur,
+# tout modele ajoute au YAML n'etait jamais enregistre).
+#
+# ETAT AU 18/08 : structure posee, valeurs INCHANGEES. Tout est sur sonnet,
+# comme aujourd'hui. Basculer une ligne est un reglage, pas un developpement.
+# C'est le principe d'activation applique au routage.
+
+routage_modele:
+  defaut: sonnet
+
+  # Par nature de travail, pas par direction : c'est la tache qui decide, pas
+  # le titre de celui qui l'execute.
+  par_nature:
+    execution:      sonnet   # appliquer une tache deja specifiee
+    diagnostic:     sonnet   # nommer la cause d'un blocage
+    validation:     sonnet   # relire une preuve et juger si elle couvre
+    strategie:      sonnet   # proposition du CEO, challenge, synthese
+    redaction:      sonnet   # contenu destine a sortir de l'entreprise
+
+  # Fournisseur. Aujourd'hui contraint par le harnais claude -p, qui ne parle
+  # qu'un format. Voir DEC-2026-0816-01 : vLLM expose un point d'entree
+  # Anthropic natif, ce qui rendrait ce champ reellement utile sans reecrire
+  # les rondes. A instruire, non tranche.
+  fournisseur: anthropic
+
+  # A TRANCHER, et volontairement laisse ouvert :
+  #   - quel modele pour validation et strategie ? La relecture du CoS decide
+  #     si une decision est close ; une erreur y coute plus qu'ailleurs.
+  #   - qui peut changer ce routage ? Le curseur engager_depense est a 1 ou 2
+  #     partout : personne ne peut arbitrer une hausse de cout aujourd'hui.
+  #   - le fournisseur doit-il pouvoir varier par nature de tache, ou reste-t-il
+  #     unique tant que le harnais l'impose ?
   outils: "Task,Bash,Read,Grep,Glob"
 
 # Outils supplémentaires par direction, au-delà du socle ci-dessus.
