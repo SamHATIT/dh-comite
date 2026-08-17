@@ -1,9 +1,10 @@
 # Journal — dh-comite
 
 > Genere automatiquement depuis les messages de commit.
-> Derniere mise a jour : 17/08/2026 12:02 UTC
+> Derniere mise a jour : 17/08/2026 12:48 UTC
 
 ## 2026-08-17
+- Curseurs V2 poses, et SPEC mise a jour des arbitrages `91cbf73`
 - Specification de la refonte DEOS Governance V2 `a3fd171`
 - Nettoyage du depot errone du 17/08 (fichier --help dans la file Salesforce) `15aff75`
 - Le garde-fou bloquait le travail normal — cinq faux positifs en un matin `1d5c252`

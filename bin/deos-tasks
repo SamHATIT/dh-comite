@@ -1,0 +1,302 @@
+#!/bin/bash
+# deos-tasks — la file d'execution du comite. LOT-02, 17/08/2026.
+#
+# POURQUOI CET OUTIL EXISTE. Le comite savait enregistrer des decisions, pas les
+# executer. Une decision accordee etait un texte : rien ne portait le critere de
+# fin, le porteur, la preuve ni la reprise. La tache est l'unite qui manquait —
+# la decision est le contenant, la tache est ce qui se fait, se bloque, echoue,
+# se prouve et REVIENT.
+#
+#   deos-tasks add --decision DEC-X --titre "..." --critere-fin "..." \
+#                  --owner delivery [--echeance 2026-08-25] [--budget 0.50] [--par cos]
+#   deos-tasks list [--owner X] [--statut Y] [--dues]
+#   deos-tasks show TASK-X
+#   deos-tasks start   TASK-X --par delivery [--cout 0.03]
+#   deos-tasks block   TASK-X --blocker "..." --next-action "..." --next-owner cos [--cout N]
+#   deos-tasks fail    TASK-X --erreur "..." [--cause "..."] [--retry-dans 10min] [--cout N]
+#   deos-tasks cause   TASK-X --cause "..." [--retry-dans 10min]
+#   deos-tasks done    TASK-X --evidence-type commit --evidence-ref abc1234 [--cout N]
+#   deos-tasks valider TASK-X --par cos --constat "..."
+#
+# TROIS REGLES QUI NE SE DEVINENT PAS :
+#
+# 1. BLOQUER EXIGE UNE SUITE. block refuse sans --blocker, --next-action et
+#    --next-owner. La contrainte blocage_avec_suite en base est le filet ; l'outil
+#    refuse avant, parce qu'un message d'erreur PostgreSQL n'apprend rien a un
+#    agent. Une tache bloquee sans action suivante est invisible : elle
+#    n'apparait dans aucune file, personne ne la reprend, elle ne repart jamais.
+#
+# 2. ON PEUT TOUJOURS ENREGISTRER CE QUI S'EST PASSE. block, fail, done et valider
+#    ne sont jamais refuses pour depassement de budget. Seul start l'est. Refuser
+#    d'enregistrer un fait reproduirait le defaut que cette refonte corrige : une
+#    difficulte qui ne laisse pas de trace termine la session en silence (I5).
+#
+# 3. LE BUDGET EST RECURSIF. Depassement tolere 10 % a chaque niveau. Au-dela, la
+#    tache escalade a sa direction, la direction au CEO, le CEO a Sam. Une
+#    escalade n'est pas un refus : c'est une demande d'arbitrage a qui peut
+#    engager davantage. Voir docs/OUTILS.md.
+
+set -euo pipefail
+esc() { printf "%s" "$1" | sed "s/'/''/g"; }
+q()  { psql "$COMITE_DB_DSN" -tA -c "$1"; }
+qq() { psql "$COMITE_DB_DSN" -q -v ON_ERROR_STOP=1 -c "$1"; }
+
+# Directions d'execution, par opposition aux roles d'arbitrage (cos, ceo, sam).
+# Meme liste que bin/deos-decisions et les scopes de bin/deos-state.
+est_direction() {
+  case "$1" in commercial|marketing|delivery|cs|legal|financier|growth) return 0;; *) return 1;; esac
+}
+
+existe() {
+  [ "$(q "SELECT count(*) FROM tasks WHERE id='$(esc "$1")';")" = "1" ] \
+    || { echo "REFUS: tache $1 inconnue" >&2; exit 2; }
+}
+
+# --retry-dans accepte 10min, 30m, 2h, 1d, ou un nombre nu (minutes).
+en_intervalle() {
+  case "$1" in
+    *min) echo "${1%min} minutes";; *m) echo "${1%m} minutes";;
+    *h)   echo "${1%h} hours";;     *d) echo "${1%d} days";;
+    *)    echo "$1 minutes";;
+  esac
+}
+
+# Le budget, aux deux niveaux que l'outil peut voir : la tache, et la direction qui
+# la porte. Le troisieme niveau (CEO -> Sam) se lit dans le tableau de bord — mais
+# le mecanisme est le meme, et c'est tout l'interet de la regle.
+controle_budget() {
+  local ID="$1"
+  # Le verdict est rendu en clair par un CASE, jamais par un booleen concatene :
+  # psql affiche un booleen isole 't'/'f' mais 'true'/'false' des qu'il est
+  # concatene a du texte. Un test ecrit contre la mauvaise forme ne declenche
+  # jamais — et un controle de budget qui ne declenche jamais passe pour un
+  # controle qui passe.
+  local L; L=$(q "SELECT owner || '|' || consomme_usd || '|' || budget_usd || '|' ||
+                  CASE WHEN consomme_usd > budget_usd * 1.1 THEN 'DEPASSE' ELSE 'ok' END
+                  FROM tasks WHERE id='$(esc "$ID")';")
+  local OWNER CONS BUD DEPASSE
+  IFS='|' read -r OWNER CONS BUD DEPASSE <<< "$L"
+  [ "$DEPASSE" = "DEPASSE" ] || return 0
+
+  local PCT; PCT=$(q "SELECT round((consomme_usd / nullif(budget_usd,0) - 1) * 100) FROM tasks WHERE id='$(esc "$ID")';")
+  echo "REFUS: budget depasse — $ID : $CONS USD consommes pour $BUD budgetes (+$PCT %)" >&2
+  echo "       la tolerance est de 10 %. Escalade attendue : $OWNER arbitre." >&2
+
+  # Niveau au-dessus : la direction. Si elle deborde aussi, l'arbitrage remonte.
+  local D; D=$(q "SELECT CASE WHEN sum(consomme_usd) > sum(budget_usd) * 1.1 THEN 'DEPASSE' ELSE 'ok' END
+                  || '|' || round(sum(consomme_usd),2) || '|' || round(sum(budget_usd),2)
+                  FROM tasks WHERE owner='$(esc "$OWNER")';")
+  local DDEP DCONS DBUD; IFS='|' read -r DDEP DCONS DBUD <<< "$D"
+  if [ "$DDEP" = "DEPASSE" ]; then
+    echo "       $OWNER deborde egalement ($DCONS USD pour $DBUD) : l'arbitrage remonte au ceo." >&2
+    echo "       et si le ceo deborde, a sam. Meme mecanisme a chaque niveau." >&2
+  fi
+  echo "       Une escalade n'est pas un refus : c'est une demande d'arbitrage a" >&2
+  echo "       qui peut engager davantage." >&2
+  exit 3
+}
+
+CMD="${1:-}"; shift || true
+case "$CMD" in
+
+  add)
+    DEC=""; TITRE=""; CRITERE=""; OWNER=""; ECHEANCE=""; BUDGET="0.50"; PAR=""
+    while [ $# -gt 0 ]; do case "$1" in
+      --decision) DEC="$2"; shift 2;; --titre) TITRE="$2"; shift 2;;
+      --critere-fin) CRITERE="$2"; shift 2;; --owner) OWNER="$2"; shift 2;;
+      --echeance) ECHEANCE="$2"; shift 2;; --budget) BUDGET="$2"; shift 2;;
+      --par) PAR="$2"; shift 2;; *) shift;; esac; done
+    [ -n "$DEC" ] && [ -n "$TITRE" ] && [ -n "$CRITERE" ] && [ -n "$OWNER" ] || {
+      echo "REFUS: --decision, --titre, --critere-fin et --owner sont requis" >&2; exit 2; }
+    [ "$(q "SELECT count(*) FROM decisions WHERE id='$(esc "$DEC")';")" = "1" ] || {
+      echo "REFUS: decision $DEC inconnue — une tache orpheline est un travail que personne n'a arbitre" >&2; exit 2; }
+    PAR="${PAR:-$OWNER}"
+
+    # Avis non bloquant : un critere de fin declaratif se valide par une
+    # affirmation, pas par une commande. C'est I3 au niveau le plus bas — un
+    # indicateur qui se calcule sur ce que l'evalue declare mesure la declaration.
+    case "$CRITERE" in
+      *fait*|*termine*|*ameliore*|*optimise*|*propre*|*a\ jour*|*OK*)
+        echo "AVIS: \"$CRITERE\" semble declaratif — un critere de fin se verifie par une commande" >&2;;
+    esac
+
+    N=$(q "SELECT lpad((count(*)+1)::text, 2, '0') FROM tasks WHERE id LIKE 'TASK-' || to_char(now(),'YYYY-MMDD') || '%';")
+    ID="TASK-$(date +%Y-%m%d)-$N"
+    qq "INSERT INTO tasks (id, decision_id, titre, critere_fin, owner, echeance, budget_usd, cree_par)
+        VALUES ('$ID', '$(esc "$DEC")', '$(esc "$TITRE")', '$(esc "$CRITERE")', '$(esc "$OWNER")',
+                $([ -z "$ECHEANCE" ] && echo NULL || echo "'$(esc "$ECHEANCE")'::date"),
+                $(esc "$BUDGET"), '$(esc "$PAR")');"
+    echo "$ID" ;;
+
+  list)
+    OWNER=""; STATUT=""; DUES=0
+    while [ $# -gt 0 ]; do case "$1" in
+      --owner) OWNER="$2"; shift 2;; --statut) STATUT="$2"; shift 2;;
+      --dues) DUES=1; shift;; *) shift;; esac; done
+    W="WHERE true"
+    [ -n "$OWNER" ]  && W="$W AND owner='$(esc "$OWNER")'"
+    [ -n "$STATUT" ] && W="$W AND statut='$(esc "$STATUT")'"
+    # --dues : toute tache failed dont retry_at est depasse REVIENT dans la file.
+    # C'est ce qui distingue un moteur d'execution d'un ordonnanceur (SPEC §2.3).
+    [ "$DUES" = "1" ] && W="$W AND retry_at IS NOT NULL AND retry_at <= now()"
+    psql "$COMITE_DB_DSN" -c "SELECT id, statut, owner, left(titre,42) AS titre, echeance,
+      attempt_count AS essais, retry_at, decision_id FROM tasks $W ORDER BY retry_at NULLS LAST, id;" ;;
+
+  show)
+    ID="${1:-}"; [ -n "$ID" ] || { echo "REFUS: identifiant requis" >&2; exit 2; }; existe "$ID"
+    psql "$COMITE_DB_DSN" -x -c "SELECT id, decision_id, statut, titre, critere_fin, owner, echeance,
+      attempt_count, last_error, retry_at, blocker, next_action, next_owner,
+      budget_usd, consomme_usd, evidence_type, evidence_ref, constat, valide_par,
+      cree_le, cree_par, maj_le
+      FROM tasks WHERE id='$(esc "$ID")';" ;;
+
+  start)
+    ID="${1:-}"; shift || true; PAR=""; COUT=""
+    while [ $# -gt 0 ]; do case "$1" in
+      --par) PAR="$2"; shift 2;; --cout) COUT="$2"; shift 2;; *) shift;; esac; done
+    [ -n "$ID" ] && [ -n "$PAR" ] || { echo "REFUS: <id> et --par requis" >&2; exit 2; }; existe "$ID"
+    [ "$(q "SELECT statut FROM tasks WHERE id='$(esc "$ID")';")" = "valide" ] && {
+      echo "REFUS: $ID est deja validee" >&2; exit 2; }
+    [ -n "$COUT" ] && qq "UPDATE tasks SET consomme_usd = consomme_usd + $(esc "$COUT") WHERE id='$(esc "$ID")';"
+    # Seule commande soumise au budget : elle engage du travail a venir. Voir la
+    # regle 2 de l'en-tete pour les autres.
+    controle_budget "$ID"
+    qq "UPDATE tasks SET statut='en_cours' WHERE id='$(esc "$ID")';"
+    echo "OK: $ID → en_cours (par $PAR)" ;;
+
+  block)
+    ID="${1:-}"; shift || true; BLOCKER=""; NEXT_ACTION=""; NEXT_OWNER=""; COUT=""
+    while [ $# -gt 0 ]; do case "$1" in
+      --blocker) BLOCKER="$2"; shift 2;; --next-action) NEXT_ACTION="$2"; shift 2;;
+      --next-owner) NEXT_OWNER="$2"; shift 2;; --cout) COUT="$2"; shift 2;; *) shift;; esac; done
+    [ -n "$ID" ] || { echo "REFUS: identifiant requis" >&2; exit 2; }; existe "$ID"
+    [ -n "$BLOCKER" ] && [ -n "$NEXT_ACTION" ] && [ -n "$NEXT_OWNER" ] || {
+      echo "REFUS: block exige --blocker, --next-action et --next-owner (I4)" >&2
+      echo "       un blocage sans action suivante est invisible : il ne repart jamais" >&2
+      exit 2; }
+    [ -n "$COUT" ] && qq "UPDATE tasks SET consomme_usd = consomme_usd + $(esc "$COUT") WHERE id='$(esc "$ID")';"
+    qq "UPDATE tasks SET statut='blocked', blocker='$(esc "$BLOCKER")',
+        next_action='$(esc "$NEXT_ACTION")', next_owner='$(esc "$NEXT_OWNER")'
+        WHERE id='$(esc "$ID")';"
+    echo "OK: $ID → blocked, suite chez $NEXT_OWNER : $NEXT_ACTION" ;;
+
+  fail)
+    ID="${1:-}"; shift || true; ERREUR=""; CAUSE=""; RETRY=""; COUT=""; NEXT_ACTION=""; NEXT_OWNER=""
+    while [ $# -gt 0 ]; do case "$1" in
+      --erreur) ERREUR="$2"; shift 2;; --cause) CAUSE="$2"; shift 2;;
+      --retry-dans) RETRY="$2"; shift 2;; --cout) COUT="$2"; shift 2;;
+      --next-action) NEXT_ACTION="$2"; shift 2;; --next-owner) NEXT_OWNER="$2"; shift 2;;
+      *) shift;; esac; done
+    [ -n "$ID" ] && [ -n "$ERREUR" ] || { echo "REFUS: <id> et --erreur requis" >&2; exit 2; }; existe "$ID"
+    [ -n "$COUT" ] && qq "UPDATE tasks SET consomme_usd = consomme_usd + $(esc "$COUT") WHERE id='$(esc "$ID")';"
+
+    ESSAI=$(( $(q "SELECT attempt_count FROM tasks WHERE id='$(esc "$ID")';") + 1 ))
+    OWNER=$(q "SELECT owner FROM tasks WHERE id='$(esc "$ID")';")
+
+    # BUDGET D'ECHEC — SPEC §2.2. La commande fail ne prend ni --blocker ni
+    # --next-owner, mais la contrainte en base les exige : ils sont donc DEDUITS
+    # du rang de la tentative, selon le tableau de la SPEC. C'est ce qui rend la
+    # regle applicable au lieu de la laisser dans un document.
+    SUITE=""; PROPRIETAIRE="$OWNER"; MSG=""
+    case "$ESSAI" in
+      1) SUITE="reprise directe"
+         RETRY="${RETRY:-10min}"
+         MSG="1re tentative — reprise dans $RETRY" ;;
+      2) SUITE="changer d'approche — cause a nommer avant de reessayer"
+         if [ -z "$CAUSE" ]; then
+           # La reprise est SUSPENDUE, pas la tache. L'echec est enregistre — on
+           # n'empeche jamais de consigner un fait (regle 2) — mais la tache ne
+           # revient pas dans la file tant que la cause n'est pas nommee. C'est
+           # « nommer la cause AVANT de reessayer », rendu mecanique : une 2e
+           # tentative identique a la 1re est une perte de temps deja payee.
+           RETRY=""
+           MSG="2e tentative — REPRISE SUSPENDUE : nommer la cause avec \`deos-tasks cause $ID --cause \"...\"\`"
+         else
+           SUITE="changer d'approche — cause : $CAUSE"
+           RETRY="${RETRY:-10min}"
+           MSG="2e tentative — cause nommee, reprise dans $RETRY"
+         fi ;;
+      *) SUITE="arbitrage du CoS : reassigner, changer d'approche, ou remonter"
+         PROPRIETAIRE="chief-of-staff"
+         RETRY="${RETRY:-}"
+         MSG="${ESSAI}e tentative — la main passe au chief-of-staff" ;;
+    esac
+    [ -n "$NEXT_ACTION" ] && SUITE="$NEXT_ACTION"
+    [ -n "$NEXT_OWNER" ]  && PROPRIETAIRE="$NEXT_OWNER"
+
+    LE="$ERREUR"; [ -n "$CAUSE" ] && LE="$ERREUR — cause : $CAUSE"
+    SETR="retry_at=NULL"
+    [ -n "$RETRY" ] && SETR="retry_at = now() + interval '$(esc "$(en_intervalle "$RETRY")")'"
+    qq "UPDATE tasks SET statut='failed', attempt_count=$ESSAI, last_error='$(esc "$LE")',
+        blocker='$(esc "$ERREUR")', next_action='$(esc "$SUITE")',
+        next_owner='$(esc "$PROPRIETAIRE")', $SETR WHERE id='$(esc "$ID")';"
+    echo "OK: $ID → failed ($MSG)"
+    echo "    suite chez $PROPRIETAIRE : $SUITE" ;;
+
+  cause)
+    # AJOUT AU CONTRAT DU LOT, et voici pourquoi. SPEC §2.2 impose de « nommer la
+    # cause avant de reessayer » a la 2e tentative. Deux implementations etaient
+    # possibles, toutes deux fausses :
+    #   - refuser un fail sans cause : on empeche d'enregistrer un fait, et une
+    #     difficulte qui ne laisse pas de trace termine la session en silence (I5) ;
+    #   - exiger la cause dans un second fail : nommer la cause consommait alors
+    #     une tentative, et faisait basculer au CoS au lieu de relancer — constate
+    #     en validation le 17/08.
+    # Nommer la cause n'est pas une tentative : c'est ce qui autorise la suivante.
+    # D'ou une commande distincte, qui n'incremente pas attempt_count.
+    ID="${1:-}"; shift || true; CAUSE=""; RETRY="10min"
+    while [ $# -gt 0 ]; do case "$1" in
+      --cause) CAUSE="$2"; shift 2;; --retry-dans) RETRY="$2"; shift 2;; *) shift;; esac; done
+    [ -n "$ID" ] && [ -n "$CAUSE" ] || { echo "REFUS: <id> et --cause requis" >&2; exit 2; }; existe "$ID"
+    ETAT=$(q "SELECT statut FROM tasks WHERE id='$(esc "$ID")';")
+    [ "$ETAT" = "failed" ] || { echo "REFUS: $ID est en '$ETAT' — nommer une cause n'a de sens que sur un echec" >&2; exit 2; }
+    qq "UPDATE tasks SET last_error = coalesce(last_error,'') || ' — cause : $(esc "$CAUSE")',
+        next_action = 'changer d''approche — cause : $(esc "$CAUSE")',
+        retry_at = now() + interval '$(esc "$(en_intervalle "$RETRY")")'
+        WHERE id='$(esc "$ID")';"
+    echo "OK: cause nommee sur $ID — reprise dans $RETRY, sans consommer de tentative"
+    echo "    ($(q "SELECT attempt_count FROM tasks WHERE id='$(esc "$ID")';") tentative(s) au compteur)" ;;
+
+  done)
+    ID="${1:-}"; shift || true; ETYPE=""; EREF=""; COUT=""
+    while [ $# -gt 0 ]; do case "$1" in
+      --evidence-type) ETYPE="$2"; shift 2;; --evidence-ref) EREF="$2"; shift 2;;
+      --cout) COUT="$2"; shift 2;; *) shift;; esac; done
+    [ -n "$ID" ] || { echo "REFUS: identifiant requis" >&2; exit 2; }; existe "$ID"
+    [ -n "$ETYPE" ] && [ -n "$EREF" ] || {
+      echo "REFUS: done exige --evidence-type et --evidence-ref" >&2
+      echo "       sans preuve, la cloture est une affirmation — et un indicateur qui" >&2
+      echo "       se calcule sur une affirmation mesure la declaration, pas le fait (I3)" >&2
+      exit 2; }
+    case "$ETYPE" in commit|fichier|base|url) ;;
+      *) echo "REFUS: --evidence-type attend commit, fichier, base ou url" >&2; exit 2;; esac
+    [ "$(q "SELECT statut FROM tasks WHERE id='$(esc "$ID")';")" = "valide" ] && {
+      echo "REFUS: $ID est deja validee" >&2; exit 2; }
+    [ -n "$COUT" ] && qq "UPDATE tasks SET consomme_usd = consomme_usd + $(esc "$COUT") WHERE id='$(esc "$ID")';"
+    # Sortir de blocked/failed efface la suite : un blocage resolu qui reste
+    # affiche se lit comme un blocage actif.
+    qq "UPDATE tasks SET statut='done', evidence_type='$(esc "$ETYPE")', evidence_ref='$(esc "$EREF")',
+        blocker=NULL, next_action=NULL, next_owner=NULL, retry_at=NULL WHERE id='$(esc "$ID")';"
+    echo "OK: $ID → done ($ETYPE $EREF) — en attente de validation"
+    echo "    rappel : le critere de fin est \"$(q "SELECT critere_fin FROM tasks WHERE id='$(esc "$ID")';")\"" ;;
+
+  valider)
+    ID="${1:-}"; shift || true; PAR=""; CONSTAT=""
+    while [ $# -gt 0 ]; do case "$1" in
+      --par) PAR="$2"; shift 2;; --constat) CONSTAT="$2"; shift 2;; *) shift;; esac; done
+    [ -n "$ID" ] && [ -n "$PAR" ] || { echo "REFUS: <id> et --par requis" >&2; exit 2; }; existe "$ID"
+    # Le CEO figure ici au titre de la suppleance du CoS (SPEC §4.2), pas comme
+    # second valideur permanent. Une direction ne valide jamais : elle a fait le
+    # travail, elle ne peut pas etre son propre relecteur.
+    case "$PAR" in
+      cos|chief-of-staff|ceo) ;;
+      *) echo "REFUS: seuls cos et ceo (suppleance) valident — $PAR a fait le travail, il ne le relit pas" >&2; exit 2;; esac
+    [ -n "$CONSTAT" ] || { echo "REFUS: valider exige --constat — la validation est une relecture, elle se dit" >&2; exit 2; }
+    ETAT=$(q "SELECT statut FROM tasks WHERE id='$(esc "$ID")';")
+    [ "$ETAT" = "done" ] || { echo "REFUS: $ID est en '$ETAT' — on ne valide que ce qui est declare fini (done)" >&2; exit 2; }
+    qq "UPDATE tasks SET statut='valide', constat='$(esc "$CONSTAT")', valide_par='$(esc "$PAR")'
+        WHERE id='$(esc "$ID")';"
+    echo "OK: $ID → valide (par $PAR) — $CONSTAT" ;;
+
+  *) echo "usage: deos-tasks add|list|show|start|block|fail|cause|done|valider ..." >&2; exit 1 ;;
+esac

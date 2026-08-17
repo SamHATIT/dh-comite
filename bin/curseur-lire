@@ -9,7 +9,8 @@ SELECT type_tache, niveau, coalesce(canal_impose,''), coalesce(evolution_prevue,
 FROM curseurs WHERE direction='$DIR'
 ORDER BY CASE type_tache
   WHEN 'observer' THEN 1 WHEN 'ecrire_base' THEN 2 WHEN 'agir_production' THEN 3
-  WHEN 'envoyer_externe' THEN 4 WHEN 'engager_depense' THEN 5 ELSE 6 END" 2>/dev/null |
+  WHEN 'envoyer_externe' THEN 4 WHEN 'engager_depense' THEN 5
+  WHEN 'ecrire_code' THEN 6 ELSE 7 END" 2>/dev/null |
 while IFS='|' read -r tache niveau canal evol; do
   [ -z "$tache" ] && continue
   case "$niveau" in
@@ -24,6 +25,13 @@ while IFS='|' read -r tache niveau canal evol; do
     agir_production)     nom="Agir sur la production" ;;
     envoyer_externe)     nom="Envoyer vers l'extérieur" ;;
     engager_depense)     nom="Engager une dépense" ;;
+    # 17/08 : curseur cree par Sam pour distinguer l ecriture de CODE de la
+    # modification du DISPOSITIF. Les deux etaient confondus sous
+    # modifier_dispositif, regle a 1 partout — ce qui interdisait au Delivery de
+    # pousser sur delivery/correctifs, alors que le montage du 14/08 avait ete
+    # fait pour ca. Sans libelle ici, la direction lirait le nom technique dans
+    # son prompt de ronde et ne saurait pas ce que le cran l autorise a faire.
+    ecrire_code)         nom="Écrire du code dans un dépôt" ;;
     modifier_dispositif) nom="Modifier le dispositif" ;;
     *)                   nom="$tache" ;;
   esac
