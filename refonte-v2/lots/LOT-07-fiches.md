@@ -133,7 +133,7 @@ parfaitement une stratégie moyenne.
   propositions mais à leur devenir : acceptée → expérimentée → résultat → impact.
 
   **Droit spécial.** Le CEO n'est pas limité au backlog existant. Il peut proposer une
-  initiative qui n'y figure pas. Limite à fixer — point ouvert n° 8.
+  initiative qui n'y figure pas. **TRANCHÉ le 17/08** (voir SPEC §8, tableau des points tranchés) : c'est un droit de PROPOSITION soumis à Sam, pas d'initiative.
 
 **Chief of Staff** — Faire que les décisions deviennent des résultats, vite et avec preuves.
 - O1 — toute décision accordée devient une tâche **correctement spécifiée** sous 24 h

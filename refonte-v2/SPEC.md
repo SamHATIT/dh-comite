@@ -187,6 +187,20 @@ CoS   ──  séquencement, assignation, validation des clôtures
 AGENTS ── exécution
 ```
 
+### 4.0bis Les sept axes de curseur
+
+`observer` · `ecrire_base` · `agir_production` · `engager_depense` ·
+`envoyer_externe` · `modifier_dispositif` · **`ecrire_code`**
+
+Le septième a été ajouté le 18/08 sur signalement du LOT-06. `modifier_dispositif`
+désigne le dispositif du comité — fiches, scripts, garde-fous. Il est à 1 pour toutes
+les directions. Y rattacher l'écriture de code rendait le mécanisme inopérant : le
+Delivery n'aurait pas pu pousser sur `delivery/correctifs`, ce pour quoi le montage du
+15/08 a été fait.
+
+État en base au 18/08 : **neuf directions, sept axes chacune.** `ecrire_code` est à 3
+pour le seul Delivery, canal imposé `/repo-delivery` branche `delivery/correctifs`.
+
 ### 4.1 Droits sur un objectif
 
 | Acteur | Droit |
@@ -352,15 +366,29 @@ permanente. À réexaminer à date fixe.
 
 Ne pas inventer en cours d'implémentation : **signaler**.
 
+> **Ce fichier fait foi.** Quand un point est tranché, il l'est ici. Les lots et les
+> fiches peuvent le citer, jamais le contredire. Un lot qui présente comme ouvert un
+> point tranché ci-dessous a tort — signalez-le.
+
+### Encore ouverts
+
 1. Coût cible du comité (aujourd'hui 196 USD/mois sur 253 de facture). Piste : bascule
    sur matériel dédié pour passer d'un coût variable à un forfait.
 2. Ce qu'un commit doit modifier pour valoir preuve — un commit vide passerait.
 3. Concurrence entre agents sur un même périmètre : verrou ou séquencement ?
-4. Fréquence du Preflight : avant chaque ronde, ou une fois par jour ?
-5. Obligations réglementaires datées du Juridique pendant sa veille.
-6. Canal imposé de Growth, qui cumule Salesforce et Ghost.
-7. Date ou condition de re-séparation de Growth.
+4. Obligations réglementaires datées du Juridique pendant sa veille.
+5. Canal imposé de Growth, qui cumule Salesforce et Ghost.
+6. Date ou condition de re-séparation de Growth.
 
-*Deux points ouverts ont été tranchés le 17/08 : le droit du CEO à sortir du backlog
-devient un droit de proposition soumis à Sam ; et c'est Sam qui juge de l'acceptation
-dans le Strategic Yield, avec le seuil de rappel à 14 jours.*
+### Tranchés — ne plus les rouvrir
+
+| Point | Arbitrage | Date |
+| --- | --- | --- |
+| Droit du CEO à sortir du backlog | Droit de **proposition** soumis à Sam, pas d'initiative. Précaution de départ, réexaminable. | 17/08 |
+| Qui juge l'acceptation dans le Strategic Yield | **Sam.** Avec seuil de rappel : 14 jours sans réponse → un rappel unique, puis veille — ni perdue, ni comptée comme refusée. | 17/08 |
+| Fréquence du Preflight | **Avant chaque ronde.** Mesure du LOT-05 : 0,8 s pour les quatre directions actives. Une passe quotidienne laisserait une fenêtre d'une journée pendant laquelle un montage perdu ou une clé expirée passe inaperçu — soit la durée exacte des pannes que le lot supprime. | 18/08 |
+| Rattachement de `repo.write` | **Nouvel axe `ecrire_code`**, distinct de `modifier_dispositif`. Ce dernier désigne le dispositif du comité, pas un dépôt de la plateforme. Sous `modifier_dispositif` (à 1 partout), le mécanisme était implémenté, testé et inopérant. | 18/08 |
+| Champs de blocage sur `decisions` | **Ajoutés.** Une décision peut être bloquée avant qu'aucune tâche n'existe — cas fréquent au sortir du Recovery Sprint. Sans ces colonnes, le LOT-03 ne pouvait pas appliquer sa propre règle. | 18/08 |
+| Qui peut poser `en_execution` | **La direction porteuse**, en plus de `cos`, `ceo`, `sam`. Sinon la boucle d'exécution ne peut pas démarrer sans passer par le CoS, et le goulot renaît au premier pas. | 18/08 |
+| Définition de « la direction porteuse » | Celle nommée `owner` d'au moins une tâche de la décision ; à défaut de tâche, l'origine. En cas d'écart, **accepter et signaler** plutôt que refuser : durcir plus tard est trivial, débloquer un refus injustifié coûte des jours. | 18/08 |
+| Date de réexamen de la dette P0 | **1er novembre 2026**, un mois après le lancement. | 18/08 |
