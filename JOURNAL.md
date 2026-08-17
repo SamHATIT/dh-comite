@@ -1,9 +1,10 @@
 # Journal — dh-comite
 
 > Genere automatiquement depuis les messages de commit.
-> Derniere mise a jour : 17/08/2026 14:28 UTC
+> Derniere mise a jour : 17/08/2026 14:33 UTC
 
 ## 2026-08-17
+- Procedure d'application des migrations, repetee sur une copie de la base reelle `50fde8e`
 - Vague A integree, et un conflit de fichier partage resolu `05e04da`
 - Curseurs V2 poses, et SPEC mise a jour des arbitrages `91cbf73`
 - Specification de la refonte DEOS Governance V2 `a3fd171`
