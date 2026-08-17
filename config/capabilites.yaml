@@ -118,22 +118,30 @@ capacites:
   # du Delivery, ouvert le 14/08). /repo, /backlog et /prodlogs sont en :ro et ne
   # sont donc pas concernés.
   #
-  # ⚠ POINT À ARBITRER PAR SAM — signalé, pas tranché.
-  # Le LOT-06 rattache repo.write au curseur `modifier_dispositif`. Or ce curseur
-  # est à 1 pour TOUTES les directions (« peut proposer une évolution, ne la pose
-  # jamais », R14). Appliqué tel quel, le Delivery ne peut pas pousser sur
-  # delivery/correctifs — alors que c'est exactement ce pour quoi le montage du
-  # 14/08 a été fait. Le mécanisme est donc implémenté, testé, et inopérant en
-  # l'état : conforme à SPEC §5 « on prépare et on valide tout, on active selon
-  # la situation ». Il s'activera le jour où Sam relèvera le curseur — ou créera
-  # un curseur distinct pour l'écriture de code, que je n'invente pas ici.
+  # LE CURSEUR SE CHOISIT PAR DÉPÔT — arbitrage de Sam, 17/08.
+  #
+  # Le LOT-06 rattachait repo.write au seul curseur `modifier_dispositif`. Erreur
+  # reconnue par Sam le 17/08 : ce curseur désigne le DISPOSITIF DU COMITÉ
+  # (prompts, garde-fous, curseurs — R14), pas un dépôt de la plateforme.
+  # Appliqué tel quel, il est à 1 pour toutes les directions et le Delivery ne
+  # pouvait pas pousser sur delivery/correctifs — le montage du 14/08 n'aurait
+  # servi à rien.
+  #
+  # D'où deux curseurs distincts, parce que ce sont deux risques distincts :
+  #   · modifier_dispositif — toucher à ce qui gouverne le comité. Reste à 4.
+  #   · ecrire_code         — écrire dans un dépôt de code. Posé par Sam à 3
+  #                           pour le Delivery (« agit sous validation »).
+  #
+  # Confondre les deux, c'est soit interdire au Delivery son travail, soit
+  # ouvrir le dispositif à qui doit seulement corriger du code.
   # ───────────────────────────────────────────────────────────────────────────
   repo.write:
     libelle: "écriture git dans un dépôt monté en écriture"
-    curseur: modifier_dispositif
+    # Défaut : le dispositif du comité. Chaque dépôt peut le surcharger.
     # 4 = « Autonomie ». Reprend le niveau que le garde-fou exigeait déjà pour
     # toute modification du dispositif (chmod sur zone protégée, écriture dans
     # .claude/agents|hooks|skills).
+    curseur: modifier_dispositif
     niveau_requis: 4
     outils:
       - programme: git
@@ -179,11 +187,18 @@ capacites:
     depots:
       ".":
         libelle: "dispositif du comité (racine du dépôt, résolue à l'exécution)"
+        # Pas de surcharge : c'est bien `modifier_dispositif` à 4 qui gouverne.
+        # Le dépôt du comité EST le dispositif — fiches, garde-fous, curseurs.
         branche_imposee: null
       "/repo-delivery":
         libelle: "clone de travail du Delivery (montage du 14/08)"
+        # Un dépôt de code de la plateforme, pas le dispositif du comité.
+        curseur: ecrire_code
+        niveau_requis: 3
         # Le montage a été fait pour ça : « Il pousse sur la branche
-        # delivery/correctifs, Sam relit et fusionne. »
+        # delivery/correctifs, Sam relit et fusionne. » La branche imposée est
+        # ce qui rend l'ouverture acceptable : le Delivery pousse, il ne fusionne
+        # pas. C'est Sam qui relit — le contrôle est déplacé, pas supprimé.
         branche_imposee: delivery/correctifs
     # Quand le dépôt visé n'est pas déterminable depuis la commande, on retient
     # le plus strict. Refuser une écriture identifiable coûte un rapport ;

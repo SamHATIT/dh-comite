@@ -71,8 +71,12 @@ cas 7 DENY "psql -f, requête non vérifiable, traité comme une écriture" \
 cas 8 DENY "sf-lead est un envoi externe, refusé au cran 2" \
     commercial "/workspace/bin/sf-lead '{\"Company\":\"Test\",\"LastName\":\"—\"}'"
 
-# repo.write. Le curseur modifier_dispositif est à 1 pour toutes les directions.
-cas 9 DENY "git push est une écriture de dépôt, refusée au cran 1" \
+# repo.write, avec les réglages du 11/08 — c'est-à-dire AVANT que Sam ne pose
+# `ecrire_code` le 17/08. Aucune ligne pour ce curseur dans la sauvegarde : le
+# défaut restrictif s'applique et le push est refusé. Ce cas ne teste donc pas
+# l'état cible, il teste le repli — un curseur non encore posé ne doit jamais
+# valoir autorisation. L'état cible est éprouvé en unitaire, cas 15 à 18.
+cas 9 DENY "curseur pas encore posé : le push reste refusé" \
     delivery 'cd /repo-delivery && git push origin delivery/correctifs'
 
 # git en lecture n'est pas une écriture de dépôt. Le montage du 08/08 a été fait
@@ -149,29 +153,32 @@ cas_moteur 14 DENY "canal imposé · au cran 3, le courriel reste hors canal" \
     commercial 'mail -s "offre" client@exemple.fr' \
     "commercial|envoyer_externe|3"
 
-# BRANCHE IMPOSÉE — mécanisme dormant. Le montage du 14/08 dit : « Il pousse sur
-# la branche delivery/correctifs, Sam relit et fusionne. »
+# BRANCHE IMPOSÉE — avec `ecrire_code` à 3, le curseur que Sam pose le 17/08
+# pour le Delivery. Le montage du 14/08 dit : « Il pousse sur la branche
+# delivery/correctifs, Sam relit et fusionne. » Ces quatre cas décrivent donc
+# l'état cible du dispositif, pas une hypothèse : ce sont eux qui vérifient que
+# le montage sert enfin à quelque chose.
 cas_moteur 15 ALLOW "branche imposée · push sur delivery/correctifs" \
     delivery 'cd /repo-delivery && git push origin delivery/correctifs' \
-    "delivery|modifier_dispositif|4"
+    "delivery|ecrire_code|3"
 
 cas_moteur 16 DENY "branche imposée · push sur une autre branche refusé" \
     delivery 'cd /repo-delivery && git push origin main' \
-    "delivery|modifier_dispositif|4"
+    "delivery|ecrire_code|3"
 
 # `git -C <dépôt>` : les options globales précèdent la sous-commande. Les
 # confondre avec des positionnels décalait la lecture de la branche — le moteur
 # lisait « origin » comme branche visée et refusait un push conforme.
 cas_moteur 17 ALLOW "branche imposée · git -C ne décale pas la lecture" \
     delivery 'git -C /repo-delivery push origin delivery/correctifs' \
-    "delivery|modifier_dispositif|4"
+    "delivery|ecrire_code|3"
 
 # Un commit n'a pas de branche dans sa commande. Lui appliquer la contrainte
 # produirait un refus que l'agent ne peut pas lever : un blocage sans suite,
 # contraire à l'invariant I4.
 cas_moteur 18 ALLOW "un commit n'est pas soumis à la branche imposée" \
     delivery 'git -C /repo-delivery commit -m "correctif"' \
-    "delivery|modifier_dispositif|4"
+    "delivery|ecrire_code|3"
 
 # RÉGLAGE MANQUANT ≠ RÉGLAGE BAS. Le CEO n'a aucune ligne dans la table
 # `curseurs` (36 lignes, sauvegarde du 11/08). Il tombe au défaut restrictif,
@@ -199,6 +206,22 @@ case "$MOTIF_CEO" in
      printf '      %s\n' "$MOTIF_CEO"
      ECHOUES=$((ECHOUES + 1)); ECHECS+=("21 motif indistinct") ;;
 esac
+
+# LA SÉPARATION DES DEUX CURSEURS — le cœur de l'arbitrage du 17/08.
+# Le Delivery a `ecrire_code` à 3 : il pousse sur le clone de la plateforme.
+# Le même agent, avec le même cran, ne doit PAS pouvoir écrire dans le dépôt du
+# comité — celui qui porte les fiches, les garde-fous et les curseurs. Si ce cas
+# tombait, la distinction que Sam a posée n'existerait que dans les commentaires.
+cas_moteur 22 DENY "ecrire_code n'ouvre pas le dépôt du comité" \
+    delivery 'git -C /workspace push origin main' \
+    "delivery|ecrire_code|3"
+
+# Et le contrôle inverse : c'est bien `modifier_dispositif` qui garde le
+# dispositif, à 4. Sans ce cas, le précédent pourrait passer pour la seule raison
+# qu'aucun curseur n'est déclaré.
+cas_moteur 23 ALLOW "modifier_dispositif à 4 ouvre le dépôt du comité" \
+    delivery 'git -C /workspace commit -m "correctif"' \
+    "delivery|modifier_dispositif|4"
 
 bilan "Cas unitaires du moteur" || BILAN_MOTEUR=1
 

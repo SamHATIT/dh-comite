@@ -76,8 +76,12 @@ Trois capacités — celles où le contrôle était faux (SPEC §7).
 | Capacité | Ce qui la déclenche | Curseur | Cran requis |
 | --- | --- | --- | --- |
 | `db.write` | `deos-decisions`, `deos-state`, `deos-tasks`, `psql` non-lecture | `ecrire_base` | 3 |
-| `repo.write` | `git` avec une sous-commande qui mute | `modifier_dispositif` | 4 |
+| `repo.write` | `git` avec une sous-commande qui mute | **selon le dépôt** — voir §8a | 4 ou 3 |
 | `external.send` | `curl`/`wget` expédiant des données, `mail`/`sendmail`/`mutt`/`msmtp`, `sf-lead` | `envoyer_externe` | 3 |
+
+`repo.write` est la seule capacité dont le curseur dépend de la **cible** et non
+de l'action : écrire dans le dispositif du comité et corriger du code de la
+plateforme sont deux risques distincts. Arbitrage de Sam du 17/08, détaillé au §8a.
 
 Les crans requis **reprennent à l'identique** ceux que le garde-fou exigeait déjà.
 Ce lot ne durcit ni n'assouplit la politique : il la rend applicable. La seule
@@ -213,8 +217,11 @@ abandonnée — la couche de permissions de la session a refusé la modification
 motif qu'elle supprimait une interdiction inconditionnelle d'envoi externe. Le
 refus n'a pas été contourné. Le faux positif du 11/08 est donc corrigé **dans le
 moteur** et subsiste **dans `DH-x-001`** : un document citant `curl … --data`
-sera toujours refusé à l'écriture. C'est une correction à porter séparément, avec
-l'accord explicite de Sam.*
+sera toujours refusé à l'écriture.*
+
+*Suite décidée le 17/08 : la correction sera portée séparément, avec l'accord
+explicite de Sam. Elle n'est pas dans ce lot et ne doit pas y être glissée —
+c'est le genre de modification qui doit rester visible dans son propre commit.*
 
 ### Ce qui reste au garde-fou, et pourquoi
 
@@ -231,17 +238,24 @@ touchée est une régression possible.
 Application de SPEC §5 : *on prépare et on valide tout, on active selon la
 situation.*
 
-| Mécanisme | État | Ce qui l'activera |
+| Mécanisme | État | Ce qui l'active |
 | --- | --- | --- |
-| Canal imposé (`external.send`) | implémenté, testé, sans effet | un curseur `envoyer_externe` ≥ 3 |
-| Branche imposée (`repo.write`) | implémenté, testé, sans effet | un curseur `modifier_dispositif` ≥ 4 |
+| Canal imposé (`external.send`) | implémenté, testé, sans effet | un curseur `envoyer_externe` ≥ 3 — aucune direction ne l'a |
+| Branche imposée (`repo.write`) | implémenté, testé — **s'active** | `ecrire_code` ≥ 3, posé par Sam le 17/08 pour le Delivery |
 
-Sans effet aujourd'hui parce qu'**aucune direction n'atteint le cran requis** :
-la contrainte de niveau refuse avant que celle de canal ou de branche ne soit
-examinée. Les cas 13 à 18 de `tests/policy.sh` les éprouvent en fournissant au
-moteur les crans qu'aucune direction n'a encore — sans quoi ces mécanismes
-resteraient invérifiés jusqu'au jour de leur activation, c'est-à-dire au pire
-moment.
+Un mécanisme dormant l'est parce que **la contrainte de niveau refuse avant que
+celle de canal ou de branche ne soit examinée**, pas parce qu'il serait
+désactivé. Le jour où le curseur monte, la contrainte s'applique sans qu'on ait
+rien à brancher.
+
+La branche imposée cesse précisément d'être dormante avec `ecrire_code` : dès que
+le réglage est en base, le Delivery pousse sur `delivery/correctifs` et **rien
+d'autre**. C'est le premier mécanisme du LOT-06 à produire un effet visible sur
+le travail quotidien d'une direction.
+
+Les cas 13 à 18 et 22-23 de `tests/policy.sh` fournissent au moteur les crans
+voulus — sans quoi ces mécanismes resteraient invérifiés jusqu'au jour de leur
+activation, c'est-à-dire au pire moment.
 
 ---
 
@@ -256,10 +270,10 @@ moment.
 Formulation reprise de SPEC §7, délibérément. Elle empêche qu'un compromis
 temporaire devienne une dette permanente.
 
-**Date de réexamen proposée : 1er novembre 2026** — un mois après le lancement du
-1er octobre, quand la sortie ne mobilise plus toute la capacité. La SPEC exige
-une date fixe sans en donner une ; celle-ci est **proposée, à confirmer par Sam**,
-et adossée au calendrier connu plutôt que choisie au hasard.
+**Date de réexamen : 1er novembre 2026 — validée par Sam le 17/08.** Un mois
+après le lancement du 1er octobre, quand la sortie ne mobilise plus toute la
+capacité. La SPEC exige une date fixe sans en donner une ; celle-ci est adossée
+au calendrier connu plutôt que choisie au hasard.
 
 Ce que la dette recouvre concrètement :
 
@@ -276,18 +290,34 @@ Ce que la dette recouvre concrètement :
 
 Signalé, pas décidé.
 
-**a. `repo.write` et le curseur `modifier_dispositif`.** Le lot rattache
-l'écriture git à ce curseur. Il est à 1 pour **toutes** les directions (*« peut
-proposer une évolution, ne la pose jamais »*, R14). Appliqué tel quel, le
-Delivery ne peut pas pousser sur `delivery/correctifs` — alors que le montage du
-14/08 a été fait exactement pour ça : *« Il pousse sur la branche
-delivery/correctifs, Sam relit et fusionne. »*
+**a. `repo.write` — tranché le 17/08 : le curseur `ecrire_code`.** Le lot
+rattachait l'écriture git au seul curseur `modifier_dispositif`. Erreur reconnue
+par Sam : *« ce curseur désigne le dispositif du comité, pas un dépôt de la
+plateforme »*. Il est à 1 pour toutes les directions (*« peut proposer une
+évolution, ne la pose jamais »*, R14) ; appliqué tel quel, le Delivery ne pouvait
+pas pousser sur `delivery/correctifs` et le montage du 14/08 ne servait à rien.
 
-Le mécanisme est implémenté et inopérant en l'état. Deux issues possibles :
-relever `modifier_dispositif` pour le Delivery, ou créer un curseur distinct pour
-l'écriture de code — `modifier_dispositif` désigne le dispositif du comité
-(prompts, garde-fous, curseurs), pas un dépôt de la plateforme. **Je n'ai pas
-créé ce curseur** : ce serait inventer une ligne de gouvernance à la place de Sam.
+Deux curseurs, parce que ce sont deux risques :
+
+| Curseur | Ce qu'il gouverne | Cran requis | Réglage |
+| --- | --- | --- | --- |
+| `modifier_dispositif` | le dépôt du comité — fiches, garde-fous, curseurs | 4 | 1 partout (R14) |
+| `ecrire_code` | un dépôt de code de la plateforme | 3 | **3 pour le Delivery** (posé par Sam le 17/08) |
+
+**Le curseur se résout donc par dépôt, pas par capacité.** C'est ce que la
+distinction implique techniquement : `repo.write` détermine d'abord quel dépôt
+est visé, puis quel curseur le gouverne. Confondre les deux, c'est soit interdire
+au Delivery son travail, soit ouvrir le dispositif à qui doit seulement corriger
+du code.
+
+Ce que la branche imposée apporte ici : le Delivery **pousse**, il ne fusionne
+pas. Sam relit. Le contrôle est déplacé, pas supprimé — c'est ce qui rend
+l'ouverture au cran 3 acceptable.
+
+Les cas 22 et 23 de `tests/policy.sh` éprouvent la séparation dans les deux
+sens : `ecrire_code` à 3 n'ouvre pas le dépôt du comité, et c'est bien
+`modifier_dispositif` qui le garde. Sans eux, la distinction n'existerait que
+dans les commentaires.
 
 **b. Le CEO n'avait aucun curseur — tranché le 17/08.** La table `curseurs`
 (36 lignes, sauvegarde du 11/08) ne contenait aucune ligne pour lui, alors que
@@ -318,12 +348,18 @@ de brouillons Ghost n'a pas d'outil dédié dans `bin/` : il n'y a rien de nomma
 comme canal sans décider à la place de Sam. Une direction sans canal déclaré
 n'est soumise qu'à son niveau de curseur.
 
-**d. Observation, hors périmètre de ce lot.** `charger_curseurs` écrit le
-résultat de `psql` dans le cache par redirection : si la base est injoignable, le
-cache est **vidé**, et toutes les directions retombent au cran 1. Le repli est
-restrictif, donc sûr, mais il est silencieux — un incident de base se manifeste
-comme un blocage général inexpliqué. Signalé, non corrigé : ce n'est pas un des
-trois axes.
+**d. Le cache vidé en silence — devenu une tâche le 17/08.**
+`charger_curseurs` écrit le résultat de `psql` dans le cache par redirection : si
+la base est injoignable, le cache est **vidé**, et toutes les directions
+retombent au cran 1. Le repli est restrictif, donc sûr, mais il est silencieux —
+un incident de base se manifesterait comme un blocage général inexpliqué,
+qu'aucune direction ne saurait rattacher à sa cause.
+
+Non corrigé ici : ce n'est pas un des trois axes, et toucher au chargement des
+curseurs pendant qu'on remplace le contrôle qui les lit cumulerait deux risques.
+**Sam en fait une tâche**, avec `couts.py`. La suite est portée, pas laissée en
+observation — un constat sans suite est exactement ce que la V2 corrige
+(invariant I5).
 
 ---
 
@@ -376,6 +412,7 @@ fichier, pas qu'il applique la gouvernance réelle.
 | `bin/policy.py` | créé — le moteur | — |
 | `config/capabilites.yaml` | créé — le lot le disait « à étendre », il n'existait pas | — |
 | `.claude/hooks/pretooluse-guard.sh` | modifié — délégation des 3 capacités | `.pre-policy` |
+| `bin/curseur-lire` | modifié — libellé du curseur `ecrire_code` | `.pre-ecrire-code` |
 | `tests/commun.sh`, `tests/garde-fou.sh`, `tests/policy.sh` | créés | — |
 | `Dockerfile` | modifié — ajout de `python3-yaml` | — |
 | `docs/POLICY_ENGINE.md` | créé — ce fichier | — |

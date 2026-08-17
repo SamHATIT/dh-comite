@@ -417,8 +417,20 @@ def decider(entree, capacites_config, curseurs):
     for nom_capacite, definition, outil, arguments, precision in detecter(
         commande, capacites_config["capacites"]
     ):
-        curseur = definition["curseur"]
-        requis = int(definition["niveau_requis"])
+        # Le dépôt se détermine AVANT le curseur : depuis l'arbitrage de Sam du
+        # 17/08, ce n'est pas la capacité qui désigne le curseur, c'est le dépôt.
+        # Écrire dans le dispositif du comité et corriger du code de la
+        # plateforme sont deux risques différents ; les faire dépendre du même
+        # réglage obligeait à choisir entre interdire au Delivery son travail et
+        # ouvrir le dispositif à qui doit seulement corriger du code.
+        depot = None
+        reglage_depot = {}
+        if nom_capacite == "repo.write":
+            depot = depot_vise(commande, definition)
+            reglage_depot = (definition.get("depots") or {}).get(depot) or {}
+
+        curseur = reglage_depot.get("curseur") or definition["curseur"]
+        requis = int(reglage_depot.get("niveau_requis") or definition["niveau_requis"])
         regle = curseurs.get((agent, curseur), NIVEAU_DEFAUT)
         libelle_outil = outil.get("libelle") or outil.get("programme")
 
@@ -430,6 +442,8 @@ def decider(entree, capacites_config, curseurs):
             "niveau_regle": regle,
             "niveau_requis": requis,
         }
+        if depot:
+            base["depot"] = depot
 
         if regle < requis:
             declare = (agent, curseur) in curseurs
@@ -472,9 +486,7 @@ def decider(entree, capacites_config, curseurs):
                 return base, DENY
 
         if nom_capacite == "repo.write":
-            depot = depot_vise(commande, definition)
-            reglage = (definition.get("depots") or {}).get(depot) or {}
-            imposee = reglage.get("branche_imposee")
+            imposee = reglage_depot.get("branche_imposee")
             # La branche imposée gouverne ce qui SORT du dépôt, donc `push`.
             # L'appliquer à `commit` obligerait à nommer une branche là où la
             # commande n'en prend pas : un refus que l'agent ne pourrait pas
