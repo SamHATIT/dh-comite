@@ -1,9 +1,10 @@
 # Journal — dh-comite
 
 > Genere automatiquement depuis les messages de commit.
-> Derniere mise a jour : 17/08/2026 14:33 UTC
+> Derniere mise a jour : 17/08/2026 14:38 UTC
 
 ## 2026-08-17
+- SPEC : cinq etats de fin, precedence des tables de routage, quatre arbitrages `79e3647`
 - Procedure d'application des migrations, repetee sur une copie de la base reelle `50fde8e`
 - Vague A integree, et un conflit de fichier partage resolu `05e04da`
 - Curseurs V2 poses, et SPEC mise a jour des arbitrages `91cbf73`

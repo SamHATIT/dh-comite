@@ -114,7 +114,7 @@ demande d'arbitrage à celui qui peut engager davantage.
 
 ## 2. La boucle d'exécution
 
-Une session ne se termine que dans l'un de quatre états.
+Une session ne se termine que dans l'un de **cinq** états.
 
 ```
 TASK
@@ -123,8 +123,36 @@ EXECUTION
  ├── DONE            → evidence → propose_cloture → tâche suivante
  ├── BLOCKED         → blocker + next_action + next_owner → diagnostic
  ├── FAILED          → attempt_count++ → budget d'échec
+ ├── TIMEBOX_EXPIRED → retour dans la file avec son avancement
  └── NEEDS_DECISION  → escalade, crée une entrée attente_sam
 ```
+
+**Correction du 18/08.** Ce texte annonçait quatre états et en listait cinq — relevé
+par le LOT-04, qui a implémenté les cinq et eu raison. Un dépassement de temps n'est
+ni un échec ni un blocage : le confondre avec l'un des deux fausserait
+`attempt_count`. **`TIMEBOX_EXPIRED` n'est pas un échec.**
+
+### Précédence des deux tables de routage
+
+§2.1 route un blocage selon sa **nature**, §2.2 route un échec selon le **rang de la
+tentative**, et rien ne disait laquelle prime.
+
+> **`FAILED` suit §2.2. `BLOCKED` suit §2.1.** Elles ne s'appliquent jamais au même
+> état, et la seconde n'écrase pas la première.
+
+Sans cette précision, une deuxième tentative recevait « créer la tâche corrective » au
+lieu de « changer d'approche, cause à nommer » — et l'opérateur ne pouvait plus
+comprendre pourquoi la tâche avait cessé de revenir.
+
+### La boucle ne croit pas le compte rendu
+
+Principe posé par le LOT-04, à conserver au-delà du lot : **la boucle relit l'état en
+base.** Si l'agent n'a rien déclaré, elle déclare à sa place — diagnostic,
+`next_action`, `next_owner`.
+
+Une règle demande la coopération de celui qu'elle contraint ; un mécanisme non. Un
+agent muet ne peut plus terminer sans laisser de suite : le blocage porte alors
+« l'agent n'a rien déclaré », et la suite va au Chief of Staff.
 
 ### 2.1 Diagnostic de blocage
 
@@ -375,10 +403,13 @@ Ne pas inventer en cours d'implémentation : **signaler**.
 1. Coût cible du comité (aujourd'hui 196 USD/mois sur 253 de facture). Piste : bascule
    sur matériel dédié pour passer d'un coût variable à un forfait.
 2. Ce qu'un commit doit modifier pour valoir preuve — un commit vide passerait.
-3. Concurrence entre agents sur un même périmètre : verrou ou séquencement ?
+3. Concurrence entre agents sur un même périmètre : verrou ou séquencement ? Cas précisé
+   par le LOT-04 : **deux sessions sur la même direction prendraient la même tâche.**
 4. Obligations réglementaires datées du Juridique pendant sa veille.
 5. Canal imposé de Growth, qui cumule Salesforce et Ghost.
 6. Date ou condition de re-séparation de Growth.
+7. Avancement d'une tâche `TIMEBOX_EXPIRED` : il ne vit que dans le journal, faute de
+   colonne. Signalé par le LOT-04.
 
 ### Tranchés — ne plus les rouvrir
 
@@ -392,3 +423,7 @@ Ne pas inventer en cours d'implémentation : **signaler**.
 | Qui peut poser `en_execution` | **La direction porteuse**, en plus de `cos`, `ceo`, `sam`. Sinon la boucle d'exécution ne peut pas démarrer sans passer par le CoS, et le goulot renaît au premier pas. | 18/08 |
 | Définition de « la direction porteuse » | Celle nommée `owner` d'au moins une tâche de la décision ; à défaut de tâche, l'origine. En cas d'écart, **accepter et signaler** plutôt que refuser : durcir plus tard est trivial, débloquer un refus injustifié coûte des jours. | 18/08 |
 | Date de réexamen de la dette P0 | **1er novembre 2026**, un mois après le lancement. | 18/08 |
+| Nombre d'états de fin | **Cinq**, `TIMEBOX_EXPIRED` compris. Ni un échec, ni un blocage. Relevé par le LOT-04. | 18/08 |
+| Précédence des tables de routage | `FAILED` suit §2.2 (rang de tentative), `BLOCKED` suit §2.1 (nature). Jamais le même état. | 18/08 |
+| Fichiers de configuration | **Séparés** : `config/preflight.yaml` et `config/policy.yaml`. Un fichier partagé recréerait le conflit à chaque évolution. | 18/08 |
+| Ordre d'application des migrations | Celui de la **dépendance**, pas de l'alphabet. Voir `docs/APPLICATION_MIGRATIONS.md`. | 18/08 |
