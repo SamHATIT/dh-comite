@@ -4,6 +4,7 @@
 > Derniere mise a jour : 17/08/2026 08:36 UTC
 
 ## 2026-08-17
+- Nettoyage du depot errone du 17/08 (fichier --help dans la file Salesforce) `15aff75`
 - Le garde-fou bloquait le travail normal — cinq faux positifs en un matin `1d5c252`
 
 ## 2026-08-16
