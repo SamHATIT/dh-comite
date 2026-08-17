@@ -1,0 +1,261 @@
+# CORRESPONDANCE OUTIL → CAPACITÉ — Policy Engine minimal (LOT-06, 17/08/2026)
+#
+# POURQUOI CE FICHIER EXISTE
+# --------------------------
+# Le garde-fou demandait « la commande contient-elle UPDATE ? ». Or les deux
+# outils par lesquels le comité écrit réellement — deos-decisions et deos-state —
+# ne contiennent aucun motif SQL. Le curseur ecrire_base existait sur le papier
+# et n'était appliqué nulle part. Symétriquement, le même contrôle textuel a
+# produit cinq faux positifs le 17/08 dans quatre directions, dont le blocage
+# d'un correctif de sécurité validé par Sam le 13/08.
+#
+# La correspondance est DÉCLARATIVE : ajouter un outil se fait ici, en une
+# ligne `programme:`, sans toucher à bin/policy.py. C'est le point 2 du contrat
+# du LOT-06. Un outil qui n'est pas listé ici n'est pas contrôlé par capacité —
+# il reste soumis aux règles textuelles du garde-fou.
+#
+# CE QUI N'EST PAS ICI
+# --------------------
+# Les niveaux des curseurs. Ils sont en base (table `curseurs`), réglés par Sam,
+# et lus à chaque appel. Ce fichier dit QUEL curseur gouverne QUELLE capacité ;
+# il ne dit jamais à quel cran il est réglé. Un agent qui lirait ce fichier n'y
+# trouve pas de quoi élever ses droits.
+#
+# DETTE P0 — tolérance temporaire explicitement acceptée (SPEC §7)
+# ---------------------------------------------------------------
+# Ce moteur est MINIMAL. Il couvre trois capacités, celles où le contrôle actuel
+# est faux. Le Policy Engine complet vient après. Cette mention est délibérée :
+# elle empêche qu'un compromis temporaire devienne une dette permanente.
+# Date de réexamen proposée : 1er novembre 2026 — un mois après le lancement du
+# 1er octobre, quand la sortie ne mobilise plus toute la capacité. À confirmer
+# par Sam ; voir docs/POLICY_ENGINE.md §« Dette P0 ».
+
+version: 1
+
+# ─────────────────────────────────────────────────────────────────────────────
+# DIRECTIONS GOUVERNÉES PAR LE MOTEUR
+#
+# Le curseur est un instrument PAR DIRECTION. Là où il n'y a pas de direction,
+# il n'y a pas de curseur à lire — et le moteur se déclare NON APPLICABLE plutôt
+# que de trancher au hasard. Le garde-fou reprend alors ses règles textuelles
+# d'origine, inchangées.
+#
+# CONSÉQUENCE VOULUE : la session de Sam (DH_DIRECTION non défini) garde
+# exactement le comportement d'avant ce lot. Sans cette liste, `deos-decisions`
+# lancé par Sam lui-même serait refusé — le défaut restrictif du garde-fou
+# renvoie 1 pour toute direction inconnue, et Sam n'a pas de ligne dans la table
+# `curseurs`. On aurait bloqué le propriétaire du dispositif en croyant durcir
+# la sécurité des agents.
+#
+# LIMITE CONNUE, à lire avec la dette P0 : un agent dont DH_DIRECTION ne serait
+# pas défini échapperait au moteur. La variable est posée par l'orchestrateur
+# (bin/rondes.sh), pas par l'agent, et un agent ne peut pas modifier
+# l'environnement du crochet depuis une commande. Le repli reste le garde-fou
+# textuel : jamais plus permissif qu'avant ce lot.
+# ─────────────────────────────────────────────────────────────────────────────
+directions_gouvernees:
+  - ceo
+  - chief-of-staff
+  - delivery
+  - commercial
+  - marketing
+  - customer-success
+  - legal
+  - growth
+  # `ceo` et `growth` sont listés SANS avoir de ligne dans la sauvegarde des
+  # curseurs du 11/08 (36 lignes, ni l'un ni l'autre). Signalé à Sam le 17/08 ;
+  # il pose les deux réglages en base le jour même — « je le pose ici avec celui
+  # de Growth, même correction en base ».
+  #
+  # Ils sont donc gouvernés DÈS MAINTENANT, avant que les lignes n'existent.
+  # C'est délibéré : une fonction absente de cette liste n'est pas contrôlée du
+  # tout. Tant que la base ne porte pas leurs réglages, le défaut restrictif
+  # s'applique (cran 1) et le motif de refus le dit — « aucun réglage déclaré ».
+  # Une direction qui ne travaille pas encore et qui est bloquée se voit ; une
+  # direction qui travaille sans contrôle ne se voit pas.
+  #
+  # Growth est ajouté ici pour la même raison, alors que sa fiche relève du
+  # LOT-07 : si sa fonction naissait avant que le moteur ne la connaisse, elle
+  # cumulerait les capacités du Commercial et du Marketing sans curseur opposable.
+
+capacites:
+
+  # ───────────────────────────────────────────────────────────────────────────
+  # db.write — écriture dans la base du comité
+  #
+  # C'est le trou principal. deos-decisions et deos-state écrivent en base sans
+  # qu'aucun mot-clé SQL apparaisse dans la commande : le contrôle syntaxique
+  # ne les voyait pas. deos-tasks (LOT-02) est déclaré d'avance pour qu'il naisse
+  # contrôlé plutôt que d'être ajouté après coup — c'est le sens d'une
+  # correspondance déclarative.
+  # ───────────────────────────────────────────────────────────────────────────
+  db.write:
+    libelle: "écriture dans la base du comité"
+    curseur: ecrire_base
+    # 3 = « Agit sous validation ». Reprend à l'identique le niveau exigé par le
+    # garde-fou avant ce lot (verifier_curseur "ecrire_base" 3). Ne pas relever
+    # sans arbitrage : le CoS est à 4 et doit rester le seul à écrire au registre.
+    niveau_requis: 3
+    outils:
+      - programme: deos-decisions
+        libelle: "écriture au registre des décisions"
+      - programme: deos-state
+        libelle: "écriture de l'état du comité"
+      - programme: deos-tasks
+        libelle: "écriture dans la file des tâches"
+      - programme: psql
+        libelle: "requête SQL directe"
+        # Une lecture reste une lecture : SELECT passe. Voir l'analyseur
+        # psql_ecriture dans bin/policy.py — il ne classe en écriture que ce qui
+        # écrit, et se rabat sur « écriture » quand il ne peut pas trancher.
+        analyseur: psql_ecriture
+
+  # ───────────────────────────────────────────────────────────────────────────
+  # repo.write — écriture git dans un dépôt monté en écriture
+  #
+  # Deux dépôts sont montés en écriture dans le conteneur (docker-compose.yml) :
+  # /workspace (le dispositif du comité) et /repo-delivery (le clone de travail
+  # du Delivery, ouvert le 14/08). /repo, /backlog et /prodlogs sont en :ro et ne
+  # sont donc pas concernés.
+  #
+  # LE CURSEUR SE CHOISIT PAR DÉPÔT — arbitrage de Sam, 17/08.
+  #
+  # Le LOT-06 rattachait repo.write au seul curseur `modifier_dispositif`. Erreur
+  # reconnue par Sam le 17/08 : ce curseur désigne le DISPOSITIF DU COMITÉ
+  # (prompts, garde-fous, curseurs — R14), pas un dépôt de la plateforme.
+  # Appliqué tel quel, il est à 1 pour toutes les directions et le Delivery ne
+  # pouvait pas pousser sur delivery/correctifs — le montage du 14/08 n'aurait
+  # servi à rien.
+  #
+  # D'où deux curseurs distincts, parce que ce sont deux risques distincts :
+  #   · modifier_dispositif — toucher à ce qui gouverne le comité. Reste à 4.
+  #   · ecrire_code         — écrire dans un dépôt de code. Posé par Sam à 3
+  #                           pour le Delivery (« agit sous validation »).
+  #
+  # Confondre les deux, c'est soit interdire au Delivery son travail, soit
+  # ouvrir le dispositif à qui doit seulement corriger du code.
+  # ───────────────────────────────────────────────────────────────────────────
+  repo.write:
+    libelle: "écriture git dans un dépôt monté en écriture"
+    # Défaut : le dispositif du comité. Chaque dépôt peut le surcharger.
+    # 4 = « Autonomie ». Reprend le niveau que le garde-fou exigeait déjà pour
+    # toute modification du dispositif (chmod sur zone protégée, écriture dans
+    # .claude/agents|hooks|skills).
+    curseur: modifier_dispositif
+    niveau_requis: 4
+    outils:
+      - programme: git
+        libelle: "commande git modifiant un dépôt"
+        analyseur: git_ecriture
+        # Déclaratif : ce qui MUTE un dépôt. Tout le reste (status, log, diff,
+        # show, fetch, blame, rev-parse…) est une lecture et n'est pas contrôlé.
+        # checkout, switch, restore et branch y figurent parce qu'ils détruisent
+        # du travail local, pas seulement parce qu'ils déplacent un pointeur.
+        sous_commandes_ecriture:
+          - commit
+          - push
+          - merge
+          - rebase
+          - reset
+          - revert
+          - cherry-pick
+          - am
+          - apply
+          - tag
+          - rm
+          - mv
+          - clean
+          - stash
+          - restore
+          - switch
+          - checkout
+          - branch
+          - remote
+          - config
+          - update-ref
+          - filter-branch
+          - gc
+          - prune
+          - submodule
+    # Les clés sont des chemins tels que le CONTENEUR les voit — c'est le seul
+    # endroit où ils ont un sens, et c'est de la donnée, pas du code.
+    # « . » est le dépôt du comité lui-même : il se résout à l'exécution depuis
+    # l'emplacement du crochet, jamais en dur. Le clone de Sam, le serveur et le
+    # conteneur ont trois racines différentes (/root/workspace/dh-comite,
+    # /workspace, un clone ailleurs) ; écrire l'une des trois ici casserait les
+    # deux autres.
+    depots:
+      ".":
+        libelle: "dispositif du comité (racine du dépôt, résolue à l'exécution)"
+        # Pas de surcharge : c'est bien `modifier_dispositif` à 4 qui gouverne.
+        # Le dépôt du comité EST le dispositif — fiches, garde-fous, curseurs.
+        branche_imposee: null
+      "/repo-delivery":
+        libelle: "clone de travail du Delivery (montage du 14/08)"
+        # Un dépôt de code de la plateforme, pas le dispositif du comité.
+        curseur: ecrire_code
+        niveau_requis: 3
+        # Le montage a été fait pour ça : « Il pousse sur la branche
+        # delivery/correctifs, Sam relit et fusionne. » La branche imposée est
+        # ce qui rend l'ouverture acceptable : le Delivery pousse, il ne fusionne
+        # pas. C'est Sam qui relit — le contrôle est déplacé, pas supprimé.
+        branche_imposee: delivery/correctifs
+    # Quand le dépôt visé n'est pas déterminable depuis la commande, on retient
+    # le plus strict. Refuser une écriture identifiable coûte un rapport ;
+    # laisser passer une écriture non identifiée coûte le dispositif.
+    depot_par_defaut: "."
+
+  # ───────────────────────────────────────────────────────────────────────────
+  # external.send — envoi vers l'extérieur
+  #
+  # Remplace deux contrôles textuels qui cherchaient « curl … -d » N'IMPORTE OÙ
+  # dans la commande, corps de heredoc compris. Le 11/08, le Marketing a été
+  # refusé parce que son document CITAIT une ligne de journal contenant cette
+  # séquence ; le Commercial a reproduit le faux positif en direct en essayant
+  # de documenter le premier. Aucun appel n'était tenté dans un cas comme dans
+  # l'autre. Le moteur n'examine plus que des commandes réellement invoquées.
+  # ───────────────────────────────────────────────────────────────────────────
+  external.send:
+    libelle: "envoi vers l'extérieur"
+    curseur: envoyer_externe
+    # 3 = « Agit sous validation ». Niveau déjà exigé par le garde-fou avant ce
+    # lot (verifier_curseur "envoyer_externe" 3).
+    niveau_requis: 3
+    outils:
+      - programme: curl
+        libelle: "appel HTTP sortant avec envoi de données"
+        # Un GET est une lecture. Seul un appel qui EXPÉDIE quelque chose compte.
+        analyseur: envoi_http
+      - programme: wget
+        libelle: "appel HTTP sortant avec envoi de données"
+        analyseur: envoi_http
+      - programme: mail
+        libelle: "envoi d'un courriel"
+        canal: email
+      - programme: sendmail
+        libelle: "envoi d'un courriel"
+        canal: email
+      - programme: mutt
+        libelle: "envoi d'un courriel"
+        canal: email
+      - programme: msmtp
+        libelle: "envoi d'un courriel"
+        canal: email
+      - programme: sf-lead
+        libelle: "dépôt d'un prospect dans Salesforce"
+        canal: salesforce
+    # CANAL IMPOSÉ — une direction qui en a un déclaré ne peut sortir que par
+    # lui, même si son curseur le lui permettrait par ailleurs. Le niveau dit
+    # « as-tu le droit d'envoyer » ; le canal dit « par où ».
+    #
+    # Source pour le Commercial : règle de Sam du 10/08 — « les contacts, suivis
+    # de contact et campagnes qui ne sont pas dans Salesforce N'EXISTENT PAS »,
+    # et bin/sf-lead est la voie exposée pour l'écrire.
+    canaux_imposes:
+      commercial: [salesforce]
+    # ⚠ SPEC §8 point 6 — NON TRANCHÉ, ne pas inventer.
+    # « Canal imposé de Growth, qui cumule Salesforce et Ghost. » Growth n'a donc
+    # aucune entrée ici. Le Marketing non plus : le dépôt de brouillons Ghost
+    # (config/outils_disponibles.md §92) n'a pas d'outil dédié dans bin/, il n'y
+    # a donc rien de nommable comme canal sans le décider à la place de Sam. Une
+    # direction sans canal déclaré n'est soumise qu'à son niveau de curseur.

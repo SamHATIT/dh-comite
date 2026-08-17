@@ -2,7 +2,12 @@
 # GATE 4 §5 — garde-fou exécutable (PreToolUse). Exit 2 = blocage + raison.
 INPUT=$(cat)
 TOOL=$(echo "$INPUT" | jq -r '.tool_name // empty')
-LOG=/workspace/hooks.log
+# 17/08 : la racine se DÉDUIT de l'emplacement de ce fichier au lieu d'être
+# écrite en dur. Le serveur (/root/workspace/dh-comite), le conteneur
+# (/workspace) et un clone de travail ont trois racines différentes ; en fixer
+# une rendait le crochet inexécutable ailleurs, donc intestable hors production.
+RACINE="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
+LOG="$RACINE/hooks.log"
 # ─────────────────────────────────────────────────────────────────────
 # CURSEUR D'AUTONOMIE — lecture du réglage effectif (06/08/2026)
 #
@@ -63,12 +68,63 @@ deny() { echo "$(date -Is) DENY [$TOOL] $1 :: $CMD" >> "$LOG"; echo "BLOQUÉ ($1
 if [ "$TOOL" = "Bash" ]; then
   CMD=$(echo "$INPUT" | jq -r '.tool_input.command // empty')
 
+  # ── MOTEUR DE POLITIQUE (LOT-06, 17/08) ────────────────────────────────────
+  # CE QUE ÇA REMPLACE : le contrôle par motifs textuels sur trois axes —
+  # écriture en base, écriture git, envoi externe. Il était faux DANS LES DEUX
+  # SENS. Faux négatif : `deos-decisions` et `deos-state` écrivent en base sans
+  # contenir un seul mot-clé SQL, le curseur ecrire_base n'était donc appliqué
+  # nulle part. Faux positif : chercher « curl … -d » n'importe où dans la
+  # commande refusait un DOCUMENT qui cite une ligne de journal (Marketing le
+  # 11/08, puis le Commercial en essayant de le documenter).
+  #
+  # Le moteur découpe la commande, retire les corps de heredoc, et n'examine que
+  # le programme réellement invoqué. Il tranche AVANT les blocages en dur qui
+  # suivent : son message dit quoi faire, pas seulement que c'est refusé.
+  #
+  # Les blocages en dur restent après lui, inchangés, comme filet : un ALLOW du
+  # moteur ne dispense d'aucune interdiction absolue (DH-DEL-001, DH-COS-002, R14).
+  MOTEUR_APPLICABLE=non
+  MOTEUR="$RACINE/bin/policy.py"
+  if [ -f "$MOTEUR" ]; then
+      charger_curseurs
+      VERDICT=$(jq -nc --arg agent "$DIRECTION" --arg outil "$TOOL" --arg cmd "$CMD" \
+                  '{agent:$agent, outil:$outil, arguments:{command:$cmd}}' \
+                | python3 "$MOTEUR" --capacites "$RACINE/config/capabilites.yaml" \
+                                    --curseurs "$CURSEUR_CACHE" 2>>"$LOG")
+      case "$?" in
+        2)  MOTIF=$(echo "$VERDICT" | jq -r '.motif // "refus du moteur de politique"' 2>/dev/null)
+            echo "$(date -Is) POLICY-DENY [$TOOL] $DIRECTION :: $VERDICT :: $CMD" >> "$LOG"
+            echo "BLOQUÉ PAR LE MOTEUR DE POLITIQUE — $MOTIF
+Prépare et propose, mais n'exécute pas. Rapporte ce refus dans ton rapport plutôt que de contourner." >&2
+            exit 2 ;;
+        0)  MOTEUR_APPLICABLE=oui ;;
+        4)  # Direction non gouvernée (session de Sam, DH_DIRECTION absent) :
+            # le garde-fou reprend ses règles d'origine, à l'identique.
+            MOTEUR_APPLICABLE=non ;;
+        *)  # Le moteur n'a pas pu décider. On NE brique PAS le comité : on
+            # retombe sur le contrôle d'avant ce lot — faux dans les deux sens,
+            # mais borné et connu — et on le journalise pour le Chief of Staff,
+            # à qui revient toute alerte de capacité (SPEC §3.1). Refuser toutes
+            # les commandes aurait arrêté les rondes pour un YAML mal formé.
+            echo "$(date -Is) POLICY-ERREUR [$TOOL] $DIRECTION :: $VERDICT :: $CMD" >> "$LOG"
+            echo "AVERTISSEMENT — le moteur de politique n'a pas pu décider ($VERDICT).
+Le contrôle retombe sur les règles textuelles, qui ne voient pas les écritures via deos-*.
+Signale-le au Chief of Staff : c'est une alerte de capacité, pas un incident de ta ronde." >&2
+            MOTEUR_APPLICABLE=non ;;
+      esac
+  fi
+
   # ── Le curseur decide EN PREMIER. Les blocages en dur qui suivent restent
   # comme filet de securite : si la base est injoignable, on refuse quand meme.
   if echo "$CMD" | grep -qE 'systemctl|(^|[;&| ])(docker|kill|pkill|killall|reboot|shutdown)([ ]|$)'; then
       verifier_curseur "agir_production" 3 "action sur les services ou conteneurs de production"
   fi
-  if echo "$CMD" | grep -qiE '\b(INSERT[[:space:]]+INTO|UPDATE|DELETE[[:space:]]+FROM|DROP|ALTER|TRUNCATE)\b'; then
+  # REMPLACÉ PAR LE MOTEUR (LOT-06) pour les directions gouvernées. Conservé
+  # comme repli pour les autres — et pour le cas où le moteur tombe en panne.
+  # Ne pas le supprimer : sans lui, une direction hors périmètre du moteur
+  # écrirait en base sans aucun contrôle.
+  if [ "$MOTEUR_APPLICABLE" != "oui" ] \
+     && echo "$CMD" | grep -qiE '\b(INSERT[[:space:]]+INTO|UPDATE|DELETE[[:space:]]+FROM|DROP|ALTER|TRUNCATE)\b'; then
       verifier_curseur "ecrire_base" 3 "ecriture en base de donnees"
   fi
 
@@ -129,7 +185,12 @@ if [ "$TOOL" = "Bash" ]; then
      && echo "$CMD" | grep -qE "$ZONES_PROTEGEES"; then
       verifier_curseur "modifier_dispositif" 4 "modification des droits sur une zone protegee"
   fi
-  if echo "$CMD" | grep -qE '(curl|wget)[^|;]*(-X[[:space:]]*(POST|PUT|PATCH|DELETE)|--data|-d[[:space:]])|(^|[;&| ])(mail|sendmail|mutt|msmtp)([ ]|$)'; then
+  # REMPLACÉ PAR LE MOTEUR (LOT-06) pour les directions gouvernées. C'est CE
+  # motif qui a produit le faux positif du 11/08 : il cherche « curl … -d »
+  # n'importe où dans la commande, corps de heredoc compris, et ne distingue pas
+  # un appel exécuté d'une citation dans un document. Conservé comme repli.
+  if [ "$MOTEUR_APPLICABLE" != "oui" ] \
+     && echo "$CMD" | grep -qE '(curl|wget)[^|;]*(-X[[:space:]]*(POST|PUT|PATCH|DELETE)|--data|-d[[:space:]])|(^|[;&| ])(mail|sendmail|mutt|msmtp)([ ]|$)'; then
       verifier_curseur "envoyer_externe" 3 "envoi vers l exterieur"
   fi
   # DH-BUDGET-001 (06/08) : engagement de depense. Les directions doivent

@@ -40,6 +40,19 @@ Lancement reporté au **1er octobre 2026**. Livraison produit visée le **27 sep
 — trois jours de marge, et la campagne démarre avant. La refonte s'achève donc bien
 avant la sortie.
 
+## Une seule source de vérité
+
+`SPEC.md` fait foi. Quand un point est tranché, il l'est là — dans le tableau
+« Tranchés » de la section 8. Les lots et les fiches peuvent le **citer**, jamais le
+contredire.
+
+Un lot qui présente comme ouvert un point tranché dans SPEC a tort : signalez-le
+plutôt que de le suivre. C'est arrivé le 18/08 sur le droit du CEO à sortir du
+backlog, et c'est le LOT-07 qui l'a vu.
+
+**Les lots ne modifient jamais `SPEC.md`** — les autres sessions le lisent en
+parallèle. Signalez, Sam porte la modification.
+
 ## Ce qui n'est pas tranché
 
 Sept points en `SPEC.md §8`. **Les signaler, ne pas les inventer.**

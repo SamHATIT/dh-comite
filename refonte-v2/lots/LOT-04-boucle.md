@@ -8,7 +8,10 @@
 ## Objectif
 
 Une session d'exécution ne peut pas se terminer parce qu'un agent rencontre une
-difficulté. Elle se termine dans l'un de quatre états, et un seul n'engendre rien.
+difficulté. Elle se termine dans l'un de CINQ états, et un seul n'engendre rien.
+
+**Correction du 18/08 :** ce lot annonçait quatre états et en listait cinq. Les cinq
+sont justes — un dépassement de temps n'est ni un échec ni un blocage.
 
 ## Pourquoi
 
@@ -26,7 +29,7 @@ fin de session, rapport. Le mécanisme de persistance manque.
 
 ## Contrat
 
-### Les quatre états de fin
+### Les cinq états de fin
 
 | État | Suite obligatoire |
 | --- | --- |

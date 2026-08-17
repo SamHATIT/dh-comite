@@ -1,0 +1,347 @@
+# CAPACITÉS REQUISES PAR DIRECTION — entrée du Preflight (LOT-05)
+#
+# Ce fichier déclare, pour chaque direction, CE DONT ELLE A BESOIN pour tenir son
+# mandat : outils, clés, montages, services, budget, canal imposé, moyen de preuve.
+# bin/preflight.py le lit et vérifie que chaque élément déclaré existe réellement.
+#
+# POURQUOI CE FICHIER EXISTE (17/08) : six pannes en douze jours, toutes de la même
+# famille — un mandat sans le moyen de l'exercer. Le mandat était écrit dans la fiche
+# de l'agent, la capacité vivait dans docker-compose.yml, dans .env ou dans la table
+# curseurs, et RIEN ne rapprochait les deux. Ce fichier est ce rapprochement.
+#
+# RÈGLE DE TENUE : quand on donne un moyen à une direction (un montage, une clé, un
+# outil), on le déclare ici. Sinon le Preflight ne saura pas qu'il manque le jour où
+# il disparaîtra. Un moyen non déclaré est un moyen dont la perte sera silencieuse.
+#
+# CHEMINS. Tout ce qui vit DANS le dépôt est écrit relativement à sa racine — « . »
+# pour la racine elle-même, « bin/sf-lead » pour un outil. Le serveur et un clone
+# n'ont pas la même racine (/root/workspace/dh-comite d'un côté, /workspace vu depuis
+# le conteneur, un chemin quelconque dans un clone) : un absolu recopié ne serait
+# vrai qu'à un seul endroit. preflight.py résout ces chemins depuis sa propre position.
+# Restent absolus les seuls chemins qui n'ont PAS d'équivalent relatif : les points de
+# montage déclarés dans docker-compose.yml (/repo, /backlog, /prodlogs,
+# /repo-delivery). Ce sont des montages du conteneur, pas des fichiers du dépôt — ils
+# n'existent donc pas dans un clone, et le Preflight le dira, ce qui est exact.
+#
+# Sous-ensemble YAML volontairement pauvre (mappings, listes, scalaires) : voir
+# docs/PREFLIGHT.md § « Pourquoi un parseur de repli ».
+
+version: 1
+
+# Les six axes de la table curseurs. Le garde-fou pretooluse-guard.sh retombe sur le
+# niveau 1 (Observe) quand il ne trouve pas de ligne — silencieusement. Une direction
+# absente de la table n'est donc pas bloquée bruyamment : elle est muette. C'est ce qui
+# est arrivé au Financier (bin/rondes.sh, FIX-FINANCIER-001 du 14/08). Le contrôle
+# `permissions` vérifie que les six lignes existent, pour ne plus dépendre du défaut.
+axes_curseurs:
+  - observer
+  - ecrire_base
+  - agir_production
+  - envoyer_externe
+  - engager_depense
+  - modifier_dispositif
+
+# Catalogue des canaux imposables par la colonne curseurs.canal_impose.
+# Un canal imposé qui ne désigne aucun outil existant est une consigne inapplicable :
+# la direction lit « passe par tel canal » et n'a pas de quoi le faire. C'est la
+# sixième panne de la série.
+#
+# CORRECTION DU 17/08, PENDANT L'IMPLÉMENTATION. La première version de ce catalogue
+# associait une CLÉ de canal à un outil, en supposant que curseurs.canal_impose
+# contenait un identifiant. Vérification faite sur la sauvegarde du 11/08 : la colonne
+# contient de la PROSE — « Exclusivement via loutil deos-decisions, qui trace auteur,
+# date, preuve et justification », « Lecture seule sur les vues v_deos_* uniquement ».
+# Le contrôle aurait donc déclaré inconnu chacun des sept canaux réellement en base,
+# et rendu NOT_READY toutes les directions. Exactement le défaut du 17/08 au matin :
+# un garde-fou qui bloque le travail normal, cinq faux positifs en une matinée.
+#
+# On reconnaît donc un canal par des MOTIFS cherchés dans la prose. Trois issues :
+#   · motif reconnu, `outil` renseigné  → l'outil doit exister et être exécutable
+#   · motif reconnu, `outil` vide       → le canal est une contrainte d'accès, pas un
+#                                         exécutable : rien à vérifier ici
+#   · aucun motif reconnu               → AVERTISSEMENT, jamais un échec. On ne sait
+#                                         pas conclure, on le dit. Un Preflight qui
+#                                         bloque sur ce qu'il ne comprend pas ne sera
+#                                         pas cru trois jours plus tard.
+canaux:
+  - nom: registre_decisions
+    motifs: ["deos-decisions"]
+    outil: bin/deos-decisions
+  - nom: etat_comite
+    motifs: ["deos-state"]
+    outil: bin/deos-state
+  - nom: salesforce
+    motifs: ["sf-lead"]
+    outil: bin/sf-lead
+  - nom: file_salesforce
+    motifs: ["file-salesforce"]
+    outil: bin/traiter-file-salesforce.sh
+  - nom: courriel_lecture
+    motifs: ["mail-lire"]
+    outil: bin/mail-lire
+  - nom: vues_prod_lecture_seule
+    motifs: ["v_deos_"]
+    # Pas un exécutable : une contrainte d'accès à la production, tenue par le rôle
+    # deos_ro et la variable DEOS_RO_DSN. Sa vérification appartient au contrôle
+    # `credentials`, pas à `policy`. Déclaré ici pour être RECONNU, donc ne pas
+    # produire d'avertissement à chaque ronde de chaque direction.
+    outil: ~
+
+directions:
+
+  # ─────────────────────────────────────────────────────────────────────────────
+  ceo:
+    etat: active
+    cadence: quotidienne
+    # Le CEO n'a jamais figuré dans la table curseurs (sauvegarde du 11/08 :
+    # six directions, aucune nommée ceo). Le Preflight le dira au lieu de le taire.
+    curseurs_direction: ceo
+    outils:
+      - chemin: bin/deos-state
+      - chemin: bin/deos-decisions
+      - chemin: bin/curseur-lire
+        # curseur-lire prend une direction en argument, pas un drapeau : « --help »
+        # serait lu comme un nom de direction et déclencherait un SELECT inutile.
+        verifier_aide: false
+      - chemin: bin/couts.py
+    credentials:
+      - variable: COMITE_DB_DSN
+    mounts:
+      - chemin: .
+        mode: rw
+    apis: []
+    budget:
+      # POINT OUVERT — SPEC §8.1 : le coût cible du comité n'est pas tranché
+      # (196 USD/mois observés sur 253 de facture). Aucun plafond n'est inventé ici :
+      # le contrôle reporte la consommation constatée et se déclare INDETERMINE.
+      plafond_usd_mois: null
+      traces: ceo
+    evidence:
+      - type: table
+        table: deos_state
+      - type: table
+        table: decisions
+    points_ouverts: []
+
+  # ─────────────────────────────────────────────────────────────────────────────
+  chief-of-staff:
+    etat: active
+    cadence: quotidienne
+    curseurs_direction: chief-of-staff
+    outils:
+      - chemin: bin/deos-decisions
+      - chemin: bin/deos-state
+      - chemin: bin/cloturer-prouvees.py
+      - chemin: bin/controle-rondes.py
+        # controle-rondes.py attend une date en argument ; « --help » serait pris
+        # pour un jour et produirait un balayage vide, sans effet de bord mais sans
+        # intérêt. On vérifie l'existence et le bit exécutable, cela suffit.
+        verifier_aide: false
+    credentials:
+      - variable: COMITE_DB_DSN
+    mounts:
+      - chemin: .
+        mode: rw
+    apis: []
+    budget:
+      plafond_usd_mois: null
+      traces: chief-of-staff
+    evidence:
+      - type: table
+        table: decisions
+      - type: table
+        table: deos_state
+      - type: fichier
+        chemin: PageSuivi.md
+    points_ouverts: []
+
+  # ─────────────────────────────────────────────────────────────────────────────
+  delivery:
+    etat: active
+    cadence: quotidienne
+    curseurs_direction: delivery
+    outils:
+      - chemin: bin/deos-state
+      - chemin: bin/memoire
+        # memoire interroge l'index vectoriel : « --help » serait traité comme une
+        # question et consommerait une requête. Lecture seule, mais inutile.
+        verifier_aide: false
+    credentials:
+      - variable: COMITE_DB_DSN
+      - variable: DEOS_RO_DSN
+    mounts:
+      # 06/08 : le backlog des évolutions n'était pas monté. Le Delivery tenait le
+      # backlog selon sa fiche et ne pouvait rien lire — cause de son immobilisme sur
+      # ce point, qu'il a signalé lui-même (docker-compose.yml).
+      - chemin: /backlog
+        mode: ro
+      # 08/08 : quatre directeurs ont conclu que « rien n'a bougé depuis le 02/08 »
+      # alors que 32 commits avaient eu lieu. Ils avaient raison sur ce qu'ils
+      # voyaient. Le dépôt complet est monté depuis, en lecture seule.
+      - chemin: /repo
+        mode: ro
+      - chemin: /prodlogs
+        mode: ro
+      # 14/08 : trois feux verts de Sam du 13/08 supposaient d'écrire dans le dépôt
+      # plateforme, monté en lecture seule. Ils étaient INEXÉCUTABLES et le Delivery
+      # l'a dit dès qu'on lui a demandé un état ligne par ligne : « BLOQUÉE, accès
+      # manquant ». Ce clone est son espace d'écriture, et son moyen de preuve.
+      - chemin: /repo-delivery
+        mode: rw
+    apis:
+      - nom: memoire_comite
+        url: http://comite-web:8090/api/memoire?q=preflight&n=1
+        optionnel: true
+    budget:
+      plafond_usd_mois: null
+      traces: directeur-delivery
+    evidence:
+      - type: depot
+        chemin: /repo-delivery
+      - type: table
+        table: deos_state
+    points_ouverts: []
+
+  # ─────────────────────────────────────────────────────────────────────────────
+  growth:
+    etat: active
+    cadence: quotidienne
+    # SPEC §5 : Growth est la fusion TEMPORAIRE de Commercial et Marketing.
+    # La table curseurs, elle, ne connaît que commercial et marketing (sauvegarde du
+    # 11/08). Le garde-fou lit DH_DIRECTION : s'il reçoit « growth » il ne trouvera
+    # aucune ligne et retombera sur Observe partout, sans le dire. Le Preflight
+    # vérifie donc la clé RÉELLEMENT vue par le garde-fou, et signale la bascule.
+    curseurs_direction: growth
+    curseurs_composantes:
+      - commercial
+      - marketing
+    outils:
+      - chemin: bin/sf-lead
+        # sf-lead --help imprime son usage et sort en 2 depuis le 17/08. Avant ce
+        # correctif, le même appel déposait le texte littéral « --help » dans la file
+        # Salesforce. C'est l'incident qui définit « répondre sans effet de bord ».
+        verifier_aide: true
+      - chemin: bin/traiter-file-salesforce.sh
+        verifier_aide: false
+      - chemin: bin/deos-state
+    credentials:
+      - variable: COMITE_DB_DSN
+    mounts:
+      - chemin: .
+        mode: rw
+      - chemin: file-salesforce
+        mode: rw
+    apis: []
+    budget:
+      plafond_usd_mois: null
+      traces: directeur-commercial
+    evidence:
+      - type: table
+        table: deos_state
+      - type: fichier
+        chemin: file-salesforce
+    points_ouverts:
+      # SPEC §8.6 — non tranché : Growth cumule Salesforce et Ghost. Aucun canal
+      # imposé n'est écrit ici ; le contrôle policy lit ce qui est EN BASE.
+      - "SPEC §8.6 — canal imposé de Growth (Salesforce et Ghost cumulés) : non tranché."
+      # SPEC §8.7 — non tranché : date ou condition de re-séparation.
+      - "SPEC §8.7 — date ou condition de re-séparation de Growth : non tranchée."
+
+  # ─────────────────────────────────────────────────────────────────────────────
+  # FONCTIONS EN VEILLE — SPEC §5 et invariant I2.
+  # Leur mandat est écrit et conservé en entier ; seule leur cadence s'arrête. Elles
+  # ne sont donc PAS dans `--toutes` : on les vérifie à la demande, ou avec
+  # --dormantes. Les supprimer d'ici serait une violation d'I2.
+  # ─────────────────────────────────────────────────────────────────────────────
+
+  legal:
+    etat: veille
+    cadence: a_la_demande
+    curseurs_direction: legal
+    outils:
+      - chemin: bin/deos-state
+      - chemin: bin/mail-lire
+        # mail-lire ouvre une session IMAP dès son lancement : « --help » relèverait
+        # la boîte. Effet de bord réseau — on ne le déclenche pas au Preflight.
+        verifier_aide: false
+    credentials:
+      - variable: COMITE_DB_DSN
+      # 11/08 : le dossier de conformité Hostinger est resté bloqué plusieurs jours
+      # parce que le lien d'accès arrivait par courriel et qu'aucun agent ne pouvait
+      # relever la boîte. Le Juridique l'a constaté lui-même : « le lien arrive par un
+      # canal auquel je n'ai pas accès ». Les clés vivent dans le .env de la
+      # plateforme, lu en lecture seule (bin/mail-lire).
+      - fichier: /repo/backend/.env
+        cle: IMAP_HOST
+      - fichier: /repo/backend/.env
+        cle: IMAP_USERNAME
+      - fichier: /repo/backend/.env
+        cle: IMAP_PASSWORD
+    mounts:
+      - chemin: .
+        mode: rw
+      - chemin: /repo
+        mode: ro
+    apis: []
+    budget:
+      plafond_usd_mois: null
+      traces: directeur-legal
+    evidence:
+      # 08/08 : le Juridique, créé le 02/08, n'avait AUCUN périmètre d'écriture dans
+      # deos-state. Ses rapports étaient refusés en silence — d'où le « 0 rapport
+      # legal » constaté pendant cinq jours. Il travaillait, rien n'arrivait. C'est le
+      # cas d'école du contrôle `evidence` : un mandat sans moyen de prouver.
+      - type: table
+        table: deos_state
+    points_ouverts:
+      - "SPEC §8.5 — obligations réglementaires datées du Juridique pendant sa veille : non tranchées."
+
+  financier:
+    etat: veille
+    cadence: a_la_demande
+    # 14/08 : le Directeur Financier n'était dans AUCUNE ronde ni dans la table des
+    # curseurs. Il existait uniquement sous forme de fiche, et deux décisions lui
+    # avaient été assignées le 13/08 avec échéance au 15/08 — il ne les aurait jamais
+    # vues (bin/rondes.sh, FIX-FINANCIER-001). Même défaut que le Juridique huit jours
+    # plus tôt. Le contrôle `permissions` est né de ces deux-là.
+    curseurs_direction: financier
+    outils:
+      - chemin: bin/deos-state
+      - chemin: bin/couts.py
+      - chemin: bin/couts-consolides.py
+    credentials:
+      - variable: COMITE_DB_DSN
+      - variable: DEOS_RO_DSN
+    mounts:
+      - chemin: .
+        mode: rw
+    apis: []
+    budget:
+      plafond_usd_mois: null
+      traces: directeur-financier
+    evidence:
+      - type: table
+        table: deos_state
+    points_ouverts:
+      - "SPEC §8.1 — coût cible du comité : non tranché. Aucun plafond n'est déclaré."
+
+  customer-success:
+    etat: veille
+    cadence: au_premier_client
+    curseurs_direction: customer-success
+    outils:
+      - chemin: bin/deos-state
+    credentials:
+      - variable: COMITE_DB_DSN
+      - variable: DEOS_RO_DSN
+    mounts:
+      - chemin: .
+        mode: rw
+    apis: []
+    budget:
+      plafond_usd_mois: null
+      traces: directeur-customer-success
+    evidence:
+      - type: table
+        table: deos_state
+    points_ouverts: []
