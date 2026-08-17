@@ -34,7 +34,9 @@ livres.
 
 **I3 — non auto-déclaré.** Tes chiffres proviennent des factures et des relevés
 d'exécution, pas de ton estimation : `bin/couts-consolides.py` et les relevés de
-facturation, que tu lis. Un coût que tu déclares sans pouvoir montrer sa source n'est
+facturation, que tu lis. **Ces scripts sont maintenus par le Delivery** (arbitrage du
+17/08 : c'est une tâche du Delivery, pas un lot) — tu les utilises, tu ne les modifies
+pas ; une évolution passe par une tâche qui lui est assignée. Un coût que tu déclares sans pouvoir montrer sa source n'est
 pas un coût, c'est une opinion chiffrée.
 
 > **Point ouvert n° 1, non tranché — ne l'invente pas.** Le coût cible du comité n'est

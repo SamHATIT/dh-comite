@@ -263,12 +263,18 @@ avec leur destinataire. Aucun n'a été corrigé ici.
    cinq fois. **À trancher au LOT-08** (rondes), qui touche `bin/comite.sh` et
    `bin/rondes.sh` : soit le script lit la fiche, soit le prompt devient un simple
    préambule d'exécution.
-2. **Aucune ligne `growth` dans la table des curseurs.** `bin/rondes.sh` déduit le nom de
-   la direction du nom de l'agent (`${AGENT#directeur-}`) : il demandera `growth` et
-   n'obtiendra rien. Le repli en place — OBSERVE sur tout — est le bon comportement, et
-   il rend la direction NOT READY. C'est un défaut à corriger **en base**, hors périmètre
-   de ce lot. Le même oubli a déjà coûté quatre jours au Juridique (06/08) et deux
-   décisions non vues au Financier (14/08) : cette fois il est signalé avant.
+2. **Aucune ligne `ceo` ni `growth` dans la table des curseurs.** `bin/rondes.sh` déduit
+   le nom de la direction du nom de l'agent (`${AGENT#directeur-}`) : il demandera
+   `growth`, puis `ceo`, et n'obtiendra rien. Le repli en place — OBSERVE sur tout — est
+   le bon comportement, et il rend la fonction NOT READY. C'est un défaut à corriger **en
+   base**, hors périmètre de ce lot. Le même oubli a déjà coûté quatre jours au Juridique
+   (06/08) et deux décisions non vues au Financier (14/08) : cette fois il est signalé
+   avant. **Sam pose les deux ensemble le 17/08 — une seule correction en base.** Les
+   fiches `ceo.md` et `directeur-growth.md` portent chacune l'état constaté.
+   *À vérifier au même moment* : la sauvegarde des curseurs du 11/08 ne porte pas non plus
+   de ligne `financier`, et le commentaire FIX-FINANCIER-001 de `bin/rondes.sh` le
+   confirmait au 14/08. Non vérifiable depuis une session sans accès à la base — donc
+   signalé, pas affirmé.
 3. **Trois cadences en écart avec la cible de SPEC §5** : Juridique et Customer Success
    tournent tous les jours ouvrés alors que la cible les veut en veille ; le Financier
    tourne deux fois par semaine pour une passe hebdomadaire cible. Chaque écart est
@@ -278,11 +284,55 @@ avec leur destinataire. Aucun n'a été corrigé ici.
    en l'état, **un commit vide passerait**. Les fiches du CoS et du Delivery portent la
    consigne de citer ce que le commit change (`git show <sha> --stat`) et d'ouvrir l'écart
    en `attente_sam` en citant ce point — **sans fabriquer de critère**.
+5. **Une contradiction entre le lot et le contrat global, résolue en faveur du contrat.**
+   `lots/LOT-07-fiches.md` présente la limite du droit du CEO à sortir du backlog comme un
+   « point ouvert n° 8 » ; `SPEC.md §8` indique que ce point **a été tranché le 17/08** —
+   c'est un droit de proposition soumis à Sam. La SPEC étant le contrat global, c'est cette
+   version qui est écrite dans `ceo.md`. Signalé parce qu'un lecteur qui n'ouvre que le lot
+   croirait la question encore ouverte.
 
 Et trois points ouverts de SPEC §8 sont inscrits nommément dans les fiches concernées,
 avec l'interdiction de les combler : **n° 1** coût cible du comité (Financier), **n° 5**
 obligations réglementaires datées pendant la veille (Juridique), **n° 6 et n° 7** canal
 imposé et re-séparation de Growth.
+
+---
+
+## 6bis. Trois arbitrages de Sam, rendus le 17/08 et intégrés ici
+
+Ils sont **tranchés**, à la différence de ce qui précède. Chacun est inscrit dans les
+fiches concernées, pas seulement dans ce document.
+
+**1. Le curseur du CEO se pose avec celui de Growth.** Deux lignes manquantes, **une
+seule correction en base**. Voir §6 point 2 : les deux fiches portent l'état constaté et
+la consigne de ne pas contourner le repli OBSERVE en attendant.
+
+**2. `couts.py` est une tâche du Delivery, pas un lot.** `bin/couts.py` et
+`bin/couts-consolides.py` sont des scripts, donc du périmètre Delivery ; le Financier en
+est l'**utilisateur**, pas le mainteneur. Inscrit dans les deux fiches — chez le Delivery
+comme une initiative, chez le Financier comme une limite de périmètre.
+*Pourquoi la distinction compte.* `couts-consolides.py` existe parce que le 11/08 une
+estimation annonçait ~4 USD pour les rondes du matin quand le réel était 21 — facteur
+cinq, de cause structurelle : chaque source a son compteur, et on en citait un seul en
+croyant citer le tout. Le script **affiche ce qu'il ne mesure pas**. C'est sa propriété la
+plus importante, et la fiche du Delivery porte la consigne de la préserver : un chiffre
+incomplet présenté comme complet est pire qu'une absence de chiffre. Confier l'outil de
+mesure à celui qui est mesuré rouvrirait exactement le trou que I3 ferme.
+
+**3. Point ouvert n° 4 — fréquence du Preflight : CLOS. Avant chaque ronde.**
+La mesure a réglé la question : **0,8 seconde pour quatre directions**. Le compromis
+envisagé — un passage par jour — n'achetait donc rien et coûtait la fraîcheur du contrôle :
+un accès qui tombe à 9 h 10 resterait invisible jusqu'au lendemain, alors que c'est
+précisément le genre de panne qui a produit six arrêts en douze jours. Les quatre fiches
+actives portent désormais la cadence dans leur section RONDE, avec sa conséquence : NOT
+READY → la direction n'entre pas dans la ronde, et l'alerte part automatiquement au Chief
+of Staff, **avant** que le budget de la session soit consommé.
+
+Il reste donc **six** points ouverts sur les sept numérotés de SPEC §8 : n° 1 (coût
+cible), n° 2 (ce qu'un commit doit modifier), n° 3 (concurrence sur un même périmètre),
+n° 5 (obligations datées du Juridique), n° 6 (canal imposé de Growth) et n° 7 (re-séparation
+de Growth). La mise à jour de `refonte-v2/SPEC.md §8` n'appartient pas à ce lot : elle est
+signalée, pas faite.
 
 ---
 

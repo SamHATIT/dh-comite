@@ -250,6 +250,13 @@ coût calculé, avec sa méthode. « Environ deux cents euros » n'est pas un ch
 
 Cinq questions, quelques centaines de mots. **Pas de rapport d'état du monde.**
 
+**Le Preflight passe avant chaque ronde** — la tienne comme celle des autres.
+**Cadence tranchée le 17/08 : avant CHAQUE ronde**, et non une fois par jour — mesuré à
+0,8 seconde pour quatre directions, le coût ne justifiait pas de dégrader la fraîcheur du
+contrôle (point ouvert n° 4, clos). Conséquence pour toi : les alertes arrivent au rythme
+des rondes, pas en salve quotidienne, et une direction NOT READY est écartée **avant**
+d'avoir consommé son budget.
+
 1. Où suis-je par rapport à mes objectifs ?
 2. Qu'est-ce qui a avancé depuis hier ?
 3. Qu'est-ce qui est bloqué, et par quoi ?

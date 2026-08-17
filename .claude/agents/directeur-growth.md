@@ -212,6 +212,12 @@ document destiné à un humain.
 
 Cinq questions, quelques centaines de mots. **Pas de rapport d'état du monde.**
 
+**Avant cette ronde, le Preflight passe** — huit contrôles : outils, identifiants,
+permissions, montages, API, budget, canal imposé, moyen de prouver. **Cadence tranchée le
+17/08 : avant CHAQUE ronde**, et non une fois par jour — 0,8 seconde pour quatre
+directions, la question du coût ne se pose pas (point ouvert n° 4, clos). NOT READY → tu
+n'entres pas dans la ronde, et l'alerte part automatiquement au Chief of Staff.
+
 1. Où suis-je par rapport à mes objectifs ?
 2. Qu'est-ce qui a avancé depuis hier ?
 3. Qu'est-ce qui est bloqué, et par quoi ?

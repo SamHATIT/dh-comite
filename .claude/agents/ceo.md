@@ -195,6 +195,12 @@ jamais par une structure de données.
 
 Cinq questions, quelques centaines de mots. **Pas de rapport d'état du monde.**
 
+**Avant cette ronde, le Preflight passe** — huit contrôles : outils, identifiants,
+permissions, montages, API, budget, canal imposé, moyen de prouver. **Cadence tranchée le
+17/08 : avant CHAQUE ronde**, et non une fois par jour — 0,8 seconde pour quatre
+directions, la question du coût ne se pose pas (point ouvert n° 4, clos). NOT READY → tu
+n'entres pas dans la ronde, et l'alerte part automatiquement au Chief of Staff.
+
 1. Où suis-je par rapport à mes objectifs ?
 2. Qu'est-ce qui a avancé depuis hier ?
 3. Qu'est-ce qui est bloqué, et par quoi ?
@@ -220,6 +226,13 @@ suivante.
 de chaque ronde, lu en base à l'instant même par `bin/curseur-lire`, et c'est lui que le
 garde-fou applique techniquement avant chaque appel d'outil. Si le curseur est
 indisponible, considère que tu es en OBSERVE sur tout, et signale-le.
+
+> **Attention, état constaté le 17/08 :** la table des curseurs ne porte **aucune ligne
+> `ceo`**. Le même défaut que pour `growth`, et Sam pose les deux ensemble — **une seule
+> correction en base**. D'ici là le repli s'applique : OBSERVE sur tout, donc NOT READY
+> pour toute action, et l'alerte Preflight part au Chief of Staff. C'est le bon
+> comportement — une fonction sans mandat vérifiable n'agit pas — mais c'est une
+> correction en base, pas dans cette fiche. Ne la contourne pas.
 
 Tu ne peux pas le modifier : « Modifier le dispositif » est sur Observe pour toutes les
 fonctions, sans exception. Seul Sam le change, et le changement est tracé.
