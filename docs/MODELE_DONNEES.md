@@ -129,6 +129,15 @@ distinction on obtient : « tu n'as pas les droits pour travailler → voici une
 de permission, à une autre direction pour une dépendance, au `ceo` pour un
 arbitrage.
 
+### La même contrainte existe sur `decisions`
+
+`decisions_blocage_avec_suite` en est le miroir exact, pour la raison exposée en
+§8.1 : une décision peut être bloquée avant qu'aucune tâche n'existe. Les deux
+tables portent donc la même obligation, avec les mêmes trois champs. **Le niveau
+auquel on constate un blocage ne change rien à la règle** — c'est ce qui la rend
+tenable : il n'y a pas un endroit du modèle où l'on peut noter un blocage sans dire
+ce qui vient ensuite.
+
 ---
 
 ## 4. Pourquoi `blocked` et `failed` sont distincts
@@ -212,44 +221,56 @@ une décision et non comme un oubli.
 | --- | --- |
 | Pas de `CHECK` sur `tasks.statut` | `SPEC §1.2` définit un défaut (`a_faire`) mais **n'énumère pas** le vocabulaire. Les commandes de LOT-02 en impliquent un (`start`, `block`, `fail`, `done`, `valider`). L'inventer ici produirait une contrainte que LOT-02 devrait défaire. **À poser par LOT-02**, une fois le vocabulaire arrêté. |
 | Pas d'obligation de preuve sur `propose_cloture` en base | LOT-03 l'exige au niveau de l'outil. L'ajouter à `clos_avec_preuve` reviendrait à modifier une contrainte hors du contrat de ce lot. À trancher avec LOT-03. |
-| Pas de champs de blocage sur `decisions` | Voir §8 ci-dessous. |
 | Pas de déclencheur append-only sur `tasks` | `decisions` est append-only (DH-COS-002) ; rien dans la SPEC ne l'exige pour `tasks`, dont la nature est d'être modifiée à chaque tour. |
 
 ---
 
-## 8. Points à trancher — signalés, non inventés
+## 8. Ce qui a été arbitré, et ce qui reste ouvert
 
-### 8.1 Les champs de blocage sur `decisions` (à arbitrer avant LOT-03)
+### 8.1 Les champs de blocage sur `decisions` — **tranché par Sam le 17/08**
 
-`SPEC §1.1` décrit le statut `blocked` d'une décision comme exigeant « `blocker`,
-`next_action`, `owner` », et `failed` comme portant « `attempt_count`,
-`last_error`, `retry_at` ». **Ces colonnes n'ont pas été créées sur `decisions`.**
+`SPEC §1.1` exigeait `blocker`, `next_action` et `owner` sur une décision `blocked`,
+tout en ne définissant ces champs qu'en `§1.2`, sur `tasks`. Incohérence reconnue et
+tranchée : **les colonnes vont sur `decisions`**, ajoutées par ce lot puisqu'il a le
+budget DDL.
 
-Raisonnement retenu : cette phrase de §1.1 reprend mot pour mot l'invariant I4, qui
-est écrit au niveau de la **tâche** (« Une tâche `blocked` ou `failed` DOIT
-porter… »), et les champs sont définis en §1.2 sur `tasks`. La lecture retenue est
-donc que le blocage d'une décision se **matérialise par ses tâches** : la décision
-est le contenant, la tâche porte la suite. C'est cohérent avec le reste du modèle.
+**Le motif décide de tout ici.** La lecture initialement retenue — le blocage d'une
+décision se matérialise par ses tâches — supposait qu'une tâche existe. Or **une
+décision peut être bloquée alors qu'aucune tâche n'a encore été créée**, et c'est le
+cas *fréquent* à la sortie du Recovery Sprint (LOT-09), qui trie une quarantaine de
+décisions ouvertes dont beaucoup n'ont jamais rien produit. Sans ces colonnes, LOT-03
+ne pourrait pas appliquer sa propre règle : il autorise une direction à passer une
+décision en `blocked`, sans avoir de quoi en porter la suite.
 
-**Mais LOT-03 autorise une direction à passer une décision en `blocked` ou `failed`
-directement**, sans mentionner de tâche. Si c'est bien l'intention, il manque de
-quoi porter la suite à ce niveau, et LOT-03 n'a pas de budget DDL — ses fichiers
-sont `bin/deos-decisions` et `docs/REGISTRE.md`.
+| Champ ajouté à `decisions` | Rôle |
+| --- | --- |
+| `blocker` | l'obstacle externe constaté |
+| `next_action` | l'action suivante concrète |
+| `next_owner` | qui la porte |
+| `attempt_count` | tentatives, quand la décision elle-même a été tentée |
+| `last_error` | dernière erreur constatée |
+| `retry_at` | date de reprise |
 
-Deux issues possibles, à trancher par Sam :
+Plus la contrainte `decisions_blocage_avec_suite`, **miroir exact** de celle de
+`tasks`.
 
-1. **Statu quo** (retenu par défaut) : une décision `blocked` doit avoir au moins une
-   tâche `blocked` qui porte la suite. LOT-03 le vérifie côté outil.
-2. **Symétrie** : ajouter les six colonnes à `decisions` et une contrainte miroir.
-   C'est une migration d'une dizaine de lignes, sans risque pour l'existant.
+> **`next_owner` et non `owner`.** `SPEC §1.1` écrit « owner », mais la contrainte de
+> `§1.2` — celle qu'on implémente, donc celle qui fait foi — dit `next_owner`. Sur
+> `decisions`, `owner` seul serait de surcroît ambigu avec la direction porteuse. Le
+> trio reste identique à celui de `tasks` : ce qui bloque, ce qui vient ensuite, qui
+> le porte.
 
-### 8.2 Neuf ou dix statuts
+### 8.2 Neuf ou dix statuts — **tranché : dix**
 
 `LOT-03` annonce « les neuf statuts » ; le tableau de `SPEC §1.1` en énumère **dix**.
-Les dix ont été implémentés, l'énumération faisant foi sur le décompte. À corriger
-dans le texte de LOT-03.
+L'énumération fait foi. À corriger dans le texte de LOT-03.
 
-### 8.3 Rappel du point ouvert `SPEC §8.2`
+### 8.3 Vocabulaire de `tasks.statut` — laissé à LOT-02
+
+Confirmé : aucune contrainte posée ici. LOT-02 définira le vocabulaire et pourra
+poser le `CHECK` à ce moment-là.
+
+### 8.4 Toujours ouvert — `SPEC §8.2`
 
 `evidence_type` et `evidence_ref` existent, mais **ce qu'un commit doit modifier pour
 valoir preuve n'est pas tranché** — un commit vide passerait aujourd'hui. Le schéma
@@ -297,8 +318,49 @@ docker exec -i dh-comite bash -c 'psql "$COMITE_DB_DSN" -v ON_ERROR_STOP=1' \
   < migrations/2026-08-17-v2-tasks.sql
 ```
 
-La migration est **transactionnelle et rejouable** : un second passage ne produit que
-des `NOTICE ... already exists, skipping`. Vérifié.
+La migration est **rejouable** : un second passage complet ne produit que des
+`NOTICE ... already exists, skipping`, sans erreur. Vérifié deux fois de suite.
+
+#### Pourquoi deux transactions et non une
+
+La migration se termine par une seconde transaction, qui ne contient que la
+contrainte `decisions_blocage_avec_suite`. Ce découpage n'est pas cosmétique.
+
+Tout ce qui précède est **additif** — nouvelles tables, nouvelles colonnes,
+élargissement d'un vocabulaire de statuts — donc rien ne peut y échouer sur des
+données déjà en place. La contrainte est la **seule étape qui restreigne
+l'existant**, donc la seule qui puisse échouer sur des lignes déjà présentes : une
+décision déjà en `blocked` sans suite la fait tomber.
+
+Le défaut a été constaté en validation le 17/08, et il était vicieux. En une seule
+transaction, l'échec de la contrainte annulait aussi l'ajout des colonnes — et le
+message d'erreur demandait alors de renseigner `blocker` et `next_action` sur des
+colonnes qui, transaction annulée, **n'existaient pas**. Le conseil était
+littéralement inapplicable : impasse.
+
+En deux transactions, un échec laisse l'additif en place. L'opérateur voit les
+colonnes, renseigne les décisions fautives, rejoue la migration : les sections déjà
+appliquées passent sans effet, la contrainte s'installe.
+
+**Conséquence assumée** : la migration peut rester partiellement appliquée. Ce n'est
+pas un état cassé — tout l'additif est cohérent, seule la contrainte manque, et
+l'erreur le dit.
+
+#### Si la contrainte est refusée
+
+```
+ERROR:  LOT-01 : 2 decision(s) en blocked/failed sans suite : DEC-T-02, DEC-T-03
+HINT:   Renseigner blocker, next_action et next_owner sur ces decisions, ou les
+        ramener a un statut anterieur, puis rejouer la migration.
+```
+
+PostgreSQL, seul, dirait `is violated by some row` — sans dire lesquelles. La
+migration nomme donc les décisions fautives avant d'essayer de poser la contrainte.
+
+**La contrainte n'est délibérément pas posée en `NOT VALID`.** Ce serait tolérer
+durablement les blocages sans suite déjà présents, c'est-à-dire exactement ce que I4
+interdit et exactement le défaut que ce lot corrige. Une migration ne doit pas
+installer une règle en s'exemptant de la faire respecter.
 
 ### Vérifications d'acceptation
 
@@ -346,17 +408,29 @@ psql "$COMITE_DB_DSN" -tAc "SELECT md5(string_agg(id||statut||coalesce(preuve::t
 
 ### Résultat sur réplica — 17 août 2026
 
+Deux instances : `comite_repl` (appliquée en deux temps, chemin de mise à niveau) et
+`comite_neuf` (base vierge, application complète en un passage).
+
 | Contrôle | Résultat |
 | --- | --- |
-| Sauvegarde + restauration essayée | **réussie** au 2ᵉ essai, empreinte identique |
+| Sauvegarde + restauration essayée, 2 fois | **réussies**, empreintes identiques |
+| — dont un `pg_dump` de 0 octet, cluster arrêté | **détecté**, sauvegarde refaite |
 | `tasks` créée, 20 champs | conforme `SPEC §1.2` |
-| Blocage sans suite (6 variantes) | **refusé** dans les 6 cas |
-| Blocage avec les 3 champs | accepté |
-| Retrait de la suite après coup | **refusé** |
+| **`tasks`** — blocage sans suite, 6 variantes | **refusé** dans les 6 cas |
+| **`tasks`** — blocage avec les 3 champs | accepté |
+| **`tasks`** — retrait de la suite après coup | **refusé** |
+| **`decisions`** — blocage sans suite, 0/3 puis 2/3 champs | **refusé** |
+| **`decisions`** — blocage avec les 3 champs | accepté |
+| **`decisions`** — retrait de la suite après coup | **refusé** |
+| **`decisions`** — `failed` sans suite | **refusé** |
+| **`decisions`** — bloquée avec **zéro tâche liée** | **accepté** — le cas qui motive l'arbitrage |
+| **`decisions`** — `obsolete` sans suite | accepté : la contrainte ne vise que `blocked`/`failed` |
 | 5 nouveaux statuts de `decisions` | acceptés |
 | Statut inventé | refusé |
 | `clos_avec_preuve` | préservée |
 | Append-only `decisions` | préservé |
 | Clé étrangère `tasks → decisions` | active |
 | Décisions existantes | **5 avant, 5 après, empreinte inchangée** |
-| Rejouabilité | seconde passe sans erreur |
+| Contrainte refusée sur données fautives | échec **nommant** les 2 décisions en cause |
+| Remédiation puis rejeu | contrainte posée |
+| Rejouabilité | deux passages complets, code 0, aucune erreur |

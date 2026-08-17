@@ -161,4 +161,109 @@ COMMENT ON CONSTRAINT decisions_statut_check ON decisions IS
   'tente, le second l''a ete. obsolete et refusee sont distincts : peremption '
   'contre jugement — marquer refusee ce qui n''a plus d''objet salit le signal.';
 
+-- ---------------------------------------------------------------------------
+-- 4. Champs de blocage sur decisions — arbitrage de Sam du 17/08
+-- ---------------------------------------------------------------------------
+--
+-- POURQUOI. SPEC §1.1 exige blocker / next_action / owner sur une decision
+-- blocked, mais ne definissait ces champs qu'en §1.2, sur tasks. Incoherence
+-- reconnue par Sam le 17/08 et tranchee dans ce sens : les colonnes vont sur
+-- decisions.
+--
+-- LE MOTIF EST LE CAS FREQUENT, PAS LE CAS LIMITE. Une decision peut etre
+-- bloquee alors qu'AUCUNE tache n'existe encore — c'est meme la situation
+-- normale a la sortie du Recovery Sprint (LOT-09), qui trie une quarantaine de
+-- decisions ouvertes dont beaucoup n'ont jamais produit de tache. Faire porter
+-- la suite par les taches supposait qu'il y en ait une : sans ces colonnes,
+-- LOT-03 ne peut pas appliquer sa propre regle.
+--
+-- NEXT_OWNER ET NON OWNER. SPEC §1.1 ecrit « owner », mais la contrainte de
+-- §1.2 — qui fait foi, c'est elle qu'on implemente — dit next_owner. Sur
+-- decisions, « owner » seul serait de surcroit ambigu avec la direction
+-- porteuse. Le trio reste donc identique a celui de tasks : ce qui bloque, ce
+-- qui vient ensuite, qui le porte.
+
+ALTER TABLE decisions
+  ADD COLUMN IF NOT EXISTS blocker       text,
+  ADD COLUMN IF NOT EXISTS next_action   text,
+  ADD COLUMN IF NOT EXISTS next_owner    text,
+  ADD COLUMN IF NOT EXISTS attempt_count integer NOT NULL DEFAULT 0,
+  ADD COLUMN IF NOT EXISTS last_error    text,
+  ADD COLUMN IF NOT EXISTS retry_at      timestamptz;
+
+COMMENT ON COLUMN decisions.next_owner IS
+  'Qui porte next_action. Souvent une AUTRE fonction que celle qui a constate le '
+  'blocage : un agent prive de ses moyens ne peut pas se debloquer lui-meme '
+  '(SPEC §3.1). Meme role que tasks.next_owner.';
+COMMENT ON COLUMN decisions.attempt_count IS
+  'Tentatives au niveau de la decision. Une decision failed a ete tentee et a '
+  'echoue, meme sans tache formalisee.';
+
+-- Fin de la premiere transaction. Tout ce qui precede est ADDITIF : nouvelles
+-- tables, nouvelles colonnes, elargissement d'un vocabulaire de statuts. Rien n'y
+-- restreint l'existant, donc rien ne peut y echouer sur des donnees deja en place.
+COMMIT;
+
+-- ---------------------------------------------------------------------------
+-- 5. La contrainte de blocage sur decisions — transaction separee, a dessein
+-- ---------------------------------------------------------------------------
+--
+-- POURQUOI PAS DANS LA MEME TRANSACTION. C'est la seule etape qui RESTREINT
+-- l'existant, donc la seule qui puisse echouer sur des donnees deja en base. Si
+-- elle etait dans la transaction precedente, son echec annulerait aussi l'ajout
+-- des colonnes blocker / next_action / next_owner — et l'operateur se verrait
+-- demander de renseigner des colonnes qui n'existent pas. Impasse constatee en
+-- validation le 17/08 : le conseil d'erreur etait litteralement inapplicable.
+--
+-- Consequence assumee : si cette transaction echoue, la migration est
+-- partiellement appliquee. Ce n'est pas un etat casse — tout l'additif est en
+-- place et coherent, seule la contrainte manque. Le rejeu apres correction la
+-- pose, les sections precedentes etant rejouables sans effet.
+
+BEGIN;
+
+-- Poser la contrainte sur une table qui contient deja des lignes fautives echoue,
+-- et PostgreSQL ne dit pas LESQUELLES : « is violated by some row ». Le cas se
+-- presente si les sections 1-3 ont ete appliquees lors d'un passage anterieur et
+-- que des decisions sont passees en blocked/failed entre-temps. On nomme donc les
+-- lignes avant d'essayer.
+--
+-- On ne pose deliberement PAS la contrainte en NOT VALID. Ce serait tolerer
+-- durablement les blocages sans suite existants — exactement ce que I4 interdit,
+-- et exactement le defaut qu'on corrige. Une migration ne doit pas installer une
+-- regle en s'exemptant de la faire respecter.
+DO $$
+DECLARE n integer; ids text;
+BEGIN
+  SELECT count(*), string_agg(id, ', ' ORDER BY id) INTO n, ids
+    FROM decisions
+   WHERE statut IN ('blocked','failed')
+     AND (blocker IS NULL OR next_action IS NULL OR next_owner IS NULL);
+
+  IF n > 0 THEN
+    RAISE EXCEPTION 'LOT-01 : % decision(s) en blocked/failed sans suite : %', n, ids
+      USING HINT = 'Renseigner blocker, next_action et next_owner sur ces decisions, '
+                   'ou les ramener a un statut anterieur, puis rejouer la migration. '
+                   'Un blocage sans action suivante est invisible : il ne repart jamais (I4).';
+  END IF;
+END $$;
+
+DO $$
+BEGIN
+  IF NOT EXISTS (
+    SELECT 1 FROM pg_constraint
+    WHERE conname = 'decisions_blocage_avec_suite' AND conrelid = 'decisions'::regclass
+  ) THEN
+    ALTER TABLE decisions ADD CONSTRAINT decisions_blocage_avec_suite CHECK (
+      statut NOT IN ('blocked','failed')
+      OR (blocker IS NOT NULL AND next_action IS NOT NULL AND next_owner IS NOT NULL)
+    );
+  END IF;
+END $$;
+
+COMMENT ON CONSTRAINT decisions_blocage_avec_suite ON decisions IS
+  'Miroir exact de blocage_avec_suite sur tasks. I4 vaut au niveau de la '
+  'decision aussi : une decision bloquee sans action suivante est invisible, '
+  'personne ne la reprend, elle ne repart jamais.';
+
 COMMIT;
