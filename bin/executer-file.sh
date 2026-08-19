@@ -41,6 +41,22 @@ MODELE=$(sed -n 's/^ *execution: *\([a-z0-9.-]*\).*/\1/p' \
          /workspace/config/cadence.yaml 2>/dev/null | head -1)
 MODELE="${MODELE:-sonnet}"
 
+# ── POINT D ENTREE LOCAL — 19/08 ────────────────────────────────────────────
+# Le harnais claude -p accepte de pointer ailleurs qu Anthropic : une variable
+# d environnement suffit, rien d autre ne change. Les directeurs gardent leurs
+# outils, leurs fiches et le garde-fou.
+# Verifie ce jour : ronde complete du Financier sur Nemotron, 3 tours, 41 s,
+# lecture de sa fiche par l outil Read, aucune erreur.
+# Si base_url_local n est pas declaree, on retombe sur Anthropic sans rien
+# casser — c est voulu : une bascule ratee ne doit pas arreter le comite.
+BASE_LOCALE=$(sed -n 's/^ *base_url_local: *"\?\([^"]*\)"\?.*/\1/p' \
+              /workspace/config/cadence.yaml 2>/dev/null | head -1)
+if [ -n "$BASE_LOCALE" ]; then
+  export ANTHROPIC_BASE_URL="$BASE_LOCALE"
+  export ANTHROPIC_AUTH_TOKEN="local"
+  export ANTHROPIC_MODEL="$MODELE"
+fi
+
 DIR="${1:?usage: executer-file.sh <direction> [max_taches] [max_minutes]}"
 MAX_TACHES="${2:-5}"
 MAX_MIN="${3:-45}"

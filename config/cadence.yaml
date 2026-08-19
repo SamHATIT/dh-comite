@@ -74,16 +74,27 @@ ronde:
 # C'est le principe d'activation applique au routage.
 
 routage_modele:
-  defaut: sonnet
+  # BASCULE DU 19/08 — le comite passe en local sur le Spark.
+  # Verifie de bout en bout : claude -p parle a Nemotron, les appels d outils
+  # passent (4 tests sur 4), une ronde complete du Financier a tourne en 41 s.
+  # Motif : le comite coute 196 USD sur 253 de facture mensuelle, devant le
+  # pipeline qui fabrique le produit (18 USD).
+  defaut: nemotron
+
+  # Le point d entree local. Le harnais claude -p accepte de pointer ailleurs :
+  # ANTHROPIC_BASE_URL suffit, rien d autre ne change — les directeurs gardent
+  # leurs outils, leurs fiches et le garde-fou.
+  base_url_local: "http://127.0.0.1:18080"
+  jeton_local: "local"
 
   # Par nature de travail, pas par direction : c'est la tache qui decide, pas
   # le titre de celui qui l'execute.
   par_nature:
-    execution:      sonnet   # appliquer une tache deja specifiee
-    diagnostic:     sonnet   # nommer la cause d'un blocage
-    validation:     sonnet   # relire une preuve et juger si elle couvre
-    strategie:      sonnet   # proposition du CEO, challenge, synthese
-    redaction:      sonnet   # contenu destine a sortir de l'entreprise
+    execution:      nemotron   # appliquer une tache deja specifiee — local
+    diagnostic:     nemotron   # nommer la cause d'un blocage — local
+    validation:     nemotron   # relire une preuve et juger si elle couvre
+    strategie:      sonnet     # proposition du CEO — reste sur API
+    redaction:      sonnet     # contenu destine a sortir — reste sur API
 
   # Fournisseur. Aujourd'hui contraint par le harnais claude -p, qui ne parle
   # qu'un format. Voir DEC-2026-0816-01 : vLLM expose un point d'entree
