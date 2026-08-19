@@ -1,9 +1,13 @@
 # Journal — dh-comite
 
 > Genere automatiquement depuis les messages de commit.
-> Derniere mise a jour : 17/08/2026 15:34 UTC
+> Derniere mise a jour : 19/08/2026 11:12 UTC
+
+## 2026-08-19
+- Note : architecture multi-modele pour l'offre on-site `2c3576b`
 
 ## 2026-08-17
+- Journal regenere par le crochet post-commit `f373b7a`
 - Routage du modele par nature de tache — un trou de la specification `a23d972`
 - Les onze lots integres, et la chaine complete verifiee de bout en bout `f97fa6c`
 - Procedure de bascule V1 vers V2 `dcab58e`
