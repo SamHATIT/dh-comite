@@ -1,9 +1,11 @@
 # Journal — dh-comite
 
 > Genere automatiquement depuis les messages de commit.
-> Derniere mise a jour : 19/08/2026 11:12 UTC
+> Derniere mise a jour : 19/08/2026 13:56 UTC
 
 ## 2026-08-19
+- Le comite bascule en local sur le Spark — circuit complet verifie `bf16027`
+- Tests du Spark : le comite peut basculer en local `f6a854d`
 - Note : architecture multi-modele pour l'offre on-site `2c3576b`
 
 ## 2026-08-17
