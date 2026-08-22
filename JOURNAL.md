@@ -4,6 +4,7 @@
 > Derniere mise a jour : 22/08/2026 08:43 UTC
 
 ## 2026-08-22
+- chore(outillage): --help sur cloturer-prouvees, contexte borne pour le modele local `07d5890`
 - fix(garde-fou): le moteur de politique etait appele sur un chemin mort `4b77874`
 
 ## 2026-08-19
