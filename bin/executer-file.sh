@@ -55,6 +55,10 @@ if [ -n "$BASE_LOCALE" ]; then
   export ANTHROPIC_BASE_URL="$BASE_LOCALE"
   export ANTHROPIC_AUTH_TOKEN="local"
   export ANTHROPIC_MODEL="$MODELE"
+  # Le harnais ne connait pas ce nom de modele et supposerait 200k. Le serveur
+  # llama.cpp alloue 131072 par emplacement (262144 / 2 slots) : le lui dire
+  # evite qu une ronde depasse ce que le serveur accepte.
+  export CLAUDE_CODE_MAX_CONTEXT_TOKENS=131072
 fi
 
 DIR="${1:?usage: executer-file.sh <direction> [max_taches] [max_minutes]}"

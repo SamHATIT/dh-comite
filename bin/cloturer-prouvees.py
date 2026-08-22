@@ -24,6 +24,10 @@ Usage : cloturer-prouvees.py [--appliquer]   (sans l option : simulation)
 """
 import json, os, re, subprocess, sys
 
+if {"--help", "-h"} & set(sys.argv[1:]):
+    print(__doc__.strip())
+    sys.exit(0)
+
 APPLIQUER = "--appliquer" in sys.argv
 DEPOTS = ["/repo-delivery", "/repo"]
 

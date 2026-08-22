@@ -1,9 +1,13 @@
 # Journal — dh-comite
 
 > Genere automatiquement depuis les messages de commit.
-> Derniere mise a jour : 19/08/2026 13:56 UTC
+> Derniere mise a jour : 22/08/2026 08:43 UTC
+
+## 2026-08-22
+- fix(garde-fou): le moteur de politique etait appele sur un chemin mort `4b77874`
 
 ## 2026-08-19
+- Voix des onze agents : distribution arretee `3739de3`
 - Le comite bascule en local sur le Spark — circuit complet verifie `bf16027`
 - Tests du Spark : le comite peut basculer en local `f6a854d`
 - Note : architecture multi-modele pour l'offre on-site `2c3576b`
