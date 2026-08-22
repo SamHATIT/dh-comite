@@ -1,0 +1,5 @@
+FROM nvcr.io/nvidia/vllm:26.07-py3
+# vLLM 0.24.0 epingle xgrammar==0.2.0 mais son code importe normalize_tool_choice,
+# absent avant 0.2.1 — les appels d outils echouent en 500.
+# --no-deps : la mise a jour normale retrograde transformers en v4, que vLLM refuse.
+RUN pip install --no-deps -U xgrammar==0.2.4
