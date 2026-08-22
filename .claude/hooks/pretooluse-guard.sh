@@ -89,7 +89,7 @@ if [ "$TOOL" = "Bash" ]; then
       charger_curseurs
       VERDICT=$(jq -nc --arg agent "$DIRECTION" --arg outil "$TOOL" --arg cmd "$CMD" \
                   '{agent:$agent, outil:$outil, arguments:{command:$cmd}}' \
-                | python3 "$MOTEUR" --capacites "$RACINE/config/capabilites.yaml" \
+                | python3 "$MOTEUR" --capacites "$RACINE/config/policy.yaml" \
                                     --curseurs "$CURSEUR_CACHE" 2>>"$LOG")
       case "$?" in
         2)  MOTIF=$(echo "$VERDICT" | jq -r '.motif // "refus du moteur de politique"' 2>/dev/null)
