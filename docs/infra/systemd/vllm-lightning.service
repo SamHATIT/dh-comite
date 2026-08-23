@@ -1,0 +1,19 @@
+[Unit]
+Description=vLLM — Nemotron 3.5 Lightning NVFP4 (comite DEOS, studio)
+After=network-online.target docker.service
+Wants=network-online.target
+
+[Service]
+Type=simple
+WorkingDirectory=/home/spark-dh
+# Le script fait `docker run --rm` en avant-plan : systemd suit le conteneur.
+ExecStart=/home/spark-dh/lancer-lightning.sh
+# `docker run --rm` laisse le conteneur si systemd tue le script : on le retire.
+ExecStopPost=/usr/bin/docker rm -f vllm-test
+Restart=always
+RestartSec=20
+# Chargement des poids + compilation des noyaux : ~5 min au premier lancement.
+TimeoutStartSec=900
+
+[Install]
+WantedBy=default.target

@@ -1,0 +1,24 @@
+[Unit]
+Description=Tunnel SSH VPS:18084 -> Spark:8001 (vLLM Lightning, comite en local)
+After=network-online.target tunnel-spark-mcp.service
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=root
+Environment=AUTOSSH_GATETIME=0
+# GatewayPorts=yes : le conteneur dh-comite atteint l hote par sa passerelle
+# 172.19.0.1, pas par la boucle locale. Ouverture ufw dediee sur ce port.
+ExecStart=/usr/bin/autossh -M 0 -N \
+  -o BatchMode=yes -o StrictHostKeyChecking=no \
+  -o ServerAliveInterval=30 -o ServerAliveCountMax=3 \
+  -o ExitOnForwardFailure=yes \
+  -o GatewayPorts=yes \
+  -p 2222 -i /root/.ssh/id_spark \
+  -L 0.0.0.0:18084:127.0.0.1:8001 \
+  spark-dh@127.0.0.1
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target
