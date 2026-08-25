@@ -159,3 +159,68 @@ pour les tours simples. Les deux ensemble donnent `reasoning_content` vide et un
 Brancher le decodage speculatif avec le brouillon DSpark
 (`~/modeles/lightning-dspark`) — c'est lui qui porte le facteur 4 annonce par
 NVIDIA. Les mesures ci-dessus sont celles du modele nu.
+
+---
+
+# Incident du 24/08 et corrections du 25/08
+
+## La chute
+
+Le Spark s'est arrete brutalement le **24/08 a 09:22:45 CEST**, pendant la
+ronde du comite, alors que vLLM servait 5 requetes simultanees.
+
+Mesure : le journal s'arrete en pleine phrase, sans sequence d'arret.
+Au redemarrage, `systemd-fsck` signale `Dirty bit is set. Fs was not properly
+unmounted`. Aucune trace thermique, aucune erreur materielle, aucune panique
+noyau, aucune tentative de mise en veille (`sleep-inactive-ac-type` = nothing).
+
+**Un systeme qui se protege laisse une trace. Ici il n'y en a aucune** — c'est
+la signature d'une coupure d'alimentation, pas d'un arret logiciel.
+
+Sam confirme qu'aucun autre appareil du reseau n'a ete affecte : le probleme
+est local au Spark (alimentation, cable, prise) ou materiel.
+
+**Un seul evenement dans l'historique disponible** (`wtmp` remonte au 19/08) —
+ce n'est pas encore un motif. A surveiller.
+
+Piste ecartee : 33 evenements `NVRM ... Out of memory` figurent dans la session
+precedente, mais le dernier date du 23/08 a 16:53, **seize heures avant la
+chute**. Ce ne sont pas des OOM du noyau mais des echecs d'allocation du pilote
+NVIDIA, sans lien etabli avec l'arret.
+
+## Le vrai defaut revele au redemarrage : deux services concurrents
+
+Au redemarrage, vLLM a echoue **19 fois de suite** :
+
+    ValueError: Free memory on device cuda:0 (69.96/121.63 GiB) on startup
+                is less than desired GPU memory utilization (0.75, 91 GiB)
+
+Cause : un `nemotron.service` (cree ce week-end, non documente) lancait
+l'ancien `Nemotron-3-Nano-30B-A3B-Q8_0` via llama.cpp au demarrage. Il occupait
+~32 Go, et les deux services etaient actives au boot.
+
+**Le conflit etait ecrit dans ce README depuis le 23/08** — « Cohabitation
+impossible, les deux ne tiennent pas ensemble sur 121 Go » — mais rien ne
+l'empechait mecaniquement. Documenter un conflit ne l'empeche pas.
+
+`nemotron.service` est desormais **desactive** (`systemctl --user disable
+--now`). Memoire libre passee de 70 a 107 Go, vLLM demarre, compteur de
+relances remis a 0.
+
+**Ne pas confondre les deux Nemotron :**
+
+| Sert | Modele | Statut |
+|---|---|---|
+| vLLM, port 8001 | `NVIDIA-Nemotron-3.5-Lightning-30B-A3B-NVFP4` | **actif** — valide le 23/08 |
+| llama.cpp, port 8080 | `Nemotron-3-Nano-30B-A3B-Q8_0` | desactive, conserve sur disque |
+
+## `--served-model-name` : de `qwen` a `nemotron-lightning`
+
+Le nom `qwen` avait ete conserve le 23/08 pour eviter de modifier
+`cadence.yaml` pendant le test. Il etait signale comme trompeur le jour meme.
+
+**Il a effectivement trompe** : le 25/08, la lecture de `modelUsage=['qwen']`
+dans la ronde du 24 a fait conclure a tort que le comite tournait sur Qwen,
+alors qu'il tournait sur Lightning depuis la bascule.
+
+Un nom de commodite finit par etre lu comme un fait. Renomme.

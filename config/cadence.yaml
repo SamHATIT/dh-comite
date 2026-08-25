@@ -84,17 +84,23 @@ routage_modele:
   # Le point d entree local. Le harnais claude -p accepte de pointer ailleurs :
   # ANTHROPIC_BASE_URL suffit, rien d autre ne change — les directeurs gardent
   # leurs outils, leurs fiches et le garde-fou.
-  base_url_local: "http://127.0.0.1:18080"
+  base_url_local: "http://172.19.0.1:18084"
   jeton_local: "local"
 
   # Par nature de travail, pas par direction : c'est la tache qui decide, pas
   # le titre de celui qui l'execute.
   par_nature:
-    execution:      nemotron   # appliquer une tache deja specifiee — local
-    diagnostic:     nemotron   # nommer la cause d'un blocage — local
-    validation:     nemotron   # relire une preuve et juger si elle couvre
-    strategie:      sonnet     # proposition du CEO — reste sur API
-    redaction:      sonnet     # contenu destine a sortir — reste sur API
+    execution:      nemotron-lightning        # appliquer une tache deja specifiee — local
+    diagnostic:     nemotron-lightning        # nommer la cause d'un blocage — local
+    validation:     nemotron-lightning        # relire une preuve et juger si elle couvre
+    # 25/08 — BASCULE TEMPORAIRE. Ces deux natures tournaient sur Sonnet via
+    # l'API Anthropic ; le compte est a zero depuis le 24/08, donc elles
+    # echoueraient. Elles passent en local le temps du rechargement.
+    # POUR REVENIR : remettre `sonnet` sur ces deux lignes, rien d'autre.
+    # La qualite du raisonnement transversal n'a PAS ete mesuree en local sur
+    # ces deux natures — c'est un pis-aller assume, pas un arbitrage valide.
+    strategie:      nemotron-lightning     # proposition du CEO — temporairement local
+    redaction:      nemotron-lightning     # contenu destine a sortir — temporairement local
 
   # Fournisseur. Aujourd'hui contraint par le harnais claude -p, qui ne parle
   # qu'un format. Voir DEC-2026-0816-01 : vLLM expose un point d'entree

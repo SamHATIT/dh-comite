@@ -1,9 +1,6 @@
 #!/bin/bash
-# Nemotron 3.5 Lightning 30B-A3B NVFP4 sur DGX Spark.
-# Image derivee vllm-spark:xg024 (xgrammar 0.2.4) — voir Dockerfile.vllm-xg.
-#
-# Chaque option ci-dessous a ete rendue necessaire par un echec observe.
-# Voir README-vllm-spark.md, section "Nemotron 3.5 Lightning".
+# Nemotron 3.5 Lightning 30B-A3B NVFP4 sur DGX Spark, image derivee xgrammar 0.2.4.
+# Memoire UNIFIEE : ce que le systeme garde en cache manque au GPU, d ou le sync.
 sync
 docker rm -f vllm-test 2>/dev/null
 exec docker run --rm --name vllm-test --gpus all --ipc=host \
@@ -11,7 +8,7 @@ exec docker run --rm --name vllm-test --gpus all --ipc=host \
   -p 8001:8000 -v ~/modeles:/modeles \
   vllm-spark:xg024 \
   vllm serve /modeles/lightning-nvfp4 \
-    --served-model-name qwen \
+    --served-model-name nemotron-lightning \
     --host 0.0.0.0 --port 8000 \
     --max-model-len 131072 \
     --gpu-memory-utilization 0.75 \
